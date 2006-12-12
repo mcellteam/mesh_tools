@@ -1,0 +1,11 @@
+object 1 class array type float rank 1 shape 3 items 26107 data file C:/ftp/nerve_positions.data,0
+attribute "dep" string "positions"
+#
+object "default" class transform of 1
+ times             1             0             0
+                   0             1             0
+                   0             0             2
+ plus              0             0             0
+attribute "Isosurface value" number 0.000000
+#
+end

@@ -1,0 +1,13 @@
+object 1 class array type int rank 1 shape 3 items 49706 data file C:/ftp/nerve_connections.data,0
+attribute "ref" string "positions"
+attribute "element type" string "triangles"
+attribute "dep" string "connections"
+#
+object "default" class transform of 1
+ times             1             0             0
+                   0             1             0
+                   0             0             2
+ plus              0             0             0
+attribute "Isosurface value" number 0.000000
+#
+end

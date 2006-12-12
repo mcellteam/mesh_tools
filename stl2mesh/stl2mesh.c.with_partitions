@@ -1,0 +1,594 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <float.h>
+#include <math.h>
+#include "stl2mesh.h"
+
+#define NUM_DICES 20
+#define EPSILON_1 1.0e-12
+#define EPSILON_2 1.0e-9
+
+extern FILE *yyin;
+char *infile;
+int line_num;
+int total_vertex_count,total_face_count;
+struct object *world_obj;
+double vol_infinity;
+
+/* Begin main */
+main(argc,argv)
+  int argc; 
+  char *argv[];  
+{
+  struct volume *volume;
+  struct subvolume *subvolp;
+  struct polyhedron *php;
+  struct meta_object *mop;
+  double pos,pos1,pos2,part_delta,x_delta,y_delta,z_delta;
+  double *dblp;
+  int n_part,nx_parts,ny_parts,nz_parts,nx,ny,nz,nxy,n_subvol;
+  int i,j,k,l;
+
+	if (argc<2) {
+      	  fprintf(stderr,"Usage: %s in_file_name [out_file_name]\n",argv[0]);
+	  exit(1);
+	}
+
+	infile=argv[1];
+
+	world_obj=NULL;
+	if ((world_obj=(struct object *)malloc(sizeof(struct object)))==NULL) {
+	  fprintf(stderr,"stl2mesh: cannot store world object\n");
+	  exit(1);
+        }
+        world_obj->next=NULL;
+        world_obj->parent=NULL;
+        world_obj->first_child=NULL;
+        world_obj->last_child=NULL;
+        world_obj->name="world metaobject";
+        world_obj->object_type=META_OBJ;
+        world_obj->contents=NULL;
+
+        if ((volume=(struct volume *)malloc(sizeof(struct volume)))==NULL) {
+          fprintf(stderr,"stl2mesh: cannot store volume data\n");
+          exit(1);
+        }
+        if ((volume->x_partitions=(double *)malloc
+            ((4+NUM_DICES)*sizeof(double)))==NULL) {
+          fprintf(stderr,"stl2mesh: cannot store volume partitions\n");
+          exit(1);
+        }
+        if ((volume->y_partitions=(double *)malloc
+            ((4+NUM_DICES)*sizeof(double)))==NULL) {
+          fprintf(stderr,"stl2mesh: cannot store volume partitions\n");
+          exit(1);
+        }
+        if ((volume->z_partitions=(double *)malloc
+            ((4+NUM_DICES)*sizeof(double)))==NULL) {
+          fprintf(stderr,"stl2mesh: cannot store volume partitions\n");
+          exit(1);
+        }
+        vol_infinity=sqrt(DBL_MAX)/4;
+        volume->n_x_partitions=4+NUM_DICES;
+        volume->n_y_partitions=4+NUM_DICES;
+        volume->n_z_partitions=4+NUM_DICES;
+        volume->n_subvol=0;
+        volume->n_x_subvol=0;
+        volume->n_y_subvol=0;
+        volume->n_z_subvol=0;
+        volume->subvol=NULL;
+
+	if ((yyin=fopen(infile,"r"))==NULL) {
+	  fprintf(stderr,"stl2mesh: error opening file: %s\n",infile);
+	  exit(1);
+	} 
+	fflush(stdout);
+	if (yyparse()) {
+	  fprintf(stderr,"stl2mesh: error parsing file: %s\n",infile);
+	  exit(1);
+	} 
+	fclose(yyin);
+
+        php=(struct polyhedron *)world_obj->first_child->contents;
+
+        fprintf(stderr,"Partitioning volume...");
+        pos1=php->llf.x-(2*EPSILON_2);
+        pos2=php->urb.x+(2*EPSILON_2);
+        part_delta=(pos2-pos1)/(NUM_DICES+1);
+        x_delta=part_delta;
+        n_part=volume->n_x_partitions;
+        dblp=volume->x_partitions;
+        dblp[0]=-vol_infinity;
+        dblp[n_part-1]=vol_infinity;
+        for (i=1;i<n_part-1;i++) {
+          dblp[i]=pos1+(i-1)*part_delta;
+        }
+
+        pos1=php->llf.y-(2*EPSILON_2);
+        pos2=php->urb.y+(2*EPSILON_2);
+        part_delta=(pos2-pos1)/(NUM_DICES+1);
+        y_delta=part_delta;
+        n_part=volume->n_y_partitions;
+        dblp=volume->y_partitions;
+        dblp[0]=-vol_infinity;
+        dblp[n_part-1]=vol_infinity;
+        for (i=1;i<n_part-1;i++) {
+          dblp[i]=pos1+(i-1)*part_delta;
+        }
+
+        pos1=php->llf.z-(2*EPSILON_2);
+        pos2=php->urb.z+(2*EPSILON_2);
+        part_delta=(pos2-pos1)/(NUM_DICES+1);
+        z_delta=part_delta;
+        n_part=volume->n_z_partitions;
+        dblp=volume->z_partitions;
+        dblp[0]=-vol_infinity;
+        dblp[n_part-1]=vol_infinity;
+        for (i=1;i<n_part-1;i++) {
+          dblp[i]=pos1+(i-1)*part_delta;
+        }
+
+        nx_parts=volume->n_x_partitions;
+        ny_parts=volume->n_y_partitions;
+        nz_parts=volume->n_z_partitions;
+        nx=nx_parts-1;
+        ny=ny_parts-1;
+        nz=nz_parts-1;
+        nxy=nx*ny;
+        n_subvol=nx*ny*nz;
+        volume->n_x_subvol=nx;
+        volume->n_y_subvol=ny;
+        volume->n_z_subvol=nz;
+        volume->n_subvol=n_subvol;
+
+        if ((subvolp=(struct subvolume *)malloc
+             (n_subvol*sizeof(struct subvolume)))==NULL) {
+          fprintf(stderr,"stl2mesh: Cannot store subvolume partition data\n");
+          return(1);
+        }
+        volume->subvol=subvolp;
+        for (i=0;i<n_subvol;i++) {
+          subvolp[i].vertex_list_list=NULL;
+        }
+
+        l=0;
+        for (k=0;k<nz;k++) {
+          for (j=0;j<ny;j++) {
+            for (i=0;i<nx;i++) {
+              subvolp[l].x1=volume->x_partitions[i];
+              subvolp[l].x2=volume->x_partitions[i+1];
+              subvolp[l].y1=volume->y_partitions[j];
+              subvolp[l].y2=volume->y_partitions[j+1];
+              subvolp[l].z1=volume->z_partitions[k];
+              subvolp[l].z2=volume->z_partitions[k+1];
+              l++;
+            }
+          }
+        }
+        fprintf(stderr,"Done\n");
+
+        fprintf(stderr,"Decomposing volume...");
+        if (decompose_polyhedron(volume,php)) {
+          fprintf(stderr,"stl2mesh: error decomposing volume\n");
+          exit(1);
+        }
+        fprintf(stderr,"Done\n");
+
+        total_vertex_count=0;
+        total_face_count=0;
+        output_object(world_obj);
+
+	exit(0);
+}
+
+
+
+/* Decompose polyhedron vertices into spatial partitions */
+/*   Return 0 on success */
+/*   Return 1 on malloc failure */
+int decompose_polyhedron(volp,php)
+struct volume *volp;
+struct polyhedron *php;
+{
+  struct subvolume *subvolp;
+  struct polygon_list *plp;
+  struct polygon *pop;
+  struct vertex_list *vlp;
+  struct vertex_list_list *vllp;
+  struct vector3 *vecp;
+  double u,v,w;
+  double pos,new_pos;
+  int umin_part,umax_part,vmin_part,vmax_part,wmin_part,wmax_part;
+  int i,j,k,l,m,transp,llf_subvol,urb_subvol,reposition;
+  int nx,nxy;
+  int subvol;
+
+  for (plp=php->polygon_list; plp!=NULL; plp=plp->next)
+  {
+    pop=plp->polygon; 
+    for (vlp=pop->vertex_list; vlp!=NULL; vlp=vlp->next)
+    {
+      vecp=vlp->vertex;
+      subvol=find_subvol(volp,vecp,-1); 
+      if (subvol<0)
+      {
+        fprintf(stderr,"stl2mesh: Oops! vertex coincident with partition\n");
+        return(1);
+      }
+      if ((vllp=(struct vertex_list_list *)malloc(sizeof(struct vertex_list_list)))==NULL) {
+        fprintf(stderr,"stl2mesh: cannot store subvolume data\n");
+        return(1);
+      }
+      vllp->vertex_list=vlp;
+      vllp->next=volp->subvol[subvol].vertex_list_list;
+      volp->subvol[subvol].vertex_list_list=vllp;
+    }
+  }
+
+  return(0);
+}
+
+
+
+/**********************************************************************
+distinguishable -- reports whether two doubles are measurably different
+
+Parameters
+        a -- first double
+        b -- second double
+        eps -- fractional difference that we think is different
+
+Returns
+        1 if the numbers are different, 0 otherwise
+**********************************************************************/
+
+int distinguishable(double a,double b,double eps)
+{
+  if (a<0) a=-a;
+  if (b<0) b=-b;
+
+  if (a==0) return ((b-a)>eps);
+  else if (b==0) return ((a-b)>eps);
+  else if (a>b) return ((a-b)>a*eps);
+  else return ((b-a)>b*eps);
+
+}
+
+
+
+/* Find which subvolume a point lies within. */
+/*   Return index of subvolume */
+/*   or return -index if point is coincident with a subvolume wall. */
+/*   For speed, first check to see if point lies within a */
+/*   subvolume specified by "guess".  Skip this check if guess=-1. */
+int find_subvol(volp,p,guess)
+struct volume *volp;
+struct vector3 *p;
+int guess;
+{
+struct subvolume *subvolp;
+int i,subvol,n_x_part,n_y_part,n_z_part,n_x_subvol,n_y_subvol,n_z_subvol;
+int x_part,y_part,z_part;
+double u,v,w,umin,umax,vmin,vmax,wmin,wmax;
+
+  u=p->x;
+  v=p->y;
+  w=p->z;
+
+  subvolp=volp->subvol;
+  if (guess!=-1) {
+    umin=subvolp[guess].x1;
+    umax=subvolp[guess].x2;
+    vmin=subvolp[guess].y1;
+    vmax=subvolp[guess].y2;
+    wmin=subvolp[guess].z1;
+    wmax=subvolp[guess].z2;
+    if (clip_point_2D(umin,umax,vmin,vmax,u,v)) {
+      if (clip_point_2D(umin,umax,wmin,wmax,u,w)) {
+        if (clip_point_2D(vmin,vmax,wmin,wmax,v,w)) {
+          if (u==umin || u==umax || v==vmin || v==vmax || w==wmin || w==wmax) {
+            return(-guess);
+          }
+          return(guess);
+        }
+      }
+    }
+  }
+
+  n_x_part=volp->n_x_partitions;
+  n_y_part=volp->n_y_partitions;
+  n_z_part=volp->n_z_partitions;
+  n_x_subvol=volp->n_x_subvol;
+  n_y_subvol=volp->n_y_subvol;
+  n_z_subvol=volp->n_z_subvol;
+  x_part=find_range(u,volp->x_partitions,n_x_part);
+  y_part=find_range(v,volp->y_partitions,n_y_part);
+  z_part=find_range(w,volp->z_partitions,n_z_part);
+  subvol=(z_part*n_x_subvol*n_y_subvol)+(y_part*n_x_subvol)+x_part;
+  if (x_part<0 || y_part<0 || z_part<0) {
+    return(-subvol);
+  }
+  return(subvol);
+}
+
+
+
+/* determine if a 2-D point lies within the bounds of a 2-D clipping window */
+int clip_point_2D(umin,umax,vmin,vmax,u1,v1)
+  double umin,umax,vmin,vmax,u1,v1;
+{
+
+  if (u1>=umin) {
+    if (u1<=umax) {
+      if (v1>=vmin) {
+        if (v1<=vmax) {
+          return(1);
+        }
+      }
+    }
+  }
+  return(0);
+}
+
+
+
+/* Find which pair of partitions a point lies between. */
+/*   Return index of lower partition */
+/*   or return -index if point is coincident with a partition. */ 
+int find_range(u,u_range,n_u_range)
+double u;
+double *u_range;
+int n_u_range;
+{
+  int n_lower,n_upper,n_mid;
+
+  n_lower=0;
+  n_upper=n_u_range-1;
+  while (n_lower!=(n_upper-1)) {
+    n_mid=(n_lower+n_upper)/2;
+    if (u>u_range[n_mid]) {
+      n_lower=n_mid;
+    }
+    else if (u<u_range[n_mid]) {
+      n_upper=n_mid;
+    }
+    else {
+      return(-n_mid);
+    }
+  }
+  if (u==u_range[n_lower]) {
+    return(-n_lower);
+  }
+  if (u==u_range[n_lower+1]) {
+    return(-(n_lower+1));
+  }
+
+  return(n_lower);
+}
+
+
+
+void output_object(op)
+  struct object *op;
+{
+  struct object *child_objp;
+
+  switch (op->object_type) {
+    case META_OBJ:
+      child_objp=op->first_child;
+      while (child_objp!=NULL) {
+        output_object(child_objp);
+        child_objp=child_objp->next;
+      }
+      break;
+    case POLY:
+      output_polyhedron(op);
+      break;
+    case NURBS:
+      output_nurbs(op);
+      break;
+  }
+  return;
+}
+
+
+
+void output_nurbs(op)
+  struct object *op;
+{
+  struct nurbs *nrbp;
+  struct double_list *dlp;
+  struct ctlpt *cpp;
+  struct ctlpt_list *clp;
+  double val,umin,umax,vmin,vmax;
+  int i,upts,vpts,uorder,vorder;
+
+  nrbp=(struct nurbs *)op->contents;
+
+  printf("NuPatch\n");
+
+  upts=nrbp->upts;
+  uorder=nrbp->uorder;
+  printf("\t%d %d\n",upts,uorder);
+  printf("\t[ ");
+  i=0;
+  dlp=nrbp->uknots;
+  while(dlp) {
+    val=dlp->val;
+    if(i==uorder-1) {
+      umin=val;
+    }
+    if(i==upts) {
+      umax=val;
+    }
+    i++;
+    printf("%.17g ",val);
+    dlp=dlp->next;
+  }
+  printf("]\n");
+  printf("\t%.17g %.17g\n",umin,umax);
+
+  vpts=nrbp->vpts;
+  vorder=nrbp->vorder;
+  printf("\t%d %d\n",vpts,vorder);
+  printf("\t[ ");
+  i=0;
+  dlp=nrbp->vknots;
+  while(dlp) {
+    val=dlp->val;
+    if(i==vorder-1) {
+      vmin=val;
+    }
+    if(i==vpts) {
+      vmax=val;
+    }
+    i++;
+    printf("%.17g ",val);
+    dlp=dlp->next;
+  }
+  printf("]\n");
+  printf("\t%.17g %.17g\n",vmin,vmax);
+
+  clp=nrbp->ctlpts;
+  if (clp) {
+    if (clp->ctlpt->rational) {
+      printf("\t\"Pw\" [\n");
+    }
+    else {
+      printf("\t\"P\" [\n");
+    }
+  }
+  while(clp) {
+    cpp=clp->ctlpt;
+    printf("\t%.17g %.17g %.17g",cpp->x,cpp->y,cpp->z);
+    if(cpp->rational) {
+      printf(" %.17g\n",cpp->w);
+    }
+    else {
+      printf("\n");
+    }
+    clp=clp->next;
+  }
+  printf("\t]\n");
+  
+  return;
+}
+
+
+
+struct vertex_list *find_vertex(vertex,vertex_list)
+  struct vector3 *vertex;
+  struct vertex_list *vertex_list;
+{
+  struct vector3 *vecp;
+  struct vertex_list *vlp;
+
+  vlp=vertex_list;
+  while (vlp!=NULL) {
+    vecp=vlp->vertex;
+    if (vertex->x==vecp->x) {
+      if (vertex->y==vecp->y) {
+        if (vertex->z==vecp->z) {
+          return(vlp);
+        }
+      }
+    }
+    vlp=vlp->next;
+  }
+
+  return(NULL);
+}
+
+
+
+void output_polyhedron(op)
+  struct object *op;
+{
+  struct polyhedron *php;
+  struct polygon_list *plp;
+  struct polygon *pop;
+  struct vertex_list *vlp,*vlp2,*vertex_tail;
+  struct element_data *edp;
+  struct vector3 *vecp,*normp;
+  int i,j,normals,this_vertex_count,*intp;
+
+  php=(struct polyhedron *)op->contents;
+  if ((edp=(struct element_data *)malloc
+              (php->n_polys*sizeof(struct element_data)))==NULL) {
+    fprintf(stderr,"stl2mesh: cannot store element data\n");
+    exit(1);
+  }
+  php->element_data=edp;
+  plp=php->polygon_list;
+  vertex_tail=NULL;
+  i=0;
+  while (plp!=NULL) {
+    pop=plp->polygon;
+    if ((intp=(int *)malloc(pop->n_verts*sizeof(int)))==NULL) {
+      fprintf(stderr,"stl2mesh: cannot store vertex index\n");
+      exit(1);
+    }
+    edp[i].vertex_index=intp;
+    vlp=pop->vertex_list;
+    j=0;
+    while (vlp!=NULL) {
+     vecp=vlp->vertex;
+     if ((vlp2=find_vertex(vecp,php->unique_vertex))==NULL) {
+       if ((vlp2=(struct vertex_list *)malloc
+                   (sizeof(struct vertex_list)))==NULL) {
+         fprintf(stderr,"stl2mesh: cannot store vertex\n");
+         exit(1);
+       }
+       vlp2->vertex_index=php->n_verts++;
+       vlp2->vertex=vecp;
+       vlp2->normal=vlp->normal;
+       if (vertex_tail==NULL) {
+         vertex_tail=vlp2;
+       }
+       vertex_tail->next=vlp2;
+       vlp2->next=NULL;
+       vertex_tail=vlp2;
+       if (php->unique_vertex==NULL) {
+         php->unique_vertex=vlp2;
+       }
+     }
+     edp[i].vertex_index[j]=vlp2->vertex_index;
+     edp[i].n_verts=1+j++;
+     vlp=vlp->next;
+    }
+    i++;
+    plp=plp->next;
+  }
+
+  i=0;
+  vlp2=php->unique_vertex;
+  while (vlp2!=NULL) {
+    i++;
+    vecp=vlp2->vertex;
+    normp=vlp2->normal;
+    printf("Vertex %d %.17g %.17g %.17g\n",total_vertex_count+i,vecp->x,vecp->y,vecp->z);
+/*
+    if (normp!=NULL) {
+      printf("      NORMAL [ %.17g, %.17g, %.17g ]\n",
+              normp->x,normp->y,normp->z);
+    }
+*/
+    vlp2=vlp2->next;
+  }
+  this_vertex_count=i;
+
+  edp=php->element_data;
+  for (i=0;i<php->n_polys;i++) {
+    total_face_count++;
+    printf("Face %d",total_face_count); 
+    for (j=0;j<edp[i].n_verts;j++) {
+      printf(" %d",edp[i].vertex_index[j]+total_vertex_count+1);
+    }
+    printf("\n"); 
+  }
+  total_vertex_count=total_vertex_count+this_vertex_count;
+
+  return;
+}
+

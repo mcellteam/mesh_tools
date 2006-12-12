@@ -1,0 +1,132 @@
+#synu				This is a comment and may be discarded
+polygonmesh 4l 24l 36l 24l	polygonmesh introducer.
+				Disregard the junk following the
+				word "polygonmesh."  It will not
+				always be there.
+8				Number of vertices
+36				Number of edges
+12				Number of polygons
+8b00				Flags (hex number)
+					0x0800 - vertex normals present
+					0x8000 - surface normals present
+					0x0300 - vertex colors present
+					There are more but these are the
+					only ones known to be used.
+-1 -1 -1			vertex 0
+0.205585 0.692003 0.692003	vertex normal 0
+0 0 0				vertex color 0 (RGB triplet, range: 0 to 1)
+1 -1 -1				vertex 1
+-0.921935 0.273894 0.273894	vertex normal 1
+0 1 1				vertex color 1
+[...]
+				Edge list follows
+				The Edge list is a list of indices
+				into the vertex list
+2				Points to vertex 2
+1				Points to vertex 1
+0				Points to vertex 0
+[...]
+				Polygon list follows
+				The polygon list is a list of indices
+				into the Edge list.  It assumes you
+				start at edge 0 and gives the *last*
+				vertex pointer in the edge list
+				comprising the polygon
+2				Polygon 0
+				Points to edge index 2, meaning that
+				the first polygon is comprised of
+				edge indices 0, 1, and 2
+0 0 -1				Surface normal 0
+5
+[...]
+				- - -
+#synu  
+polygonmesh 4l 24l 36l 24l
+8
+36
+12
+8b00
+-1 -1 -1
+0.205585 0.692003 0.692003
+0 0 0
+1 -1 -1
+-0.921935 0.273894 0.273894
+0 1 1
+1 1 -1
+-0.205585 -0.692003 0.692003
+0 1 0
+1 -1 1
+-0.273894 0.921935 -0.273894
+1 1 0
+-1 -1 1
+0.692003 0.205585 -0.692003
+1 0 0
+-1 1 -1
+0.921935 -0.273894 0.273894
+0 0 1
+-1 1 1
+0.273894 -0.921935 -0.273894
+1 0 1
+1 1 1
+-0.692003 -0.205585 -0.692003
+1 1 1
+2
+1
+0
+3
+0
+1
+3
+4
+0
+5
+0
+4
+2
+0
+5
+2
+5
+6
+5
+4
+6
+7
+6
+4
+2
+6
+7
+7
+1
+2
+7
+3
+1
+7
+4
+3
+2
+0 0 -1
+5
+0 -1 0
+8
+0 -1 0
+11
+-1 0 0
+14
+0 0 -1
+17
+0 1 0
+20
+-1 0 0
+23
+0 0 1
+26
+0 1 0
+29
+1 0 0
+32
+1 0 0
+35
+0 0 1

@@ -1,0 +1,50 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: poly - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\jgsun\LOCALS~1\Temp\RSP4E6.tmp" with contents
+[
+/nologo /MTd /W3 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/poly.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\myStuff\desktop\pipeline\converts\header.cpp"
+"D:\myStuff\desktop\pipeline\converts\iv2raw.cpp"
+"D:\myStuff\desktop\pipeline\converts\new_adjust.cpp"
+"D:\myStuff\desktop\pipeline\converts\poly.cpp"
+"D:\myStuff\desktop\pipeline\converts\vrml.cpp"
+"D:\myStuff\desktop\pipeline\converts\vrml2raw.cpp"
+"D:\myStuff\desktop\pipeline\converts\wrl2raw.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\jgsun\LOCALS~1\Temp\RSP4E6.tmp" 
+Creating temporary file "C:\DOCUME~1\jgsun\LOCALS~1\Temp\RSP4E7.tmp" with contents
+[
+kernel32.lib user32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib gdi32.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib nafxcwd.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/poly.pdb" /debug /machine:I386 /out:"Debug/poly.exe" /pdbtype:sept /libpath:"C:\winnt\system32" 
+.\Debug\header.obj
+.\Debug\iv2raw.obj
+.\Debug\new_adjust.obj
+.\Debug\poly.obj
+.\Debug\vrml.obj
+.\Debug\vrml2raw.obj
+.\Debug\wrl2raw.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\jgsun\LOCALS~1\Temp\RSP4E7.tmp"
+<h3>Output Window</h3>
+Compiling...
+header.cpp
+iv2raw.cpp
+new_adjust.cpp
+poly.cpp
+vrml.cpp
+vrml2raw.cpp
+wrl2raw.cpp
+Linking...
+
+
+
+<h3>Results</h3>
+poly.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

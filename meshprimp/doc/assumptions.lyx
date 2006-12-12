@@ -1,0 +1,74 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Assumptions made about Input Mesh Files
+\layout Date
+
+14 September 2006
+\layout Enumerate
+
+The sequence of vertex indices in each Face specifies counter-clockwise
+ traversal of face.
+\layout Enumerate
+
+Computing the normal of the face with vertices 1 2 3 as 12 x 23 points outward
+ (i.e.
+ outside of the mesh.
+\layout Enumerate
+
+All face normals point outward.
+\layout Enumerate
+
+The mesh is fully closed.
+\layout Enumerate
+
+No duplicate vertices, i.e.
+ two or more vertices with different indices and identical x,y,z values.
+\layout Enumerate
+
+No other files in directory with '.mesh' anywhere in the filename.
+\backslash 
+
+\layout Enumerate
+
+Vertex and Face indices are numbered sequentially, i.e.
+ the largest Vertex and Face index is equal to the number of vertices and
+ faces in mesh.
+\layout Section
+
+Tests
+\layout Itemize
+
+#2: Check outward facing normals with ray from infinity.
+\layout Itemize
+
+#3: Check first polygon, fix if necessary, and make all others same as first.
+\layout Itemize
+
+#4: Check edge list.
+ Each edge shoud be shared by two polygons.
+\the_end

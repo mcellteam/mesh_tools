@@ -1,0 +1,40 @@
+Date: 11/14/02 KLC
+README for File converters
+
+Currently, I support conversions from the following file formats to the RAW format:
+a) POLY
+b) IPOLY
+c) GLX
+d) FAT
+e) STL
+f) RAW: It removes all the unreferenced vertices in the current RAW file.
+g) IV
+h) WRL
+i) VRML
+
+/////////////////////////////////////////////////////////////
+Usage is as follows:
+
+       <number> can be any of the following:
+       0: for fixing a RAW file
+       1: for POLY to RAW
+       2: for IPOLY to RAW
+       3: for GLX to RAW
+       4: for FAT to RAW
+       5: for STL to RAW
+       6: for VRML to RAW
+       7: for IV to RAW
+       8: for WRL to RAW
+       9: for RAW to STL
+
+Input and Output file names are the second and third arguments.
+
+Optional parameter <-h> prints out this usage message.
+/////////////////////////////////////////////////////////////
+eg: -n 8 -in "dunno.wrl" -out "test.raw"
+
+Misc: In case you come across any other file format routine, please append the code to this directory and make changes to this readme file :-)
+
+NOTE: This directory also contains the following files:
+a) raw.cpp 	:- It can add the 68bytes header information to a RAWIV file.
+b) main.cpp	:- it can read all the RAW files in a directory and merge them into a single RAW file.

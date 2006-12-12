@@ -1,0 +1,183 @@
+Brief user manual of the tiling program "contour" or "tiling"
+(they are the same). Note that use the sample.config in this 
+directory because it is newest.
+ 
+"tiling" is a program to construct triangular mesh from a set of 
+contour files or image files. The processing of contour files is
+working. The processing of image files may not work because I have
+not used it for a long time. Anyway, the main purpose for "tiling"
+is to reconstruct 3D surface triangles from a set of planar contours.
+You can use your own method to generate input contour files. Or you
+can use "newtrace" program to manually trace contours from image
+files. 
+
+The theory and implementation of "tiling" program is published
+in "Arbitrary Topology Shape Reconstruction from Planar Cross Sections",
+Graphic Models and Image Processing, v. 58, no. 6, p. 524-543 Nov. 1996. 
+Please see the Limitation section of this paper to avoid undesirable 
+results.  There are many possible shapes for the same input data. 
+So the criteria is single-sheeted surface. This leads to a result: 
+If the projections of two contours of the adjacent slices overlaps, 
+and they are of the same level (the number of enclosing contours), 
+then they are constructed as linked shape. If the projections of two 
+contours separate, they will be reconstructed as disjoint objects. 
+This algorithm works very well in the cases of densely sampled Z. 
+
+Step 1: Prepare the input files
+    The input files are a set of contour files. Each contour file
+    contain 0 or more planar polygons. The Z value of the planar
+    polygons must be the same in the same file. So each file represents
+    a cross section of the object you are going to construct. All
+    input files must have the same prefix and subfix. They are indexed
+    by numbers. So the file names look like PREFIX???SUBFIX; here
+    ??? is an non-negative integer. For example, if PREFIX=./DATA/junk,
+    SUBFIX=.pts, and SLICE_RANGE is from 3 to 5. Then it implies
+    ./DATA/junk3.pts, ./DATA/junk4.pts and ./DATA/junk5.pts,. 
+
+The format of an input file:
+    The input file contains 0 or more contours. Each contour is represented
+    by a  number followed by lines of XYZ coordinates. For example, the
+    following file has two contours.  
+	4
+	0 0 2.0 
+	1 0 2.0 
+	1 1.2 2.0 
+	0 1.2 2.0 
+	3
+	3.7 2.3 2.0
+	4.8 3.4 2.0
+	-2.9 -19 2.0
+
+How to form a closed surface?
+   You can provide a no-contour file to force the "contour" program
+   to build caps to cover the contours in the adjacent slice. 
+   If a file has no contour at all, then its adjacent file will form 
+   appearing/disappearing vertical feature. A cap is built to
+   cover the contour of the adjacent slice. The cap is extended from
+   the contour of the adjacent slice to the middle of two slices. 
+   So, you MUST provide the Z values of this no-contour file such that
+   the Z of the middle slice can be calculated. You simply do it by put
+   a single point in the whole no-contour file as the following.
+	1
+	0.0 0.0 Z
+   Only the Z value of this no-contour file is used, the others are
+   ignored.  
+
+How to generate the input files?
+   1. use "newtrace" to manually trace contours from images.
+   2. write your own program to generate input files.
+
+Step 2: prepare the configuration file.
+   See the appendix for the sample.config file.
+
+Step 3: run the tiling program  by "contour -f sample.config"
+    It will generate ?.poly file and ?_untiled.poly. The size
+    of ?_untiled.poly should be zero. If not, it implies that
+    the medial axis calculation fails in these cases. You can
+    still visualize ?.poly file. 
+
+Step 4: how to view the result?
+
+    You can use viewpolyexe (or viewpolyexe.IRISGL) (written by
+    Dan Schicore) to view a .poly or .ipoly file. I recommend that
+    you convert a .poly to .ipoly file first by "poly2ipoly" 
+    (located in /IMPORTANT_TOOLS/POLY_TOOLS/) It is much faster
+    to down load a .ipoly than a .poly file to viewpolyexe. 
+
+Frequently asked questions:
+
+Q1: Does the Z need to be sampled uniformly?
+A:  No, however the Z value must increase with the number of the slice.
+    For example, data4.pts must have a larger Z value than data3.pts.
+
+Q2: Can I skip a file number?
+A:  No, all files indicated by the SLICE_NUMBER (inclusive) must exist.
+
+Q3: Can I calculate the volume of the reconstructed shape?
+A:  Yes, You uncomment the "DIFF_LEVEL_FILES:" in the configuration file,
+    and run the tiling program by "contour -f ?.config -V". It should 
+    calculate the volume of each layer.  For example, If the constructed
+    object is a sphere with a hole. The program processes the outer and 
+    inner surfaces separately, and produced two volumes. The real
+    volume is the volume of the outer surface minus the volume of the
+    inner surface (the void).
+
+Q4: How do I calculate the area of the reconstructed surfaces?
+A:  You need to convert the .poly to .ipoly by /IMPORTANT_TOOLS/POLY_TOOLS/ 
+    poly2ipoly, then use /IMPORTANT_TOOLS/POLY_TOOLS/ipoly_area
+    to calculate the total area of all triangles.
+
+Q5: How do I do irregular tiling (the Z distance  is not uniform)?
+    1. Do the traceing of whatever slice you want.
+    2. use symbolic link or rename them to have slice number increased by 1
+    3. commet DETZ in the tiling configuration file, so the actually Z
+       space is determined by the DATA file.
+
+Appendix: a sample configuration file.
+
+###############################################################################
+# This is the default configuration file for running the "contour" program
+# which construct  surface from planar conturs. 
+# How to run contour program? contour -f configuration_file
+#
+# Everything after # to the EOL is ignored.
+#
+# PREFIX and SUFFIX specify a series of contour files to be processed.
+#   For example, if the data files are from CThead1.pts up 
+#   to CThead113.pts, and are located at /u/u49/bajaj/Medical/skull/
+#   directory, then the PREFIX should be "/u/u49/bajaj/Medical/skull/CThead"
+#   and the SUFFIX be ".pts"
+# SLICE_RANGE: the start and end slice number (inclusive). For example "1 113" 
+#
+# OUTPUT_FILE_NAME: specify the output filename. ?.poly file will be generated.
+#		    You can convert it to .ipoly format so it is fast
+#		    to view the data by viewpolyexe program (written by Dan)
+#	How to run poly2ipoly? 
+#		poly2ipoly junk.poly
+#		It will generate junk.ipoly file.	
+#
+# DETZ:	   the distance between slices. The Z value of the data file will
+#          be ignored. If a contour file is name???.pts, its Z value will
+#          be calculated as DETZ*???. 
+#		If "no_writing" is specified, no output file is generated.
+#
+# DIFF_LEVEL_FILES: put different level tiling into different files.
+#               This option is to construct files of different layers.
+#
+# NON_VALID: Each edge may not shared by exactly two triangles. This is
+#            OK for visualization. This option generate less number of 
+#            triangles. If you are going to do finite element analysis,
+#            you need to comment this out by #
+#
+# MERGE_DISTANCE_SQUARE: if the square of distance of two vertices is smaller
+#	than the specified, they are merged into one vertices.
+#
+# MESH_FILE: It generates ?.cpts & ?.tile files which are required
+#            for a tetrahedralization program "dt". Commet it out if
+#	     you are not going to tetrahedralize your result.
+##############################################################################
+
+PREFIX: 	# one string e.g. /u/u49/bajaj/Medical/skull/CThead
+		# The data is from CThead01.dat to CThead113.dat,
+		# so the PREFIX is CThead, and the SUFFIX is .dat
+	/homes/klin/DATA/EPS/slice
+
+SUFFIX:		# one string
+	.pts
+
+OUTPUT_FILE_NAME:	# one string, the filename of output polygons 
+	#no_writing	# if no_writing, then no output file is generated
+	/homes/klin/DATA/EPS/slice
+
+SLICE_RANGE:	# int int : start & end slice number
+	1 133    # for computer generated data, the max is from 1 to 64
+#DETZ:           # one float, used to replace the Z by DETZ*slice_number 
+#        0.003
+
+#DIFF_LEVEL_FILES: # put different level tiling into different files
+NON_VALID:	# for visualization only
+MERGE_DISTANCE_SQUARE: 0.0001
+#FILE_FOR_MESH_GEN:     # generate .cpts & .tile files as the input to the 
+		# tetrahedralization program named "dt"
+SAME_LEVEL:     # only tile between same level
+

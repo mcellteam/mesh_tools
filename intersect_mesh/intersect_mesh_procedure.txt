@@ -1,0 +1,20 @@
+
+1) convert mesh files to irit format:
+
+   mesh2irit d000_MERGED_FILTERED_MANIP.mesh > d000_MERGED_FILTERED_MANIP.itd
+   mesh2irit cube_cutter.mesh > cube_cutter.itd
+
+2) edit intersect_mesh.irt to operate on the desired irit mesh files.
+
+3) run irit script (this might take several minutes):
+
+   irit intersect_mesh.irt
+
+
+4) convert result of above from irit format to mesh format:
+
+   irit2mesh intersect_mesh_obj.itd > my_mesh_file.mesh
+
+   or
+
+irit2mesh intersect_mesh_obj.itd | Filtermesh -fixvertices -fixfaces > foo.mesh

@@ -1,0 +1,62 @@
+/*
+ * Copyright (c) 1992, 1993, 1994, Hugues Hoppe, University of Washington.
+ * Copying, use, and development for non-commercial purposes permitted.
+ *                  All rights for commercial use reserved.
+ */
+
+Herein is source code for the algorithms described in:
+
+H. Hoppe, T. DeRose, T. DuChamp, J. McDonald, and W. Stuetzle.
+Surface reconstruction from unorganized points.
+Proceedings of SIGGRAPH '92 (Chicago, Illinois, July 26--31, 1992).
+In {\em Computer Graphics} 26(2) (July 1992), 71--78.
+
+H. Hoppe, T. DeRose, T. DuChamp, J. McDonald, and W. Stuetzle.
+Mesh optimization.
+Proceedings of SIGGRAPH '93 (Annaheim, California, August 1--6, 1993).
+In {\em Computer Graphics} Proceedings, Annual Conference Series, 1993,
+19--26.
+
+H. Hoppe, T. DeRose, T. DuChamp, M. Halstead, H. Jin, J. McDonald,
+J. Schweitzer, and W. Stuetzle.
+Piecewise smooth surface reconstruction.
+Proceedings of SIGGRAPH '94 (Orlando, Florida, July 24--29, 1994).
+In {\em Computer Graphics} Proceedings, Annual Conference Series, 1994.
+
+Hugues Hoppe.  Surface reconstruction from unorganized points.
+PhD thesis, Department of Computer Science and Engineering,
+University of Washington, in preparation, 1994.
+
+
+The source code is written in C++; it is contained in ./src
+Since it makes advance use of templates, it requires a C++ compiler version
+3.0 or better (in Stroustrup's classification).
+The code compiled successfully under both:
+ - DEC's cxx compiler (on both mips/Ultrix and alpha/Ultrix)
+    what `which cxx`:   cxxdrv.c 1.12 DEC C++ Compiler 2/9/93
+ - GNU g++ versions 2.4.5 and 2.5.8 (on both mips/Ultrix and sgi/Irix)
+
+Note: the code does not successfully compile on many current AT&T based
+compilers, such as SGI's C++ compiler because of inlining restrictions.
+
+
+To compile:
+
+1) Edit the src/C/h++ file to set options for your C++ compiler
+   if it is not g++.
+
+2) Then, run make.
+
+The siggraph '92 module is called 'Recon'.
+The siggraph '93 module is called 'Meshfit'.
+The siggraph '94 module is called 'Subdivfit'.
+
+Two other programs, 'Filtermesh' and 'Filtera3d' let you manipulate meshes
+and streams of geometric primitives, respectively.
+
+The program 'Polyfit' is a specialization of mesh optimization (Meshfit) to
+curve fitting in 2D.
+
+See the directory ./examples for some test data and expected results.
+Refer to the files Reconstruct and Simplify for a brief description of
+parameters, and some sample uses.

@@ -1,0 +1,15 @@
+viewclear();
+mesh_file="srf_pts.recon.dat";
+
+iritState("EchoSource",false);
+iritState("Coplanar",true);
+resolution = 10;
+
+mesh_obj=load(mesh_file);
+scale_factor=1.0;
+mesh_obj = mesh_obj * scale(vector(scale_factor,scale_factor,scale_factor));
+
+my_axes = Axes * scale(vector(1,1,1));
+
+view(list(my_axes,mesh_obj),false);
+#include("view_mesh.irt");

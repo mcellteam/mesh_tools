@@ -1,0 +1,33 @@
+
+
+random_vector
+
+vert:
+  pos
+  original_index
+  merged_index
+  projection
+  
+linked list of verts
+array of verts
+linked list of polys
+
+1) read in polys:
+   add poly to poly list
+   add verts to vert list
+   assign original_index to each vert
+   initialize merged_index to -1
+   compute projection of vert onto random_vector
+   
+2) construct array of verts
+
+3) sort array of verts according to value of projection
+
+4) scan sorted array of verts:
+    re-index array by assigning a unique value of merged_index to
+    each distinguishable vert.  Indistinguishable verts will be assigned
+    the same value of merged_index.
+
+5) output all unique verts.
+
+6) output all polygons using their connectivity to unique verts.

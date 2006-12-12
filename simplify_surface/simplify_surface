@@ -1,0 +1,35 @@
+#!/usr/bin/perl -w
+
+if ($#ARGV < 1) {
+  print STDOUT "\nUsage: simplify_surface dx_mesh_infile dx_mesh_outfile\n\n";
+  exit(1);
+}
+
+$in_file = $ARGV[0];
+$out_file = $ARGV[1];
+
+$dx_script = "
+Echo (\"Simplify Surface Running...\"); 
+Echo (\"Input file:  $in_file\"); 
+Echo (\"Output file:  $out_file\"); 
+surf = Import(\"$in_file\");
+# data = Import(\"$in_file\");
+# surf = Select(data,\"0\");
+simp_surf = SimplifySurface(surf,0.01,NULL,1,1,1,1,1);
+surf_pos = Extract(simp_surf,\"positions\");
+surf_con = Extract(simp_surf,\"connections\");
+simp_surf = Construct(surf_pos);
+simp_surf = Replace(surf_con,simp_surf,\"default\",\"connections\");
+simp_surf = Remove(simp_surf,\"box\");
+Export(simp_surf,\"$out_file\",\"dx binary\");
+Echo (\"Simplify Surface Completed.\"); 
+";
+
+open(CMD,"echo '$dx_script' | dx -memory 1000 -script |");
+
+while (defined($line=<CMD>)) {
+  print STDOUT "$line";
+}
+close(CMD);
+
+exit(0);

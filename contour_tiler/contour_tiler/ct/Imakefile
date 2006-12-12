@@ -1,0 +1,15 @@
+#############################################################################
+# Makefile for ct                                                           # 
+#############################################################################
+
+#include "../../Imakefile.tmpl"
+
+CDEBUGFLAGS    = -g
+
+CSRCS = slice.c \
+        volume.c \
+        CTVolumeHartley3D.c \
+        CTSliceH2DInit.c \
+        CTSliceHartley2D.c
+
+ShaLibraryTarget(ct)

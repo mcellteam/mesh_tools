@@ -1,0 +1,68 @@
+#!/bin/csh -f
+# Examples of surface reconstruction (phases 1, 2, and 3).
+
+set r=mechpart n=4102  sampd=.032  crep2=1e-5  crep3=1e-5
+
+# Other examples to try
+if ($?DISTCAP) set r=distcap n=12745  sampd=.02  crep2=1e-5  crep3=1e-5 fillh
+if ($?CLUB71)  set r=club71  n=16864  sampd=.02  crep2=1e-5  crep3=1e-5
+
+# Explanation of variable names:
+# $r = rootname of dataset
+# $n = number of points
+#   (the file $r.$n.pts should contain the points)
+# $sampd = \sigma + \rho,  as described in Siggraph '92 paper
+#     You should set "sampd" to be the minimum inter-sheet spacing in the data.
+#     So, no two separate sheets of surface should come closer than "sampd".
+#     However, the sampling density should be sufficient so that there are no
+#     holes in the sampling that have radii larger than "sampd".
+#     So, it's a trade-off, and this parameter should be set by carefully
+#     examining the data.
+# $crep2 = representation paramater for phase 2, as described in Siggraph '93
+#     paper (it determines the trade-off between accuracy and conciseness)
+#     (usually, 1e-5 gets good results, if you want more detail, try 1e-6,
+#      if you want a coarser representation, try 1e-4)
+# $crep3 = representation paramater for phase 3, as described in Siggraph '94
+#     paper (it determines the trade-off between accuracy and conciseness)
+#     (usually, 1e-5 gets good results, if you want more detail, try 1e-6,
+#      if you want a coarser representation, try 1e-4)
+
+echo "**** PHASE 1 - initial surface estimation (Siggraph '92 paper)"
+
+echo "Reconstructing a surface from $r.$n.pts (should take a few minutes)."
+if (-r $r.$n.pts.Z) uncompress $r.$n.pts
+cat $r.$n.pts | Recon -samp $sampd >$r.recon.m
+echo "Mesh $r.recon.m is ready."
+
+if ($?fillh) then
+  echo "Manually filling in small holes (probably sampling artifacts)"
+  # This is used primarily for the distcap data set,
+  #  as for this object many regions of the surface were left unsampled.
+  mv $r.recon.m $r.recon.orig.m
+  Filtermesh $r.recon.orig.m -genus -fillholes 30 -triang -genus >$r.recon.m
+  echo "New mesh $r.recon.m is ready."
+endif
+
+echo "*** PHASE 2 - mesh optimization (Siggraph '93 paper)"
+
+echo "Using initial mesh $r.recon.m and set of points $r.$n.pts to"
+echo " compute a new mesh $r.opt.m (may take up to 1 hour of cpu time)."
+Meshfit -fi $r.$n.pts -mf $r.recon.m -crep $crep2 -recon >$r.opt.m
+echo "Optimized mesh $r.opt.m is ready."
+
+echo "*** PHASE 3 - subdivision surface optimization (Siggraph '94 paper)"
+
+echo "Using initial mesh $r.opt.m and set of points $r.$n.pts to"
+echo " compute a tagged subdivision surface control mesh $r.nsub2.0.m"
+echo " (may take several hours of cpu time)."
+set csharp=`awk "BEGIN {print $crep3/5;}" </dev/null`
+Filtermesh $r.opt.m -angle 40 -mark | \
+  Subdivfit -mf - -fi $r.$n.pts -crep $crep3 -csharp $csharp -recon \
+  >$r.nsub2.0.m
+echo "Optimized subdivision control mesh $r.nsub2.0.m is ready."
+
+echo "** computing subdivision surface approximation"
+echo "Computing a piecewise linear approximation to the subdivision surface,"
+echo " with vertices pushed to their limit positions on the limit surface."
+Subdivfit -mf $r.nsub2.0.m -nsubdiv 2 -outn >$r.nsub2.n.m
+echo "Approximating mesh $r.nsub2.n.m is ready."

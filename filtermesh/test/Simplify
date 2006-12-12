@@ -1,0 +1,63 @@
+#!/bin/csh -f
+# Examples of model simplification (optimized piecewise linear and piecewise
+#  smooth models).
+# The input is:
+#  1) $r.pts: a large set of points sampled exactly on the surface to
+#      approximate;
+#  2) $r.m: an initial tessellation (mesh) for the surface.
+# The output is:
+#  $r.opt.m: an optimized piecewise linear surface (mesh)
+#  $r.nsub2.0.m: an optimized piecewise smooth subdivision control mesh
+#  ($r.nsub2.n.m: a piecewise linear approximation to the subdivision surface)
+
+if (1) then
+  echo "*** Using a mesh as the surface to approximate"
+  set r=fandisk  n=10000  crep2=1e-5  crep3=1e-4
+  echo "Generating a set of points on the mesh"
+  Filtermesh $r.m -randpts $n -vertexpts -bndpts 3 -noo >$r.pts
+  echo "Will use the dense mesh $r.m as the initial tessellation"
+  # Since the intial mesh $r.m is in fact the surface to approximate,
+  # skip global optimization
+  set phase2opt=(-simplify)
+else
+  echo "If you have a method for sampling a set of points from a smooth"
+  echo " surface and a way of getting an initial tessellation,"
+  echo " enter it here."
+endif
+
+# $r = rootname to use for surfaces
+# $r.pts = file containing the points to use in surface approximation.
+# $r.m = initial mesh (preferably dense)
+# $crep2 = representation parameter for mesh simplification (phase 2),
+#     as described in Siggraph '93 paper
+#     (it determines the trade-off between accuracy and conciseness)
+#     (usually, 1e-5 gets good results, if you want more detail, try 1e-6)
+#     (if you want a coarser mesh, try 1e-4)
+# $crep3 = repr. parameter for piecewise smooth approximation (phase 3),
+#     as described in Siggraph 94 paper
+#     (it determines the trade-off between accuracy and conciseness)
+#     (usually, 1e-5 gets good results, if you want more detail, try 1e-6)
+#     (if you want a coarser mesh, try 1e-4)
+
+echo "**** Mesh optimization"
+echo "Finding a piecewise linear approximation to surface indicated by the"
+echo " points $r.pts, using $r.m as an initial estimate, with crep=$crep2"
+if (! $?phase2opt) set phase2opt=(-reconstruct)
+Meshfit -fi $r.pts -mf $r.m -crep $crep2 $phase2opt >$r.opt.m
+echo "Optimized (simplified) mesh $r.opt.m is ready."
+
+
+echo "**** Subdivision surface optimization"
+echo "Finding a piecewise smooth approximation to surface indicated by the"
+echo " points $r.pts, using $r.opt.m as the initial subdivision control mesh,"
+echo " with crep=$crep3"
+set csharp=`awk "BEGIN {print $crep3/5;}" </dev/null`
+Filtermesh $r.opt.m -angle 40 -mark | \
+  Subdivfit -mf - -fi $r.pts -crep $crep3 -csharp $csharp -recon >$r.nsub2.0.m
+echo "Optimized subdivision control mesh $r.nsub2.0.m is ready."
+
+echo "** computing subdivision surface approximation"
+echo "Computing a piecewise linear approximation to the subdivision surface,"
+echo " with vertices pushed to their limit positions on the limit surface."
+Subdivfit -mf $r.nsub2.0.m -nsubdiv 3 -outn >$r.nsub2.n.m
+echo "Approximating mesh $r.nsub2.n.m is ready."
