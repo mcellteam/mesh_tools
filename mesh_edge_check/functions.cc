@@ -424,3 +424,49 @@ void identifyBadFaces(EdgeBlock *eb,void_list *flh,void_list *vlh){
 	printf("\n\n # BAD FACES = %i\n\n",count);
 }
 
+// #####################################################
+// #####################################################
+
+void_list * scanDir(void_list *files) {
+	void_list *p;
+	char *name;
+    std::string str;
+    std::string::size_type found;
+
+	DIR *pdir;								// pointer to a directory data structure
+	struct dirent *pent;					// pointer to dirent structure
+
+    pdir = opendir("./");
+    if (!pdir) {
+        printf ("opendir() failure; could not open %s. terminating","./");
+        exit(1);
+    }
+    errno = 0;
+    while ((pent=readdir(pdir))){
+		// copy char array to string
+		str = pent->d_name;
+		// if file of typ *.mesh
+		found = str.find(".mesh",0);
+        if (found != std::string::npos) {
+			// save filename
+			p = new void_list();
+			p->next=files;
+			name = new char[1024];
+			strcpy(name,str.c_str());
+			p->data=(void*)name;
+			files=p;
+			// print file found to screen
+	        printf("file found: %s\n",name);
+		}
+    }
+    if (errno) {
+        printf ("readdir() failure; terminating");
+        exit(1);
+    }
+    closedir(pdir);
+	return files;
+}
+
+// #####################################################
+// #####################################################
+

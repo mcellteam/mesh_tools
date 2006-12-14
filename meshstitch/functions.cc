@@ -713,6 +713,7 @@ void addFacesVertices(Group &g,void_list *&F,void_list *&V,int max_vertex,int ma
 		for(j=0;j<g.c[i].num;j++){
 			th=g.c[i].s[j].th;
 			// add face with l1, site ev0, and third
+			orient=g.c[i].s[j].orient;
 			v1=g.c[i].s[j].l1;
 			v2=g.c[i].s[j].ev[0]->v;
 			max_vertex++;

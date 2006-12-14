@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
+
+#include <dirent.h>
+#include <errno.h>
+
+using namespace std;
 
 int distinguishable(double a,double b,double eps)
 {
@@ -211,48 +216,63 @@ Face::Face(char *triplet)
 	}
 }
 
-int main(int argc,char *argv[]){
+void_list * scanDir(void_list *files) {
+	void_list *p;
+	char *name;
+    std::string str;
+    std::string::size_type found;
 
-	if (argc != 2)
-	{
-		printf("\nSyntax: mesh_renumber input_file\n\n");
-		printf("Description: Renumbers vertex and face indices of mesh file in sequentially increasing fashion. Writes output to stdout.\n\n");
-		return 1;
-	}
+	DIR *pdir;								// pointer to a directory data structure
+	struct dirent *pent;					// pointer to dirent structure
 
-	////////// declare variables /////////
+    pdir = opendir("./");
+    if (!pdir) {
+        printf ("opendir() failure; could not open %s. terminating","./");
+        exit(1);
+    }
+    errno = 0;
+    while ((pent=readdir(pdir))){
+		// copy char array to string
+		str = pent->d_name;
+		// if file of typ *.mesh
+		found = str.find(".mesh",0);
+        if (found != std::string::npos) {
+			// save filename
+			p = new void_list();
+			p->next=files;
+			name = new char[1024];
+			strcpy(name,str.c_str());
+			p->data=(void*)name;
+			files=p;
+			// print file found to screen
+	        printf("file found: %s\n",name);
+		}
+    }
+    if (errno) {
+        printf ("readdir() failure; terminating");
+        exit(1);
+    }
+    closedir(pdir);
+	return files;
+}
 
-	char *infile;
-	char line[2048];
-	char *str;
-	char *eptr;
+void getData(char *infile,void_list *&flh,void_list *&vlh){
+
+	char line[2048],*str,*eptr;
 	FILE *F;
-	void_list *q,*qq,*p,*pp,*prev;
-
-
-	// vertex and face linked lists
-	void_list *vlh,*vl;
+	void_list *vl;
 	Vertex *v;
-	vlh = NULL;
-	void_list *flh,*fl;
+	void_list *fl;
 	Face *f;
-	flh = NULL;
-
-	// pointers to start of vertex and face linked lists 
-	void_list *vend;
-	void_list *fend;
-
-	////////// get data /////////
 
 	// open first file
-	infile = argv[1];
 	F = fopen(infile,"r");
 	if (!F) {
 	printf("Couldn't open input file %s\n",infile);
-	return 1;
+	return;
 	}
 
-	// for every line in first file
+	// for every line in file
 	for (str=fgets(line,2048,F) ; str!=NULL ; str=fgets(line,2048,F)) {
 
 		// skip leading whitespace
@@ -276,104 +296,177 @@ int main(int argc,char *argv[]){
 		}
 	}
 	fclose(F);
+}
 
-	// go through linked list backwards and add previous pointers
-	// for each vertex
-	prev = NULL;
-	for (p=vlh;p!=NULL;p=p->next) {
-		p->previous = prev;
-		prev = p;
-		if (p->next==NULL) break;
+void_list* addPrevious(void_list* L) {
+    // go through linked list backwards and add previous pointers
+    void_list *p,*prev;
+    prev = NULL;
+    for (p=L;p!=NULL;p=p->next) {
+        p->previous = prev;
+        prev = p;
+        if (p->next==NULL) break;
+    }
+    return L;
+}
+
+int maxVert(void_list *L){
+    void_list *p;
+    int max=0;
+    for (p=L;p!=NULL;p=p->next) {
+        if (max<((Vertex*)p->data)->index) {max=((Vertex*)p->data)->index;}
+    }
+    return max;
+}
+
+int maxFace(void_list *L){
+    void_list *p;
+    int max=0;
+    for (p=L;p!=NULL;p=p->next) {
+        if (max<((Face*)p->data)->index) {max=((Face*)p->data)->index;}
+    }
+    return max;
+}
+
+void writeData(char *name,void_list *vlh,void_list *flh){
+	void_list *q,*vend,*fend;
+	Vertex *v;
+	Face *f;
+	FILE *F;
+	char line[1024];
+	for (q=vlh;q!=NULL;q=q->next) {vend=q;}
+	for (q=flh;q!=NULL;q=q->next) {fend=q;}
+
+	// open file
+	F = fopen(name,"w");
+	if (!F) {
+		printf("Couldn't open output file %s\n",name);
+		exit(0);
 	}
 
-	// for each face
-	prev = NULL;
-	for (p=flh;p!=NULL;p=p->next) {
-		p->previous = prev;
-		prev = p;
-		if (p->next==NULL) break;
+	// write out vertex linked list
+	for (q=vend;q!=NULL;q=q->previous) {
+		v = (Vertex*)q->data;
+      	sprintf(line,"Vertex %i  %.15g %.15g %.15g\n",v->index,v->x,v->y,v->z);
+		fputs(line,F);
 	}
+	// write out face linked list
+	for (q=fend;q!=NULL;q=q->previous) {
+		f=(Face*)q->data;
+      	sprintf(line,"Face %i  %i %i %i\n",f->index,f->v1,f->v2,f->v3);
+		fputs(line,F);
+	}
+	fclose(F);
+}
 
-	////////// add pointers to ends of linked lists /////////
-	// read out vertex linked list
-	for (q=vlh;q!=NULL;q=q->next) {
-		vend = q;
-		if (q->next==NULL) break;
-	}
+void printData(void_list *vlh,void_list *flh){
+	void_list *q,*vend,*fend;
+	Vertex *v;
+	Face *f;
+	for (q=vlh;q!=NULL;q=q->next) {vend=q;}
+	for (q=flh;q!=NULL;q=q->next) {fend=q;}
 
-	// read out face linked list
-	for (q=flh;q!=NULL;q=q->next) {
-		fend = q;
-		if (q->next==NULL) break;
-	}
-
-	////////// create arrays //////////
-
-	// find max verterx
-	int max_vertex=0;
-	for (p=vlh;p!=NULL;p=p->next) {
-		if(((Vertex*)p->data)->index > max_vertex){max_vertex = ((Vertex*)p->data)->index;}
-		if (p->next==NULL) break;
-	}
-	max_vertex++;
-
-	// find max face
-	int max_face=0;
-	for (p=flh;p!=NULL;p=p->next) {
-		if(((Face*)p->data)->index > max_face){max_face = ((Face*)p->data)->index;}
-		if (p->next==NULL) break;
-	}
-	max_face++;
-
-	// arrays
-	int *verts,*faces;
-	verts = new int[max_vertex];
-	faces = new int[max_face];
-
-	// load arrays
-	int n = 1;
-	for (p=vend;p!=NULL;p=p->previous) {
-		verts[((Vertex*)p->data)->index] = n++;
-		if (p->previous==NULL) break;
-	}
-	n = 1;
-	for (p=fend;p!=NULL;p=p->previous) {
-		faces[((Face*)p->data)->index] = n++;
-		if (p->previous==NULL) break;
-	}
-
-	////////// fix linked lists //////////
-	for (p=vlh;p!=NULL;p=p->next) {
-		((Vertex*)p->data)->index = verts[((Vertex*)p->data)->index];
-		if (p->next==NULL) break;
-	}
-	
-	for (p=flh;p!=NULL;p=p->next) {
-		((Face*)p->data)->index = faces[((Face*)p->data)->index];
-		((Face*)p->data)->v1 = verts[((Face*)p->data)->v1];
-		((Face*)p->data)->v2 = verts[((Face*)p->data)->v2];
-		((Face*)p->data)->v3 = verts[((Face*)p->data)->v3];
-		if (p->next==NULL) break;
-	}
-	
 	////////// write data to stdout /////////
 	// write out vertex linked list
 	for (q=vend;q!=NULL;q=q->previous) {
-      	printf("Vertex %i  %.15g %.15g %.15g\n",((Vertex*)q->data)->index
-								,((Vertex*)q->data)->x
-								,((Vertex*)q->data)->y
-								,((Vertex*)q->data)->z);
-		if (q->previous==NULL) break;
+		v = (Vertex*)q->data;
+      	printf("Vertex %i  %.15g %.15g %.15g\n",v->index,v->x,v->y,v->z);
 	}
-
 	// write out face linked list
 	for (q=fend;q!=NULL;q=q->previous) {
-      	printf("Face %i  %i %i %i\n",((Face*)q->data)->index
-								,((Face*)q->data)->v1
-								,((Face*)q->data)->v2
-								,((Face*)q->data)->v3);
-		if (q->previous==NULL) break;
+		f=(Face*)q->data;
+      	printf("Face %i  %i %i %i\n",f->index,f->v1,f->v2,f->v3);
+	}
+}
+
+void cleanup(void_list *f,void_list *v){
+	void_list *p,*q;
+	// faces
+	p=f;
+	while (p!=NULL) {
+		q=p->next;
+		delete (Face*)p->data;
+		delete p;
+		p=q;
+	}
+	// vertices
+	p=v;
+	while (p!=NULL) {
+		q=p->next;
+		delete (Vertex*)p->data;
+		delete p;
+		p=q;
+	}
+}
+
+int main(int argc,char *argv[]){
+
+	if (argc != 2)
+	{
+		printf("\nSyntax: mesh_renumber input_file|4all\n\n");
+		printf("Description: Renumbers vertex and face indices of mesh file in sequentially increasing fashion. Writes output to stdout.\n");
+		printf("If 4all, then all mesh files in current directory are flipped.\n");
+		printf("Note 4all writes flipped mesh back to original filename.\n\n");
+		return 1;
 	}
 
+	////////// declare variables /////////
+	void_list *q,*p,*files,*vend,*fend;
+	Face *f;
+	Vertex *v;
+	files=NULL;
+	bool flag;
+	int max_vertex,max_face,*verts,*faces,n;
+
+	// vertex and face linked lists
+	void_list *vlh,*flh;
+	vlh=flh=NULL;
+
+	// get files to analyze
+	if(!strcmp(argv[1],"4all")){
+		files=scanDir(files);
+		flag=true;
+	} else {
+		files = new void_list();
+		files->next=NULL;
+		files->data=(void*)argv[1];
+		flag=false;
+	}
+
+	// for all mesh files in current directory
+	for(q=files;q!=NULL;q=q->next){
+		fprintf(stderr,"\nrenumbering %s...\n",(char*)q->data);
+		////////// get data /////////
+		getData((char*)q->data,flh,vlh);
+		flh=addPrevious(flh);
+		vlh=addPrevious(vlh);
+        max_vertex=maxVert(vlh);
+        max_face=maxFace(flh);
+		verts = new int[max_vertex+1];
+		faces = new int[max_face+1];
+		// load arrays
+		for (p=vlh;p!=NULL;p=p->next) {vend=p;}
+		for (p=flh;p!=NULL;p=p->next) {fend=p;}
+		n=1;
+		for (p=vend;p!=NULL;p=p->previous) {verts[((Vertex*)p->data)->index]=n++;}
+		n=1;
+		for (p=fend;p!=NULL;p=p->previous) {faces[((Face*)p->data)->index]=n++;}
+		////////// fix linked lists //////////
+		for (p=vlh;p!=NULL;p=p->next) {
+			v=(Vertex*)p->data;
+			v->index = verts[v->index];
+		}
+		for (p=flh;p!=NULL;p=p->next) {
+			f=(Face*)p->data;
+			f->index = faces[f->index];
+			f->v1 = verts[f->v1];
+			f->v2 = verts[f->v2];
+			f->v3 = verts[f->v3];
+		}
+		if(flag){writeData((char*)q->data,vlh,flh);}
+		else {printData(vlh,flh);}
+		cleanup(flh,vlh);
+		vlh=flh=NULL;
+	}
 	return 0;
 }

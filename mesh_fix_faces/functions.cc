@@ -98,6 +98,7 @@ Edge* findEdge(EdgeBlock *eb,int va,int vb){
 	while(q!=NULL && !found){
 		// compute hashval of va,vb
 		hashval = getEdgeHashVal(va,vb,q->ht->s);
+//		printf("findEdge: hashval %i\n",hashval);
 		// for each edge in hashtable element pointed to by hashval
 		p = eb->ht->t[hashval];
 		while (p!=NULL && !found){
@@ -166,15 +167,15 @@ void createEdge(Face *F,EdgeBlock *eb,int va,int vb){
 	(e->f)->data = (void*)F;
 	// store edge pointer in hash table
 	// compute hashval of va,vb
-	int hashval = getEdgeHashVal(va,vb,q->ht->s);
+	e->hashval = getEdgeHashVal(va,vb,q->ht->s);
 	// load hash table
 	p=new void_list();
-	p->next = q->ht->t[hashval];
+	p->next = q->ht->t[e->hashval];
 	p->data= (void*)e;
-	q->ht->t[hashval] = p;
+	q->ht->t[e->hashval] = p;
 }
 
-void checkEdge(Face *F,EdgeBlock *&eb,int va,int vb) {
+void checkEdge(Face *F,EdgeBlock *eb,int va,int vb) {
 	Edge *e;
 	if(e=findEdge(eb,va,vb)){updateEdge(F,e,va,vb);}
 	else {createEdge(F,eb,va,vb);}
@@ -323,7 +324,7 @@ int evaluateEdge(Edge *e) {
 }
 
 void flipFace(Face *f){
-	printf("face was flipped\n");
+	fprintf(stderr,"face was flipped\n");
     // flip the face
     int temp;
     temp = f->v3;
@@ -387,17 +388,20 @@ void groupFaces(EdgeBlock *eb,int print_flag,void_list *flh){
 	EdgeBlock *q;
 	Edge *e;
 	Face *F1,*F2;
-	int i,count=0,val,next_group=1,g1,g2;
+	int i,count=0,val,next_group=1,g1,g2,j=0;
 	bool amalgamate=true,swap;
     while(amalgamate) {
+		fprintf(stderr,"\niteration %i\n",j++);
         amalgamate = false;
 		// for each EdgeBlock
 		for(q=eb;q!=NULL;q=q->next){
 			// for each edge in block
 			for(i=0;i<q->n;i++){
 				e=&q->e[i];
+//				printf("hashval %i\n",e->hashval);
 				if(e->hashval!=-1){
 					val = evaluateEdge(e);
+//					printf("val %i\n",val);
 					if(val<0){badEdge(e);}
 					else if(val<2){
 						getEdgeGroupsFaces(e,g1,g2,F1,F2);
@@ -414,7 +418,7 @@ void groupFaces(EdgeBlock *eb,int print_flag,void_list *flh){
 		                        if (val) {
 		                            // problem!
 		                            fprintf(stderr,"ERROR! Face %i and %i are both ",F1->index,F2->index);
-		                            fprintf(stderr,"in group %ibut with different orientations.\n",F1->g);
+		                            fprintf(stderr,"in group %i but with different orientations.\n",F1->g);
 		                            exit(1);
 								} //else { // if oriented same // do nothing //}
 		                    }
@@ -424,12 +428,15 @@ void groupFaces(EdgeBlock *eb,int print_flag,void_list *flh){
 			}
 		}
 	}
+	fprintf(stderr,"\ngrouping is complete\n-----------------------------------\n");
 }
 
 int maxGroup(void_list *L){
     void_list *p;
     int max=0;
+	if (L==NULL){printf("maxGroup: pointer is NULL\n");}
     for (p=L;p!=NULL;p=p->next) {
+//		fprintf(stderr,"face group %i\n",((Face*)p->data)->g);
         if (max<((Face*)p->data)->g) {max=((Face*)p->data)->g;}
     }
     return max;
@@ -444,6 +451,7 @@ void countFaceGroups(void_list *flh,int print_flag){
 	Face *f;
 	int max_group,i;
 	// find maxgroup#
+	if (flh==NULL){printf("countFaceGroups: pointer is NULL\n");}
 	max_group = maxGroup(flh);
 	// declare array of size maxgroup#+1
 	int count[max_group+1];
@@ -471,9 +479,10 @@ void printFlipActivity(void_list *flh){
 	void_list *p;
 	Face *f;
 	// for each face
+	fprintf(stderr,"\nFLip summar:y\n");
 	for(p=flh;p!=NULL;p=p->next){
 		f=(Face*)p->data;
-		if(f->flips){ printf("Face %i, group %i was flipped %i times\n",f->index,f->g,f->flips);}
+		if(f->flips){ fprintf(stderr,"Face %i, group %i was flipped %i times\n",f->index,f->g,f->flips);}
 	}
 }
 
