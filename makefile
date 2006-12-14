@@ -4,6 +4,7 @@ all:
 	cd contour_tiler/poly_converter; make
 	cd dx2mesh; make
 	cd dx2mesh_2; make
+	cd filtermesh; make
 	cd irit2mesh; make
 	cd mesh2dx; make
 	cd mesh2irit; make
@@ -15,15 +16,30 @@ all:
 	cd mesh2smf; make
 	cd mesh2stl; make
 	cd mesh2vtk; make
+	cd meshalyzer; make
 	cd meshclip; make
+	cd mesh_degenerate; make
+	cd mesh_edge_check; make
 	cd meshfilter; make
+	cd mesh_fix_faces; make
+	cd meshflip; make
+	cd meshheal; make
+	cd mesh_intersect_detect; make
 	cd meshmerge; make
 	cd meshoffset; make
+	cd meshprimp; make
+	cd meshrefine; make
+	cd mesh_renumber; make
 	cd meshscale; make
+	cd mesh_separate; make
+	cd meshstitch; make
 	cd meshtranslate; make
 	cd netgen2mesh; make
 	cd netgen2smesh; make
-	cd Recon_tmb_1; make
+	cd poly2mesh; make
+	cd reconstruct2contourtiler; make
+	cd remove_duplicate_faces; make
+	cd remove_duplicate_vertices; make
 	cd simplify_surface; make
 	cd stl2mesh; make
 	cd stlb2stla; make
