@@ -1,6 +1,0 @@
-15June2006
-
-Filtermesh a222.mesh -fixvertices -fixfaces -nice -fillholes 8 -triangulate -trisubdiv -trisubdiv -trisubdiv -trisubdiv -nfaces 20000 -inscribedc -reduce -fillholes 8 -triangulate -stats > ! a222.reduce.mesh
-
-06July2006
-Filtermesh d000_shaft.mesh -fixvertices -fixfaces -nice -fillholes 8 -triangulate -trisubdiv -trisubdiv -trisubdiv -nfaces 150000 -inscribedc -reduce -stats > ! d000_shaft.reduce.mesh
