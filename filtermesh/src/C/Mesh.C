@@ -223,7 +223,9 @@ int Mesh::isNice(Vertex v) const
 		e=clwHEdge(e);
 		if (!e || e==er) break;
 	}
-	if (e!=er) for (e=er;(e=ccwHEdge(e)) != 0;) ne++;
+//	if (e!=er) for (e=er;(e=ccwHEdge(e)) != 0;) ne++;
+	if (ne!=v->ste.height())
+            printf("Mesh::isNice - ne!=v->ste.height(): vertex [%.15lg %.15lg %.15lg]\n", v->point[0], v->point[1], v->point[2]);
 	return ne==v->ste.height();
 }
 
@@ -884,6 +886,8 @@ void Mesh::renumber()
 
 Edge Mesh::erep(Vertex v) const
 {
+//	if(v->ste.empty())
+//            printf("\nMesh::erep - v->ste.empty()==true: vertex(%.15lg, %.15lg, %.15lg)\n\n", v->point[0], v->point[1], v->point[2]);
 	return v->ste.empty()?0:v->ste.top()->prev;
 }
 

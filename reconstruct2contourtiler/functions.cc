@@ -11,6 +11,17 @@ int distinguishable(double a,double b,double eps)
   return (c>eps);
 }
 
+bool degenerateObject(Object* o){
+    void_list *q;
+    Contour *c;
+    // for each contour
+    for (q=o->contours;q!=NULL;q=q->next) {
+        c=(Contour*)q->data;
+        if(c->num_interp_points<3){return true;}
+    }
+    return false;
+}
+
 Weights* loadWeightArrays(void_list *p,Weights* w,int limit) {
 	///// load arrays of weights /////
 	// END OF RAW POINTS ARRAY WAS PASSED AS P 
@@ -512,9 +523,85 @@ void printDiagnostics(void_list* q,SplinePoint* sp,int num,char *outdir,int tag)
 	fclose(F);
 }
 
+void initTransform(double *t){
+	t[0]=0.0; t[1]=1.0; t[2]=0.0; t[3]=0.0; t[4]=0.0; t[5]=0.0;
+	t[6]=0.0; t[7]=0.0; t[8]=1.0; t[9]=0.0; t[10]=0.0; t[11]=0.0;
+}
+
+void setTransform(double *t,char *p){
+	char val[80],*eptr;
+	int i;
+	// grab '1'
+	while (strchr(" \t,",*p)!=NULL) { p++; }
+	i=0;
+	while (strchr("0123456789+-eE.",*p)!=NULL){val[i++]=*p++;}
+	val[i]=0;
+	t[0]=strtod(val,&eptr);
+	if (val==eptr) {
+		t[0]=0.0; t[1]=1.0; t[2]=0.0; t[3]=0.0; t[4]=0.0; t[5]=0.0;
+		printf("Error in reading '1' coefficient\n"); printf("str =%s\n",p);
+		return;
+	}
+	// grab 'x'
+	while (strchr(" \t,",*p)!=NULL) { p++; }
+	i=0;
+	while (strchr("0123456789+-eE.",*p)!=NULL){val[i++]=*p++;}
+	val[i]=0;
+	t[1]=strtod(val,&eptr);
+	if (val==eptr) {
+		t[0]=0.0; t[1]=1.0; t[2]=0.0; t[3]=0.0; t[4]=0.0; t[5]=0.0;
+		printf("Error in reading 'x' coefficient\n"); printf("str =%s\n",p);
+		return;
+	}
+	// grab 'y'
+	while (strchr(" \t,",*p)!=NULL) { p++; }
+	i=0;
+	while (strchr("0123456789+-eE.",*p)!=NULL){val[i++]=*p++;}
+	val[i]=0;
+	t[2]=strtod(val,&eptr);
+	if (val==eptr) {
+		t[0]=0.0; t[1]=1.0; t[2]=0.0; t[3]=0.0; t[4]=0.0; t[5]=0.0;
+		printf("Error in reading 'y' coefficient\n"); printf("str =%s\n",p);
+		return;
+	}
+	// grab 'xy'
+	while (strchr(" \t,",*p)!=NULL) { p++; }
+	i=0;
+	while (strchr("0123456789+-eE.",*p)!=NULL){val[i++]=*p++;}
+	val[i]=0;
+	t[3]=strtod(val,&eptr);
+	if (val==eptr) {
+		t[0]=0.0; t[1]=1.0; t[2]=0.0; t[3]=0.0; t[4]=0.0; t[5]=0.0;
+		printf("Error in reading 'xy' coefficient\n"); printf("str =%s\n",p);
+		return;
+	}
+	// grab 'x*x'
+	while (strchr(" \t,",*p)!=NULL) { p++; }
+	i=0;
+	while (strchr("0123456789+-eE.",*p)!=NULL){val[i++]=*p++;}
+	val[i]=0;
+	t[4]=strtod(val,&eptr);
+	if (val==eptr) {
+		t[0]=0.0; t[1]=1.0; t[2]=0.0; t[3]=0.0; t[4]=0.0; t[5]=0.0;
+		printf("Error in reading 'x*x' coefficient\n"); printf("str =%s\n",p);
+		return;
+	}
+	// grab 'y*y'	
+	while (strchr(" \t,",*p)!=NULL) { p++; }
+	i=0;
+	while (strchr("0123456789+-eE.",*p)!=NULL){val[i++]=*p++;}
+	val[i]=0;
+	t[5]=strtod(val,&eptr);
+	if (val==eptr) {
+		t[0]=0.0; t[1]=1.0; t[2]=0.0; t[3]=0.0; t[4]=0.0; t[5]=0.0;
+		printf("Error in reading 'y*y' coefficient\n"); printf("str =%s\n",p);
+		return;
+	}
+}
+
 void_list * getContours(int argc,char *argv[],double thickness){
 	int i,min_section,max_section;
-	char *indir,infile[128],*str,line[2048],*name,filename[256],*eptr,*temp;
+	char *indir,infile[128],*str,line[2048],*name,filename[256],*eptr,*temp,*coef;
 	FILE *F;
 	void_list *c,*q,*ch;
 	ch=NULL;
@@ -524,6 +611,7 @@ void_list * getContours(int argc,char *argv[],double thickness){
 	indir = argv[1];
 	min_section = (int) strtod(argv[3],&eptr);
 	max_section = (int) strtod(argv[4],&eptr);
+	double transform[12];
 	// adjust indir
 	strcpy(filename,indir);
 	temp=strrchr(indir,'/');
@@ -539,10 +627,40 @@ void_list * getContours(int argc,char *argv[],double thickness){
 		if (!F) { printf("Couldn't open input file %s\n",infile); return NULL;}
 		else{ printf("Input file found: %s\n",infile); }
 		contour_flag = false;
+		// initialize Transform
+		initTransform(transform);
 		// for every line in file
-		for (str=fgets(line,2048,F) ; str!=NULL ; str=fgets(line,2048,F)) {
+		for (str=fgets(line,2048,F);str!=NULL;str=fgets(line,2048,F)) {
+			if (strstr(str,"Transform dim")!=NULL) {
+				// get next line
+				str=fgets(line,2048,F);
+				if(str==NULL){
+					printf("Nothing after Transform Dim.");
+					printf(" Reconstruct file may be corrupted: %s.\n",infile); return NULL;
+				}
+				// get xcoeff
+				if (strstr(str,"xcoef=")!=NULL) {
+					coef = strstr(str,"xcoef=");
+					coef += 8; // advance pointer to start of coefficients
+							// 8, because 'xcoeff="' is full string
+					setTransform(transform,coef);
+				} else {printf("No xcoef. Reconstruct file may be corrupted.: %s.\n",infile); return NULL;}
+				// get next line
+				str=fgets(line,2048,F);
+				if(str==NULL){
+					printf("Nothing after xcoef.");
+					printf(" Reconstruct file may be corrupted: %s.\n",infile); return NULL;
+				}
+				// get ycoeff
+				if (strstr(str,"ycoef=")!=NULL) {
+					coef = strstr(str,"ycoef=");
+					coef += 8; // advance pointer to start of coefficients
+							// 8, because 'ycoeff="' is full string
+					setTransform(transform+6,coef);
+				} else {printf("No ycoef. Reconstruct file may be corrupted: %s.\n",infile); return NULL;}
+			}
 			// if start of contour
-			if (strstr(str,"<Contour")!=NULL) {
+			else if (strstr(str,"<Contour")!=NULL) {
 				// find name
 				name = strstr(str,"name=");
 				name += 6; // advance pointer to start of name
@@ -559,7 +677,7 @@ void_list * getContours(int argc,char *argv[],double thickness){
 			else if (strstr(str,"/>")!=NULL){contour_flag = false;}
 			else if (contour_flag) {
 				// add point to contour
-				v = new Point(str,i,thickness);
+				v = new Point(str,i,thickness,&transform[0]);
 				q = new void_list();
 				q->next = ((Contour*)ch->data)->raw_points;
 				q->data = (void*)v;
@@ -799,7 +917,7 @@ void printConfigFile(char *outdir,Object* o,int capping_flag){
 		sprintf(line,"%sMERGE_DISTANCE_SQUARE: 1E-24\n",line);
 	}else{
 		sprintf(line,"SLICE_RANGE: %i %i\n",o->min_section ,o->max_section);
-		sprintf(line,"%snMERGE_DISTANCE_SQUARE: 1E-24\n",line);
+		sprintf(line,"%sMERGE_DISTANCE_SQUARE: 1E-24\n",line);
 	}
 	fputs(line,F);
 	// close pts file

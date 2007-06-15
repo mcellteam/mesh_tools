@@ -1,5 +1,6 @@
 BASEDIR = ../..
-OPTIM = -O3 -march=pentiumpro
+#OPTIM = -O3 -march=pentiumpro
+OPTIM = -m64 -O3 -march=opteron
 INC = -I${BASEDIR}/include
 CFLAGS = ${OPTIM} ${INC}
 

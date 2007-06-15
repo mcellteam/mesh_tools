@@ -222,7 +222,12 @@ edge_segment_list: edge_segment
 	| edge_segment_list edge_segment
 ;
 
-edge_segment:	num_arg num_arg num_arg num_arg num_arg num_arg newline_list
+//edge_segment:	num_arg num_arg num_arg num_arg num_arg num_arg newline_list
+edge_segment:	num_arg_list newline_list
+;
+
+num_arg_list:  num_arg
+	| num_arg_list num_arg
 ;
 
 points_block:  POINTS newline_list

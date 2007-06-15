@@ -1,3 +1,0 @@
-17June2006
-
-Use typedef for improved readability.

@@ -7,7 +7,7 @@
 #define POLY 2
 #define NURBS 3
 
-#define EPS_D 1.0e-12
+#define EPS_D 1.0e-15
 
 typedef unsigned char byte;
 

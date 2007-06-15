@@ -405,8 +405,8 @@ int main(int argc,char *argv[]){
 	{
 		printf("\nSyntax: mesh_renumber input_file|4all\n\n");
 		printf("Description: Renumbers vertex and face indices of mesh file in sequentially increasing fashion. Writes output to stdout.\n");
-		printf("If 4all, then all mesh files in current directory are flipped.\n");
-		printf("Note 4all writes flipped mesh back to original filename.\n\n");
+		printf("If 4all, then all mesh files in current directory are renumbered.\n");
+		printf("Note 4all writes renumbered mesh back to original filename.\n\n");
 		return 1;
 	}
 

@@ -178,7 +178,7 @@ public:
   double d; // distance between vertices with indices vA and vB
   Vertex *vA,*vB;
   Distance(double,void_list*,void_list*);
-  ~Distance(void);
+//  ~Distance(void);
   bool deleteme;
 };
 
@@ -190,10 +190,10 @@ Distance::Distance(double dist,void_list *p,void_list *q)
 	deleteme = false;
 }
 
-Distance::~Distance(void)
-{
-	if(deleteme){delete vB;}
-}
+//Distance::~Distance(void)
+//{
+//	if(deleteme){delete vB;}
+//}
 
 class Edge
 {

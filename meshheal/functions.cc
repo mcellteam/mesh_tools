@@ -167,6 +167,7 @@ Edge* findEdge(EdgeBlock *eb,int va,int vb){
     while(q!=NULL && !found){
         // compute hashval of va,vb
         hashval = getEdgeHashVal(va,vb,q->ht->s);
+		if(hashval>q->ht->s-1){printf("hashval %i, size of hashtable %i\n",hashval,q->ht->s);}
         // for each edge in hashtable element pointed to by hashval
         p = eb->ht->t[hashval];
         while (p!=NULL && !found){
@@ -192,7 +193,7 @@ void updateEdge(Face *F,Edge *e,int va,int vb){
 }
 
 
-void createEdge(Face *F,EdgeBlock *eb,int va,int vb){
+EdgeBlock* createEdge(Face *F,EdgeBlock *eb,int va,int vb){
     EdgeBlock *q;
     Edge *e;
     bool found=false;
@@ -212,6 +213,9 @@ void createEdge(Face *F,EdgeBlock *eb,int va,int vb){
 
     // if no open Edge slot found in any EdgeBlock
     if (!found) {
+		printf("Increase number of edges in EdgeBlock!\n");exit(1);
+/*
+		printf("new edge block created!\n");
         // create a new EdgeBlock
         q = new EdgeBlock(10000);
         // store pointer to last EdgeBlock
@@ -221,6 +225,8 @@ void createEdge(Face *F,EdgeBlock *eb,int va,int vb){
         // grab Edge pointer
         e=&q->e[q->p];
         q->p++;
+		eb=q;
+*/
     }
 
     // load Edge
@@ -242,16 +248,17 @@ void createEdge(Face *F,EdgeBlock *eb,int va,int vb){
     p->next = q->ht->t[hashval];
     p->data= (void*)e;
     q->ht->t[hashval] = p;
+	return eb;
 }
 
 
 void checkEdge(Face *F,EdgeBlock *&eb,int va,int vb) {
     Edge *e;
     if(e=findEdge(eb,va,vb)){ updateEdge(F,e,va,vb);}
-    else {createEdge(F,eb,va,vb);}
+    else {eb=createEdge(F,eb,va,vb);}
 }
 
-void getEdges(void_list *flh,EdgeBlock *eb,int num,int print_flag){
+void getEdges(void_list *flh,EdgeBlock *&eb,int num,int print_flag){
     void_list *q;
     Face *f;
     int i=0;
@@ -302,6 +309,39 @@ void_list* removeLink(void_list* L) {
 	q=L->next;
 	delete L;
 	return q;
+}
+
+void_list* addLink(void_list* L, Vertex *v) {
+	void_list *q;
+	q = new void_list();
+	q->next = L;
+	q->data = (void*)v;
+	return q;
+}
+
+double computeLongestEdge(EdgeBlock *eb,Vertex **vert_array,double epsilon) {
+	EdgeBlock *q;
+	Edge *e;
+	Vertex *va,*vb;
+	double d,max=0.0;
+
+    // for each EdgeBlock
+    for(q=eb;q!=NULL;q=q->next){
+        // for each edge in block
+        for(int i=0;i<q->n;i++){
+            e=&q->e[i];
+			// if edge is valid
+			if(e->v1!=0 &&e->v2!=0){
+				va=vert_array[e->v1];
+				vb=vert_array[e->v2];
+				// compute squared edge length
+				d=(va->x/epsilon-vb->x/epsilon)*(va->x/epsilon-vb->x/epsilon)+(va->y/epsilon-vb->y/epsilon)*(va->y/epsilon-vb->y/epsilon)+(va->z/epsilon-vb->z/epsilon)*(va->z/epsilon-vb->z/epsilon);
+				// if edge is longer than max, then save d
+	            if (d>max){max=d;}
+			}
+		}
+	}
+	return max; // return threshold squared
 }
 
 void_list * gatherFreeVertices(EdgeBlock *eb,int max_vert,Vertex **vert_array,int print_flag) {
@@ -379,9 +419,9 @@ int compare (const void* a, const void* b ) {
 	else { return (0);}
 }
 
-void_list ** computeDistances(EdgeBlock *eb,void_list **dist_array,void_list *v,void_list *F,int& d_count,double epsilon,int print_flag) {
+void_list ** computeDistances(EdgeBlock *eb,void_list **dist_array,void_list *v,void_list *F,int& d_count,double epsilon,int print_flag,double threshold) {
 	///// compute distances /////
-	if (!print_flag) {printf("Computing vertex distances...");fflush(stdout);}
+	fprintf(stderr,"Computing vertex distances...");fflush(stderr);
 	void_list *q,*qq,*dl,*dlh;
 	double diffx,diffy,diffz,squared_dist;
 	int i=0;
@@ -406,13 +446,16 @@ void_list ** computeDistances(EdgeBlock *eb,void_list **dist_array,void_list *v,
 					diffy = vo->y/epsilon-vi->y/epsilon;
 					diffz = vo->z/epsilon-vi->z/epsilon;
 					squared_dist = diffx*diffx+diffy*diffy+diffz*diffz;
-					// create distance
-					dl = new void_list();
-					dl->next = dlh;
-					d = new Distance(squared_dist,q,qq);
-					dl->data = (void*)d;
-					dlh = dl;
-					d_count++;
+					// if distance less than longest edge, then save
+					if (squared_dist<threshold){
+						// create distance
+						dl = new void_list();
+						dl->next = dlh;
+						d = new Distance(squared_dist,q,qq);
+						dl->data = (void*)d;
+						dlh = dl;
+						d_count++;
+					}
 				}
 			}
 		}
@@ -450,7 +493,7 @@ int countFreeVertices(void_list *v,int print_flag) {
 	void_list *q;
 	int i=0;
     for (q=v;q!=NULL;q=q->next) { i++; }
-	if(!print_flag){printf("num free vertices = %i\n",i);fflush(stdout);}
+	fprintf(stderr,"num free vertices = %i\n",i);fflush(stderr);
 	return i;
 }
 
@@ -476,13 +519,16 @@ int findVerticesToMerge(void_list **array,int count,void_list *vfree,
 		if (vflag1&&vflag2){flag=true;}
 		else{i++;}
 	}
-	if (!print_flag){ printf("vertices to merge: %i %i, dist = %.15g\n",
-				((Vertex*)d->vA)->index,((Vertex*)d->vB)->index,sqrt(d->d*epsilon*epsilon));}
-	if (i==count){fprintf(stderr,"ERROR! No eligible vertices to merge were found.\n");exit(0);}
-	else {return i;}
+	if (i==count){
+		fprintf(stderr,"ERROR! No eligible vertices to merge were found.\n");
+	} else {
+		fprintf(stderr,"vertices to merge: %i %i, dist = %.15g\n",
+				((Vertex*)d->vA)->index,((Vertex*)d->vB)->index,sqrt(d->d*epsilon*epsilon));
+	}
+	return i;
 }
 
-void_list * fixVertices(void_list *v,Distance *d,int print_flag) {
+void_list * fixVertices(void_list *v,Distance *d,int print_flag,void_list *&vbad) {
 	///// remove second vertex in pair from vertex list /////
 	void_list *ptr,*p;
 	ptr=v;
@@ -490,6 +536,8 @@ void_list * fixVertices(void_list *v,Distance *d,int print_flag) {
 	bool found = false;
 	while (p!=NULL && !found) {
 		if(((Vertex*)d->vB)->index == ((Vertex*)p->data)->index){
+			// add pointer to bad vertex list
+			vbad = addLink(vbad,(Vertex*)p->data);
 			// adjust list pointer
 			if (p==ptr) { ptr=p->next;}
 			// remove link from list
@@ -552,7 +600,7 @@ void_list * printVerticesFaces(void_list *vlh,void_list *flh){
 	}
 }
 
-void_list * deleteEdges(EdgeBlock *eb) {
+void deleteEdges(EdgeBlock *eb) {
     EdgeBlock *pp,*qq;
     // for each EdgeBlock
     pp=eb;
@@ -564,7 +612,7 @@ void_list * deleteEdges(EdgeBlock *eb) {
 }
 
 void cleanup(EdgeBlock *eb,void_list *vf,void_list *v,
-			void_list *f,void_list **d,int count,Vertex **vert_array){
+			void_list *f,void_list **d,int count,Vertex **vert_array,void_list *vbad){
 	void_list *p,*q;
 	deleteEdges(eb);
 	deleteFreeVertices(vf);
@@ -591,4 +639,12 @@ void cleanup(EdgeBlock *eb,void_list *vf,void_list *v,
 	delete[] d;
 	///////////////////////
 	delete[] vert_array;
+	////////// delete bad vertices /////////
+	p=vbad;
+	while (p!=NULL) {
+		q=p->next;
+		delete (Vertex*)p->data;
+		delete p;
+		p=q;
+	}
 }

@@ -1,10 +1,15 @@
 BASEDIR = ..
 INC = -I${BASEDIR}/include
 
+#CPP = g++-3.4
 CPP = g++
-CPPFLAGS = ${INC} -O3 -march=pentium4 -mcpu=pentium4 -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
-#CPPFLAGS = ${INC} -g -march=pentium4 -mcpu=pentium4 -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
-CFLAGS = -O3 -march=pentium4 -mcpu=pentium4
+#CPPFLAGS = ${INC} -m64 -O3 -march=opteron -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
+#CPPFLAGS = ${INC} -O3 -march=pentium4  -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
+CPPFLAGS = ${INC} -O3 -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
+#CPPFLAGS = ${INC} -O3 -march=pentium4  -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
+#CPPFLAGS = ${INC} -g -march=pentium4  -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
+#CFLAGS = -O3 -march=pentium4 -mcpu=pentium4
+CFLAGS = -O3
 #CFLAGS = -g -march=pentium4 -mcpu=pentium4
 LDFLAGS = -static
 HLIBS = libHh.a ../lib/recipes/librecipes.a ../lib/linpack/liblinpack.a

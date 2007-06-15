@@ -21,6 +21,10 @@ int main(int argc,char *argv[]){
 		return 1;
 	}
 
+	fprintf(stderr,"Warning. This algorithm may assumme that face vertices v1 v2 v3 are listed\n");
+	fprintf(stderr,"in ccw order and that the vector formed by the cross product of\n");
+	fprintf(stderr,"vectors v1v2 and v2v3 points out of the mesh.\n");
+
 	////////// declare variables /////////
 
 	char *infile1,*infile2,outfile1[128],outfile2[128],line[2048];

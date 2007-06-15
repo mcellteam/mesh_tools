@@ -96,7 +96,7 @@ object: '[' OBJECT attribute VAR
     op->parent=world_obj;
     op->first_child=NULL;
     op->last_child=NULL;
-    op->name=$<str>3;
+    op->name=$<str>2;
     op->object_type=POLY;
     op->contents=NULL;
 
@@ -171,7 +171,7 @@ num_arg: INTEGER {$$=(double)ival;}
 ;
 
 
-polygon_w_plane: POLYGON plane attribute num_arg
+polygon_w_plane: POLYGON plane num_arg
 {
     vlp=NULL;
     vertex_head=NULL;

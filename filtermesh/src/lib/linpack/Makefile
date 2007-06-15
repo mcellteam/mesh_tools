@@ -2,7 +2,8 @@
 # Found file r_sign.c in f2c library and created f2chelper.c with it.
 # On alpha, had to modify 'long' to be 'int' in f2c.h
 
-CFLAGS = -O3 -march=pentiumpro
+#CFLAGS = -O3 -march=pentiumpro
+CFLAGS = -m64 -O3 -march=opteron
 
 # FTN = f77
 # FTNFLAGS = -O

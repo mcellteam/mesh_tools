@@ -118,14 +118,15 @@ int main(int argc,char *argv[]){
 	// for each object
 	for (q=objectsh;q!=NULL;q=q->next) {
 		o=(Object*)q->data;
-		///// print config file /////
-		printConfigFile(outdir,o,capping_flag);
-		/////  append to script files /////
-		appendScriptFile(outdir,o);
-		///// print pts files of interpolated contour points /////
-		printPtsFiles(outdir,o,scale);
-		if(capping_flag){printCaps(outdir,o,thickness,scale);}
-
+        if(!degenerateObject(o) && (capping_flag || o->min_section!=o->max_section)){
+			///// print config file /////
+			printConfigFile(outdir,o,capping_flag);
+			/////  append to script files /////
+			appendScriptFile(outdir,o);
+			///// print pts files of interpolated contour points /////
+			printPtsFiles(outdir,o,scale);
+			if(capping_flag){printCaps(outdir,o,thickness,scale);}
+		}
 	}
 
 	////////// create calling script //////////

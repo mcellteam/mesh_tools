@@ -27,7 +27,6 @@ all:
 	cd mesh_intersect_detect; make
 	cd meshmerge; make
 	cd meshoffset; make
-	cd meshprimp; make
 	cd meshrefine; make
 	cd mesh_renumber; make
 	cd meshscale; make

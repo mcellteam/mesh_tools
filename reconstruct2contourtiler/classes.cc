@@ -69,7 +69,7 @@ class Point
 {
 public:
   double x,y,z;
-  Point(char *str,int section,double thickness);
+  Point(char *str,int section,double thickness,double *transform);
   Point(double xval,double yval,double zval);
 };
 
@@ -80,11 +80,12 @@ Point::Point(double xval, double yval, double zval)
 	z = zval;
 }
 
-Point::Point(char *str, int section, double thickness)
+Point::Point(char *str, int section, double thickness,double *t)
 {
 	char val[80];
 	char *eptr;
 	int i;
+	double xval,yval;
 
 	// set z coordinate
 	z = section*thickness;
@@ -94,35 +95,33 @@ Point::Point(char *str, int section, double thickness)
 
 	// grab x coordinate
 	i=0;
-	while (strchr("0123456789+-eE.",*str)!=NULL)
-	{
-		val[i++] = *str++;
-	}
+	while (strchr("0123456789+-eE.",*str)!=NULL) { val[i++] = *str++; }
 	val[i]=0;
-	x = strtod(val,&eptr);
-	if (val==eptr)
-	{
+	xval = strtod(val,&eptr);
+	if (val==eptr) {
 		x=y=z=0;
 		printf("Error in reading x coordinate\n");
-	printf("str =%s\n",str);
+		printf("str =%s\n",str);
 		return;
 	}
 
 	// grab y coordinate
 	while (strchr(" \t,",*str)!=NULL) { str++; }
 	i=0;
-	while (strchr("0123456789+-eE.",*str)!=NULL)
-	{
-		val[i++] = *str++;
-	}
+	while (strchr("0123456789+-eE.",*str)!=NULL) { val[i++] = *str++; }
 	val[i]=0;
-	y = strtod(val,&eptr);
-	if (val==eptr)
-	{
+	yval = strtod(val,&eptr);
+	if (val==eptr) {
 		x=y=z=0;
 		printf("Error in reading y coordinate\n");
 		return;
 	}
+//	if(section==64){
+//	printf("xcoef = %g %g %g %g %g %g\n",t[0],t[1],t[2],t[3],t[4],t[5]);
+//	printf("ycoef = %g %g %g %g %g %g\n\n",t[6],t[7],t[8],t[9],t[10],t[11]);
+//	}
+	x = t[0]+t[1]*xval+t[2]*yval+t[3]*xval*yval+t[4]*xval*xval+t[5]*yval*yval;
+	y = t[6]+t[7]*xval+t[8]*yval+t[9]*xval*yval+t[10]*xval*xval+t[11]*yval*yval;
 }
 
 class Contour
@@ -169,6 +168,16 @@ Contour::Contour(char *str, int sec)
 	i=0;
 	while (strchr("\"",*str)==NULL){val[i++]=*str++;}
 	val[i]=0;
+
+    char *ptr = val;
+    while(ptr!=NULL){
+//      ptr=strchr(val,'#');
+        ptr=strpbrk(val,"#()");
+        if(ptr!=NULL){
+            *ptr='_';
+        }
+    }
+
 	strcpy(name,val);
 	section = sec;
 	raw_points = NULL;

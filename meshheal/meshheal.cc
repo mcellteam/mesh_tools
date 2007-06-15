@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <string>
 
 #include "classes.cc"
 #include "functions.cc"
@@ -35,9 +36,11 @@ vertex that is also on a border. Declare these two vertices to be duplicates.
 	void_list** dist_array;
     Vertex **vert_array;
 
+	int delay = 0;
+
 	// linked lists
-	void_list *flh,*vlh,*vfree;
-	flh=vlh=vfree=NULL;
+	void_list *flh,*vlh,*vfree,*vbad;
+	flh=vlh=vfree=vbad=NULL;
 
 	////////// get data /////////
 	double epsilon = strtod(argv[2],&eptr);
@@ -52,57 +55,63 @@ vertex that is also on a border. Declare these two vertices to be duplicates.
 	initVertArray(vlh,vert_array,num_verts);
 
     ///// build edge list ////
-    num_edges=num_faces+num_verts-2+1000;
+    num_edges=num_faces+num_verts-2+10000;
     eb = new EdgeBlock(num_edges);
     eb->ht = new HashTable(eb->n);
     getEdges(flh,eb,num_faces,print_flag);
+
+	// get max edge length squared
+	double threshold = computeLongestEdge(eb,vert_array,epsilon);
 
 	///// gather free vertices /////
 	vfree = gatherFreeVertices(eb,num_verts,vert_array,print_flag);
 
 	///// compute distances /////
-	dist_array = computeDistances(eb,dist_array,vfree,flh,d_count,epsilon,print_flag);
+	dist_array = computeDistances(eb,dist_array,vfree,flh,d_count,epsilon,print_flag,threshold);
 
 	///// count number free vertices /////
 	num_vfree = countFreeVertices(vfree,print_flag);
 
 	///// merge vertices /////
-	while(num_vfree){
-//	while(num_vfree>3){   //USED FOR HEALING proc61 in glia
-
+	bool flag=true;
+	while(flag){
 		///// identify free vertex pair separated by the smallest distance /////
 		i=findVerticesToMerge(dist_array,d_count,vfree,print_flag,epsilon);
+		if (i==d_count){flag=false;}
+		else if (sqrt(((Distance*)dist_array[i]->data)->d*epsilon*epsilon)>1e-9){flag=false;}
+		else {
+			///// remove second vertex in pair from vertex list /////
+			vlh = fixVertices(vlh,(Distance*)dist_array[i]->data,print_flag,vbad);
 
-		///// remove second vertex in pair from vertex list /////
-		vlh = fixVertices(vlh,(Distance*)dist_array[i]->data,print_flag);
-
-		///// replace all instances of second vertex in face list with first vertex /////
-		flh = fixFaces(flh,(Distance*)dist_array[i]->data,print_flag);
-
-		///// delete edge list /////
-		deleteEdges(eb);
-
-	    ///// build edge list ////
-	    num_edges=num_faces+num_verts-2+1000;
-	    eb = new EdgeBlock(num_edges);
-	    eb->ht = new HashTable(eb->n);
-	    getEdges(flh,eb,num_faces,print_flag);
-
-		///// delete free vertices /////
-		deleteFreeVertices(vfree);
-		vfree=NULL;
-
-		///// gather free vertices /////
-		vfree = gatherFreeVertices(eb,num_verts,vert_array,print_flag);
-
-		///// count number free vertices /////
-		num_vfree = countFreeVertices(vfree,print_flag);
+			///// replace all instances of second vertex in face list with first vertex /////
+			flh = fixFaces(flh,(Distance*)dist_array[i]->data,print_flag);
+		
+			///// delete edge list /////
+			deleteEdges(eb);
+		
+		    ///// build edge list ////
+		    num_edges=num_faces+num_verts-2+10000;
+		    eb = new EdgeBlock(num_edges);
+		    eb->ht = new HashTable(eb->n);
+		    getEdges(flh,eb,num_faces,print_flag);
+		
+			///// delete free vertices /////
+			deleteFreeVertices(vfree);
+			vfree=NULL;
+		
+			///// gather free vertices /////
+			vfree = gatherFreeVertices(eb,num_verts,vert_array,print_flag);
+		
+			///// count number free vertices /////
+			num_vfree = countFreeVertices(vfree,print_flag);
+			if(!num_vfree){flag=false;}
+		}
 	}
 	// print to stdout
 	if(print_flag){printVerticesFaces(vlh,flh);}
 
 	///// cleanup /////
-	cleanup(eb,vfree,vlh,flh,dist_array,d_count,vert_array);
+	cleanup(eb,vfree,vlh,flh,dist_array,d_count,vert_array,vbad);
 
 	return 0;
 }
