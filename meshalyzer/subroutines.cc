@@ -979,14 +979,10 @@ void Container::scanFile (Object *obj,char *filename) {
     fclose(F);
 }
 
-void Container::writeDistances(int iteration) {
+void Container::writeDistances(void) {
 	char file[128];
 	// create output filename
-	if (append_iteration_number_to_distances) {
-		sprintf(file,"%sclosest_point_distances_%i.dat",OUTPUT_DATA_DIR,iteration);
-	} else {
-		sprintf(file,"%sclosest_point_distances.dat",OUTPUT_DATA_DIR);
-	}
+	sprintf(file,"closest_point_distances.dat");
 	// open output file
 	std::ofstream newfile (file,std::ios::out);
 	if(newfile.is_open()){
@@ -1093,15 +1089,6 @@ void Space::boundWorld(Container& c) {
 	if (zmin<0) {world[4]=zmin*1.01;} else {world[4]=zmin*0.99;}
 	if (zmax<0) {world[5]=zmax*0.99;} else {world[5]=zmax*1.01;}
 
-	if (print_flag) {
-		cout << "\nworld bounds = [" 
-			<< world[0] << " "
-			<< world[1] << " "
-			<< world[2] << " "
-			<< world[3] << " "
-			<< world[4] << " "
-			<< world[5] << "]\n";
-	}
 }
 
 // #####################################################
@@ -2716,7 +2703,7 @@ void Controls::areaAspectRatio(Object *o){
 	area.createHistogram();
 //	cout << "area [min,max]=[" << area.min << "," << area.max << "]"<< endl;
 	// build aspect ratio histogram
-	aspect_ratio.createHistogram();
+	aspect_ratio.createAspectRatioHistogram();
 }
 
 
@@ -3087,7 +3074,7 @@ void Controls::computeEdgeAngles(Object *o){
 	for(std::vector<Edge*>::iterator i=o->e.begin();i!=o->e.end();i++){
 		// if edge has exactly two adjacent faces
 		if((*i)->f2!=NULL && (*i)->fvec.empty()){
-			double angle = (*i)->getAngle();
+			double angle = (*i)->getAngle()*180/PI; // degrees
 			edge_angle.n++;
 			edge_angle.sum+=angle;
 			edge_angle.sum2+=angle*angle;
@@ -3301,13 +3288,13 @@ void Object::printChars(Controls &cs){
 	}
 
 	// bounding box
-	cout << "bounding box: [xmin,xmax,ymin,ymax,zmin,zmax]\n";
+	cout << "bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]\n";
 	cout << "bounding box: ["
 	<< cs.bb[0] << " , "
-	<< cs.bb[1] << " , "
 	<< cs.bb[2] << " , "
+	<< cs.bb[4] << "]["
+	<< cs.bb[1] << " , "
 	<< cs.bb[3] << " , "
-	<< cs.bb[4] << " , "
 	<< cs.bb[5] << "]" << endl << endl;
 	// face area
 	cout << "Face area statistics:" << endl;
@@ -3321,7 +3308,7 @@ void Object::printChars(Controls &cs){
 	cout << "Face aspect ratio statistics:" << endl;
 	cs.aspect_ratio.printStats();
 	cout << "Face aspect ratio histogram:" << endl;
-	cs.aspect_ratio.printHistogram();
+	cs.aspect_ratio.printAspectRatioHistogram();
 	printf("  (Aspect ratio is longest edge divided by shortest altitude)\n");
 	printf("\n");
 
@@ -3342,7 +3329,7 @@ void Object::printChars(Controls &cs){
 
 	// if edge angles computed
 	if(manifold==true && consistent==true){
-		cout << "Edge angle statistics:         (radians)" << endl;
+		cout << "Edge angle statistics:         (degrees)" << endl;
 		cs.edge_angle.printStats();
 		cout << "Edge angle histogram:" << endl;
 		cs.edge_angle.printHistogram();
@@ -3697,7 +3684,7 @@ void Container::printBatch(Controls &cs){
 			}
 		}
 		//	print sep distance
-	    writeDistances(0);
+	    writeDistances();
 	} else {
 		// print goodness
 		cout << cs.num_score << endl;

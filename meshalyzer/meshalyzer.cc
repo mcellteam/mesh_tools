@@ -44,15 +44,15 @@ using std::set;
 int main(int argc,char **argv){
 
 	char message[2048];
-	sprintf(message,"\nSyntax: meshalyzer file/folder ");
-	sprintf(message,"%s[-a]|[-p] [-g t1 t2 t3][-i][-s]\n\n",message);
+	sprintf(message,"\nUsage: meshalyzer file|folder ");
+	sprintf(message,"%s[-a]|[-p] [-g=t1,t2,t3][-i][-s]\n\n",message);
 	sprintf(message,"%sDescription: Analyze and assess the integrity of mesh files.\n\n",message);
 	sprintf(message,"%sThe '-a' option evaluates the attributes of the meshes,\n",message);
 	sprintf(message,"%s reports the results, and exits.\n\n",message);
 	sprintf(message,"%sThe '-p' option prints offending mesh elements \n",message);
 	sprintf(message,"%s(i.e. flipped faces, borders, nonmanifold edges,\n",message);
 	sprintf(message,"%snonmanifold vertices, intersecting faces).\n\n",message);
-	sprintf(message,"%sThe '-g t1 t2 t3' option explicitly reports whether\n",message);
+	sprintf(message,"%sThe '-g=t1,t2,t3' option explicitly reports whether\n",message);
 	sprintf(message,"%sor not mesh is good (i.e. mesh is closed manifold\n",message);
 	sprintf(message,"%swith outward normals, no intersecting faces, no orphaned\n",message);
 	sprintf(message,"%sor missing vertices, no degenerate faces, contiguous vertex\n",message);

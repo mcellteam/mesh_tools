@@ -1,3 +1,4 @@
 June 2007
 1. Consider using half-edge data structure
 	see http://www.openmesh.org/
+2. The Euler-Poincare formula for computing genus only assumes that the mesh be orientable. Currently, the mesh is required to be oriented.

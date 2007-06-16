@@ -306,7 +306,9 @@ public:
 	double median(void);
 	double variance(void);
 	void createHistogram(void);
+	void createAspectRatioHistogram(void);
 	void printHistogram(void);
+	void printAspectRatioHistogram(void);
 	void printStats(void);
 };
 
@@ -327,6 +329,25 @@ void Stats::printHistogram(void){
 		bins[6], bins[7], count[6], bins[14], bins[15], count[14]);
 	printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
 		bins[7], bins[8], count[7], bins[15], bins[16], count[15]);
+}
+
+void Stats::printAspectRatioHistogram(void){
+	printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+		bins[0], bins[1], count[0], bins[8], bins[9], count[8]);
+	printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+		bins[1], bins[2], count[1], bins[9], bins[10], count[9]);
+	printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+		bins[2], bins[3], count[2], bins[10], bins[11], count[10]);
+	printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+		bins[3], bins[4], count[3], bins[11], bins[12], count[11]);
+	printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+		bins[4], bins[5], count[4], bins[12], bins[13], count[12]);
+	printf("  %9.4g - %-9.4g    : %9d  | %9.4g - 10000       : %9d\n",
+		bins[5], bins[6], count[5], bins[13], count[13]);
+	printf("  %9.4g - %-9.4g    : %9d  |     10000 - 100000      : %9d\n",
+		bins[6], bins[7], count[6], count[14]);
+	printf("  %9.4g - %-9.4g    : %9d  |    100000 -             : %9d\n",
+		bins[7], bins[8], count[7], count[15]);
 }
 
 void Stats::printStats(void){
@@ -352,6 +373,41 @@ void Stats::createHistogram(void){
 		bins[i]=min+step*i;
 	}
 	bins[NUM_BINS]=max;
+
+	// bin data
+	unsigned int start,mid,end;
+
+	// for each element in x
+	for(std::vector<double>::iterator i=x.begin();i!=x.end();i++){
+		start=0;
+		end=NUM_BINS-1;
+		while (end-start>1){
+			mid=(start+end)/2;
+			if (*i >= bins[start] && *i <= bins[mid]) { end=mid;}
+			else { start=mid; }
+		}
+		if (*i >= bins[start] && *i <= bins[end]) { count[start]++;}
+		else { count[end]++; }
+	}
+}
+void Stats::createAspectRatioHistogram(void){
+	// create bins
+	bins[0]=1.1547;
+	bins[1]=1.5;
+	bins[2]=2;
+	bins[3]=2.5;
+	bins[4]=3;
+	bins[5]=4;
+	bins[6]=6;
+	bins[7]=10;
+	bins[8]=15;
+	bins[9]=25;
+	bins[10]=50;
+	bins[11]=100;
+	bins[12]=300;
+	bins[13]=1000;
+	bins[14]=10000;
+	bins[15]=100000;
 
 	// bin data
 	unsigned int start,mid,end;
@@ -1085,7 +1141,7 @@ public:
 	void createEdges(void);
 	void addVertexPointers(void);
 	void findVertexAdjacencies(Controls&);
-	void writeDistances(int);
+	void writeDistances(void);
 	///////////
 	void boundWorld(void);
 	void getNiceSet(Space&,Monitor&);
