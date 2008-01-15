@@ -1,7 +1,7 @@
 COMPILE = g++ -O3 -o meshstitch
 LINK = g++
 
-mesh_manip: classes.cc functions.cc meshstitch.cc  
+meshstitch: classes.cc functions.cc meshstitch.cc  
 	$(COMPILE) meshstitch.cc
 
 clean:

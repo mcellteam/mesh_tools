@@ -1,7 +1,7 @@
 COMPILE = g++ -O3 -g -o meshrefine
 LINK = g++
 
-mesh_manip: classes.cc functions.cc meshrefine.cc  
+meshrefine: classes.cc functions.cc meshrefine.cc  
 	$(COMPILE) meshrefine.cc
 
 clean:

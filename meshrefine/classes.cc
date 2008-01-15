@@ -318,32 +318,29 @@ class Edge
 public:
 	Face *f1,*f2;	// pointers to adjacent faces (i.e. faces that contain edge)
 	Vertex* v; // pointer to new vertex if edge is bisected
-	Vertex *v1,*v2; // pointer to edge vertices
 	bool bisected;
-	Edge(Face*,Vertex*,Vertex*);
+	Edge(Face*);
 	void update(Face*);
 	double getSqLength(void);
-//	void getVertices(Vertex*&,Vertex*&,Vertex*&,Vertex*&);
+	void getVertices(Vertex*&,Vertex*&,Vertex*&,Vertex*&);
 	bool threshold(double);
 };
 
 double Edge::getSqLength(void){
-//	Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
-//	getVertices(v1,v2,o1,o2);
+	Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
+	getVertices(v1,v2,o1,o2);
 	return (v1->p[0]-v2->p[0])*(v1->p[0]-v2->p[0])
 			+(v1->p[1]-v2->p[1])*(v1->p[1]-v2->p[1])
 			+(v1->p[2]-v2->p[2])*(v1->p[2]-v2->p[2]);
 }
 
-Edge::Edge(Face *f,Vertex *va,Vertex *vb){
+Edge::Edge(Face *f){
 	f1=f;
 	f2=NULL;
 	v=NULL;
 	bisected=false;
-	v1=va;
-	v2=vb;
 }
-/*
+
 void Edge::getVertices(Vertex *&v1,Vertex *&v2,Vertex *&o1,Vertex *&o2){
 	// find pair of vertices va and vb in common between f1 and f2
 	Vertex *va=NULL,*vb=NULL;
@@ -398,30 +395,7 @@ void Edge::getVertices(Vertex *&v1,Vertex *&v2,Vertex *&o1,Vertex *&o2){
 		<< "o2 was not successfully found.\n\n";
 		exit(0);
 	}
-}*/
-/*
-class BorderEdge
-{
-public:
-	Edge *e;		// pointer to Edge of Face that was deleted
-	Vertex *v1,*v2;	// vertices of Edge gathered before face deletion
-	BorderEdge(Edge*);
-	BorderEdge(Edge*,Vertex*,Vertex*);
-};
-
-BorderEdge::BorderEdge(Edge *ee,Vertex *vv1,Vertex *vv2){
-	e=ee;
-	v1=vv1;
-	v2=vv2;
 }
-
-BorderEdge::BorderEdge(Edge *ee){
-	Vertex *vv1=NULL,*vv2=NULL,*o1=NULL,*o2=NULL;
-	ee->getVertices(vv1,vv2,o1,o2);
-	e=ee;
-	v1=vv1;
-	v2=vv2;
-}*/
 
 class Object
 {
@@ -429,10 +403,6 @@ public:
 	std::vector<Vertex*> v;		// container of pointers to all vertices in object
 	std::vector<Face*> f;		// container of pointers to all faces in object
 	std::vector<Edge*> e;		// container of pointers to all edges in object
-	std::vector<Face*> nf;		// new faces
-//	std::vector<Face*> df;		// deleted faces
-//	std::vector<BorderEdge*> be;	// border edges
-	std::vector<Edge*> be;	// border edges
 	int max_faces;
 	Object(char*);
 	void scanFile(char*);
@@ -444,13 +414,6 @@ public:
 	bool thresholdEdges(double);
 	int createNewVertices(void);
 	int createNewSubdividedFaces(void);
-	void buildBorderEdges(Face*);
-//	void processBorderEdges(void);
-	int processNewEdges(void);
-	Edge* findMatchingBorderEdge(Vertex*,Vertex*);
-	Edge* findMatchingBorderEdge2(Edge*);
-	void clearBorderEdges(void);
-	int checkEdges(void);
 };
 
 Object::Object(char *file)
@@ -461,10 +424,11 @@ Object::Object(char *file)
 	fprintf(stderr,"complete.\n");
 	fflush(stderr);
 	max_faces = f.size();
-	fprintf(stderr,"Building edges..................");
+/*	fprintf(stderr,"Building edges..................");
 	fflush(stderr);
 	createEdges();
 	fprintf(stderr,"complete.\n");
 	fflush(stderr);
+*/
 }
 

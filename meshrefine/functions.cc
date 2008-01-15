@@ -43,10 +43,10 @@ std::string keyPair(int a,int b,int num_digits){
 }
 
 bool edgeMatch(Edge *e,int va,int vb) {
-//	Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
-//	e->getVertices(v1,v2,o1,o2);
-    if ( (e->v1->index==va && e->v2->index==vb) ||
-        (e->v1->index==vb && e->v2->index==va) ){return true;}
+	Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
+	e->getVertices(v1,v2,o1,o2);
+    if ( (v1->index==va && v2->index==vb) ||
+        (v1->index==vb && v2->index==va) ){return true;}
     else {return false;}
 }
 
@@ -90,8 +90,8 @@ void Face::addEdge(Edge* ptr){
 
 void Object::createEdge(Face *ff,Vertex* va,Vertex* vb,hashtable_t &hm,int num_digits){
 	// new edge
-	Edge *en = new Edge(ff,va,vb);
-//	Edge *en = new Edge(ff);
+//	Edge *en = new Edge(ff,va,vb);
+	Edge *en = new Edge(ff);
 	// store edge pointer in hash table
 	hm[keyPair(va->index,vb->index,num_digits)]=en;
 	// add edge pointer to face
@@ -166,105 +166,7 @@ bool refineMesh(Object &o,double t){
 	n = o.createNewSubdividedFaces();
 	fprintf(stderr,"complete. %d new faces.\n",n);
 	fflush(stderr);
-	fprintf(stderr,"Process new edges...............");
-	fflush(stderr);
-	n = o.processNewEdges();
-	fprintf(stderr,"complete. %d new edges.\n",n);
-	fflush(stderr);
-	fprintf(stderr,"Check edges.....................");
-	fflush(stderr);
-	n = o.checkEdges();
-	fprintf(stderr,"complete. %d border edges.\n",n);
-	fflush(stderr);
 	return flag;
-}
-
-int Object::checkEdges(void)
-{
-	int n=0;
-	// for each edge
-	for(std::vector<Edge*>::iterator i=e.begin();i!=e.end();i++)
-	{
-		// if edge is open
-			if( ((*i)->f1==NULL && (*i)->f2!=NULL) ||
-				((*i)->f1!=NULL && (*i)->f2==NULL) )
-			{
-				n++;
-			}
-	}
-	return n;
-}
-
-Edge* Object::findMatchingBorderEdge2(Edge *ee)
-{
-	Edge *t=NULL;
-	// for each border edge
-	for(std::vector<BorderEdge*>::iterator i=be.begin();i!=be.end();i++)
-	{
-		// if border edge matches two vertices
-			if( (*i)->e==ee )
-			{
-				return (*i)->e;
-			}
-	}
-	return NULL;
-}
-
-Edge* Object::findMatchingBorderEdge(Vertex *v1,Vertex *v2)
-{
-	Edge *t=NULL;
-	// for each border edge
-	for(std::vector<BorderEdge*>::iterator i=be.begin();i!=be.end();i++)
-	{
-		// if border edge matches two vertices
-			if( ((*i)->v1==v1 && (*i)->v2==v2) ||
-				((*i)->v1==v2 && (*i)->v2==v1) )
-			{
-				return (*i)->e;
-			}
-	}
-	return NULL;
-}
-
-int Object::processNewEdges(void)
-{
-	int n=0;
-	// for each new face
-	for(std::vector<Face*>::iterator i=nf.begin();i!=nf.end();i++)
-	{
-		// for each edge of new face
-		for(int j=0;j<3;j++)
-		{
-			Vertex *v1 = (*i)->v[j];
-			Vertex *v2 = (*i)->v[(j+1)%3];
-			Edge* ee = findMatchingBorderEdge(v1,v2);
-		    if(ee!=NULL)
-			{
-				// edge is border edge so add face to edge
-				if(ee->f1==NULL) { ee->f1=*i; }
-				else if (ee->f2==NULL) { ee->f2=*i; }
-				else
-				{
-					cout << "Error! third face added to edge!\n";
-					exit(0);
-				}
-			}
-			else
-			{
-				n++;
-				// new edge
-				ee = new Edge(*i);
-				// add edge pointer to face
-				(*i)->addEdge(ee);
-				// add edge pointer to object
-				e.push_back(ee);
-				// add edge pointer to border edges
-				BorderEdge *bb = new BorderEdge(ee,v1,v2);
-				be.push_back(bb);
-			}
-		}
-	}
-	return n;
 }
 
 bool Edge::threshold(double t){
@@ -433,28 +335,14 @@ double getMaxAR(Vertex *v0,Vertex *v1,Vertex *v2,Vertex *v3){
 	else { return ar023;}
 }
 
-void Object::clearBorderEdges(void) {
-	for(std::vector<BorderEdge*>::iterator i=be.begin();i!=be.end();i++)
-	{
-		delete *i;
-	}
-	be.clear();
-}
-
 int Object::createNewSubdividedFaces(void)
 {
-	int foo=1;
-	nf.clear();
-	clearBorderEdges();
 	Vertex* new_verts[3];
-//	std::vector<Face*> nf; // new faces
+	std::vector<Face*> nf; // new faces
 	// for each face
-	for(std::vector<Face*>::iterator i=f.begin();i!=f.end();i++)
+	std::vector<Face*>::iterator i=f.begin();
+	while(i!=f.end())
 	{
-		if(foo%1000==0){
-			cout << foo << " of " << f.size() << endl;
-		}
-		foo++;
 		// if face is subdivided
 		if((*i)->subdivided==true){
 			// identify new vertices
@@ -544,38 +432,15 @@ int Object::createNewSubdividedFaces(void)
 				printf("but num_subdivided_edges = %d\n\n",num_subdivided_edges);
 				exit(0);
 			}
-			// remove face from edge
-			buildBorderEdges(*i);
 			// free memory
 			delete *i;
 			// delete face* from vector
-//			f.erase(i);
-			*i=NULL;
-//			i++;
-//			df.push_back(*i);
-		}// else {i++;}
+			f.erase(i);
+		} else {i++;}
 	}
 	// add new faces to old faces
-//	f.insert(f.end(),nf.begin(),nf.end());
+	f.insert(f.end(),nf.begin(),nf.end());
 	return nf.size();
-}
-
-void Object::buildBorderEdges(Face *ff)
-{
-	// for each face edge
-	for(int i=0;i<3;i++)
-	{
-//		// build Border edge
-//		Edge* ee = findMatchingBorderEdge2(ff->e[i]);
-//		if(ee==NULL)
-//		{
-//			BorderEdge *bb = new BorderEdge(ff->e[i]);
-//			be.push_back(bb);
-//		}
-		// remove Face* from edge
-		if(ff==ff->e[i]->f1){ ff->e[i]->f1=NULL; }
-		else				{ ff->e[i]->f2=NULL; }
-	}
 }
 
 /*

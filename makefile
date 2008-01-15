@@ -22,13 +22,9 @@ all:
 	cd meshalyzer_toms; make
 	cd meshalyzerxxl; make
 	cd meshclip; make
-	cd mesh_degenerate; make
-	cd mesh_edge_check; make
 	cd meshfilter; make
-	cd mesh_fix_faces; make
 	cd meshflip; make
 	cd meshheal; make
-	cd mesh_intersect_detect; make
 	cd meshmerge; make
 	cd meshmorph; make
 	cd meshoffset; make
@@ -44,7 +40,6 @@ all:
 	cd netgen2smesh; make
 	cd poly2mesh; make
 	cd reconstruct2contourtiler; make
-	cd remove_duplicate_faces; make
 	cd remove_duplicate_vertices; make
 	cd simplify_surface; make
 	cd stl2mesh; make
@@ -77,7 +72,6 @@ clean:
 	cd meshtranslate; make clean
 	cd netgen2mesh; make clean
 	cd netgen2smesh; make clean
-	cd Recon_tmb_1; make clean
 	cd simplify_surface; make clean
 	cd stl2mesh; make clean
 	cd stlb2stla; make clean

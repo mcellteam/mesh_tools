@@ -1,8 +1,8 @@
 BASEDIR = ..
 INC = -I${BASEDIR}/include
 
-#CPP = g++-3.4
-CPP = g++
+CPP = g++-3.3
+#CPP = g++
 #CPPFLAGS = ${INC} -m64 -O3 -march=opteron -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
 #CPPFLAGS = ${INC} -O3 -march=pentium4  -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast
 CPPFLAGS = ${INC} -O3 -felide-constructors -Wall -Wpointer-arith -Wwrite-strings -Wold-style-cast

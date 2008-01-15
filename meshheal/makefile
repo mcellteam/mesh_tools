@@ -1,7 +1,7 @@
 COMPILE = g++ -O3 -o meshheal
 LINK = g++
 
-mesh_manip: meshheal.cc  
+meshheal: meshheal.cc  
 	$(COMPILE) meshheal.cc
 
 clean:

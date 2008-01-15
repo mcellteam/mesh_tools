@@ -41,11 +41,11 @@ int main(int argc,char *argv[]){
 	do {
 		fprintf(stderr,"iteration %i: ",j++);
 		fprintf(stderr,"max vertex %i max face %i\n",o.v.size(),o.f.size());
-//		fprintf(stderr,"Building edges..................");
-//		fflush(stderr);
-//		o.createEdges();
-//		fprintf(stderr,"complete.\n");
-//		fflush(stderr);
+		fprintf(stderr,"Building edges..................");
+		fflush(stderr);
+		o.createEdges();
+		fprintf(stderr,"complete.\n");
+		fflush(stderr);
 	} while(refineMesh(o,threshold)==true);
 	// print new mesh to stdout
 //	printMesh(vlh,flh);
