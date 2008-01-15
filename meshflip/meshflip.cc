@@ -226,7 +226,7 @@ void_list * scanDir(void_list *files) {
 
 void getData(char *infile,void_list *&flh,void_list *&vlh){
 
-	char line[2048],*str,*eptr;
+	char line[2048],*str;
 	FILE *F;
 	void_list *vl;
 	Vertex *v;
@@ -279,7 +279,7 @@ void_list* addPrevious(void_list* L) {
 }
 
 void writeData(char *name,void_list *vlh,void_list *flh){
-	void_list *q,*vend,*fend;
+	void_list *q,*vend=NULL,*fend=NULL;
 	Vertex *v;
 	Face *f;
 	FILE *F;
@@ -310,7 +310,7 @@ void writeData(char *name,void_list *vlh,void_list *flh){
 }
 
 void printData(void_list *vlh,void_list *flh){
-	void_list *q,*vend,*fend;
+	void_list *q,*vend=NULL,*fend=NULL;
 	Vertex *v;
 	Face *f;
 	for (q=vlh;q!=NULL;q=q->next) {vend=q;}
@@ -362,7 +362,7 @@ int main(int argc,char *argv[]){
 	}
 
 	////////// declare variables /////////
-	void_list *q,*p,*files;
+	void_list *q,*files;
 	files=NULL;
 	bool flag;
 
@@ -383,7 +383,7 @@ int main(int argc,char *argv[]){
 
 	// for all mesh files in current directory
 	for(q=files;q!=NULL;q=q->next){
-		printf("\nflipping %s...\n",(char*)q->data);
+		fprintf(stderr,"\nflipping %s...\n",(char*)q->data);
 		////////// get data /////////
 		getData((char*)q->data,flh,vlh);
 		flh=addPrevious(flh);

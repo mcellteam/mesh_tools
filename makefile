@@ -1,5 +1,6 @@
 
 all:
+	cd contour_plotting; make
 	cd contour_tiler/contour_tiler; make
 	cd contour_tiler/poly_converter; make
 	cd dx2mesh; make
@@ -7,6 +8,7 @@ all:
 	cd filtermesh; make
 	cd irit2mesh; make
 	cd mesh2dx; make
+	cd mesh2groupdx; make
 	cd mesh2irit; make
 	cd mesh2mcell; make
 	cd mesh2off; make
@@ -17,6 +19,8 @@ all:
 	cd mesh2stl; make
 	cd mesh2vtk; make
 	cd meshalyzer; make
+	cd meshalyzer_toms; make
+	cd meshalyzerxxl; make
 	cd meshclip; make
 	cd mesh_degenerate; make
 	cd mesh_edge_check; make
@@ -26,11 +30,14 @@ all:
 	cd meshheal; make
 	cd mesh_intersect_detect; make
 	cd meshmerge; make
+	cd meshmorph; make
 	cd meshoffset; make
 	cd meshrefine; make
+	cd meshrefinexxl; make
 	cd mesh_renumber; make
 	cd meshscale; make
 	cd mesh_separate; make
+	cd meshsimplify; make
 	cd meshstitch; make
 	cd meshtranslate; make
 	cd netgen2mesh; make

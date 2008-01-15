@@ -1,0 +1,4 @@
+1) JPK JAN2008
+make vertex index renumbering a command line option
+default is to renumber vertex indices in output files
+Optionally, preserve original vertex indices from input mesh file.

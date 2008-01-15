@@ -1,0 +1,3 @@
+disk=/tmp/stxxl,10000,syscall
+disk=/netapp/cnl/home/jkinney/mesh_tools/meshalyzer/with_stxxl/disc/stxxl,10000,syscall
+disk=/netapp/snl/data/mcell/justin/stxxl,10000,syscall

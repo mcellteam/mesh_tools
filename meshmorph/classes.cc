@@ -17,6 +17,8 @@ class void_list;
 class Bit;
 class Monitor;
 class Neighbor;
+class Triplet;
+class VTrack;
 u4 computeHashValue(int);
 
 // ######################################
@@ -53,14 +55,6 @@ struct eqe
     return s1==s2;
   }
 };
-/*
-struct eqs
-{
-  bool operator()(const std::string s1, const std::string s2) const
-  {
-    return s1==s2;
-  }
-};*/
 
 struct u4_hash
 {
@@ -82,12 +76,6 @@ struct e_hash
     u4 operator()(Edge* i) const { return (u4) i; }
 };
 
-/*
-struct s_hash
-{
-    u4 operator()(std::string i) const { return (u4) i; }
-};*/
-
 struct ltd
 {
   bool operator()(const double s1, const double s2) const
@@ -101,6 +89,22 @@ struct gtd
   bool operator()(const double s1, const double s2) const
   {
     return s1 > s2;
+  }
+};
+
+struct lte
+{
+  bool operator()(const Edge* s1, const Edge* s2) const
+  {
+    return s1 < s2;
+  }
+};
+
+struct lto
+{
+  bool operator()(const Object* s1, const Object* s2) const
+  {
+    return s1 < s2;
   }
 };
 
@@ -128,9 +132,12 @@ struct lts
   }
 };
 
+typedef std::map<double,int,ltd,std::allocator<int> > map_di;
+typedef std::map<double,int,ltd,std::allocator<int> >::iterator di_iterator;
 typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> > hashtable_t;
 typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> >::iterator ht_iterator;
-//typedef __gnu_cxx::hash_map<Face*,std::vector<Box*>*,f_hash,eqf,std::allocator<std::vector<Box*>* > > hashtable_f;
+typedef std::map<std::string,double,lts,std::allocator<double> > map_sd;
+typedef std::map<std::string,double,lts,std::allocator<double> >::iterator sd_iterator;
 typedef std::multimap<Face*,Box*,ltf,std::allocator<Box*> > hashtable_f;
 typedef std::multimap<Face*,Box*,ltf,std::allocator<Box*> >::iterator tf_iterator;
 typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv,std::allocator<int> > hashtable_v;
@@ -141,6 +148,7 @@ typedef __gnu_cxx::hash_map<Vertex*,double,v_hash,eqv,std::allocator<double> >::
 typedef __gnu_cxx::hash_map<Edge*,double,e_hash,eqe,std::allocator<double> > hashtable_e_double;
 typedef __gnu_cxx::hash_map<Edge*,double,e_hash,eqe,std::allocator<double> >::iterator edhm_iterator;
 typedef __gnu_cxx::hash_map<Face*,std::vector<Face*>*,f_hash,eqf,std::allocator<std::vector<Face*>* > > hashtable_f_face;
+typedef __gnu_cxx::hash_map<Face*,std::vector<Face*>*,f_hash,eqf,std::allocator<std::vector<Face*>* > >::iterator htff_iterator;
 typedef __gnu_cxx::hash_map<Edge*,int,e_hash,eqe,std::allocator<int> > hashtable_e;
 typedef std::map<Vertex*,double,ltv,std::allocator<double> > table_d;
 typedef std::map<Vertex*,double,ltv,std::allocator<double> >::iterator td_iterator;
@@ -148,19 +156,30 @@ typedef std::map<Face*,double*,ltf,std::allocator<double*> > table_fd;
 typedef std::map<Face*,double*,ltf,std::allocator<double*> >::iterator fd_iterator;
 typedef std::multimap<double,Vertex*,gtd,std::allocator<Vertex*> > table_v;
 typedef std::multimap<double,Vertex*,gtd,std::allocator<Vertex*> >::iterator tv_iterator;
+typedef std::multimap<double,Face*,ltd,std::allocator<Face*> > mmap_d_f;
+typedef std::multimap<double,Face*,ltd,std::allocator<Face*> >::iterator df_iterator;
 typedef std::pair<double,Vertex*> vd_pair;
 typedef std::pair<double,double> dd_pair;
+typedef std::set<Edge*,lte> e_set;
+typedef std::set<Edge*,lte>::iterator es_iterator;
 typedef std::set<Vertex*,ltv> v_set;
 typedef std::set<Vertex*,ltv>::iterator vs_iterator;
 typedef std::set<Face*,ltf> f_set;
 typedef std::set<Face*,ltf>::iterator fs_iterator;
 typedef std::list<Vertex*> v_list;
+typedef std::list<Vertex*>::iterator vl_iterator;
 typedef __gnu_cxx::hash_set<Face*,f_hash,eqf> hashset_f;
 typedef __gnu_cxx::hash_set<Face*,f_hash,eqf>::iterator hf_iterator;
 typedef __gnu_cxx::hash_set<Vertex*,v_hash,eqv> hashset_v;
 typedef __gnu_cxx::hash_set<Vertex*,v_hash,eqv>::iterator hv_iterator;
 typedef __gnu_cxx::hash_set<Edge*,e_hash,eqe> hashset_e;
 typedef __gnu_cxx::hash_set<Edge*,e_hash,eqe>::iterator he_iterator;
+typedef std::map<double,Face*,ltd,std::allocator<Face*> > map_df;
+typedef std::map<double,Face*,ltd,std::allocator<Face*> >::iterator mdf_iterator;
+typedef std::map<double,Triplet*,ltd,std::allocator<Triplet*> > map_dt;
+typedef std::map<double,Triplet*,ltd,std::allocator<Triplet*> >::iterator mdt_iterator;
+typedef std::multimap<Object*,int,lto,std::allocator<int> > mmap_oi;
+typedef std::multimap<Object*,int,lto,std::allocator<int> >::iterator oi_iterator;
 
 // ######################################
 // ######################################
@@ -201,27 +220,17 @@ public:
 // ######################################
 // ######################################
 
-/*
-// structure for neighborhood element
-class neighbor
-{
+class Triplet{
 public:
-	Vertex *v;	// vertex* to vertex in neighborhood
-	double l;	// minimum length between v and origin vertex
-	neighbor(Vertex*,double);
-	bool ifFrozen(void);
+	double x,y,z;
+	Triplet(double,double,double);
 };
 
-bool neighbor::ifFrozen(void){
-	if (l<NEIGHBORHOOD_RADIUS){return true;}
-	else {return false;}
+Triplet::Triplet(double j,double k,double l){
+	x=j;
+	y=k;
+	z=l;
 }
-
-neighbor::neighbor(Vertex *a, double b){
-	v=a;
-	l=b;
-}
-*/
 
 class Point{
 public:
@@ -229,6 +238,7 @@ public:
 	double a,b,c,L; // closest point and squared distance
 	void add(double,double,double);
 	Point(double,double,double);
+	void clear(void);
 };
 
 void Point::add(double j,double k,double l){
@@ -244,6 +254,11 @@ Point::Point(double j,double k,double l){
 	L=1e300;
 }
 
+void Point::clear(void){
+	a=b=c=0.0;
+	L=1e300;
+}
+
 // ######################################
 // ######################################
 
@@ -251,22 +266,22 @@ class Vertex {
 public:
 	int index;
 	double pN[3];		// current position coordinates (x,y,z)
-	double pC[3];		// closest mesh position coordinates (x,y,z)
 	Face *cl;			// pointer to face on which closest mesh position lies
 	Object *o;			// pointer to parent object
-	vector<Edge*> e;	// pointers to adjacent edges
 	vector<Face*> f;	// pointers to adjacent faces
 	vector<Face*> nf;	// pointers to neighborhood faces
+						// NOTE FULL HOOD = neighborhood+adjacent
 	Vertex(char* triplet,Object*);
+	double energy;
 	void getAdjacentVertices(vector<Vertex*>&);
 	void getAdjacentFaces(hashset_f&);
-	double getSqSepDist(void); 
+	void getAdjacentEdges(std::vector<Edge*>&);
+	double getSqSepDist(Container*); 
 	void getNormal(double*);
-	void getForceEnergy(double[3]);
-    double getSeparationForceEnergy(double[3],bool);
+	void getForceEnergy(double[3],Container*);
+    double getSeparationForceEnergy(double[3],bool,Container*);
     double getEdgeStretchForceEnergy(double[3],bool);
     double getEdgeAngleFaceIntersectionForceEnergy(double[3],bool);
-//	void computeNewCoords(Container*,double[3]);
 	void computeNewCoords(Container*,double[3],double);
 	void assignHolding(double[3]);
 	void printNeighborhood(void);
@@ -276,8 +291,9 @@ public:
 	//////////////
 	bool vertexIsNice(void);
 	int getVertexNiceness(void);
-	void setVertexNiceness(int);
+	void setVertexNiceness(int,Container*);
 	void computeEdgeFlip(void);
+	bool match(int,std::string);
 };
 
 void Vertex::printVertex(std::string s){
@@ -371,11 +387,9 @@ Vertex::Vertex(char* triplet,Object *q) {
         printf("Error in reading vertex: string %s\n",cp);
         return;
     }
-	pC[0]=pN[0];
-	pC[1]=pN[1];
-	pC[2]=pN[2];
 	o=q;
 	cl=NULL;
+	energy=0;
 }
 
 // ######################################
@@ -386,20 +400,21 @@ public:
 	int index;		// face index
 	Vertex *v[3];	// pointers to vertices
 	Edge   *e[3];	// pointers to edges
-	std::vector<Box*> b;	// pointers to boxes
+	double bb[6];	// bounding box [xmin xmax ymin ymax zmin zmax]
 	Face(char*,std::vector<Vertex*>&); 
 	void addEdge(Edge*);
-	void recordBoxes(vector<Box*>&); 
 	void getNormal(double[3]);	// compute outward normal vector
 	void getVertexCoordinates(double *[3]);
-	bool computeIntersectionForce(Container*);
+	bool computeIntersectionForce(Container*,Space&);
 	void calculateIntersectionForce(Container*);
-	bool getFaceIntersection(Container*,bool,std::vector<Face*>&);
+//	bool getFaceIntersection(Container*,std::vector<Face*>&,Space&);
+	bool getFaceIntersection(Container*,Space&);
 	bool getFaceIntersectionCheck(Container*,Space&,hashtable_f&);
 	double getAngle(Vertex *v);
 	void printFace(std::string);
-	void updateBoxes(hashtable_f&);
-	void getBoundingBox(double br[6]);
+	void printFaceCP(void);
+	void updateBoxes(hashtable_f&,hashtable_f&);
+	void getBoundingBox(void);
 	/////////
 	std::vector<Face*> * getIntersectingFaces(void);
 	void addFaceToTable_iv(void);
@@ -407,12 +422,17 @@ public:
 	bool faceInTable_iv(void);
 	bool faceInTable_intf(void);
 	void addForceToFace(double[3]);
-	void addFaceToVector(Face*);
+	void addFaceToVector(Face*,Container*);
 	void clearFaceFromTable_iv(void);
-	void clearFaceFromTable_intf(void);
+//	void clearFaceFromTable_intf(void);
+	void clearFaceFromTable_intf(Container*);
 	void getForceFromTable(double[3]);
 	bool noMoreIntersectingFaces(void);
-	void removeFaceFromVector(Face*);
+//	void removeFaceFromVector(Face*);
+	void removeFaceFromVector(Face*,Container*);
+	bool match(int,std::string);
+	/////////
+	bool faceInVector(Face*);
 };
 
 // ######################################
@@ -420,23 +440,24 @@ public:
 
 class Edge {
 public:
-	Object *o;		// pointer to parent object
-	Vertex *v1,*v2; // pointers to vertices on edge
-	Vertex *o1,*o2; // pointers to vertices on adjacent faces not on edge
 	Face *f1,*f2;	// pointers to adjacent faces (i.e. faces that contain edge)
 	double l;		// original edge length
-	void update(Face*,Vertex*);
-	Edge(Face*,Vertex*,Vertex*,Vertex*,Object*);
+	void update(Face*);
+	Edge(Face*,Vertex*,Vertex*);
 	double getSqLength(void);
 	int computeFlip(void);
 	double getAngle(void);
-	double getForceEnergy(int,double[3],bool); // force[0][] = fx,fy,fz for o1 
-															// force[1][] = fx,fy,fz for o2
+	double getForceEnergy(int,double[3],bool);  
+	double getReactionForceEnergy(double[3],bool);  
 	double getStretchForceEnergy(Vertex*,double[3],bool);
 	void printEdge(std::string);
+	void getVertices(Vertex*&,Vertex*&,Vertex*&,Vertex*&);
+	double energy;
 };
 
 void Edge::printEdge(std::string s){
+	Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
+	getVertices(v1,v2,o1,o2);
 	cout.precision(12);
 	if (v1==NULL || v2==NULL ||o1==NULL ||o2==NULL ||f1==NULL ||f2==NULL){
 		cout << "\nNULL POINTERS IN EDGE!\n";
@@ -480,21 +501,19 @@ void Edge::printEdge(std::string s){
 	<< endl;
 }
 
-Edge::Edge(Face *f,Vertex *va,Vertex *vb,Vertex *vc,Object *op){
-	v1=va;
-	v2=vb;
+Edge::Edge(Face *f,Vertex *va,Vertex *vb){
 	f1=f;
 	f2=NULL;
-	o=op;
-	o1=vc;
-	o2=NULL;
 	// compute original edge length
 	l=sqrt((va->pN[0]-vb->pN[0])*(va->pN[0]-vb->pN[0])+
 			(va->pN[1]-vb->pN[1])*(va->pN[1]-vb->pN[1])+
 			(va->pN[2]-vb->pN[2])*(va->pN[2]-vb->pN[2]));
+	energy=0;
 }
 
 double Edge::getSqLength(void){
+	Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
+	getVertices(v1,v2,o1,o2);
 	return (v1->pN[0]-v2->pN[0])*(v1->pN[0]-v2->pN[0])
 			+(v1->pN[1]-v2->pN[1])*(v1->pN[1]-v2->pN[1])
 			+(v1->pN[2]-v2->pN[2])*(v1->pN[2]-v2->pN[2]);
@@ -511,13 +530,14 @@ public:
 	vector<Face*> f;		// container of pointers to all faces in object
 	vector<Edge*> e;		// container of pointers to all edges in object
 	Object(std::string);
+	double mean_edge_length;
 	~Object(void);
 	void addOriginal(int,double*);
 	void createEdges(void);
 	int setNumDigits(void);
-	void checkEdge(Face*,Vertex*,Vertex*,Vertex*,hashtable_t&,int);
+	void checkEdge(Face*,Vertex*,Vertex*,hashtable_t&,int);
 	Edge* findEdge(Vertex*,Vertex*,hashtable_t&,int);
-	void createEdge(Face*,Vertex*,Vertex*,Vertex*,hashtable_t&,int);
+	void createEdge(Face*,Vertex*,Vertex*,hashtable_t&,int);
 	void addVertexPointers(void);
 	int getMaxVertex(void);
 	void fixFaces(Vertex**);
@@ -549,9 +569,18 @@ public:
 	void newFindNeighborhoods(void);
 	bool thawedAndAble(hashtable_v_double&,v_set&);
 	void collectFaces(hashtable_v_double&,v_set&,std::vector<Face*>&);
-//	bool processEdge(Edge*,hashtable_v_double&,std::vector<Edge*>&);	
-	bool processEdge(Edge*,hashtable_v_double&,std::vector<Edge*>&,Vertex*);	
+	bool processEdge(Edge*,hashtable_v_double&,std::vector<Edge*>&,Vertex*);
+	void buildNeighborhood(Vertex*);
+	//////////////
 };
+
+bool Vertex::match(int i, std::string str){
+	return i==index && str==o->name;
+}
+
+bool Face::match(int i, std::string str){
+	return i==index && str==v[0]->o->name;
+}
 
 void Object::clearFlipTable(void){
 	flip.clear();
@@ -589,10 +618,6 @@ int Object::getVertexNiceness(Vertex *vv){
 	}
 }
 
-void Vertex::setVertexNiceness(int val){
-	o->setVertexNiceness(this,val);
-}
-
 void Object::setVertexNiceness(Vertex *vv,int val){
 	if (val==0){
 		nice.erase(vv);
@@ -613,7 +638,6 @@ Object::~Object(void){
 
 Object::Object(std::string s) {
 	name=s;
-//	frozen=false;
 }
 
 bool Object::faceInTable_intf(Face *ff){
@@ -653,10 +677,10 @@ void Face::addForceToFace(double fvec[3]){
 	v[0]->o->iv[this][1]+=fvec[1];
 	v[0]->o->iv[this][2]+=fvec[2];	
 }
-
+/*
 void Face::addFaceToVector(Face* f){
 	(*v[0]->o->intf[this]).push_back(f);
-}
+}*/
 
 void Face::getForceFromTable(double fvec[3]){
 	fvec[0]+=v[0]->o->iv[this][0];
@@ -674,16 +698,7 @@ void Face::clearFaceFromTable_iv(void){
 	}
 }
 
-void Face::clearFaceFromTable_intf(void){
-	// if this face is in intf table 
-	if(faceInTable_intf()){
-		// delete vector<face*>*
-		delete v[0]->o->intf[this];
-		// remove element from table
-		v[0]->o->intf.erase(this);
-	}
-}
-
+/*
 void Face::removeFaceFromVector(Face *f){
 	// if intersecting face has intersecting faces
 	if(faceInTable_intf()){
@@ -698,7 +713,7 @@ void Face::removeFaceFromVector(Face *f){
 			clearFaceFromTable_iv();
 		}
 	}
-}
+}*/
 
 bool Face::noMoreIntersectingFaces(void){
 	return (*v[0]->o->intf[this]).empty();
@@ -730,7 +745,7 @@ void Face::printFace(std::string s){
 }
 
 // THE FOLLOWING CODE IS USEFUL. IT PRINTS IN DReAMM CUSTOM POINTS FORMAT.
-/*void Face::printFace(std::string s){
+void Face::printFaceCP(void){
 	cout << v[0]->pN[0] << " "
 	<< v[0]->pN[1] << " "
 	<< v[0]->pN[2] << " 1 0 0 1\n"
@@ -740,7 +755,7 @@ void Face::printFace(std::string s){
 	<< v[2]->pN[0] << " "
 	<< v[2]->pN[1] << " "
 	<< v[2]->pN[2] << " 1 0 0 1\n";
-}*/
+}
 
 void Face::getVertexCoordinates(double *cpvc[3]){
 	cpvc[0]=v[0]->pN;
@@ -751,7 +766,6 @@ void Face::getVertexCoordinates(double *cpvc[3]){
 Face::Face(char *triplet,std::vector<Vertex*> &vp){
 
 	e[0]=e[1]=e[2]=NULL;
-//	iv[0]=iv[1]=iv[2]=0;
 
     char val[80];
     char *eptr;
@@ -824,6 +838,9 @@ Face::Face(char *triplet,std::vector<Vertex*> &vp){
         printf("Error in reading vertex index\n");
         return;
     }
+
+	getBoundingBox();
+
 }
 
 
@@ -833,6 +850,7 @@ Face::Face(char *triplet,std::vector<Vertex*> &vp){
 class Container
 {
 public:
+	std::ofstream Sfile;
 	std::ofstream Cfile;
 	std::ofstream Olist;
 	vector<Object*> o;	//vector of object pointers
@@ -845,15 +863,14 @@ public:
 						/////
 	int si;				// twice total # self-intersections in all objects
 	int ti;				// twice total # intersections in all objects
-						///// because each intersecting pair of faces will be discovered twice
-	double md[2];		///// mean displacement of vertices in object during each iteration
+						// because each intersecting pair
+						// of faces will be discovered twice
+	double md[2];		///// mean displacement of vertices in object during each group
 						// md[0] = mean displacement of N-1 vertices
 						// md[1] = mean displacement of N vertices
 	double d_min,d_max;	// min and max actual displacement
-//	double se_min,se_max,se_mean;	// min and max separation error
-//	double stor_min,stor_max;	// storage for printing
+	std::vector<Vertex*> frozen;	// sorted vector of Vertex* to frozen vertices
 	double min_edge_angle;
-	double gain;
 	int N;
 	void clear(void);
 	void scanDir(void);
@@ -865,12 +882,23 @@ public:
 	void findVertexAdjacencies(void);
 	void writeObjectList(void);
 	void statusFileInit(void);
-	void buildMeshAfter(int);
+	void sepFileInit(int);
+	void sepOrigLog(Monitor&);
+	void sepSnapshotLog(Monitor&,int);
+	void buildMeshAfter(int const);
 	void writeDistances(int);
 	void writeDistances50(int);
 	void writeDistancesNOCP(int);
+	void writeDistancesOneSidedHausdorff_noself(void);
+	void writeDistancesTwoSidedHausdorff_noself(void);
+	void writeDistancesOneSidedHausdorff(void);
+	void writeDistancesTwoSidedHausdorff(void);
+	void computePC(Face*,Vertex*,double[3]);
 	void fileOutit(void);
+	void sepFileOutit(void);
+//	void updateFile(int,bool,double,double);
 	void updateFile(int,bool,double);
+	void updateSepFile(double,std::string,int,double);
 	void checkAdjacentFaces(void);
 	void checkAngle(double);
 	void cleanup(void);
@@ -878,7 +906,7 @@ public:
 	Container(void);
 	void updateStats(double);
 	void removeOldIntersections(Vertex*,hashset_v&);
-	void updateNewIntersections(Vertex*,hashset_v&);
+	void updateNewIntersections(Vertex*,hashset_v&,Space&);
 	//// from Manip
 	std::ofstream Mfile;
 	int object_count;				// total number of objects in model
@@ -900,36 +928,43 @@ public:
 	bool checkNiceness(Space&,Vertex*);
 	void collectCrossed(Space&,Vertex*,std::vector<Object*>&);
 	bool updateNiceness(Vertex*,std::vector<Object*>&);	
-	void findClosestAxis(Space&,Vertex*,double[2][3]);
+	void findClosestAxis(Space&,Vertex*,double[2][3],double [6][3]);
 	int findExtraPoint(Space&,Vertex*,double[3],int);
-	void findCrossed1(Space&,Vertex*,double[2][3],std::vector<Object*>&);
-	void findCrossed2(Space&,double[2][3],std::vector<Object*>&);
+//	void findCrossed1(Space&,Vertex*,double[2][3],std::vector<Object*>&);
+	bool findCrossed1(Space&,Vertex*,double[2][3],std::vector<Object*>&);
+//	void findCrossed2(Space&,double[2][3],std::vector<Object*>&);
+	bool findCrossed2(Space&,double[2][3],std::vector<Object*>&);
 	void getExtraRay(Vertex*,double[2][3],int);
 	void collectNiceFaces(Space&,double[2][3],vector<Face*>&);
 	void getBoxIndexRange(Space&,double[2][3],int[6]);
 	void findIntersectedFaces(double[2][3],vector<Face*>&,
-								vector<Face*>&,vector<int>&);
-	void findOddMeshes(vector<Face*>&,vector<int>&,int&,std::vector<Object*>&);
+								std::vector<Face*>&,std::vector<Face*>&);
+	void findOddMeshes(std::vector<Face*>&,std::vector<Face*>&,std::vector<Object*>&);
+	void findOddObjects(std::vector<Object*>&,std::vector<Object*>&);
+	void findEvenObjects(std::vector<Object*>&,std::vector<Object*>&);
 	///////////
 	void getSeparationDistances(Space&,Monitor&);
 	bool findClosest(Space&,Vertex*,Monitor&,bool);
-//	bool computeClosest(Face*,Vertex*,double&,double[3],bool);
 	bool computeClosest(Face*,Vertex*,double&,double[3]);
+	bool computeClosestColl(std::vector<Vertex*>&,std::vector<Edge*>&,std::vector<Face*>&,
+							Vertex*,double&,double[3]);
 	bool getPlaneIntersection(Face*,Vertex*,double*,double,double,Point&);
 	void getEdgeIntersection(Vertex*,double*[3],Point&);
-	void getBoxes(vector<Box*>&,Vertex*,int,Space&);
-//	void getBoxes(vector<Box*>&,Vertex*,Space&);
-	void getCandidateFaces(vector<Box*>&,Vertex*,hashset_f&);
+	void getBoxes(vector<Box*>&,Vertex*,Space&);
+	void getCandidateFaces(vector<Box*>&,Vertex*,std::vector<Face*>&);
 	bool faceInNeighborhood(Face*,Vertex*);
+	bool faceIsAdjacent(Face*,Vertex*);
 	///////////
-	bool assignNewVertexCoords(Space&,Vertex*,double[3],Monitor&); 
+//	bool assignNewVertexCoords(Space&,Vertex*,double[3],Monitor&); 
+	bool assignNewVertexCoords(Space&,Vertex*,double[3],Monitor&,bool&,bool&); 
 	void getAffectedVerticesAndEdgesBefore(Space&,Vertex*,double[3],Monitor&);
 	void getAffectedVerticesAndEdgesAfter(Space&,Vertex*,double[3],Monitor&);
 	bool boxesOverlap(double[6],double[6]);
 	void computeNewVertexCoords(double); 
-	void computeFaceIntersectionForce(void); 
+	void computeFaceIntersectionForce(Space&); 
 	void setFaceIntersection(Face*,Space&); 
-	bool checkForIntersections(Vertex*,Space&,bool,hashtable_f&);
+//	bool checkForIntersections(Vertex*,Space&,bool,hashtable_f&);
+	bool checkForIntersections(Vertex*,Space&,hashtable_f&);
 	bool checkForSmallAngles(Monitor&);
 	bool angleChangeIsWrong(double,double);
 	void collectEdgeAngles(Vertex*,Monitor&);
@@ -946,8 +981,9 @@ public:
 	void identifyBoxes(Space&,Face*,vector<Box*>&);
 	/////////
 	void updateAdjacentFaceBoxes(Vertex*,Monitor&);
-	void getNiceCheckSet(Vertex*,Monitor&);
-	double getVertexSqD(Vertex*);
+	void updateAdjacentFaceBoundingBoxes(Vertex*);
+	void getNiceCheckSet(Vertex*,Monitor&,Space&);
+	double getVertexSqD(Vertex*,double);
 	void collectAdjacentFaceNormals(table_fd&,Vertex*);
 	void freeAdjacentFaceNormals(table_fd&);
 	void getVertexAndEdgeEnergy(Monitor&);
@@ -955,15 +991,45 @@ public:
 	void updateMovedVertexEnergy(Vertex*,Monitor&);
 	void updateEdgeAngles(Vertex*);
 	void updateVertexVD(Vertex*,Monitor&);
+	bool searchCP(Vertex*,std::vector<Face*>&,double&);
+	void getPD2(double[6],double[6],Vertex*);
+	//
+	Object* getObjectPointer(char[FILENAME_SIZE]);
+	void loadFrozenMap(mmap_oi&,char*);
+	void readFrozen (char*);
+	void checkFrozenAndNoCP(void);
+	void writeObjectData(void);
+	void writeSeparationDistances(void);
+	void computeMeanEdgeLengths(void);
+	void sortAdjacentFaces(void);
+	Face* getNonAdjacentFaceOfVertex(Vertex*,Vertex*);
+	Face* getNonAdjacentFaceOfEdge(Vertex*,Edge*);
+	void summarize(void);
+	void countNonnice(int&,int&);
+	void countIntersections(int&,int&);
+	void reportVertexNiceness(int,std::string,Space&);
+	void gatherDiagnostics(void);
+
 };
 
+void Container::summarize(void){
+	// for each object, accumulate number of vertices and faces
+	for (std::vector<Object*>::iterator i=o.begin();i!=o.end();i++) {
+		object_count++;
+		vertex_count += (*i)->v.size();
+		face_count += (*i)->f.size();
+		edge_count += (*i)->e.size();
+	}
+}
+
 Container::Container(void){
-	si=ti=0; // twice number of intersecting faces in model, self and total, respectively
-	min_edge_angle=500; // minimum edge angle in model
-	s_nonnice=nonnice=0; // total number of nonnice vertices in model, self and total, respectively
+	si=ti=0;				// twice number of intersecting faces
+							// in model, self and total, respectively
+	min_edge_angle=500;		// minimum edge angle in model
+	s_nonnice=nonnice=0;	// total number of nonnice vertices
+							// in model, self and total, respectively
 	energy=0; // NOT USED
 	force=0; // NOT USED
-	gain = TIME_STEP/DAMPING;
 	pairs[0][0] = 0;
 	pairs[0][1] = 1;
 	pairs[1][0] = 1;
@@ -973,9 +1039,16 @@ Container::Container(void){
 	object_count=vertex_count=face_count=edge_count=0;
 	scanDir();
 	scanFiles();
+	summarize();
 	createEdges();
 	findVertexAdjacencies();
+	sortAdjacentFaces();
 	checkEdgeAngles();
+	computeMeanEdgeLengths();
+	N=0;			// count of moved vertices
+	md[0]=md[1]=0;	// mean displacement of N moved vertices
+	d_min=1E30;		// min displacement of N moved vertices
+	d_max=-1E30;	// max displacement of N moved vertices
 }
 
 Container::~Container(void){
@@ -1013,35 +1086,36 @@ public:
 };
 
 void Box::printBox(double a,double b,double c){
-	cout << "Box::printBox world 0,2,4 ["
+	cout << "Box::printBox: world 0,2,4 ["
 	<< a << " "
 	<< b << " "
-	<< c << "]" << endl;
+	<< c << "]";
 	cout.flush();
-	cout << "Box ";
+	cout << ", Box [";
 	cout.flush();
 	cout << x << " ";
 	cout.flush();
 	cout << y << " ";
 	cout.flush();
-	cout << z << "]" << endl;
+	cout << z << "]\n";
 	cout.flush();
-	cout << " limits ["
+	cout << "Box::printBox: "
+	<< "limits ["
 	<< xmin(a) << " "
 	<< xmax(a) << " "
 	<< ymin(b) << " "
 	<< ymax(b) << " "
 	<< zmin(c) << " "
-	<< zmax(c) << "] ";
+	<< zmax(c) << "]\n";
 	cout.flush();
 }
 
-double Box::xmin(double i){return x*SPACE_LENGTH+i;}
-double Box::xmax(double i){return (x+1)*SPACE_LENGTH+i;}
-double Box::ymin(double i){return y*SPACE_LENGTH+i;}
-double Box::ymax(double i){return (y+1)*SPACE_LENGTH+i;}
-double Box::zmin(double i){return z*SPACE_LENGTH+i;}
-double Box::zmax(double i){return (z+1)*SPACE_LENGTH+i;}
+double Box::xmin(double i){return x*SPACE_LENGTH*SCALE+i;}
+double Box::xmax(double i){return (x+1)*SPACE_LENGTH*SCALE+i;}
+double Box::ymin(double i){return y*SPACE_LENGTH*SCALE+i;}
+double Box::ymax(double i){return (y+1)*SPACE_LENGTH*SCALE+i;}
+double Box::zmin(double i){return z*SPACE_LENGTH*SCALE+i;}
+double Box::zmax(double i){return (z+1)*SPACE_LENGTH*SCALE+i;}
 
 Box::Box(int a,int b,int c){
 	x=a;
@@ -1069,14 +1143,16 @@ public:
 	int location2Index(double,char*);
 	int indices2Index(int,int,int);
 	void getBoxesFor3DLocations(double[6],std::vector<Box*>&);
-	void getBoxesFor3DIndices(int[6],std::vector<Box*>&,bool);
+	void getBoxesFor3DIndices(int[6],std::vector<Box*>&);
 	int screenIndex(int,char*);
 	Space(Container&);
 	~Space(void);
+	void getSR(double[6],int[6]);
+	bool expandSR(bool,double,double[6],int[6],int[6]);
 };
 
 Space::Space(Container& c){
-	cout << "initializing space data structure..............";
+	cout << "Initializing space data structure..............";
 	cout.flush();	
 	boundWorld(c);
 	initBoxes();
@@ -1114,35 +1190,61 @@ void Space::getBoxesFor3DLocations(double p[6],std::vector<Box*>& bp){
 	br[3] = location2Index(p[3],"y");	//  y
 	br[4] = location2Index(p[4],"z");   // -z
 	br[5] = location2Index(p[5],"z");	//  z
+/*	if(!distinguishable(p[0],3687.94) &&
+		!distinguishable(p[1],3723.04) &&
+		!distinguishable(p[2],7044.62) &&
+		!distinguishable(p[3],7063.26) &&
+		!distinguishable(p[4],5685.73) &&
+		!distinguishable(p[5],5721.23)){
+		cout << "\n\n index range ["
+		<< br[0] << " "
+		<< br[1] << " "
+		<< br[2] << " "
+		<< br[3] << " "
+		<< br[4] << " "
+		<< br[5] << "]\n";
+	}
+*/
 	// collect boxes to check
-	getBoxesFor3DIndices(br,bp,false);
+	getBoxesFor3DIndices(br,bp);
 }
 
-void Space::getBoxesFor3DIndices(int br[6],std::vector<Box*>& bp,bool shell){
+void Space::getBoxesFor3DIndices(int br[6],std::vector<Box*>& bp){
 	// assume br = [xmin,xmax,ymin,ymax,zmin,zmax]
+	int x0=br[0],x1=br[1],y0=br[2],y1=br[3],z0=br[4];
 	std::vector<Box*>::iterator i;
+	i = b.begin()+num_space[0]*((z0-1)*num_space[1]+(y0-1));
 	for (int z = br[4];z<br[5]+1;z++){
+		i += num_space[0]*num_space[1];
 		for (int y = br[2];y<br[3]+1;y++){
-			for (int x = br[0];x<br[1]+1;x++){
-				if (shell) {
-					if (z==br[4]||z==br[5]||x==br[0]||x==br[1]||y==br[2]||y==br[3]){
-						bp.push_back(b[indices2Index(x,y,z)]);
-					}
-				} else {
-					bp.push_back(b[indices2Index(x,y,z)]);
-				}
+			i += num_space[0];
+			if(x1==x0){
+				bp.push_back(*(i+x0));
+			} else {
+				bp.insert(bp.end(),i+x0,i+x1+1);
 			}
 		}
+		i-=(y1-y0+1)*num_space[0];
+	}
+	if(bp.empty()==true){
+		cout << "br ["
+		<< br[0] << ","
+		<< br[1] << ","
+		<< br[2] << ","
+		<< br[3] << ","
+		<< br[4] << ","
+		<< br[5] << "]\n";
+		exit(0);
 	}
 }
 
 int Space::indices2Index(int x,int y,int z){
-	return z*num_space[0]*num_space[1]+y*num_space[0]+x;
+	return num_space[0]*(z*num_space[1]+y)+x;
 }
 
 void Space::index2Range(int i,double r[2],char *c){
-		r[0] = i*SPACE_LENGTH;
-		r[1] = (i+1)*SPACE_LENGTH;
+		r[0] = i*SPACE_LENGTH*SCALE;
+		r[1] = (i+1)*SPACE_LENGTH*SCALE;
 	if (!strcmp(c,"x")){
 		r[0] += world[0];
 		r[1] += world[0];
@@ -1161,32 +1263,45 @@ int Space::location2Index(double ss,char *c){
 	// yield negative indices or indices beyond declared range, respectively.
 	// Therefore, constrain box_range to known index range.
 	// Effectively, border boxes are understood to extend to infinity
+
+	// DEBUG
+/*	bool flag=false;
+	if(!distinguishable(ss,7044.62)){flag=true;}
+	if(flag){
+		cout << "Space::location2Index: "
+		<< " ss=" << ss
+		<< ", c=" << c << endl;
+		cout << "Space::location2Index: "
+		<< "world ["
+		<< world[0] << " "
+		<< world[1] << " "
+		<< world[2] << " "
+		<< world[3] << " "
+		<< world[4] << " "
+		<< world[5] << "]\n";
+	}*/
+	// DEBUG
 	int a=0;
 	if (!strcmp(c,"x")){
-		a = (int) floor((ss-world[0])/SPACE_LENGTH);
+		a = (int) floor((ss-world[0])/(SPACE_LENGTH*SCALE));
 		a = screenIndex(a,"x");
 	} else if (!strcmp(c,"y")){
-		a = (int) floor( (ss-world[2])/SPACE_LENGTH );
+		a = (int) floor( (ss-world[2])/(SPACE_LENGTH*SCALE) );
+//		if(flag){
+//			cout << "Space::location2Index: "
+//			<< " a=" << a << endl;
+//		}
 		a = screenIndex(a,"y");
+//		if(flag){
+//			cout << "Space::location2Index: "
+//			<< " a=" << a << endl;
+//		}
 	} else if (!strcmp(c,"z")){
-		a = (int) floor( (ss-world[4])/SPACE_LENGTH );
+		a = (int) floor( (ss-world[4])/(SPACE_LENGTH*SCALE) );
 		a = screenIndex(a,"z");
 	} else {cout << "Received unexpected string.\n"; exit(0);}
 	return a;
 }
-
-// ######################################
-// ######################################
-
-/*class Manip
-{
-public:
-	///////////
-	Manip(void);
-};
-
-Manip::Manip(void){
-}*/
 
 //############################################################################
 //############################################################################
@@ -1291,40 +1406,72 @@ void Bit::init(int num_vertices){
 
 class Monitor {
 public:
-	int touchs;
+	int old_rank;
+	int used_rank;
+	double used_vd;
+	double old_vd;
+	double old_position[3];
+	double new_position[3];
+	int touches;
 	table_v topN;					// double f -> vertex *v
 	table_d old;					// vertex *v -> double se
 	hashtable_v_double v_energy;	// vertex* -> double potential energy
 	hashtable_e_double e_energy;	// edge* -> double potential energy
 	hashtable_v touch_map;			// vertex selection hash map
-	hashtable_f nb;					// build face* hashtable
+	hashtable_f ob;					// build old face* hashtable
+	hashtable_f nb;					// build new face* hashtable
 	hashset_v set_nice_check;		// store vertices for which niceness may have changed
 	hashset_v set_nice_changed;		// store vertices for which niceness did change
-	hashset_v av;					// store all vertices within NUM_ADJACENT_BOXES of adjacent faces
+	hashset_v fs;					// store all vertices requiring a full search for closest point
+	hashset_v ps;					// store all vertices requiring a partial search for closest point
 	hashset_e ae;					// store adjacent face edges
 	hashtable_e_double e_angle;		// edge* -> double edge angle in radians
 	double sum,avg_new,avg_old;		// sliding sum and average of global energy
 	int num;						// size of sliding window
 	double *window,*begin,*end;		// double pointers to elements of sliding
 									// collection of global energies
-//	std::vector<double> window;		// sliding collection of global energies
-//	std::vector<double>::iterator next; // iterator pointing to next element in vector to replace
 	v_set refrac_s;					// set of last N vertices moved
-	v_list refrac_l;					// set of last N vertices moved
-//	vs_iterator next;				// iterator pointing to oldest element in refractory window
+	v_list refrac_l;				// set of last N vertices moved
+
+	Vertex* set_seed;
+
+	timeval tim;					// time the main loop
+	int interval;					// used to track number of times each vertex is moved
+	int gain_period;				// used to schedule gain changes
+	double gain_step;				// gain step size
+	double max_gain;				// maximum allowed gain
+	double ref_gain;				// reference gain
+	double gain;					// active gain, all the time
+	std::vector<Vertex*> vset;		// unique set of vertices of all faces in box
+	Vertex *cv;						// Vertex* of current vertex
+//	hashtable_v gate; 				// list of vertices moved small distance and punished
+									// list of vertices moved small distance and punished
+	hashtable_v pun_n;				// moved max # times
+	hashtable_v pun_int;			// moves result in face intersections
+	hashtable_v pun_ang;			// moves result in really small or large angle
+	hashtable_v pun_com;			// neither of above cases hold
+	tv_iterator tvi; 				// multimap iterator to pair with largest separation error
+	double t1; 						// track elapsed time
+	int count;						// number of moved vertices in group
+	double store;					// square of actual virtual displacement of current vertex
+	double pH[3];					// destination of vertex move
+	int count_ref;					// to detect if any vertices from set were moved
+
+	Box *bp;						// Box* of worst vertex
+	double sep_dis;					// square of separation distance of current vertex before move
+
 	void initAvg(void);
 	void freeAvg(void);
 	void clearAvg(void);
 	void updateAvg(double);
-	void initTable(void);
-	void clearTable(void);
+	void initTable(Vertex*,Space&);
 	void saveOld(void);
 	void updateTopN(Vertex*,double,double,bool);
 	bool entryInTopN(Vertex*,double,tv_iterator&);
 	void updateOld(Vertex*,double);
 	void loadTopN(Container*);
 	void validateOld(void);
-	void validateTopN(char*);
+	void validateTopN(Container*);
 	void validateVertex(int,Container&);
 	void validateMultimap(void);
 	void printVertexSelect(Container&,int);
@@ -1332,25 +1479,1143 @@ public:
 	void updateTouchMap(Vertex*);
 	void updateEnergyMap(Vertex*,double);
 	void updateSets(Vertex*,double,bool);
+	void cleanTopN(Vertex*,double);
 	void prep(Container*);
 	double bpf_mean, bpf_min, bpf_max;	// #boxes per face
 	double fpb_mean, fpb_min, fpb_max;	// #faces per box
 	void getBoxesPerFace(Container&);
 	void getFacesPerBox(Space&);
 	void printVerticesWithCP(void);
-//	std::vector<Vertex*> added;
 	void initRefrac(void);
 	bool Refracted(Vertex*);
 	void updateRefractoryWindow(Vertex*);
+	int getMaxVertexMoves(void);
+	Monitor(void);
+	void groupInit(Container&);
+	void identifyMeshRegionToUpdate(Space&,Container&);
+	bool vertexIsMoveCandidate(Vertex *v,Container&);
+	void computeVertex(Vertex*,Container*);
+	void updateStatsAndPrint(Container&,int);
+	//std::vector<Vertex*>::iterator detectPunishableVertex(std::vector<Vertex*>::iterator,bool,bool,VTrack&,Container&);
+	std::vector<Vertex*>::iterator detectPunishableVertex(std::vector<Vertex*>::iterator,bool,bool);
+	bool noSetVerticesMoved(void);
+	void updateGain(void);
+	void writeFilesAndUpdateMaxGain(Container&,int);
+//	void punishGate(Vertex*,int);
+	void punishN(Vertex*,int);
+	void vertexSearchInTopN(Container*,int,std::string);
+	bool gainReachedSteadyState(void);
+	bool findTopN(Vertex*,tv_iterator&,int&);
+	void punishIfOverTouched(Vertex*);
+	void writePunished(int);
+	void writeIntersected(int,Container*);
+	void writeNonnice(int,Container*);
+
+	void screenDisp(Vertex*,double[3]);
+	bool isPunished(Vertex*);
+	void punishInt(Vertex*,int);
+	void punishAng(Vertex*,int);
+	void punishCom(Vertex*,int);
 };
 
+bool Monitor::isPunished(Vertex *v){
+	return (pun_n.find(v)!=pun_n.end() ||
+	pun_int.find(v)!=pun_int.end() ||
+	pun_com.find(v)!=pun_com.end() || 
+	pun_ang.find(v)!=pun_ang.end());
+}
+
+
+void Monitor::writeFilesAndUpdateMaxGain(Container &c,const int group){
+	gettimeofday(&tim,NULL);
+	double t2=tim.tv_sec+(tim.tv_usec/1000000.0);
+//	c.updateFile(group,count>1,t2-t1,max_gain);
+	c.updateFile(group,count>1,t2-t1);
+
+//	if (!distinguishable(avg_new,avg_old,ENERGY_EPSILON)){
+		if(max_gain>gain_step){max_gain-=gain_step;}
+		if(gain>max_gain){gain=max_gain;}
+//	}
+
+	if (WRITE_MESH_EVERY_ITERATION) {
+//		printVertexSelect(c,group);
+		cout << "Iteration " << group << ": ";
+		cout << "Build Mesh after..................";
+		cout.flush();
+		c.buildMeshAfter(group);
+		cout << "complete.\n";
+		cout.flush();
+	}
+	if (WRITE_DISTANCES_EVERY_ITERATION) {
+		cout << "Iteration " << group << ": ";
+		cout << "Write closest point distances.....";
+		cout.flush();
+		c.writeDistances(group);
+		cout << "complete.\n";
+		cout.flush();
+	}
+	if(WRITE_PUNISHED_VERTICES_TO_FILE){
+		cout << "Iteration " << group << ": ";
+		cout << "Write punished vertices...........";
+		cout.flush();
+		writePunished(group);
+		cout << "complete.\n";
+		cout.flush();
+	}
+	if(WRITE_INTERSECTED_FACES_TO_FILE){
+		cout << "Iteration " << group << ": ";
+		cout << "Write intersected faces...........";
+		cout.flush();
+		writeIntersected(group,&c);
+		cout << "complete.\n";
+		cout.flush();
+	}
+	if(WRITE_NONNICE_VERTICES_TO_FILE){
+		cout << "Iteration " << group << ": ";
+		cout << "Write nonnice vertices...........";
+		cout.flush();
+		writeNonnice(group,&c);
+		cout << "complete.\n";
+		cout.flush();
+	}
+
+
+/*	//DEBUG
+	// close separation distance log file
+	c.sepFileOutit();
+	// separation distance snapshot log file
+	c.sepSnapshotLog((*this),group);
+*/	// DEBUG
+}
+
+void Monitor::writeNonnice(const int group,Container *c){
+    char file[FILENAME_SIZE];
+    // create output filename
+    if (APPEND_ITERATION_NUMBER_TO_MESH) {
+        sprintf(file,"%s%s.%i",OUTPUT_DATA_DIR.c_str(),NONNICE_FILE,group);
+    } else {
+        sprintf(file,"%s%s",OUTPUT_DATA_DIR.c_str(),NONNICE_FILE);
+    }
+    // open output file
+    std::ofstream newfile (file,std::ios::out);
+    if(newfile.is_open()){
+		// create vector set
+		v_set vs;
+		// for each object in container
+		for(std::vector<Object*>::iterator i=c->o.begin();i!=c->o.end();i++) {
+			// for each nonnice hashtable element in object
+			for(vhm_iterator j=(*i)->nice.begin();j!=(*i)->nice.end();j++){
+				// add vertex* to set
+				vs.insert((*j).first);
+			}
+		}
+		// vector set was collected
+		// if cp
+		if("FORMAT_NONNICE_VERTICES"=="cp"){
+			// print header
+			newfile << "x_coordinate y_coordinate z_coordinate "
+			<< "state_value x_normal y_normal z_normal\n";
+			// for each vertex in set
+	        newfile.precision(12);
+			for(vs_iterator i=vs.begin();i!=vs.end();i++){
+				// print vertex
+				newfile << (*i)->pN[0] << " "
+				<< (*i)->pN[1] << " "
+				<< (*i)->pN[2] << " 1 0 0 1\n";
+			}
+		} else { // else detail
+	        newfile.precision(12);
+			// for each vertex in set
+			for(vs_iterator i=vs.begin();i!=vs.end();i++){
+				// print vertex
+				newfile << "Vertex <obj>" << (*i)->o->name
+				<< "<ind>" << (*i)->index << " "
+				<< "["
+				<< (*i)->pN[0] << " "
+				<< (*i)->pN[1] << " "
+				<< (*i)->pN[2] << "]\n";
+			}
+		}
+        newfile.close();
+    }
+}
+
+void Monitor::writeIntersected(const int group,Container *c){
+    char file[FILENAME_SIZE];
+    // create output filename
+    if (APPEND_ITERATION_NUMBER_TO_MESH) {
+        sprintf(file,"%s%s.%i",OUTPUT_DATA_DIR.c_str(),INTERSECTED_FILE,group);
+    } else {
+        sprintf(file,"%s%s",OUTPUT_DATA_DIR.c_str(),INTERSECTED_FILE);
+    }
+    // open output file
+    std::ofstream newfile (file,std::ios::out);
+    if(newfile.is_open()){
+		// if cp
+		if("FORMAT_INTERSECTED_FACES"=="cp"){
+			// create vector set
+			v_set vs;
+	        // for each object in container
+	        for(std::vector<Object*>::iterator i=c->o.begin();i!=c->o.end();i++) {
+				// for each intersected hashtable element in object
+				for(htff_iterator j=(*i)->intf.begin();j!=(*i)->intf.end();j++){
+					// grab Face *key
+					Face *ff=(*j).first;
+					// for each vertex of Face* key
+					for(int k=0;k<3;k++){
+						// add vertex* to set
+						vs.insert(ff->v[k]);
+					}
+					// for each Face* in vector
+					std::vector<Face*> *fv=(*j).second;
+					for(std::vector<Face*>::iterator k=fv->begin();k!=fv->end();k++){
+						// for each vertex of Face*
+						for(int nn=0;nn<3;nn++){
+							// add vertex* to set
+							vs.insert((*k)->v[nn]);
+						}
+					}
+				}
+        	}
+			// vector set was collected
+			// print header
+			newfile << "x_coordinate y_coordinate z_coordinate "
+			<< "state_value x_normal y_normal z_normal\n";
+			// for each vertex in set
+	        newfile.precision(12);
+			for(vs_iterator i=vs.begin();i!=vs.end();i++){
+				// print vertex
+				newfile << (*i)->pN[0] << " "
+				<< (*i)->pN[1] << " "
+				<< (*i)->pN[2] << " 1 0 0 1\n";
+			}
+			
+		} else { // else detail
+			// create face set
+			f_set ffs;
+	        // for each object in container
+	        for(std::vector<Object*>::iterator i=c->o.begin();i!=c->o.end();i++) {
+				// for each intersected hashtable element in object
+				for(htff_iterator j=(*i)->intf.begin();j!=(*i)->intf.end();j++){
+					// add Face* to set
+					ffs.insert((*j).first);
+					// for each Face* in vector
+					std::vector<Face*> *fv=(*j).second;
+					for(std::vector<Face*>::iterator k=fv->begin();k!=fv->end();k++){
+						// add Face* to set
+						ffs.insert(*k);
+					}
+				}
+        	}
+			// face set was collected
+	        newfile.precision(12);
+			// for each face in set
+			for(fs_iterator i=ffs.begin();i!=ffs.end();i++){
+				// print face
+				newfile << "Face <obj>" << (*i)->v[0]->o->name
+				<< "<ind>" << (*i)->index << endl
+				<< "[v0 "
+				<< (*i)->v[0]->index << " "
+				<< (*i)->v[0]->pN[0] << " "
+				<< (*i)->v[0]->pN[1] << " "
+				<< (*i)->v[0]->pN[2] << "]\n"
+				<< "[v1 "
+				<< (*i)->v[1]->index << " "
+				<< (*i)->v[1]->pN[0] << " "
+				<< (*i)->v[1]->pN[1] << " "
+				<< (*i)->v[1]->pN[2] << "]\n"
+				<< "[v2 "
+				<< (*i)->v[2]->index << " "
+				<< (*i)->v[2]->pN[0] << " "
+				<< (*i)->v[2]->pN[1] << " "
+				<< (*i)->v[2]->pN[2] << "]\n";
+			}
+		}
+        newfile.close();
+    }
+}
+
+void Monitor::writePunished(const int group){
+    char file[FILENAME_SIZE];
+    // create output filename
+    if (APPEND_ITERATION_NUMBER_TO_MESH) {
+        sprintf(file,"%s%s.%i",OUTPUT_DATA_DIR.c_str(),PUNISHED_FILE,group);
+    } else {
+        sprintf(file,"%s%s",OUTPUT_DATA_DIR.c_str(),PUNISHED_FILE);
+    }
+    // open output file
+    std::ofstream newfile (file,std::ios::out);
+    if(newfile.is_open()){
+        newfile.precision(12);
+		if(pun_n.empty()==false){
+	        // for each vertex moved too many time
+			newfile << "# vertices punished for moving MAX_TOUCHES="
+			<< MAX_TOUCHES << "times in group=" << group << endl;
+	        for(vhm_iterator i=pun_n.begin();i!=pun_n.end();i++) {
+				Vertex *vv=(*i).first;
+				newfile << "Vertex <obj>" << vv->o->name
+				<< "<ind>" << vv->index << " "
+				<< "["
+				<< vv->pN[0] << " "
+				<< vv->pN[1] << " "
+				<< vv->pN[2] << "]\n";
+	        }
+		}
+		if(pun_int.empty()==false){
+	        // for each punished vertex
+			newfile << "# vertices punished for causing intersecting faces"
+			<< " in group=" << group << endl;
+	        for(vhm_iterator i=pun_int.begin();i!=pun_int.end();i++) {
+				Vertex *vv=(*i).first;
+				newfile << "Vertex <obj>" << vv->o->name
+				<< "<ind>" << vv->index << " "
+				<< "["
+				<< vv->pN[0] << " "
+				<< vv->pN[1] << " "
+				<< vv->pN[2] << "]\n";
+			}
+        }
+		if(pun_ang.empty()==false){
+	        // for each punished vertex
+			newfile << "# vertices punished for causing very small or very large edge angles"
+			<< " in group=" << group << endl;
+	        for(vhm_iterator i=pun_ang.begin();i!=pun_ang.end();i++) {
+				Vertex *vv=(*i).first;
+				newfile << "Vertex <obj>" << vv->o->name
+				<< "<ind>" << vv->index << " "
+				<< "["
+				<< vv->pN[0] << " "
+				<< vv->pN[1] << " "
+				<< vv->pN[2] << "]\n";
+			}
+        }
+		if(pun_com.empty()==false){
+	        // for each punished vertex
+			newfile << "# vertices whose punishment is not "
+			<< "attributable to either of the above categories" << endl;
+	        for(vhm_iterator i=pun_com.begin();i!=pun_com.end();i++) {
+				Vertex *vv=(*i).first;
+				newfile << "Vertex <obj>" << vv->o->name
+				<< "<ind>" << vv->index << " "
+				<< "["
+				<< vv->pN[0] << " "
+				<< vv->pN[1] << " "
+				<< vv->pN[2] << "]\n";
+	        }
+		}
+        newfile.close();
+    } else {
+		cout << "Monitor::writePunished: Error.\n"
+		<< "Could not open " << file << " for writing punished vertices.\n";
+	}
+}
+void Monitor::updateGain(void){
+	// if gain changeable?
+	if(gain_period==0){
+		// let cc equal the max number of moves
+		// made by a single vertex in the last gain period
+//		int cc = getMaxVertexMoves();
+//		// if oscillating, i.e. max number of vertex moves > upper threshold
+//		// and gain is larger than gain step size
+//		if(cc>UPPER_MOVES_THRESHOLD && gain>gain_step){
+		//
+		// if change in mean energy < epsilon
+		// and gain is larger than gain step size
+		if( gainReachedSteadyState()==true && gain>gain_step){
+//			cout << "cc " << cc
+//			<< ", gain " << gain
+//			<< ", gain_step " << gain_step
+//			<< ", max_gain-gain_step " << max_gain-gain_step
+//			<< endl;
+			// decrease gain
+			gain -= gain_step;
+			// reset gain period
+			gain_period = REFRACTORY_PERIOD;
+			// update reference gain
+			ref_gain = gain;
+		} 
+		// else if system not active enough
+		// i.e. max number of vertex moves < lower threshold
+		// and gain is small enough to be incremented without exceeding max_gain
+/*		else if (cc<LOWER_MOVES_THRESHOLD && gain<=(max_gain-gain_step)){
+			// increase gain
+			gain += gain_step;
+			// reset gain period
+			gain_period = REFRACTORY_PERIOD;
+			// update reference gain
+			ref_gain=gain;
+		}
+*/
+	}
+}
+
+bool Monitor::noSetVerticesMoved(void){
+	return count_ref==count;
+}
+
+void Monitor::screenDisp(Vertex *ccvv,double PT[3]){
+	// square of displacement
+	double d[3]={PT[0]-ccvv->pN[0],PT[1]-ccvv->pN[1],PT[2]-ccvv->pN[2]};
+	double sqdisp = d[0]*d[0]+d[1]*d[1]+d[2]*d[2];
+	// if too big
+	if(sqdisp>MAX_ACTUAL_DISPL_SQ){
+		double disp=sqrt(sqdisp);
+		double newgain=sqrt(MAX_ACTUAL_DISPL_SQ);
+		for(int k=0;k<3;k++){
+			PT[k] = ccvv->pN[k]+newgain*d[k]/disp;
+		}
+	}
+}
+
+void Monitor::computeVertex(Vertex *v,Container *c){
+	cv=v;
+	// compute new holding position coordinates (x,y,z)
+	cv->computeNewCoords(c,pH,gain);
+	// impose max displacement policy
+	screenDisp(cv,pH);
+	// displacement along x,y,z
+	double a=pH[0]-cv->pN[0];
+	double b=pH[1]-cv->pN[1];
+	double d=pH[2]-cv->pN[2];
+	// compute and store squared displacement 
+	store=a*a+b*b+d*d;
+	// compute and store squared separation distance 
+	sep_dis = cv->getSqSepDist(c);
+
+/*	// DEBUG
+	if(v==set_seed){
+		old_rank=0;
+		old_vd=0;
+		tv_iterator	target;
+		if(findTopN(v,target,old_rank)==true){
+			old_vd = sqrt((*target).first);
+		} else {
+			cout << "vertex not found in topN!" << endl;
+			v->printVertex(v->o->name);cout << endl;
+			exit(0);
+		}
+
+		old_position[0] = cv->pN[0];
+		old_position[1] = cv->pN[1];
+		old_position[2] = cv->pN[2];
+		new_position[0] = pH[0];
+		new_position[1] = pH[1];
+		new_position[2] = pH[2];
+	}
+*/	// DEBUG
+
+}
+
+void Monitor::updateStatsAndPrint(Container &c,const int group){
+	// automatically strict face intersection prevention
+	if(STRICT_FACE_INTERSECTION_PREVENTION==false){
+		if(DETECT_COMPLETE_SEPARATION==true){
+			if(c.ti==0){STRICT_FACE_INTERSECTION_PREVENTION=true;}
+		}
+	}
+	// update gain_period
+	if(gain_period>0){gain_period--;}
+	// increment number of times current vertex has been moved
+	updateTouchMap(cv);
+	// punish vertex if moved too many time
+	punishIfOverTouched(cv);
+	// update sliding energy average
+	updateAvg(c.energy);
+	// print number of times each vertex has been moved
+	if(!WRITE_MESH_EVERY_ITERATION && touches==1000){
+		touches = 0;
+		printVertexSelect(c,++interval);
+		touch_map.clear();
+	}
+	// update container stats
+	c.updateStats(sqrt(store));
+	// update list of vertices in refractory period
+	updateRefractoryWindow(cv);
+
+	// print to stdout
+	if(!(count++%1000)){
+//	if(count++){
+        char name[1024];
+        sprintf(name,"count %d, ",count-1);
+        cout << name;
+        sprintf(name,"group %d, ",group);
+        cout << name;
+        cout.width(45);
+        sprintf(name,"%s->%d, ",cv->o->name.c_str(),cv->index);
+        cout << left << name;
+        cout.width(24);
+        sprintf(name,"vd %.12g, ",sqrt(store));
+        cout << left << name;
+        cout.width(24);
+        sprintf(name,"e %.12g, ",c.energy);
+        cout << left << name;
+        cout.width(28);
+        sprintf(name,"e_avg %.12g, ",avg_new);
+        cout << left << name;
+        cout.width(12);
+        sprintf(name,"gain %.6g, ",gain);
+        cout << left << name;
+//        cout.width(14);
+//        sprintf(name,"max_gain %.6g, ",max_gain);
+//        cout << left << name;
+//        sprintf(name,"min edge angle %.6g, ",c.min_edge_angle);
+//        cout << left << name;
+        if(PRINT_FLAG){
+            sprintf(name,"bpf (%.6g,%.6g,%.6g), ",bpf_min,bpf_mean,bpf_max);
+            cout << left << name;
+            sprintf(name,"fpb (%.6g,%.6g,%.6g), ",fpb_min,fpb_mean,fpb_max);
+            cout << left << name;
+        }
+        cout << endl;
+    }
+
+/*	// DEBUG
+	bool dec=false;
+//	if(count && group==3){dec=true;}
+//	if(count++ && cv==set_seed){dec=true;}
+	if(dec){
+		char name[1024];
+		sprintf(name,"count %d, ",count-1);
+		cout << name;
+		sprintf(name,"iter %d, ",group);
+		cout << name;
+		if(cv==set_seed){cout << " seed, ";}
+		else {cout << "member, ";}
+		cout.width(45);
+		sprintf(name,"%s->%d, ",cv->o->name.c_str(),cv->index);
+		cout << left << name;
+
+		tv_iterator	target;
+		int rank=0;
+		if(findTopN(cv,target,rank)==true){
+			cout.width(28);
+			sprintf(name,"rank [%d->%d], ",old_rank,rank);
+			cout << left << name;
+			cout.width(38);
+			sprintf(name,"vd [%.12g->%.12g], ",old_vd,sqrt((*target).first));
+			cout << left << name;
+		} else {
+			cout << "vertex not found in topN!" << endl;
+			cv->printVertex(cv->o->name);cout << endl;
+			exit(0);
+		}
+		cout.width(24);
+		sprintf(name,"actual disp %.12g, ",sqrt(store));
+		cout << left << name << endl;
+
+		cout.width(88);
+		sprintf(name,"pos [%.12g,%.12g,%.12g]->[%.12g,%.12g,%.12g], "
+		,old_position[0],old_position[1],old_position[2]
+		,cv->pN[0],cv->pN[1],cv->pN[2]);
+		cout << left << name;
+	
+		// get closest point
+		double pC[3];
+		c.computePC(cv->cl,cv,pC);
+		cout.width(48);
+		sprintf(name,"new clos pt [%.12g,%.12g,%.12g]",pC[0],pC[1],pC[2]);
+		cout << left << name;
+
+		cout << endl;
+	}*/
+	// update iterator
+	gain=ref_gain;
+/*	if(group==3){
+		// print debug data to file
+	    char file[256];	
+		sprintf(file,"%s%s_%d.dat",OUTPUT_DATA_DIR,cv->o->name.c_str(),cv->index);
+	    std::ofstream File(file,std::ofstream::app);
+	    if (File.fail()) // if stream cannot be opened
+	    { cout << "Can't open " << file ; exit(1); }
+		File.precision(12);
+		File << endl;
+		File << "group " << group << endl;
+		File << "count " << count-1 << endl;
+		if(cv==set_seed){File << "seed\n";}
+		else {File << "member\n";}
+		File << "old topN rank " << old_rank << endl;
+		File << "old virtual displacement " << old_vd << endl;
+		tv_iterator	target;
+		int rank=0;
+		if(findTopN(cv,target,rank)==true){
+			File << "new topN rank " << rank << endl;
+			File << "new virtual displacement "
+			<< sqrt((*target).first) << endl;
+		} else {
+			cout << "vertex not found in topN!" << endl;
+			cv->printVertex(cv->o->name);cout << endl;
+			exit(0);
+		}
+		File << "actual displacement " << sqrt(store) << endl;
+		File << "old position ["
+		<< old_position[0] << ", "
+		<< old_position[1] << ", "
+		<< old_position[2] << "]\n";
+		File << "new position [" << cv->pN[0] << ", "
+		<< cv->pN[1] << ", " << cv->pN[2] << "]\n";
+		// get closest point
+		double pC[3];
+		c.computePC(cv->cl,cv,pC);
+		File << "new closest point [" << pC[0] << ", "
+		<< pC[1] << ", " << pC[2] << "]\n";
+		// close files
+	    File.close();
+	}
+*/	// DEBUG
+
+}
+
+
+bool Monitor::vertexIsMoveCandidate(Vertex *v,Container &c){
+	// if vertex is candidate, i.e. closest point was found for vertex
+	// and vertex not found in refractory list of vertices
+	// i.e. list of last REFRACTORY_PERIOD (e.g. 1000) vertices moved
+	// and vertex is not in gate, i.e. failed to move and punished for extent of w group
+	return (v->cl!=NULL) && (isPunished(v)==false) && !Refracted(v)
+			&& (binary_search(c.frozen.begin(),c.frozen.end(),v)==false);
+//	return (v->cl!=NULL) && (gate.find(v)==gate.end()) && !Refracted(v);
+}
+
+
+
+void Monitor::identifyMeshRegionToUpdate(Space &s,Container &c){
+	set_seed=NULL;
+	if(MOVE_NONNICE_AND_INTERSECTED_FIRST){
+		// try to pick nonnice vertex as set seed
+		// for each object
+		for(std::vector<Object*>::iterator i=c.o.begin();i!=c.o.end();i++){
+			// for each element of nice hashmap
+			for(vhm_iterator j=(*i)->nice.begin();j!=(*i)->nice.end();j++){
+				Vertex *vv=(*j).first;
+				// if vertex is not punished and not refracted
+				// and not frozen and has a closest face
+				if ( isPunished(vv)==false && Refracted(vv)==false && vv->cl!=NULL
+					&& (binary_search(c.frozen.begin(),c.frozen.end(),vv)==false))
+				{
+					set_seed = vv;break;
+				}
+			}
+			if(set_seed!=NULL){break;}
+		}
+
+		// else try to pick intersected face vertex as set seed
+		if(set_seed==NULL){
+			// for each object
+			for(std::vector<Object*>::iterator i=c.o.begin();i!=c.o.end();i++){
+				// for each element of intf hashmap
+				for(htff_iterator j=(*i)->intf.begin();j!=(*i)->intf.end();j++){
+					Face *ff=(*j).first;
+					// for each vertex of face
+					for(int k=0;k<3;k++){
+						Vertex *vv=ff->v[k];
+						// if vertex is not punished and not refracted
+						// and not frozen and has a closest face
+						if (isPunished(vv)==false && Refracted(vv)==false && vv->cl!=NULL
+							&& (binary_search(c.frozen.begin(),c.frozen.end(),vv)==false))
+						{
+							set_seed = vv;break;
+						}
+					}
+					if(set_seed!=NULL){break;}
+				}
+				if(set_seed!=NULL){break;}
+			}
+		}
+	}
+	
+	// else pick vertex from sorted virtual displacement list
+	if(set_seed==NULL){
+		// starting at current location of tvi in topN
+		// find vertex with largest virtual displacement that is not punished
+		// and not refracted and not frozen and has a closest face
+		while(isPunished((*tvi).second)==true || Refracted((*tvi).second)==true
+				|| (binary_search(c.frozen.begin(),c.frozen.end(),(*tvi).second)==true)
+				|| (*tvi).second->cl==NULL){
+			tvi++;
+		}
+		set_seed = (*tvi).second;
+	}
+
+	// DEBUG
+	if(set_seed!=NULL){
+		cout << "\n>>>>> SET_SEED VERTEX: " << set_seed->o->name << "->" << set_seed->index << endl;
+	} else {
+		cout << "\n>>>>> SET_SEED VERTEX: NULL" << endl;
+	}
+	// DEBUG
+
+	// grab Box* of worst vertex
+	bp=s.b[s.indices2Index(
+//		s.location2Index((*tvi).second->pN[0],"x"),
+//		s.location2Index((*tvi).second->pN[1],"y"),
+//		s.location2Index((*tvi).second->pN[2],"z"))];
+		s.location2Index(set_seed->pN[0],"x"),
+		s.location2Index(set_seed->pN[1],"y"),
+		s.location2Index(set_seed->pN[2],"z"))];
+	// grab unique set of vertices of all faces in box
+	std::vector<Vertex*> bin;
+	for(std::vector<Face*>::iterator z=bp->f.begin();z!=bp->f.end();z++){
+		for(int k=0;k<3;k++){
+			if((*z)->v[k]!=set_seed){
+				bin.push_back((*z)->v[k]);
+			}
+		}
+	}
+	// sort and keep unique Vertex*
+	sort(bin.begin(),bin.end());
+	std::vector<Vertex*>::iterator new_end = unique(bin.begin(),bin.end());
+	bin.assign(bin.begin(),new_end);
+	// build vset
+	vset.clear();	
+	vset.push_back(set_seed);
+	for(std::vector<Vertex*>::iterator i=bin.begin();i!=bin.end();i++){
+		vset.push_back(*i);
+	}
+	// to detect if any vertices from set were moved
+	count_ref = count;
+}
+
+Monitor::Monitor(void){
+	// used to track number of times each vertex is moved
+	interval=0;
+	// used to schedule gain changes
+	gain_period=0;
+	// inital max gain
+	max_gain = TIME_STEP/DAMPING;
+	// initialize gain
+	gain = max_gain;
+	// gain step size
+	gain_step = max_gain/NUM_GROUPS;
+	// Box* of worst vertex
+	bp=NULL;
+	// Vertex* of current vertex
+	cv=NULL;
+}
+
+void Monitor::groupInit(Container &c){
+//	if(group-1){
+		// load topN, save old, and initialize avg
+		prep(&c);
+//	}
+	// instantiate list of vertices moved small distance (gate)
+	// and instantiate refractory period list
+	initRefrac();
+	// clear punished vertex lists
+	pun_n.clear();
+	pun_int.clear();
+	pun_com.clear();
+	pun_ang.clear();
+	// initialize reference gain
+	ref_gain = gain;
+	// intialize sliding window average of global energy
+	clearAvg();
+	updateAvg(c.energy);
+	c.clear();
+	// point multimap iterator to pair with largest separation error
+	tvi = topN.begin();
+
+	// initialize variable used to track how many times each vertex was moved
+	touches = 0;
+	touch_map.clear();
+	// track elapsed time
+	gettimeofday(&tim,NULL);
+	t1=tim.tv_sec+(tim.tv_usec/1000000.0);
+	// initialize count of vertices moved in group
+	count = 1;
+}
+
+bool Face::faceInVector(Face *ff){
+	// get this face's intersecting faces vector
+	std::vector<Face*> *ifv=this->getIntersectingFaces();
+	// look for face f in this face's intersecting faces vector
+	std::vector<Face*>::iterator i=find((*ifv).begin(),(*ifv).end(),ff);
+	// return true if found
+	// return false if no found
+	return (i!=(*ifv).end());
+}
+
+void Face::addFaceToVector(Face* f,Container *c){
+	// if this face not in intf, then add new element to intf
+	if(!faceInTable_intf()){addFaceToTable_intf();}
+	// face f not already in vector
+	if(faceInVector(f)==false){
+		// add face f to this face's intersecting faces vector
+		(*v[0]->o->intf[this]).push_back(f);
+	}
+	// update global intersections count
+	if (v[0]->o==f->v[0]->o){c->si++;}
+	c->ti++;
+}
+
+void Face::removeFaceFromVector(Face *f,Container *c){
+	// update si for removal of both adjacent and intersecting faces
+	if(v[0]->o==f->v[0]->o){c->si-=1;}
+	// update ti for removal of both adjacent and intersecting faces
+	c->ti-=1;
+	// if this face has intersecting faces in hashmap intf
+	if(faceInTable_intf()==true){
+		// get this face's intersecting faces vector
+		std::vector<Face*> *ifv=this->getIntersectingFaces();
+		// look for face f in this face's intersecting faces vector
+		std::vector<Face*>::iterator i=find((*ifv).begin(),(*ifv).end(),f);
+		// if found
+		if (i!=(*ifv).end()){
+			// remove face f from this face's intersecting faces vector
+			(*ifv).erase(remove((*ifv).begin(),(*ifv).end(),f),(*ifv).end());
+			// if intersecting face vector is now empty
+			if (noMoreIntersectingFaces()){
+				// then remove intersecting face vector from hashtable
+				clearFaceFromTable_intf(c);
+				// then update face intersect force, i.e. set force to zero
+				clearFaceFromTable_iv();
+			}
+		} else {
+/*			cout << "\nFace::removeFaceFromVector: "
+			<< "Face " << f->v[0]->o->name
+			<< "->" << f->index
+			<< " NOT found in intersecting face vector of Face "
+			<< v[0]->o->name << "->" << index
+			<< " intersecting face vector.\n";
+*/
+		}
+	} else {
+/*		cout << "\nFace::removeFaceFromVector: "
+		<< "Face " << v[0]->o->name
+		<< "->" << index
+		<< " NOT found in intf table.\n";
+*/
+	}
+}
+
+void Face::clearFaceFromTable_intf(Container *c){
+	// if this face is in intf table 
+	if(faceInTable_intf()==true){
+		// get this face's intersecting faces vector
+		std::vector<Face*> *ifv=this->getIntersectingFaces();
+		// if intersecting faces vector is not empty
+		if((*ifv).empty()==false){
+			// for each face in intersection vector
+			for(std::vector<Face*>::iterator i=(*ifv).begin();i!=(*ifv).end();i++){
+/*				// DEBUG
+				cout << "Container::clearFaceFromTable_intf: "
+				<< "adjface=" << index
+				<< ", intface=" << (*i)->index
+				<< endl;
+*/				// DEBUG
+				// update si for removal of both adjacent and intersecting faces
+				if(v[0]->o==(*i)->v[0]->o){c->si--;}
+				// update ti for removal of both adjacent and intersecting faces
+				c->ti--;
+			}
+			(*ifv).clear();
+		}
+		// delete vector<face*>*
+		delete v[0]->o->intf[this];
+		// remove element from table
+		v[0]->o->intf.erase(this);
+	}
+}
+
+void Vertex::setVertexNiceness(int newval,Container *c){
+	int oldval=0;
+	vhm_iterator i = o->nice.find(this);
+	// if vertex in hashtable
+	if(i!=o->nice.end()){oldval=o->nice[this];}
+	// process
+	// not old==new needs no action
+	switch (oldval+newval*3) {
+		case 1 :
+			// old==1 + new==0*3
+			// remove this vertex from hashtable
+			o->nice.erase(i);
+			c->nonnice--;
+			break;
+
+		case 2 :
+			// old==2 + new==0*3
+			o->nice.erase(i);
+			c->nonnice--;
+			c->s_nonnice--;
+			break;
+
+		case 3 :
+			// old==0 + new==1*3
+	   		o->nice[this]=newval;
+			c->nonnice++;
+			break;
+
+		case 5 :
+			// old==2 + new==1*3
+	   		o->nice[this]=newval;
+			c->s_nonnice--;
+			break;
+
+		case 6 :
+			// old==0 + new==2*3
+	   		o->nice[this]=newval;
+			c->nonnice++;
+			c->s_nonnice++;
+			break;
+
+		case 7 :
+			// old==1 + new==2*3
+	   		o->nice[this]=newval;
+			c->s_nonnice++;
+			break;
+
+	}	
+}
+
+
 //############################################################################
 //############################################################################
 
+class VTrack{
+public:
+	Vertex *vv;
+	// ..[0]==original, ..[1]==new
+	double p[2][3];
+	double topN[2];
+	double vd[2];
+	double sepdis[2];
+	double cp[2][3];
+	void clear(void);
+	bool isGood(void);
+	void print(void);
+	void printBad(void);
+	void addNewSepDis(double);
+	double getNewSepDis(void);
+	void addNewVD(double);
+	double getNewVD(void);
+	void addNewTopN(double);
+	double getNewTopN(void);
+	void addOrigSepDis(double);
+	double getOrigSepDis(void);
+	void addOrigVD(double);
+	double getOrigVD(void);
+	void addOrigTopN(double);
+	double getOrigTopN(void);
+	void addOrigP(double[3]);
+	void getOrigP(double[3]);
+	void getNewP(double[3]);
+	void addNewP(double[3]);
+	void addOrigCP(double[3]);
+	void getOrigCP(double[3]);
+	void getNewCP(double[3]);
+	void addNewCP(double[3]);
+	void addVertex(Vertex*);
+	Vertex* getVertex(void);
+};
 
+void VTrack::printBad(void){
+	if (vv==NULL){cout << "vertex* is NULL.\n";}
+	if (p[0][0]<0){cout << "orig pos not set.\n";}
+	if (p[1][0]<0){cout << "new pos not set.\n";}
+	if (cp[0][0]<0){cout << "orig clos pos not set.\n";}
+	if (cp[1][0]<0){cout << "new clos pos not set.\n";}
+	if (topN[0]<0){cout << "orig topN not set.\n";}
+	if (topN[1]<0){cout << "new topN not set.\n";}
+	if (vd[0]<0){cout << "orig vd not set.\n";}
+	if (vd[1]<0){cout << "new vd not set.\n";}
+	if (sepdis[0]<0){cout << "orig sepdis not set.\n";}
+	if (sepdis[1]<0){cout << "new sepdis not set.\n";}
+}
 
+void VTrack::print(void){
+	cout << "pos ["
+	<< p[0][0] << " "
+	<< p[0][1] << " "
+	<< p[0][2] << "]->["
+	<< p[1][0] << " "
+	<< p[1][1] << " "
+	<< p[1][2] << "]\n"
+	<< "closest pos ["
+	<< cp[0][0] << " "
+	<< cp[0][1] << " "
+	<< cp[0][2] << "]->["
+	<< cp[1][0] << " "
+	<< cp[1][1] << " "
+	<< cp[1][2] << "]\n"
+	<< "topN rank ["
+	<< topN[0] << "]->["
+	<< topN[1] << "], "
+	<< "vd ["
+	<< vd[0] << "]->["
+	<< vd[1] << "], "
+	<< "sepdis ["
+	<< sepdis[0] << "]->["
+	<< sepdis[1] << "]\n";
+}
 
+Vertex* VTrack::getVertex(void){
+	return vv;
+}
 
+void VTrack::addVertex(Vertex *uu){
+	vv=uu;
+}
 
+bool VTrack::isGood(void){
+	return	vv!=NULL &&
+			(p[0][0]>0) &&
+			(p[1][0]>0) &&
+			(cp[0][0]>0) &&
+			(cp[1][0]>0) &&
+			(topN[0]>0) &&
+			(topN[1]>0) &&
+			(vd[0]>0) &&
+			(vd[1]>0) &&
+			(sepdis[0]>0) &&
+			(sepdis[1]>0);
+}
 
+void VTrack::addNewSepDis(double i){
+	sepdis[1]=i;
+}
 
+double VTrack::getNewSepDis(void){
+	return sepdis[1];
+}
+
+void VTrack::addNewVD(double i){
+	vd[1]=i;
+}
+
+double VTrack::getNewVD(void){
+	return vd[1];
+}
+
+void VTrack::addNewTopN(double i){
+	topN[1]=i;
+}
+
+double VTrack::getNewTopN(void){
+	return topN[1];
+}
+
+void VTrack::addOrigSepDis(double i){
+	sepdis[0]=i;
+}
+
+double VTrack::getOrigSepDis(void){
+	return sepdis[0];
+}
+
+void VTrack::addOrigVD(double i){
+	vd[0]=i;
+}
+
+double VTrack::getOrigVD(void){
+	return vd[0];
+}
+
+void VTrack::addOrigTopN(double i){
+	topN[0]=i;
+}
+
+double VTrack::getOrigTopN(void){
+	return topN[0];
+}
+
+void VTrack::clear(void){
+	for(int i=0;i<2;i++){
+		p[i][0]=p[i][1]=p[i][2]=-1.0;
+		cp[i][0]=cp[i][1]=cp[i][2]=-1.0;
+		topN[i]=vd[i]=sepdis[i]=-1.0;
+	}
+}
+
+void VTrack::addOrigP(double q[3]){
+	p[0][0]=q[0];
+	p[0][1]=q[1];
+	p[0][2]=q[2];
+}
+
+void VTrack::getOrigP(double q[3]){
+	q[0]=p[0][0];
+	q[1]=p[0][1];
+	q[2]=p[0][2];
+}
+
+void VTrack::getNewP(double q[3]){
+	q[0]=p[1][0];
+	q[1]=p[1][1];
+	q[2]=p[1][2];
+}
+
+void VTrack::addNewP(double q[3]){
+	p[1][0]=q[0];
+	p[1][1]=q[1];
+	p[1][2]=q[2];
+}
+
+void VTrack::addOrigCP(double q[3]){
+	cp[0][0]=q[0];
+	cp[0][1]=q[1];
+	cp[0][2]=q[2];
+}
+
+void VTrack::getOrigCP(double q[3]){
+	q[0]=cp[0][0];
+	q[1]=cp[0][1];
+	q[2]=cp[0][2];
+}
+
+void VTrack::getNewCP(double q[3]){
+	q[0]=cp[1][0];
+	q[1]=cp[1][1];
+	q[2]=cp[1][2];
+}
+
+void VTrack::addNewCP(double q[3]){
+	cp[1][0]=q[0];
+	cp[1][1]=q[1];
+	cp[1][2]=q[2];
+}
+
+std::vector<Vertex*>::iterator Monitor::detectPunishableVertex(std::vector<Vertex*>::iterator i,bool int_flag,bool ang_flag){
+	if(store<MIN_DISPLACEMENT_SQ*SCALE*SCALE){
+/**/	// DEBUG
+//		pod.addNewP(stats.cv->pN);
+//		pod.addNewSepDis(sqrt(stats.cv->getSqSepDist(&c)));
+                /*
+		pod.addNewP(pod.p[0]);
+		pod.addNewSepDis(pod.sepdis[0]);
+		if(true){
+			int rrank;
+			tv_iterator ttt;
+			findTopN(cv,ttt,rrank);
+			// get closest point
+			double pC[3];
+			c.computePC(cv->cl,cv,pC);
+			// set
+			pod.addNewCP(pC);
+			pod.addNewVD(sqrt((*ttt).first));
+			pod.addNewTopN(rrank);
+		}
+		if(pod.isGood()==true){pod.print();}
+		else { pod.printBad();exit(0);}
+                */
+/**/	// DEBUG
+		cout << "\nvertex: " << cv->o->name << "->" << cv->index << " was punished.\n"
+		<< "virtual displacement sqd(" << store << ")"
+		<< " < threshold(" << MIN_DISPLACEMENT_SQ*SCALE*SCALE << ")\n";
+		cv->printVertex(cv->o->name);
+		cout << endl << endl;
+		// vertex is effectively immovable, so punish vertex
+		if(int_flag==true){	punishInt(cv,static_cast<int>(GROUP_SIZE));}
+		else if(ang_flag==true){	punishAng(cv,static_cast<int>(GROUP_SIZE));}
+		else {	punishCom(cv,static_cast<int>(GROUP_SIZE));}
+		// reset gain
+		gain=ref_gain;
+		// move on to next vertex in set
+		i++;
+	} else {
+		// try halving gain to halve attempted virtual displacement and try again
+		gain=gain/2.0;
+	}
+	return i;
+}
+
+//############################################################################
+//############################################################################

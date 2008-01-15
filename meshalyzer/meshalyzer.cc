@@ -8,20 +8,13 @@
 #include <fstream>
 #include <string>
 #include <dirent.h>
-//#include <errno.h>
-//#include <time.h>
-//#include <sys/timeb.h>
-//#include <sys/time.h>
 #include <ext/hash_map>
 #include <ext/hash_set>
 #include <numeric>
 #include <map>
 #include <sys/stat.h>
-//#include <ncurses.h>
+#include <unistd.h>
 
-//using namespace std;
-//using namespace __gnu_cxx;
-//using __gnu_cxx::map;
 using std::map;
 using std::vector;
 using std::cout;
@@ -33,7 +26,7 @@ using std::set;
 //#################### includes ######################
 //####################################################
 
-#include "controls.cc"
+#include "controls.h"
 #include "classes.cc"
 #include "subroutines.cc"
 
@@ -42,163 +35,180 @@ using std::set;
 //####################################################
 
 int main(int argc,char **argv){
-
-	char message[2048];
-	sprintf(message,"\nUsage: meshalyzer file|folder ");
-	sprintf(message,"%s[-a]|[-p] [-g=t1,t2,t3][-i][-s]\n\n",message);
-	sprintf(message,"%sDescription: Analyze and assess the integrity of mesh files.\n\n",message);
-	sprintf(message,"%sThe '-a' option evaluates the attributes of the meshes,\n",message);
-	sprintf(message,"%s reports the results, and exits.\n\n",message);
-	sprintf(message,"%sThe '-p' option prints offending mesh elements \n",message);
-	sprintf(message,"%s(i.e. flipped faces, borders, nonmanifold edges,\n",message);
-	sprintf(message,"%snonmanifold vertices, intersecting faces).\n\n",message);
-	sprintf(message,"%sThe '-g=t1,t2,t3' option explicitly reports whether\n",message);
-	sprintf(message,"%sor not mesh is good (i.e. mesh is closed manifold\n",message);
-	sprintf(message,"%swith outward normals, no intersecting faces, no orphaned\n",message);
-	sprintf(message,"%sor missing vertices, no degenerate faces, contiguous vertex\n",message);
-	sprintf(message,"%sand face numbering, maximum face aspect ratio is less than\n",message);
-	sprintf(message,"%suser-defined threshold, minimum edge angle is greater than\n",message);
-	sprintf(message,"%suser-defined threshold, and minimum edge length is larger\n",message);
-	sprintf(message,"%sthan user-defined threshold).\n",message);
-	sprintf(message,"%st1=aspect ratio threshold, t2=edge angle threshold(radians)\n",message);
-	sprintf(message,"%st3=edge length thresold in same units as input mesh file\n",message);
-	sprintf(message,"%sIf no other options used, returns '1' or '0'\n",message);
-	sprintf(message,"%sif mesh is good or not good, respectively.\n\n",message);
-	sprintf(message,"%sThe '-i' option looks for intersections between\n",message);
-	sprintf(message,"%sfaces from different objects.\n\n",message);
-	sprintf(message,"%sThe '-s' option computes the seperation distance\n",message);
-	sprintf(message,"%sfor every vertex in each object.\n\n",message);
+	std::string message = "\n";
+	message=message+
+	"NAME\n"+
+	"       meshalyzer - mesh quality analyzer\n"+
+	"\nSYNOPSIS\n"+
+	"       meshalyzer [options] FILE|DIR\n"+
+	"\nDESCRIPTION\n"+
+	"       Meshalyzer is a general purpose mesh analyzer useful for\n"+
+	"       generating a complete summary of the current state of a mesh.\n"+
+	"       Meshalyzer assesses mesh integrity (e.g. missing data),\n"+
+	"       mesh attributes (e.g. closed, manifold, oriented), and\n"+
+	"       mesh characteristics (e.g. number of vertices, faces, edges).\n"+
+	"       Batch processing is easy by passing a directory name\n"+
+	"       as input on the command line.\n"+
+	"\nEXAMPLES\n"+
+	"       meshalyzer filename\n"+
+	"              Evaluate mesh integrity, attributes,\n"+
+	"              and characteristics for the single mesh file.\n\n"+
+	"       meshalyzer directoryname\n"+
+	"              Evaluate mesh integrity, attributes,\n"+
+	"              and characteristics for each single mesh file in directory.\n\n"+
+	"       meshalyzer -p filename\n"+
+	"              Evaluate mesh integrity, attributes, and characteristics \n"+
+	"              for the single mesh file, print the results, and print \n"+
+	"              the mesh elements preventing the mesh from being good with\n"+
+	"              regards to the mesh characteristics and the attributes, if any.\n\n"+
+	"       meshalyzer -a -p filename\n"+
+	"              Evaluate the five mesh attributes for the single mesh file,\n"+
+	"              print the state of each attribute, and print the mesh elements\n"+
+	"              preventing the mesh from being good with regards to the attributes, if any.\n\n"+
+	"       meshalyzer -b 10.0 -c 1.0 -p filename\n"+
+	"              Evaluate mesh integrity, attributes, and characteristics \n"+
+	"              for the single mesh file, print the results, and print \n"+
+	"              the mesh elements preventing the mesh from being good with\n"+
+	"              regards to the mesh characteristics and the attributes, if any.\n"+
+	"              Additionally, screen faces with aspect ratios larger than 10.0 and\n"+
+	"              screen edges with lengths larger than 1.0, and print detailed\n"+
+	"              information about the offending mesh elements.\n"+
+	"\nOPTIONS\n"+
+	"       -a\n"+
+	"              Evaluate the attributes of the mesh and report the results.\n"+
+	"              Skip the evaluation of mesh characteristics.\n\n"+
+	"       -b NUM\n"+
+	"              Detect edges with length smaller than NUM.\n"+
+	"              Units are same as FILE.\n\n"+
+	"       -c NUM\n"+
+	"              Detect edges with length greater than NUM.\n"+
+	"              Units are same as FILE.\n\n"+
+	"       -d NUM\n"+
+	"              Detect edges with angle between two adjacent faces\n"+
+	"              smaller than NUM degrees.\n\n"+
+	"       -e NUM\n"+
+	"              Detect edges with angle between two adjacent faces\n"+
+	"              greater than NUM degrees.\n\n"+
+	"       -f NUM\n"+
+	"              Detect faces with aspect ratio greater than NUM.\n\n"+
+	"       -h\n"+
+	"              Print meshalyzer man page.\n\n"+
+	"       -i\n"+
+	"              Detect intersections between faces from different objects.\n"+
+	"              Faceintersection detection is performed once all objects\n"+
+	"              are loaded into memory. Single object intersection detection\n"+
+	"              is omitted.\n\n"+
+	"       -p\n"+
+	"              Print detailed information about offending mesh elements \n"+
+	"              (i.e. flipped faces, borders, nonmanifold edges,\n"+
+	"              nonmanifold vertices, intersecting faces).\n\n"+
+	"       -q\n"+
+	"              Same as '-p' option, but prints vertex information\n"+
+	"              in dreamm custom points format.\n"+
+	"\nJustin Kinney				2007/10/01\n";
 
 	// instantiate controls class
 	Controls cs;
 
 	// parse command line 
+//	char filename[FILENAME_SIZE];
+//	cs.parse(argc,argv,message,filename);
 	cs.parse(argc,argv,message);
-
-	// adjust input directory
-	char filename[1028];
-	strcpy(filename,argv[1]);
-	if(cs.folder){
-    	char *temp=strrchr(filename,'/');
-		if(!temp) {strcat(filename,"/");}
-		else if(*++temp) {strcat(filename,"/");}
-	}
 
 	// create container, objects, vertices, faces, edges, and find adjacencies
 	Container c;
 
 	// initialize space data structure
-//	Space s(c);
 	Space s;
 
-	// if single file
-	Object *obj;
-	bool badmesh=false;
-	if(!cs.folder){
+	// if single input file was found
+	if(cs.folder==false){
 		// save filename
-		c.files.push_back(filename);
+//		c.files.push_back(filename);
+		c.files.push_back(cs.inpath);
 		// update index
 		c.num_files++;
-
 		// build data structure of mesh
-		c.scanFiles();
-		// if mesh
-		obj=c.o.front();
-		obj->checkIntegrity(cs);
-		// if mesh file is not fatally flawed
-		// i.e. no missing or orphaned vertices
-		// and must be contiguous vertex and face indexing.
-		// Note score may be set to 1 for other reasons in analyze
-		if(obj->score!=1){
-			obj->createEdges();
-//			cout << "pre adjacencies";cout.flush();
-			obj->findVertexAdjacencies(cs);
-			// partition space
-//			cout << "pre boundWorld";cout.flush();
-			c.boundWorld();
-//			cout << "post boundWorld";cout.flush();
-//			s.deleteBoxes();
-			s.initBoxes(c);
-			c.assignFacesToBoxes(s);
-			// analyze and respond
-			obj->analyze(&c,cs);
-		} else {badmesh=true;}
-		// update cumulative score
-		cs.num_score+=obj->score;
-		obj->print(cs,badmesh);
+		Object *obj=c.processFile(c.files[0]);
+		// if either no vertices or no faces were found
+		if (obj!=NULL) {
+			// check mesh integrity
+			obj->checkIntegrity();
+			// if mesh file is not fatally flawed
+			// i.e. no missing or orphaned vertices
+			// and must be contiguous vertex and face indexing.
+			// Note score may be set to 1 for other reasons in analyze()
+			if(obj->goodIntegrity()==true){
+				obj->createEdges();
+				obj->findVertexAdjacencies();
+				// partition space
+				c.boundWorld(s,cs);
+				// DEBUG
+//				cout << "\nmain: "
+//				<< "c.countFace = " << c.countFace()
+//				<< ", obj->f.size()=" << obj->f.size() << endl;
+				// DEBUG
+//				s.initBoxes(c.countFace());
+				s.initBoxes(obj->f.size());
+				c.assignFacesToBoxes(s);
+				// analyze and respond
+				obj->analyze(&c,cs,s);
+			}
+			obj->print(cs);
+		}
 	} else { 
 		// else scan folder
-		c.scanDir(cs,filename);
-		char file[1024];
+//		c.scanDir(filename);
+		c.scanDir(cs.inpath.c_str());
 		// for each file in folder
 		for (int count=0;count<c.num_files;count++) {
-			///// create an instance of Object class /////
-			// copy char array to string
-	        std::string str = c.files[count];
-	        // record object name
-			std::string::size_type pos1 = str.find(".",0);
-			if (!(pos1==std::string::npos)) {
-				// ALLOCATE MEMORY FOR NEW OBJECT
-				obj = new Object(str.substr(0,pos1));
-			} else { cout << "Error! Object name was not found in " << str << "\n";exit(1);}
-			// save pointer to object
-			c.o.push_back(obj);
-			// count object in Controls
-			cs.num_obj++;
-
 			// build data structure of mesh
-			sprintf(file,"%s%s",filename,c.files[count].c_str());
-			c.scanFile(obj,file);
-			cs.num_vert+=obj->v.size();
-			cs.num_faces+=obj->f.size();
-			obj->checkIntegrity(cs);
-			if(cs.binaryOutput() && !cs.isGood(obj)){
-				break;
-			}
-			if(obj->score!=1){
-				obj->createEdges();
-				cs.num_edges+=obj->e.size();
-				obj->findVertexAdjacencies(cs);
-	
-				// partition space
-				c.boundWorld();
-				s.deleteBoxes();
-				s.initBoxes(c);
-				c.assignFacesToBoxes(s);
-				// analyze and respond
-				obj->analyze(&c,cs);
-			} else {badmesh=true;}
-			// update cumulative score
-			cs.num_score+=obj->score;
-			if(cs.binaryOutput() && !cs.isGood(obj)){
-				break;
-			}
-			obj->print(cs,badmesh);
-			cs.clear();
-			// if NOT batch mode
-			if(!cs.interf && !cs.sepdist){
- 				// then continue as single file
-				// delete object from container and clear space
-				delete obj;
-				s.clearBoxes();
-				c.clear();
-				badmesh=false;
+			Object *obj=c.processFile(cs.inpath+c.files[count]);
+			// if neither zero vertices nor zero faces were found
+			if (obj!=NULL){
+				obj->checkIntegrity();
+				if(obj->goodIntegrity()==true){
+					obj->createEdges();
+					obj->findVertexAdjacencies();
+					// partition space
+					c.boundWorld(s,cs);
+					s.deleteBoxes();
+//					s.initBoxes(c.countFace());
+					s.initBoxes(obj->f.size());
+					c.assignFacesToBoxes(s);
+					// analyze and respond
+					obj->analyze(&c,cs,s);
+					c.update(obj);
+					cs.store(obj);
+				} else {
+					cs.good_integrity=false;
+				}
+				// print stats
+				obj->print(cs);
+				// if no request for inter-object
+				// face intersection detection
+					if(cs.interf==false){
+					// then save space, delete object
+					delete obj;
+						c.o.clear();
+				}
 			}
 		}
+		c.boundWorld(s,cs);
+		// analyze data as set
+//		cs.analyzeCumulative(c);
+		cs.analyzeCumulative();
 		// print cumulative surface area, volume, 
-		cs.printCumulative(badmesh,obj);
-		// if batch mode
-		if(cs.interf || cs.sepdist){
-			if(cs.num_score == 0){
-				// partition space
-				c.boundWorld();
-				s.deleteBoxes();
-				s.initBoxes(c);
-				c.assignFacesToBoxes(s);
-				// analyze and respond
-				obj->analyzeBatch(&c,cs,s);
-				c.printBatch(cs);
-			}
+		cs.printCumulative(c);
+		// detect intersecting faces between objects
+		if(cs.interf==true){
+			// partition space
+			s.deleteBoxes();
+			s.initBoxes(c.countFace());
+			c.assignFacesToBoxes(s);
+			// analyze and respond
+			cs.analyzeBatch(&c,s);
+			c.printBatch(cs);
 		}
 	}
 }

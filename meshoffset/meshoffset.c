@@ -19,6 +19,8 @@ main(argc,argv)
 
 	if (argc<3) {
       	  fprintf(stderr,"Usage: %s offset in_file_name\n",argv[0]);
+      	  fprintf(stderr,"Usage: offset ==  0.1 means 10%% larger\n");
+      	  fprintf(stderr,"Usage: offset == -0.1 means 10%% smaller\n");
 	  exit(1);
 	}
 

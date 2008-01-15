@@ -1,0 +1,14 @@
+
+Dec2007
+Triangulated surface intersection detection is a well-studied problem with solutions offered by RAPID and VCollide (~/lib/).
+
+Rapid detects intersections of pairs of objects.
+Vcollide uses Rapid to detect intersections between N objects.
+
+Suspect neither Rapid nor Vcollied are out-of-core compatible. Not sure if either are 64-bit compatible.
+
+For small data sets where entire collection of objects fit in RAM, use Vcollide.
+For medium data sets where pairs of obejcts fit in memory, use Rapid and write own Vcollide.
+For large data sets where single objects do not fit in memory, write own Rapid and Vcollide by replicating boundingbox tree.
+
+

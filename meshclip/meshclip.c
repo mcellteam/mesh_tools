@@ -42,7 +42,7 @@ int wall_map[27][3] = {
   FRNT, LFT, -1,  FRNT, -1, -1,  FRNT, RT, -1,	
   LFT, -1, -1,  -1, -1, -1,  RT, -1, -1,	
   BCK, LFT, -1,  BCK, -1, -1,  BCK, RT, -1,	
-	
+
   TP, FRNT, LFT,  TP, FRNT, -1,  TP, FRNT, RT,	
   TP, LFT, -1,  TP, -1, -1,  TP, RT, -1,	
   TP, BCK, LFT,  TP, BCK, -1,  TP, BCK, RT	
@@ -55,154 +55,154 @@ main(argc,argv)
   char *argv[];  
 {
 
-	if (argc<3) {
-      	  fprintf(stderr,
+  if (argc<3) {
+    fprintf(stderr,
             "Usage: %s input_mesh_filename clipping_mesh_filename\n",argv[0]);
-	  exit(1);
-	}
+    exit(1);
+  }
 
-	input_mesh_filename=argv[1];
-	clipping_mesh_filename=argv[2];
-        sprintf(fully_outside_filename,"fully_outside.m");
-        sprintf(fully_inside_filename,"fully_inside.m");
-        sprintf(on_edge_filename,"on_edge.m");
+  input_mesh_filename=argv[1];
+  clipping_mesh_filename=argv[2];
+  sprintf(fully_outside_filename,"fully_outside.mesh");
+  sprintf(fully_inside_filename,"fully_inside.mesh");
+  sprintf(on_edge_filename,"on_edge.mesh");
 
-        if ((volume=(struct volume *)malloc(sizeof(struct volume)))==NULL) {
-          fprintf(stderr,"meshclip: cannot store volume data\n");
-          exit(1);
-        }      
-        if ((volume->x_partitions=(double *)malloc
-            ((4+NUM_DICES)*sizeof(double)))==NULL) {
-          fprintf(stderr,"meshclip: cannot store volume partitions\n");
-          exit(1);
-        }      
-        if ((volume->y_partitions=(double *)malloc
-            ((4+NUM_DICES)*sizeof(double)))==NULL) {
-          fprintf(stderr,"meshclip: cannot store volume partitions\n");
-          exit(1);
-        }      
-        if ((volume->z_partitions=(double *)malloc
-            ((4+NUM_DICES)*sizeof(double)))==NULL) {
-          fprintf(stderr,"meshclip: cannot store volume partitions\n");
-          exit(1);
-        }      
-        vol_infinity=sqrt(DBL_MAX)/4;
-        volume->n_x_partitions=4+NUM_DICES;
-        volume->n_y_partitions=4+NUM_DICES;
-        volume->n_z_partitions=4+NUM_DICES;
-        volume->x_walls=NULL;
-        volume->y_walls=NULL;
-        volume->z_walls=NULL;
-        volume->n_subvol=0;
-        volume->n_x_subvol=0;
-        volume->n_y_subvol=0;
-        volume->n_z_subvol=0;
-        volume->subvol=NULL;
-  
-        wall_head = NULL;
+  if ((volume=(struct volume *)malloc(sizeof(struct volume)))==NULL) {
+    fprintf(stderr,"meshclip: cannot store volume data\n");
+    exit(1);
+  }      
+  if ((volume->x_partitions=(double *)malloc
+       ((4+NUM_DICES)*sizeof(double)))==NULL) {
+    fprintf(stderr,"meshclip: cannot store volume partitions\n");
+    exit(1);
+  }      
+  if ((volume->y_partitions=(double *)malloc
+       ((4+NUM_DICES)*sizeof(double)))==NULL) {
+    fprintf(stderr,"meshclip: cannot store volume partitions\n");
+    exit(1);
+  }      
+  if ((volume->z_partitions=(double *)malloc
+       ((4+NUM_DICES)*sizeof(double)))==NULL) {
+    fprintf(stderr,"meshclip: cannot store volume partitions\n");
+    exit(1);
+  }      
+  vol_infinity=sqrt(DBL_MAX)/4;
+  volume->n_x_partitions=4+NUM_DICES;
+  volume->n_y_partitions=4+NUM_DICES;
+  volume->n_z_partitions=4+NUM_DICES;
+  volume->x_walls=NULL;
+  volume->y_walls=NULL;
+  volume->z_walls=NULL;
+  volume->n_subvol=0;
+  volume->n_x_subvol=0;
+  volume->n_y_subvol=0;
+  volume->n_z_subvol=0;
+  volume->subvol=NULL;
 
-	if ((yyin=fopen(input_mesh_filename,"r"))==NULL) {
-	  fprintf(stderr,"meshclip: error opening file: %s\n",
+  wall_head = NULL;
+
+  if ((yyin=fopen(input_mesh_filename,"r"))==NULL) {
+    fprintf(stderr,"meshclip: error opening file: %s\n",
             input_mesh_filename);
-	  exit(1);
-	} 
-	fflush(stdout);
-        infile=input_mesh_filename;
-        line_num=0;
-	if (yyparse()) {
-	  fprintf(stderr,"meshclip: error parsing file: %s\n",
+    exit(1);
+  } 
+  fflush(stdout);
+  infile=input_mesh_filename;
+  line_num=0;
+  if (yyparse()) {
+    fprintf(stderr,"meshclip: error parsing file: %s\n",
             input_mesh_filename);
-	  exit(1);
-	} 
-	fclose(yyin);
-        input_mesh=(struct polyhedron *)op->contents;
+    exit(1);
+  } 
+  fclose(yyin);
+  input_mesh=(struct polyhedron *)op->contents;
 
-	if ((yyin=fopen(clipping_mesh_filename,"r"))==NULL) {
-	  fprintf(stderr,"meshclip: error opening file: %s\n",
+  if ((yyin=fopen(clipping_mesh_filename,"r"))==NULL) {
+    fprintf(stderr,"meshclip: error opening file: %s\n",
             clipping_mesh_filename);
-	  exit(1);
-	} 
-	fflush(stdout);
-        infile=clipping_mesh_filename;
-        line_num=0;
-	if (yyparse()) {
-	  fprintf(stderr,"meshclip: error parsing file: %s\n",
+    exit(1);
+  } 
+  fflush(stdout);
+  infile=clipping_mesh_filename;
+  line_num=0;
+  if (yyparse()) {
+    fprintf(stderr,"meshclip: error parsing file: %s\n",
             clipping_mesh_filename);
-	  exit(1);
-	} 
-	fclose(yyin);
-        clipping_mesh=(struct polyhedron *)op->contents;
+    exit(1);
+  } 
+  fclose(yyin);
+  clipping_mesh=(struct polyhedron *)op->contents;
 
-        pos1=clipping_mesh->llf.x-(2*EPSILON_2);
-        pos2=clipping_mesh->urb.x+(2*EPSILON_2);
-        part_delta=(pos2-pos1)/(NUM_DICES+1);
-        x_delta=part_delta;
-        n_part=volume->n_x_partitions;
-        dblp=volume->x_partitions;
-        dblp[0]=-vol_infinity;
-        dblp[n_part-1]=vol_infinity;
-        for (i=1;i<n_part-1;i++) {
-          dblp[i]=pos1+(i-1)*part_delta;
-        }
+  pos1=clipping_mesh->llf.x-(2*EPSILON_2);
+  pos2=clipping_mesh->urb.x+(2*EPSILON_2);
+  part_delta=(pos2-pos1)/(NUM_DICES+1);
+  x_delta=part_delta;
+  n_part=volume->n_x_partitions;
+  dblp=volume->x_partitions;
+  dblp[0]=-vol_infinity;
+  dblp[n_part-1]=vol_infinity;
+  for (i=1;i<n_part-1;i++) {
+    dblp[i]=pos1+(i-1)*part_delta;
+  }
 
-        pos1=clipping_mesh->llf.y-(2*EPSILON_2);
-        pos2=clipping_mesh->urb.y+(2*EPSILON_2);
-        part_delta=(pos2-pos1)/(NUM_DICES+1);
-        y_delta=part_delta;
-        n_part=volume->n_y_partitions;
-        dblp=volume->y_partitions;
-        dblp[0]=-vol_infinity;
-        dblp[n_part-1]=vol_infinity;
-        for (i=1;i<n_part-1;i++) {
-          dblp[i]=pos1+(i-1)*part_delta;
-        }
+  pos1=clipping_mesh->llf.y-(2*EPSILON_2);
+  pos2=clipping_mesh->urb.y+(2*EPSILON_2);
+  part_delta=(pos2-pos1)/(NUM_DICES+1);
+  y_delta=part_delta;
+  n_part=volume->n_y_partitions;
+  dblp=volume->y_partitions;
+  dblp[0]=-vol_infinity;
+  dblp[n_part-1]=vol_infinity;
+  for (i=1;i<n_part-1;i++) {
+    dblp[i]=pos1+(i-1)*part_delta;
+  }
 
-        pos1=clipping_mesh->llf.z-(2*EPSILON_2);
-        pos2=clipping_mesh->urb.z+(2*EPSILON_2);
-        part_delta=(pos2-pos1)/(NUM_DICES+1);
-        z_delta=part_delta;
-        n_part=volume->n_z_partitions;
-        dblp=volume->z_partitions;
-        dblp[0]=-vol_infinity;
-        dblp[n_part-1]=vol_infinity;
-        for (i=1;i<n_part-1;i++) {
-          dblp[i]=pos1+(i-1)*part_delta;
-        }
+  pos1=clipping_mesh->llf.z-(2*EPSILON_2);
+  pos2=clipping_mesh->urb.z+(2*EPSILON_2);
+  part_delta=(pos2-pos1)/(NUM_DICES+1);
+  z_delta=part_delta;
+  n_part=volume->n_z_partitions;
+  dblp=volume->z_partitions;
+  dblp[0]=-vol_infinity;
+  dblp[n_part-1]=vol_infinity;
+  for (i=1;i<n_part-1;i++) {
+    dblp[i]=pos1+(i-1)*part_delta;
+  }
 
-	fprintf(stderr,"Partitioning volume...");
-        if (partition_volume(volume)) {
-	  fprintf(stderr,"meshclip: error partitioning volume\n");
-	  exit(1);
-        }
-	fprintf(stderr,"Done\n");
+  fprintf(stderr,"Partitioning volume...");
+  if (partition_volume(volume)) {
+    fprintf(stderr,"meshclip: error partitioning volume\n");
+    exit(1);
+  }
+  fprintf(stderr,"Done\n");
 
-	fprintf(stderr,"Initializing clipping geometry...");
-        if (init_geom(clipping_mesh)) {
-	  fprintf(stderr,"meshclip: error initializing geometry\n");
-	  exit(1);
-        }
-	fprintf(stderr,"Done\n");
+  fprintf(stderr,"Initializing clipping geometry...");
+  if (init_geom(clipping_mesh)) {
+    fprintf(stderr,"meshclip: error initializing geometry\n");
+    exit(1);
+  }
+  fprintf(stderr,"Done\n");
 
-	fprintf(stderr,"Decomposing volume...");
-        if (decompose_volume(volume,wall_head)) {
-	  fprintf(stderr,"meshclip: error decomposing volume\n");
-	  exit(1);
-        }
-	fprintf(stderr,"Done\n");
+  fprintf(stderr,"Decomposing volume...");
+  if (decompose_volume(volume,wall_head)) {
+    fprintf(stderr,"meshclip: error decomposing volume\n");
+    exit(1);
+  }
+  fprintf(stderr,"Done\n");
 
-	fprintf(stderr,"Clipping...\n");
-        if (clip_mesh(volume,input_mesh)) {
-	  fprintf(stderr,"meshclip: error clipping mesh\n");
-	  exit(1);
-        }
-	fprintf(stderr,"Done clipping\n");
+  fprintf(stderr,"Clipping...\n");
+  if (clip_mesh(volume,input_mesh)) {
+    fprintf(stderr,"meshclip: error clipping mesh\n");
+    exit(1);
+  }
+  fprintf(stderr,"Done clipping\n");
 
-	exit(0);
+  exit(0);
 }
 
 
 void swap_double(x,y)
-double *x,*y;
+  double *x,*y;
 {
   double temp;
 
@@ -234,7 +234,7 @@ sort_dbl_array(array,n)
 
 
 void cube_corners(p1,p2,corner)
-struct vector3 *p1,*p2,*corner;
+  struct vector3 *p1,*p2,*corner;
 {
   double dx,dy,dz;
 
@@ -281,50 +281,50 @@ void cube_face(corner,face,i)
   struct vector3 *corner,**face;
   int i;
 {
-      /* Build each face using right-hand rule */
-      if (i==TP) {
-        /* top face */
-        face[0]=&corner[1];
-        face[1]=&corner[5];
-        face[2]=&corner[7];
-        face[3]=&corner[3];
-      }
-      else if (i==BOT) {
-        /* bottom face */
-        face[0]=&corner[0];
-        face[1]=&corner[2];
-        face[2]=&corner[6];
-        face[3]=&corner[4];
-      }
-      else if (i==FRNT) {
-        /* front face */
-        face[0]=&corner[0];
-        face[1]=&corner[4];
-        face[2]=&corner[5];
-        face[3]=&corner[1];
-      }
-      else if (i==BCK) {
-        /* back face */
-        face[0]=&corner[2];
-        face[1]=&corner[3];
-        face[2]=&corner[7];
-        face[3]=&corner[6];
-      }
-      else if (i==LFT) {
-        /* left face */
-        face[0]=&corner[0];
-        face[1]=&corner[1];
-        face[2]=&corner[3];
-        face[3]=&corner[2];
-      }
-      else if (i==RT) {
-        /* right face */
-        face[0]=&corner[4];
-        face[1]=&corner[6];
-        face[2]=&corner[7];
-        face[3]=&corner[5];
-      }
-      return;
+  /* Build each face using right-hand rule */
+  if (i==TP) {
+    /* top face */
+    face[0]=&corner[1];
+    face[1]=&corner[5];
+    face[2]=&corner[7];
+    face[3]=&corner[3];
+  }
+  else if (i==BOT) {
+    /* bottom face */
+    face[0]=&corner[0];
+    face[1]=&corner[2];
+    face[2]=&corner[6];
+    face[3]=&corner[4];
+  }
+  else if (i==FRNT) {
+    /* front face */
+    face[0]=&corner[0];
+    face[1]=&corner[4];
+    face[2]=&corner[5];
+    face[3]=&corner[1];
+  }
+  else if (i==BCK) {
+    /* back face */
+    face[0]=&corner[2];
+    face[1]=&corner[3];
+    face[2]=&corner[7];
+    face[3]=&corner[6];
+  }
+  else if (i==LFT) {
+    /* left face */
+    face[0]=&corner[0];
+    face[1]=&corner[1];
+    face[2]=&corner[3];
+    face[3]=&corner[2];
+  }
+  else if (i==RT) {
+    /* right face */
+    face[0]=&corner[4];
+    face[1]=&corner[6];
+    face[2]=&corner[7];
+    face[3]=&corner[5];
+  }
+  return;
 }
 
 
@@ -338,31 +338,31 @@ void cube_faces(corner,face)
   face[0][1]=&corner[5];
   face[0][2]=&corner[7];
   face[0][3]=&corner[3];
- 
+
   /* bottom face */
   face[1][0]=&corner[0];
   face[1][1]=&corner[2];
   face[1][2]=&corner[6];
   face[1][3]=&corner[4];
- 
+
   /* front face */
   face[2][0]=&corner[0];
   face[2][1]=&corner[4];
   face[2][2]=&corner[5];
   face[2][3]=&corner[1];
- 
+
   /* back face */
   face[3][0]=&corner[2];
   face[3][1]=&corner[3];
   face[3][2]=&corner[7];
   face[3][3]=&corner[6];
- 
+
   /* left face */
   face[4][0]=&corner[0];
   face[4][1]=&corner[1];
   face[4][2]=&corner[3];
   face[4][3]=&corner[2];
- 
+
   /* right face */
   face[5][0]=&corner[4];
   face[5][1]=&corner[6];
@@ -372,9 +372,9 @@ void cube_faces(corner,face)
 
 
 struct wall *init_wall(face,face_vertex_normal,n_verts)
-struct vector3 **face;
-struct vector3 **face_vertex_normal;
-int n_verts;
+  struct vector3 **face;
+  struct vector3 **face_vertex_normal;
+  int n_verts;
 {
   struct wall *wp;
   struct vector3 v1,v2,nv1,nv2;
@@ -418,7 +418,7 @@ int n_verts;
     wp->length[i]=vect_length(&v1);
   }
   wp->d=wp->normal.x*wp->vert[0]->x+wp->normal.y*wp->vert[0]->y
-    +wp->normal.z*wp->vert[0]->z;
+        +wp->normal.z*wp->vert[0]->z;
   wp->projection=0;
   tmp = wp->normal.x;
   if (tmp*tmp < wp->normal.y*wp->normal.y) {
@@ -441,7 +441,7 @@ int partition_volume(volp)
   struct wall_list *wlp;
   struct wall *wp;
   int i,j,k,l,m,n,nx,ny,nz,nxy,nx_parts,ny_parts,nz_parts,n_subvol;
- 
+
   nx_parts=volp->n_x_partitions;
   ny_parts=volp->n_y_partitions;
   nz_parts=volp->n_z_partitions;
@@ -681,7 +681,7 @@ int partition_volume(volp)
           subvolp[l].walls[FRNT]=NULL;
         }
         if (j<(ny-1)) {
-        subvolp[l].walls[BCK]=volp->y_walls[j+1];
+          subvolp[l].walls[BCK]=volp->y_walls[j+1];
         }
         else {
           subvolp[l].walls[BCK]=NULL;
@@ -705,7 +705,7 @@ int partition_volume(volp)
     }
   }
 
-/* indexed by wall_index [0-5] for subvolume wall faces */
+  /* indexed by wall_index [0-5] for subvolume wall faces */
   motion_map[0]=nxy;
   motion_map[1]=-nxy;
   motion_map[2]=-nx;
@@ -753,9 +753,9 @@ int init_geom(php)
 /*   Return index of lower partition */
 /*   or return -index if point is coincident with a partition. */ 
 int find_range(u,u_range,n_u_range)
-double u;
-double *u_range;
-int n_u_range;
+  double u;
+  double *u_range;
+  int n_u_range;
 {
   int n_lower,n_upper,n_mid;
 
@@ -786,9 +786,9 @@ int n_u_range;
 /* find range of partitions spanned by a polygon */
 find_polygon_range(umin_part,umax_part,vmin_part,vmax_part,
                    wmin_part,wmax_part,volp,wp)
-  int *umin_part,*umax_part,*vmin_part,*vmax_part,*wmin_part,*wmax_part;
-  struct volume *volp;
-  struct wall *wp;
+int *umin_part,*umax_part,*vmin_part,*vmax_part,*wmin_part,*wmax_part;
+struct volume *volp;
+struct wall *wp;
 {
   double u,v,w,umin_bb,umax_bb,vmin_bb,vmax_bb,wmin_bb,wmax_bb;
   double pos,new_pos;
@@ -824,7 +824,7 @@ find_polygon_range(umin_part,umax_part,vmin_part,vmax_part,
       wmax_bb=w;
     }
   }
-    
+
   /* find partition range of polygon bounding box */
   *umin_part=find_range(umin_bb,volp->x_partitions,volp->n_x_partitions);
   *umax_part=find_range(umax_bb,volp->x_partitions,volp->n_x_partitions);
@@ -870,20 +870,20 @@ repartition_volume(volp)
     verts[0]->x=volp->x_partitions[i];
     verts[0]->y=volp->y_partitions[0];
     verts[0]->z=volp->z_partitions[0];
-      
+
     verts[1]->x=volp->x_partitions[i];
     verts[1]->y=volp->y_partitions[0];
     verts[1]->z=volp->z_partitions[nz];
-      
+
     verts[2]->x=volp->x_partitions[i];
     verts[2]->y=volp->y_partitions[ny];
     verts[2]->z=volp->z_partitions[nz];
-      
+
     verts[3]->x=volp->x_partitions[i];
     verts[3]->y=volp->y_partitions[ny];
     verts[3]->z=volp->z_partitions[0];
     wp->d=wp->normal.x*wp->vert[0]->x+wp->normal.y*wp->vert[0]->y
-      +wp->normal.z*wp->vert[0]->z;
+          +wp->normal.z*wp->vert[0]->z;
   } 
   for (i=0;i<ny_parts;i++) {
     wp=volp->y_walls[i];
@@ -891,20 +891,20 @@ repartition_volume(volp)
     verts[0]->x=volp->x_partitions[0];
     verts[0]->y=volp->y_partitions[i];
     verts[0]->z=volp->z_partitions[0];
-      
+
     verts[1]->x=volp->x_partitions[nx];
     verts[1]->y=volp->y_partitions[i];
     verts[1]->z=volp->z_partitions[0];
-      
+
     verts[2]->x=volp->x_partitions[nx];
     verts[2]->y=volp->y_partitions[i];
     verts[2]->z=volp->z_partitions[nz];
-      
+
     verts[3]->x=volp->x_partitions[0];
     verts[3]->y=volp->y_partitions[i];
     verts[3]->z=volp->z_partitions[nz];
     wp->d=wp->normal.x*wp->vert[0]->x+wp->normal.y*wp->vert[0]->y
-      +wp->normal.z*wp->vert[0]->z;
+          +wp->normal.z*wp->vert[0]->z;
   } 
   for (i=0;i<nz_parts;i++) {
     wp=volp->z_walls[i];
@@ -912,20 +912,20 @@ repartition_volume(volp)
     verts[0]->x=volp->x_partitions[0];
     verts[0]->y=volp->y_partitions[0];
     verts[0]->z=volp->z_partitions[i];
-  
+
     verts[1]->x=volp->x_partitions[0];
     verts[1]->y=volp->y_partitions[ny];
     verts[1]->z=volp->z_partitions[i];
-  
+
     verts[2]->x=volp->x_partitions[nx];
     verts[2]->y=volp->y_partitions[ny];
     verts[2]->z=volp->z_partitions[i];
-  
+
     verts[3]->x=volp->x_partitions[nx];
     verts[3]->y=volp->y_partitions[0];
     verts[3]->z=volp->z_partitions[i];
     wp->d=wp->normal.x*wp->vert[0]->x+wp->normal.y*wp->vert[0]->y
-      +wp->normal.z*wp->vert[0]->z;
+          +wp->normal.z*wp->vert[0]->z;
   } 
   l=0;
   subvolp=volp->subvol;
@@ -957,7 +957,7 @@ repartition_volume(volp)
           subvolp[l].walls[FRNT]=NULL;
         }
         if (j<(ny-1)) {
-        subvolp[l].walls[BCK]=volp->y_walls[j+1];
+          subvolp[l].walls[BCK]=volp->y_walls[j+1];
         }
         else {
           subvolp[l].walls[BCK]=NULL;
@@ -978,7 +978,7 @@ repartition_volume(volp)
       }
     }
   }
-  
+
   return;
 }
 
@@ -1059,7 +1059,7 @@ int clip_polygon(subvol,verts,nverts)
   double r1,r2;
   int i,intersect;
 
-/* intersect xy projections of subvol and polygon */
+  /* intersect xy projections of subvol and polygon */
   umin=subvol->x1;
   umax=subvol->x2;
   vmin=subvol->y1;
@@ -1107,8 +1107,8 @@ int clip_polygon(subvol,verts,nverts)
     i++;
   } 
   if (intersect!=1) {
-  /* Check to see if the bounding box of projected polygon completely */
-  /*   surrounds the bounding box of the projected subvolume */
+    /* Check to see if the bounding box of projected polygon completely */
+    /*   surrounds the bounding box of the projected subvolume */
     /* form bounding box of projected polygon */
     umin_bb=DBL_MAX;
     umax_bb=-DBL_MAX;
@@ -1144,7 +1144,7 @@ int clip_polygon(subvol,verts,nverts)
     }
   }
 
-/* intersect xz projections of subvol and polygon */
+  /* intersect xz projections of subvol and polygon */
   umin=subvol->x1;
   umax=subvol->x2;
   vmin=subvol->z1;
@@ -1191,8 +1191,8 @@ int clip_polygon(subvol,verts,nverts)
     i++;
   } 
   if (intersect!=1) {
-  /* Check to see if the bounding box of projected polygon completely */
-  /*   surrounds the bounding box of the projected subvolume */
+    /* Check to see if the bounding box of projected polygon completely */
+    /*   surrounds the bounding box of the projected subvolume */
     /* form bounding box of projected polygon */
     umin_bb=DBL_MAX;
     umax_bb=-DBL_MAX;
@@ -1228,7 +1228,7 @@ int clip_polygon(subvol,verts,nverts)
     }
   }
 
-/* intersect yz projections of subvol and polygon */
+  /* intersect yz projections of subvol and polygon */
   umin=subvol->y1;
   umax=subvol->y2;
   vmin=subvol->z1;
@@ -1275,8 +1275,8 @@ int clip_polygon(subvol,verts,nverts)
     i++;
   } 
   if (intersect!=1) {
-  /* Check to see if the bounding box of projected polygon completely */
-  /*   surrounds the bounding box of the projected subvolume */
+    /* Check to see if the bounding box of projected polygon completely */
+    /*   surrounds the bounding box of the projected subvolume */
     /* form bounding box of projected polygon */
     umin_bb=DBL_MAX;
     umax_bb=-DBL_MAX;
@@ -1311,7 +1311,7 @@ int clip_polygon(subvol,verts,nverts)
       return(0);
     }
   }
-  
+
   return(1);
 
 }
@@ -1321,8 +1321,8 @@ int clip_polygon(subvol,verts,nverts)
 /*   Return 0 on success */
 /*   Return 1 on malloc failure */
 int decompose_volume(volp,wp)
-struct volume *volp;
-struct wall *wp;
+  struct volume *volp;
+  struct wall *wp;
 {
   struct subvolume *subvolp;
   struct wall *wp_start;
@@ -1411,7 +1411,7 @@ struct wall *wp;
           /* if polygon intersects this subvolume */
           if (clip_polygon(subvolp,wp->vert,wp->n_vert)) {
             if ((wlp=(struct wall_list *)malloc
-	         (sizeof(struct wall_list)))==NULL) {
+                 (sizeof(struct wall_list)))==NULL) {
               return(1);
             }
             wlp->wall=wp;
@@ -1428,15 +1428,15 @@ struct wall *wp;
             else {
               sv_wlp=subvolp->wall_list;
               if (sv_wlp!=NULL) {
-	        while (sv_wlp->next!=NULL) {
-	          sv_wlp=sv_wlp->next;
-	        }
-	        sv_wlp->next=wlp;
-	        wlp->next=NULL;
+                while (sv_wlp->next!=NULL) {
+                  sv_wlp=sv_wlp->next;
+                }
+                sv_wlp->next=wlp;
+                wlp->next=NULL;
               }
               else {
-	        wlp->next=subvolp->wall_list;
-	        subvolp->wall_list=wlp;
+                wlp->next=subvolp->wall_list;
+                subvolp->wall_list=wlp;
               }
             }
           }
@@ -1456,19 +1456,19 @@ struct wall *wp;
 /*   For speed, first check to see if point lies within a */
 /*   subvolume specified by "guess".  Skip this check if guess=-1. */
 int find_subvol(volp,p,guess)
-struct volume *volp;
-struct vector3 *p;
-int guess;
+  struct volume *volp;
+  struct vector3 *p;
+  int guess;
 {
-struct subvolume *subvolp;
-int i,subvol,n_x_part,n_y_part,n_z_part,n_x_subvol,n_y_subvol,n_z_subvol;
-int x_part,y_part,z_part;
-double u,v,w,umin,umax,vmin,vmax,wmin,wmax;
+  struct subvolume *subvolp;
+  int i,subvol,n_x_part,n_y_part,n_z_part,n_x_subvol,n_y_subvol,n_z_subvol;
+  int x_part,y_part,z_part;
+  double u,v,w,umin,umax,vmin,vmax,wmin,wmax;
 
   u=p->x;
   v=p->y;
   w=p->z;
-  
+
   subvolp=volp->subvol;
   if (guess!=-1) {
     umin=subvolp[guess].x1;
@@ -1531,9 +1531,9 @@ int ray_trace (point,ray,subvol)
 
   /* ray trace the motion of a point */
   /* move until delta is used up */
-/*
-  fuzz=0.999999;
-*/
+  /*
+      fuzz=0.999999;
+      */
   hit_status=NO_COLLISION;
   fuzz=1.0;
   lig_type=0;
@@ -1606,164 +1606,164 @@ int ray_trace (point,ray,subvol)
         if (wp!=NULL) {
           if (wp!=prev_wall) {
             /* compute t value for collision with subvolume wall */
-	    a=wp->normal.x;
-	    b=wp->normal.y;
-	    c=wp->normal.z;
-	    d=wp->d;
-	    n_dot_delta=a*dx+b*dy+c*dz;
-	    if (n_dot_delta==0) {
-	      t=1000;
-	    }
-	    else {
-	      t=(d-a*x-b*y-c*z)/n_dot_delta;
-	    }
-      
-	    if (t>=0.0 && t<=1.0 && t<=t_min) {
-	      wall_hit=wp;
-	      wall_hit_type=wp->wall_type[lig_type];
+            a=wp->normal.x;
+            b=wp->normal.y;
+            c=wp->normal.z;
+            d=wp->d;
+            n_dot_delta=a*dx+b*dy+c*dz;
+            if (n_dot_delta==0) {
+              t=1000;
+            }
+            else {
+              t=(d-a*x-b*y-c*z)/n_dot_delta;
+            }
+
+            if (t>=0.0 && t<=1.0 && t<=t_min) {
+              wall_hit=wp;
+              wall_hit_type=wp->wall_type[lig_type];
               wall_hit_index=wall_index;
-	      t_min=t;
-	      ah=a;
-	      bh=b;
-	      ch=c;
-	      dot=n_dot_delta;
+              t_min=t;
+              ah=a;
+              bh=b;
+              ch=c;
+              dot=n_dot_delta;
             }
           }
         }
       }
     }
-    
+
 
     /* intersect motion with each wall in wall_list*/
     wlp=volume->subvol[subvol].wall_list;
     while (wlp!=NULL) {
       wp=wlp->wall;
       if (wp!=prev_wall) {
-	/* compute t value */
-	a=wp->normal.x;
-	b=wp->normal.y;
-	c=wp->normal.z;
-	d=wp->d;
-	n_dot_delta=a*dx+b*dy+c*dz;
-	if (n_dot_delta==0) {
-	  t=1000;
-	}
-	else {
-	  t=(d-a*x-b*y-c*z)/n_dot_delta;
-	}
+        /* compute t value */
+        a=wp->normal.x;
+        b=wp->normal.y;
+        c=wp->normal.z;
+        d=wp->d;
+        n_dot_delta=a*dx+b*dy+c*dz;
+        if (n_dot_delta==0) {
+          t=1000;
+        }
+        else {
+          t=(d-a*x-b*y-c*z)/n_dot_delta;
+        }
 
-	coincident_t = (fabs(t_min-t) < EPSILON_1);
-	if (t>=0.0 && t<=1.0 && (t<=t_min || coincident_t)) {
-	  /* take 2D projection of wall and hit point */
-	  /*   and determine if point is within the wall boundaries */
-	  projection = wp->projection;
-	  vert=wp->vert[0];
-	  if (projection == 0) {
-	    p1=y+t*dy;
-	    p2=z+t*dz;
-	    a1=vert->y-p1;
-	    a2=vert->z-p2;
-	  }
-	  else if (projection == 1) {
-	    p1=x+t*dx;
-	    p2=z+t*dz;
-	    a1=vert->x-p1;
-	    a2=vert->z-p2;
-	  }
-	  else {
-	    p1=x+t*dx;
-	    p2=y+t*dy;
-	    a1=vert->x-p1;
-	    a2=vert->y-p2;
+        coincident_t = (fabs(t_min-t) < EPSILON_1);
+        if (t>=0.0 && t<=1.0 && (t<=t_min || coincident_t)) {
+          /* take 2D projection of wall and hit point */
+          /*   and determine if point is within the wall boundaries */
+          projection = wp->projection;
+          vert=wp->vert[0];
+          if (projection == 0) {
+            p1=y+t*dy;
+            p2=z+t*dz;
+            a1=vert->y-p1;
+            a2=vert->z-p2;
           }
-	  j=1;
-	  prev_det=0;
-	  inside=1;
-	  n_vert = wp->n_vert;
-	  while (inside && j<n_vert) {
-	    vert=wp->vert[j];
-	    if (projection == 0) {
-	      b1=vert->y-p1;
-	      b2=vert->z-p2;
-	    }
-	    else if (projection == 1) {
-	      b1=vert->x-p1;
-	      b2=vert->z-p2;
-	    }
-	    else {
-	      b1=vert->x-p1;
-	      b2=vert->y-p2;
+          else if (projection == 1) {
+            p1=x+t*dx;
+            p2=z+t*dz;
+            a1=vert->x-p1;
+            a2=vert->z-p2;
+          }
+          else {
+            p1=x+t*dx;
+            p2=y+t*dy;
+            a1=vert->x-p1;
+            a2=vert->y-p2;
+          }
+          j=1;
+          prev_det=0;
+          inside=1;
+          n_vert = wp->n_vert;
+          while (inside && j<n_vert) {
+            vert=wp->vert[j];
+            if (projection == 0) {
+              b1=vert->y-p1;
+              b2=vert->z-p2;
             }
-	    det=a1*b2-a2*b1;
-	    a1=b1;
-	    a2=b2;
-	    if (j>1) {
-	      inside=(!((det<0 && prev_det>=0) || (det>=0 && prev_det<0)));
-	    }
-	    prev_det=det;
-	    j++;
-	  }
-	  if (inside) {
-	    vert=wp->vert[0];
-	    if (projection == 0) {
-	      b1=vert->y-p1;
-	      b2=vert->z-p2;
-	    }
-	    else if (projection == 1) {
-	      b1=vert->x-p1;
-	      b2=vert->z-p2;
-	    }
-	    else {
-	      b1=vert->x-p1;
-	      b2=vert->y-p2;
+            else if (projection == 1) {
+              b1=vert->x-p1;
+              b2=vert->z-p2;
             }
-	    det=a1*b2-a2*b1;
-	    inside=(!((det<0 && prev_det>=0) || (det>=0 && prev_det<0)));
-	    prev_det=det;
-	  }
-	
-	  if (inside) {
+            else {
+              b1=vert->x-p1;
+              b2=vert->y-p2;
+            }
+            det=a1*b2-a2*b1;
+            a1=b1;
+            a2=b2;
+            if (j>1) {
+              inside=(!((det<0 && prev_det>=0) || (det>=0 && prev_det<0)));
+            }
+            prev_det=det;
+            j++;
+          }
+          if (inside) {
+            vert=wp->vert[0];
+            if (projection == 0) {
+              b1=vert->y-p1;
+              b2=vert->z-p2;
+            }
+            else if (projection == 1) {
+              b1=vert->x-p1;
+              b2=vert->z-p2;
+            }
+            else {
+              b1=vert->x-p1;
+              b2=vert->y-p2;
+            }
+            det=a1*b2-a2*b1;
+            inside=(!((det<0 && prev_det>=0) || (det>=0 && prev_det<0)));
+            prev_det=det;
+          }
 
-	    /* check t and hit loc values to see if we have a valid hit */
-	    /* and find minimum valid t value between 0 and 1 */
+          if (inside) {
 
-	    /* if 2 walls coincide with one another */
-	    /* give hit priority to transparent walls */
-	    wall_type=wp->wall_type[lig_type];
-	    if (wall_type!=TRANSP && (coincident_t || prev_wall_type!=TRANSP)) {
-	      coincident_wall=wp;
-	    }
-	    if (wall_type==TRANSP) {
-	      wall_hit=wp;
-	      wall_hit_type=wall_type;
-	      t_min=t;
-	      ah=a;
-	      bh=b;
-	      ch=c;
-	      dot=n_dot_delta;
-	    }
-	    /* register hit to non-transparent wall */
-	    /* iff this wall does not coincide with transparent wall */
-	    else if (!coincident_t) {
-	      if (prev_wall==NULL) {
-	        wall_hit=wp;
-	        wall_hit_type=wall_type;
-	        t_min=t;
-	        ah=a;
-	        bh=b;
-	        ch=c;
-	        dot=n_dot_delta;
-	      }
-	      else if (t > EPSILON_1 || prev_wall_type!=TRANSP) {
-	        wall_hit=wp;
-	        wall_hit_type=wall_type;
-	        t_min=t;
-	        ah=a;
-	        bh=b;
-	        ch=c;
-	        dot=n_dot_delta;
-	      }
-	    }
+            /* check t and hit loc values to see if we have a valid hit */
+            /* and find minimum valid t value between 0 and 1 */
+
+            /* if 2 walls coincide with one another */
+            /* give hit priority to transparent walls */
+            wall_type=wp->wall_type[lig_type];
+            if (wall_type!=TRANSP && (coincident_t || prev_wall_type!=TRANSP)) {
+              coincident_wall=wp;
+            }
+            if (wall_type==TRANSP) {
+              wall_hit=wp;
+              wall_hit_type=wall_type;
+              t_min=t;
+              ah=a;
+              bh=b;
+              ch=c;
+              dot=n_dot_delta;
+            }
+            /* register hit to non-transparent wall */
+            /* iff this wall does not coincide with transparent wall */
+            else if (!coincident_t) {
+              if (prev_wall==NULL) {
+                wall_hit=wp;
+                wall_hit_type=wall_type;
+                t_min=t;
+                ah=a;
+                bh=b;
+                ch=c;
+                dot=n_dot_delta;
+              }
+              else if (t > EPSILON_1 || prev_wall_type!=TRANSP) {
+                wall_hit=wp;
+                wall_hit_type=wall_type;
+                t_min=t;
+                ah=a;
+                bh=b;
+                ch=c;
+                dot=n_dot_delta;
+              }
+            }
           }
         }
       }
@@ -1784,76 +1784,76 @@ int ray_trace (point,ray,subvol)
       prev_wall=wall_hit;
       prev_wall_type=wall_hit_type;
       if (wall_hit_type==TRANSP) {
-	/* wall is transparent */
-	nx=x+t_min*dx;
-	ny=y+t_min*dy;
-	nz=z+t_min*dz;
-	t_inv=1.0-t_min;
-	curr_point.x=nx;
-	curr_point.y=ny;
-	curr_point.z=nz;
-	/* to continue motion through surface: */
-/*
-	dx=dx*t_inv;
-	dy=dy*t_inv;
-	dz=dz*t_inv;
-*/
-	/* to end motion at point of collision: */
+        /* wall is transparent */
+        nx=x+t_min*dx;
+        ny=y+t_min*dy;
+        nz=z+t_min*dz;
+        t_inv=1.0-t_min;
+        curr_point.x=nx;
+        curr_point.y=ny;
+        curr_point.z=nz;
+        /* to continue motion through surface: */
+        /*
+            dx=dx*t_inv;
+            dy=dy*t_inv;
+            dz=dz*t_inv;
+            */
+        /* to end motion at point of collision: */
         dx=0.0;
         dy=0.0;
         dz=0.0;
-	if (dot<0) {
+        if (dot<0) {
           hit_status=ENTERING;
-	}
-	else {
+        }
+        else {
           hit_status=LEAVING;
-	}
+        }
       }
       else if (wall_hit_type==RFLCT) {
-	/* reflect off wall */
-	nx=x+t_min*dx;
-	ny=y+t_min*dy;
-	nz=z+t_min*dz;
-	t_inv=1.0-t_min;
-	curr_point.x=nx;
-	curr_point.y=ny;
-	curr_point.z=nz;
-	/* to reflect direction of motion: */
-/*
-	ray_p=-2.0*dot*t_inv;
-	dx=ah*ray_p+dx*t_inv;
-	dy=bh*ray_p+dy*t_inv;
-	dz=ch*ray_p+dz*t_inv;
-*/
-	/* to end motion at point of collision: */
+        /* reflect off wall */
+        nx=x+t_min*dx;
+        ny=y+t_min*dy;
+        nz=z+t_min*dz;
+        t_inv=1.0-t_min;
+        curr_point.x=nx;
+        curr_point.y=ny;
+        curr_point.z=nz;
+        /* to reflect direction of motion: */
+        /*
+            ray_p=-2.0*dot*t_inv;
+            dx=ah*ray_p+dx*t_inv;
+            dy=bh*ray_p+dy*t_inv;
+            dz=ch*ray_p+dz*t_inv;
+            */
+        /* to end motion at point of collision: */
         dx=0.0;
         dy=0.0;
         dz=0.0;
-	if (dot<0) {
+        if (dot<0) {
           hit_status=ENTERING;
-	}
-	else {
+        }
+        else {
           hit_status=LEAVING;
-	}
+        }
       }
       else if (wall_hit_type==SUBVOL) {
-	/* wall is a subvolume boundary */
-	nx=x+t_min*dx;
-	ny=y+t_min*dy;
-	nz=z+t_min*dz;
-	t_inv=1.0-t_min;
-	curr_point.x=nx;
-	curr_point.y=ny;
-	curr_point.z=nz;
-	dx=dx*t_inv;
-	dy=dy*t_inv;
-	dz=dz*t_inv;
+        /* wall is a subvolume boundary */
+        nx=x+t_min*dx;
+        ny=y+t_min*dy;
+        nz=z+t_min*dz;
+        t_inv=1.0-t_min;
+        curr_point.x=nx;
+        curr_point.y=ny;
+        curr_point.z=nz;
+        dx=dx*t_inv;
+        dy=dy*t_inv;
+        dz=dz*t_inv;
         subvol=subvol+motion_map[wall_hit_index];
         hit_status=NO_COLLISION;
       }
     }
   }
-  
+
   return(hit_status);
 }
 
@@ -1889,11 +1889,11 @@ int clip_mesh(volp,php)
   vmax=volp->y_partitions[n_y_part-2];
   wmin=volp->z_partitions[1];
   wmax=volp->z_partitions[n_z_part-2];
-/*
-  printf("umin = %g  umax = %g\n",umin,umax);
-  printf("vmin = %g  vmax = %g\n",vmin,vmax);
-  printf("wmin = %g  wmax = %g\n",wmin,wmax);
-*/
+  /*
+      printf("umin = %g  umax = %g\n",umin,umax);
+      printf("vmin = %g  vmax = %g\n",vmin,vmax);
+      printf("wmin = %g  wmax = %g\n",wmin,wmax);
+      */
   ray.x=1*(volp->x_partitions[n_x_part-2]-volp->x_partitions[1]);
   ray.y=0;
   ray.z=0;
@@ -1961,21 +1961,21 @@ int clip_mesh(volp,php)
   fprintf(stderr,"Writing vertices...");
   if ((fully_outside_file=fopen(fully_outside_filename,"w"))==NULL) {
     fprintf(stderr,"meshclip: error opening file: %s\n",
-      fully_outside_filename);
+            fully_outside_filename);
     return(1);
   } 
   if ((fully_inside_file=fopen(fully_inside_filename,"w"))==NULL) {
     fprintf(stderr,"meshclip: error opening file: %s\n",
-      fully_inside_filename);
+            fully_inside_filename);
     return(1);
   } 
-/*
+  /**/
   if ((on_edge_file=fopen(on_edge_filename,"w"))==NULL) {
     fprintf(stderr,"meshclip: error opening file: %s\n",
-      on_edge_filename);
+            on_edge_filename);
     return(1);
   } 
-*/
+  /**/
   fully_outside_vertex_count=0;
   fully_inside_vertex_count=0;
   on_edge_vertex_count=0;
@@ -1986,22 +1986,38 @@ int clip_mesh(volp,php)
       fully_outside_vertex_count++;
       vlp->fully_outside_index=fully_outside_vertex_count;
       fprintf(fully_outside_file,"Vertex %d %.15g %.15g %.15g\n",
-        fully_outside_vertex_count,vert->x,vert->y,vert->z);
+              fully_outside_vertex_count,vert->x,vert->y,vert->z);
+              // JPK 2008
+              // add command line flag to optionally
+              // print following original vertex indexing
+              // instead of renumbered indexing as above
+              // vlp->vertex_index,vert->x,vert->y,vert->z);
     }
-    if (vlp->fully_inside_member || vlp->on_edge_member) {
+    //    if (vlp->fully_inside_member || vlp->on_edge_member) {
+    if (vlp->fully_inside_member) {
       fully_inside_vertex_count++;
       vlp->fully_inside_index=fully_inside_vertex_count;
       fprintf(fully_inside_file,"Vertex %d %.15g %.15g %.15g\n",
-        fully_inside_vertex_count,vert->x,vert->y,vert->z);
+              fully_inside_vertex_count,vert->x,vert->y,vert->z);
+              // JPK 2008
+              // add command line flag to optionally
+              // print following original vertex indexing
+              // instead of renumbered indexing as above
+              // vlp->vertex_index,vert->x,vert->y,vert->z);
     }
-/*
+    /**/
     if (vlp->on_edge_member) {
       on_edge_vertex_count++;
       vlp->on_edge_index=on_edge_vertex_count;
       fprintf(on_edge_file,"Vertex %d %.15g %.15g %.15g\n",
-        on_edge_vertex_count,vert->x,vert->y,vert->z);
+              on_edge_vertex_count,vert->x,vert->y,vert->z);
+              // JPK 2008
+              // add command line flag to optionally
+              // print following original vertex indexing
+              // instead of renumbered indexing as above
+              //vlp->vertex_index,vert->x,vert->y,vert->z);
     }
-*/
+    /**/
     vlp=vlp->next;
   }
   fprintf(stderr,"Done\n");
@@ -2020,33 +2036,52 @@ int clip_mesh(volp,php)
     if (pop->polygon_status==FULLY_OUTSIDE) {
       fully_outside_polygon_count++;
       fprintf(fully_outside_file,"Face %d %d %d %d\n",
-        fully_outside_polygon_count,vl0->fully_outside_index,
-        vl1->fully_outside_index,vl2->fully_outside_index);
+              fully_outside_polygon_count,vl0->fully_outside_index,
+              vl1->fully_outside_index,vl2->fully_outside_index);
+              // JPK 2008
+              // add command line flag to optionally
+              // print following original vertex indexing
+              // instead of renumbered indexing as above
+              //fully_outside_polygon_count,vl0->vertex_index,
+              //vl1->vertex_index,vl2->vertex_index);
     }
-    else if (pop->polygon_status==FULLY_INSIDE
-             || pop->polygon_status==ON_EDGE) {
+    //    else if (pop->polygon_status==FULLY_INSIDE
+    //             || pop->polygon_status==ON_EDGE) {
+    else if (pop->polygon_status==FULLY_INSIDE) {
       fully_inside_polygon_count++;
       fprintf(fully_inside_file,"Face %d %d %d %d\n",
-        fully_inside_polygon_count,vl0->fully_inside_index,
-        vl1->fully_inside_index,vl2->fully_inside_index);
+              fully_inside_polygon_count,vl0->fully_inside_index,
+              vl1->fully_inside_index,vl2->fully_inside_index);
+              // JPK 2008
+              // add command line flag to optionally
+              // print following original vertex indexing
+              // instead of renumbered indexing as above
+              //fully_inside_polygon_count,vl0->vertex_index,
+              //vl1->vertex_index,vl2->vertex_index);
     }
-/*
+    /**/
     else if (pop->polygon_status==ON_EDGE) {
       on_edge_polygon_count++;
       fprintf(on_edge_file,"Face %d %d %d %d\n",
-        on_edge_polygon_count,vl0->on_edge_index,
-        vl1->on_edge_index,vl2->on_edge_index);
+              on_edge_polygon_count,vl0->on_edge_index,
+              vl1->on_edge_index,vl2->on_edge_index);
+              // JPK 2008
+              // add command line flag to optionally
+              // print following original vertex indexing
+              // instead of renumbered indexing as above
+              //on_edge_polygon_count,vl0->vertex_index,
+              //vl1->vertex_index,vl2->vertex_index);
     }
-*/
+    /**/
     plp=plp->next;
   }
   fprintf(stderr,"Done\n");
 
   fclose(fully_outside_file);
   fclose(fully_inside_file);
-/*
+  /**/
   fclose(on_edge_file);
-*/
+  /**/
 
   return(0);
-}
+  }

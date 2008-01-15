@@ -1,4 +1,4 @@
-COMPILE = g++ -O3 -o meshrefine
+COMPILE = g++ -O3 -g -o meshrefine
 LINK = g++
 
 mesh_manip: classes.cc functions.cc meshrefine.cc  

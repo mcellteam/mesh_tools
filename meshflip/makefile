@@ -1,4 +1,4 @@
-COMPILE = g++ -O3 -o meshflip
+COMPILE = g++ -Wall -Wshadow -W -O3 -o meshflip
 LINK = g++
 
 mesh_manip: meshflip.cc  

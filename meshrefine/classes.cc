@@ -1,55 +1,102 @@
+// ######################################
+// ######################################
+class Vertex;
+class Face;
+class Edge;
+class Object;
 
 typedef  unsigned long int  u4;   /* unsigned 4-byte type */
 typedef  unsigned     char  u1;   /* unsigned 1-byte type */
 
-// ######################################
-// ######################################
-// declarations - so compiler doesn't complain
-class Vertex;
-class Face;
-class Edge;
-
-u4 computeHashValue(int,int);
-u4 keyPair(int,int);
-
-class void_list
+struct eqf
 {
-public:
-  void_list *previous;
-  void_list *next;
-  void *data;
+  bool operator()(const Face* s1, const Face* s2) const
+  {
+    return s1==s2;
+  }
 };
+
+struct equ4
+{
+  bool operator()(const u4 s1, const u4 s2) const
+  {
+    return s1==s2;
+  }
+};
+
+struct pair_hash
+{
+    u4 operator()(u4 i) const { return i; }
+};
+
+struct f_hash
+{
+    u4 operator()(Face* i) const { return (u4) i; }
+};
+
+struct lts
+{
+  bool operator()(const std::string s1, const std::string s2) const
+  {
+    return s1 < s2;
+  }
+};
+
+typedef __gnu_cxx::hash_map<int,Vertex*> hashtable_v;
+typedef __gnu_cxx::hash_set<Face*,f_hash,eqf> hashset_f;
+typedef __gnu_cxx::hash_set<Face*,f_hash,eqf>::iterator hf_iterator;
+typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> > hashtable_t;
+typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> >::iterator ht_iterator;
+
+// ######################################
+// ######################################
 
 class Vertex
 {
 public:
-  double x,y,z;
-  int index;
-  std::vector<Vertex*> v;	// adjacent vertices
-  std::vector<Edge*> e;		// adjacent edges
-  std::vector<Face*> f;		// adjacent faces
-  void_list *p; // points to void_list link holding this vertex
-  Vertex(char *,void_list*);
-  Vertex(int,double,double,double,void_list*);
+	double p[3];	// vertex position
+	int index;
+	Vertex(char*);
+	Vertex(int,double,double,double);
+	void getAdjacentVertices(std::vector<Vertex*>&);
+	void getAdjacentFaces(hashset_f&);
+	void getAdjacentEdges(std::vector<Edge*>&);
+	void printVertex(std::string);
+	void printVertexCP(void);
+	bool match(int,std::string);
 };
 
-Vertex::Vertex(int i,double xval,double yval,double zval,void_list *q)
+void Vertex::printVertex(std::string s){
+	cout.precision(12);
+	cout << "Vertex <obj>" << s << "<ind>" << index << " "
+	<< "["
+	<< p[0] << " "
+	<< p[1] << " "
+	<< p[2] << "] ";
+}
+
+void Vertex::printVertexCP(void){
+	cout.precision(12);
+	cout
+	<< p[0] << " "
+	<< p[1] << " "
+	<< p[2] << " 1 0 0 1";
+}
+
+Vertex::Vertex(int i,double xval,double yval,double zval)
 {
     index=i;
-    x=xval;
-    y=yval;
-    z=zval;
-	p=q;
+    p[0]=xval;
+    p[1]=yval;
+    p[2]=zval;
 }
 
 
-Vertex::Vertex(char *triplet,void_list *q)
+Vertex::Vertex(char *triplet)
 {
 	char val[80];
 	char *eptr;
 	int i;
-
-	p=q;
 
 	// get past 'Vertex'
   	while (strchr("Vertx",*triplet)!=NULL) {triplet++;}
@@ -66,7 +113,7 @@ Vertex::Vertex(char *triplet,void_list *q)
 	if (val==eptr)
 	{
 		index=0;
-		x=y=z=0;
+		p[0]=p[1]=p[2]=0;
 		printf("Error in reading vertex index\n");
 		return;
 	}
@@ -79,10 +126,10 @@ Vertex::Vertex(char *triplet,void_list *q)
 		val[i++] = *triplet++;
 	}
 	val[i]=0;
-	x = strtod(val,&eptr);
+	p[0] = strtod(val,&eptr);
 	if (val==eptr)
 	{
-		x=y=z=0;
+		p[0]=p[1]=p[2]=0;
 		printf("Error in reading vertex\n");
 		return;
 	}
@@ -95,10 +142,10 @@ Vertex::Vertex(char *triplet,void_list *q)
 		val[i++] = *triplet++;
 	}
 	val[i]=0;
-	y = strtod(val,&eptr);
+	p[1] = strtod(val,&eptr);
 	if (val==eptr)
 	{
-		x=y=z=0;
+		p[0]=p[1]=p[2]=0;
 		printf("Error in reading vertex\n");
 		return;
 	}
@@ -111,10 +158,10 @@ Vertex::Vertex(char *triplet,void_list *q)
 		val[i++] = *triplet++;
 	}
 	val[i]=0;
-	z = strtod(val,&eptr);
+	p[2] = strtod(val,&eptr);
 	if (val==eptr)
 	{
-		x=y=z=0;
+		p[0]=p[1]=p[2]=0;
 		printf("Error in reading vertex\n");
 		return;
 	}
@@ -124,45 +171,78 @@ class Face
 {
 public:
 	int index;	// Face index
-	Vertex *v1,*v2,*v3;	// vertex indices
-	Edge *e1,*e2,*e3;	// edge pointers
-	void_list *p; // points to void_list link holding this face
-	Face(char *,void_list*);
-    Face(int,Vertex*,Vertex*,Vertex*,void_list*);
+	Vertex *v[3];	// vertex indices
+	Edge *e[3];	// edge pointers
+	Face(char*,std::vector<Vertex*>&);
+    Face(int,Vertex*,Vertex*,Vertex*);
 	void clearEdges(void);
 	bool subdivided;
 	bool bisubdivided;
+	void printFace(void);
+	void printFaceCP(void);
+	void addEdge(Edge*);
+	int matchEdges(Vertex*[3]);
 };
 
+void Face::printFace(void){
+	cout.precision(12);
+	cout << "Face <ind>" << index << endl
+	<< "[v0 "
+	<< v[0]->index << " "
+	<< v[0]->p[0] << " "
+	<< v[0]->p[1] << " "
+	<< v[0]->p[2] << "]\n"
+	<< "[v1 "
+	<< v[1]->index << " "
+	<< v[1]->p[0] << " "
+	<< v[1]->p[1] << " "
+	<< v[1]->p[2] << "]\n"
+	<< "[v2 "
+	<< v[2]->index << " "
+	<< v[2]->p[0] << " "
+	<< v[2]->p[1] << " "
+	<< v[2]->p[2] << "]";
+}
+
+// THE FOLLOWING CODE IS USEFUL. IT PRINTS IN DReAMM CUSTOM POINTS FORMAT.
+void Face::printFaceCP(void){
+	cout << v[0]->p[0] << " "
+	<< v[0]->p[1] << " "
+	<< v[0]->p[2] << " 1 0 0 1\n"
+	<< v[1]->p[0] << " "
+	<< v[1]->p[1] << " "
+	<< v[1]->p[2] << " 1 0 0 1\n"
+	<< v[2]->p[0] << " "
+	<< v[2]->p[1] << " "
+	<< v[2]->p[2] << " 1 0 0 1\n";
+}
+
 void Face::clearEdges(void){
-	e1=e2=e3=NULL;
+	e[0]=e[1]=e[2]=NULL;
 	subdivided=bisubdivided=false;
 }
 
-Face::Face(int i,Vertex *va,Vertex *vb,Vertex *vc,void_list *q)
+Face::Face(int i,Vertex *va,Vertex *vb,Vertex *vc)
 {
     subdivided = false;
     bisubdivided = false;
-    e1=e2=e3=NULL;
+    e[0]=e[1]=e[2]=NULL;
     index=i;
-    v1=va;
-    v2=vb;
-    v3=vc;
-	p=q;
+    v[0]=va;
+    v[1]=vb;
+    v[2]=vc;
 }
 
-Face::Face(char *triplet,void_list *q)
+Face::Face(char *triplet,std::vector<Vertex*> &vp)
 {
-	v1=v2=v3=NULL;
-	e1=e2=e3=NULL;
+	v[0]=v[1]=v[2]=NULL;
+	e[0]=e[1]=e[2]=NULL;
     subdivided = false;
     bisubdivided = false;
 
 	char val[80];
 	char *eptr;
 	int i;
-
-	p=q;
 
 	// get past 'Face'
   	while (strchr("Face",*triplet)!=NULL) {triplet++;}
@@ -179,7 +259,7 @@ Face::Face(char *triplet,void_list *q)
 	if (val==eptr)
 	{
 		index=0;
-		v1=v2=v3=NULL;
+		v[0]=v[1]=v[2]=NULL;
 		printf("Error in reading face index\n");
 		return;
 	}
@@ -192,10 +272,10 @@ Face::Face(char *triplet,void_list *q)
 		val[i++] = *triplet++;
 	}
 	val[i]=0;
-	v1 = (Vertex*)(int) strtod(val,&eptr);
+	v[0] = vp[(int)strtod(val,&eptr)-1];
 	if (val==eptr)
 	{
-		v1=v2=v3=NULL;
+		v[0]=v[1]=v[2]=NULL;
 		printf("Error in reading vertex index\n");
 		return;
 	}
@@ -208,10 +288,10 @@ Face::Face(char *triplet,void_list *q)
 		val[i++] = *triplet++;
 	}
 	val[i]=0;
-	v2 = (Vertex*)(int) strtod(val,&eptr);
+	v[1] = vp[(int)strtod(val,&eptr)-1];
 	if (val==eptr)
 	{
-		v1=v2=v3=NULL;
+		v[0]=v[1]=v[2]=NULL;
 		printf("Error in reading vertex index\n");
 		return;
 	}
@@ -224,10 +304,10 @@ Face::Face(char *triplet,void_list *q)
 		val[i++] = *triplet++;
 	}
 	val[i]=0;
-	v3 = (Vertex*)(int) strtod(val,&eptr);
+	v[2] = vp[(int)strtod(val,&eptr)-1];
 	if (val==eptr)
 	{
-		v1=v2=v3=NULL;
+		v[0]=v[1]=v[2]=NULL;
 		printf("Error in reading vertex index\n");
 		return;
 	}
@@ -236,89 +316,155 @@ Face::Face(char *triplet,void_list *q)
 class Edge
 {
 public:
-  Vertex *v1,*v2; // pointers to edge vertices
-  Vertex *va,*vb; // pointers to vertices in adjacent faces not on edge
-  Face *f1,*f2;	// pointers to adjacent faces (i.e. faces that contain edge)
-  Vertex* v; // pointer to new vertex if edge is bisected
-  double l; // edge length squared
-  bool bisected;
-  Edge(Face*,Vertex*,Vertex*);
-  void update(Face*);
-  void updateLength(void);
+	Face *f1,*f2;	// pointers to adjacent faces (i.e. faces that contain edge)
+	Vertex* v; // pointer to new vertex if edge is bisected
+	Vertex *v1,*v2; // pointer to edge vertices
+	bool bisected;
+	Edge(Face*,Vertex*,Vertex*);
+	void update(Face*);
+	double getSqLength(void);
+//	void getVertices(Vertex*&,Vertex*&,Vertex*&,Vertex*&);
+	bool threshold(double);
 };
 
-void Edge::updateLength(void){
-	l=(v1->x-v2->x)*(v1->x-v2->x)+(v1->y-v2->y)*
-		(v1->y-v2->y)+(v1->z-v2->z)*(v1->z-v2->z);
+double Edge::getSqLength(void){
+//	Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
+//	getVertices(v1,v2,o1,o2);
+	return (v1->p[0]-v2->p[0])*(v1->p[0]-v2->p[0])
+			+(v1->p[1]-v2->p[1])*(v1->p[1]-v2->p[1])
+			+(v1->p[2]-v2->p[2])*(v1->p[2]-v2->p[2]);
 }
 
-Edge::Edge(Face *f,Vertex *a,Vertex *b){
-	v1=a;
-	v2=b;
+Edge::Edge(Face *f,Vertex *va,Vertex *vb){
 	f1=f;
 	f2=NULL;
 	v=NULL;
 	bisected=false;
-	// compute original edge length
-	l=(v1->x-v2->x)*(v1->x-v2->x)+
-		(v1->y-v2->y)*(v1->y-v2->y)+
-		(v1->z-v2->z)*(v1->z-v2->z);
-	// assign va
-	if (f->v1!=v1 && f->v1!=v2){va=f->v1;}
-	else if (f->v2!=v1 && f->v2!=v2){va=f->v2;}
-	else if (f->v3!=v1 && f->v3!=v2){va=f->v3;}
-	else {fprintf(stderr,"Error assigning va in edge.\n");exit(1);}
-	vb=NULL;
-	// add edge* to face*
-	if(f->e1==NULL&&((a==f->v1&&b==f->v2)||(a==f->v2&&b==f->v1))){f->e1=this;}
-	else if(f->e2==NULL&&((a==f->v2&&b==f->v3)||(a==f->v3&&b==f->v2))){f->e2=this;}
-	else if(f->e3==NULL&&((a==f->v3&&b==f->v1)||(a==f->v1&&b==f->v3))){f->e3=this;}
-	else {fprintf(stderr,"Error. No available edge* in face.\n");exit(0);}
+	v1=va;
+	v2=vb;
 }
-
-void Edge::update(Face *f){
-    //add face to edge
-	if(f1==NULL) {f1=f;}
-	else if (f2==NULL) {f2=f;}
-	else {
-		fprintf(stderr,"Error. Tried to add third face to edge.\n");
-		fprintf(stderr,"Face %i %i ",f->index,f->v1->index); 
-		fprintf(stderr,"%i %i\n",f->v2->index,f->v3->index);
-		fprintf(stderr,"Existing Face %i %i ",f1->index,f1->v1->index); 
-		fprintf(stderr,"%i %i\n",f1->v2->index,f1->v3->index);
-		fprintf(stderr,"Existing Face %i %i ",f2->index,f2->v1->index); 
-		fprintf(stderr,"%i %i\n",f2->v2->index,f2->v3->index);
-		fprintf(stderr,"Edge vertices: v1 %i, v2 %i\n",v1->index,v2->index);
-		char s[32];
-		fprintf(stderr,"keyPair %u\n",keyPair(v1->index,v2->index)); 
-		exit(1);
+/*
+void Edge::getVertices(Vertex *&v1,Vertex *&v2,Vertex *&o1,Vertex *&o2){
+	// find pair of vertices va and vb in common between f1 and f2
+	Vertex *va=NULL,*vb=NULL;
+	if(f1->v[0]==f2->v[0] || f1->v[0]==f2->v[1] || f1->v[0]==f2->v[2]){va=f1->v[0];}
+	if(f1->v[1]==f2->v[0] || f1->v[1]==f2->v[1] || f1->v[1]==f2->v[2]){
+		if(va==NULL){va=f1->v[1];}
+		else {vb=f1->v[1];}
+	} 
+	if(f1->v[2]==f2->v[0] || f1->v[2]==f2->v[1] || f1->v[2]==f2->v[2]){
+		vb=f1->v[2];
 	}
-	// assign vb
-	if (f->v1!=v1 && f->v1!=v2){vb=f->v1;}
-	else if (f->v2!=v1 && f->v2!=v2){vb=f->v2;}
-	else if (f->v3!=v1 && f->v3!=v2){vb=f->v3;}
-	else {fprintf(stderr,"Error assigning vb in edge.\n");exit(1);}
-	// add edge* to face*
-	if(f->e1==NULL){f->e1=this;}
-	else if(f->e2==NULL){f->e2=this;}
-	else if(f->e3==NULL){f->e3=this;}
-	else {fprintf(stderr,"Error. No available edge* in face.\n");exit(0);}
+	if(va==NULL || vb==NULL){
+		cout << "\n\nEdge::getVertices: "
+		<< "common face vertices were not identified.\n\n";
+		if(f1!=NULL){f1->printFace();cout << endl;}
+		else{cout << "f1 is NULL.\n";}
+		if(f2!=NULL){f2->printFace();cout << endl;}
+		else{cout << "f2 is NULL.\n";}
+		if(va!=NULL){cout << "va index = " << va->index << endl;}
+		else{cout << "va is NULL.\n";}
+		if(vb!=NULL){cout << "vb index = " << vb->index << endl;}
+		else{cout << "vb is NULL.\n";}
+		exit(0);
+	}
+	// identify v1 and v2 using f1
+	if( (f1->v[0]==va && f1->v[1]==vb) || (f1->v[0]==vb && f1->v[1]==va)){
+		v1=f1->v[0];
+		v2=f1->v[1];
+		o1=f1->v[2];
+	} else if( (f1->v[1]==va && f1->v[2]==vb) || (f1->v[1]==vb && f1->v[2]==va)){
+		v1=f1->v[1];
+		v2=f1->v[2];
+		o1=f1->v[0];
+	} else if( (f1->v[2]==va && f1->v[0]==vb) || (f1->v[2]==vb && f1->v[0]==va)){
+		v1=f1->v[2];
+		v2=f1->v[0];
+		o1=f1->v[1];
+	} else {
+		cout << "\n\nEdge::getVertices: "
+		<< "v1 and v2 were not successfully found.\n\n";
+		exit(0);
+	}
+	// identify o2
+	if( (f2->v[0]==va && f2->v[1]==vb) || (f2->v[0]==vb && f2->v[1]==va)){
+		o2=f2->v[2];
+	} else if( (f2->v[1]==va && f2->v[2]==vb) || (f2->v[1]==vb && f2->v[2]==va)){
+		o2=f2->v[0];
+	} else if( (f2->v[2]==va && f2->v[0]==vb) || (f2->v[2]==vb && f2->v[0]==va)){
+		o2=f2->v[1];
+	} else {
+		cout << "\n\nEdge::getVertices: "
+		<< "o2 was not successfully found.\n\n";
+		exit(0);
+	}
+}*/
+/*
+class BorderEdge
+{
+public:
+	Edge *e;		// pointer to Edge of Face that was deleted
+	Vertex *v1,*v2;	// vertices of Edge gathered before face deletion
+	BorderEdge(Edge*);
+	BorderEdge(Edge*,Vertex*,Vertex*);
+};
+
+BorderEdge::BorderEdge(Edge *ee,Vertex *vv1,Vertex *vv2){
+	e=ee;
+	v1=vv1;
+	v2=vv2;
 }
 
-struct equ4
+BorderEdge::BorderEdge(Edge *ee){
+	Vertex *vv1=NULL,*vv2=NULL,*o1=NULL,*o2=NULL;
+	ee->getVertices(vv1,vv2,o1,o2);
+	e=ee;
+	v1=vv1;
+	v2=vv2;
+}*/
+
+class Object
 {
-  bool operator()(const u4 s1, const u4 s2) const
-  {
-    return s1==s2;
-  }
+public:
+	std::vector<Vertex*> v;		// container of pointers to all vertices in object
+	std::vector<Face*> f;		// container of pointers to all faces in object
+	std::vector<Edge*> e;		// container of pointers to all edges in object
+	std::vector<Face*> nf;		// new faces
+//	std::vector<Face*> df;		// deleted faces
+//	std::vector<BorderEdge*> be;	// border edges
+	std::vector<Edge*> be;	// border edges
+	int max_faces;
+	Object(char*);
+	void scanFile(char*);
+	void clearEdges(void);
+	void createEdges(void);
+	void createEdge(Face*,Vertex*,Vertex*,hashtable_t&,int);
+	void checkEdge(Face*,Vertex*,Vertex*,hashtable_t&,int);
+	int setNumDigits(void);
+	bool thresholdEdges(double);
+	int createNewVertices(void);
+	int createNewSubdividedFaces(void);
+	void buildBorderEdges(Face*);
+//	void processBorderEdges(void);
+	int processNewEdges(void);
+	Edge* findMatchingBorderEdge(Vertex*,Vertex*);
+	Edge* findMatchingBorderEdge2(Edge*);
+	void clearBorderEdges(void);
+	int checkEdges(void);
 };
 
-struct pair_hash
+Object::Object(char *file)
 {
-    u4 operator()(u4 i) const { return i; }
-};
-
-typedef __gnu_cxx::hash_map<u4,void_list*,pair_hash,equ4,std::allocator<void_list*> > hashtable_t;
-typedef __gnu_cxx::hash_map<u4,void_list*,pair_hash,equ4,std::allocator<void_list*> >::iterator ht_iterator;
-typedef __gnu_cxx::hash_map<int,Vertex*> hashtable_v;
+	fprintf(stderr,"\n\nBuilding vertices and faces.....");
+	fflush(stderr);
+	scanFile(file);
+	fprintf(stderr,"complete.\n");
+	fflush(stderr);
+	max_faces = f.size();
+	fprintf(stderr,"Building edges..................");
+	fflush(stderr);
+	createEdges();
+	fprintf(stderr,"complete.\n");
+	fflush(stderr);
+}
 

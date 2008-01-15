@@ -1,0 +1,79 @@
+# JPK jan2008
+add option to meshmorph for detailed output, thus obviating the need
+for the separate detailed_output_version source code.
+
+Oct2007
+1. Replace use of char with string to avoid specifying a filename size.
+2. Energy increases after I imposed max move size of 3 nm.
+3. Add 'const' everywhere applicable
+4. uses relative path to copy controls.cc to outdir. fix this
+5. use std::string not char* OR check strlen before strcpy
+6. print to stdout 'Creating __ subvolumes (__,__,__ per axis)
+7. new stat to print to stdout and cont.log : max(vd^2) i.e. topN.front()
+	if mean(max(vd^2))==constant then likely osciallating or steady state
+8. new stat to print to stdout and cont.log : mean(vd^2) )
+	if mean(vd^2) is low, then boost overall gain even if max vd==MAX_MOVE_SIZE
+	since a single large move sets max, while population is represented in medial and max
+
+Ideas from Jed for improving speed of meshmorph (Oct2007)
+----------------------------------------------
+1. use closest vertex as closest point
+	(closest vertex and closest point will converge as edge length -> 0)
+2. fully morph small regions
+
+Improving speed of classifying niceness of vertices
+--------------------------------------------------
+After picking ray for tracing
+1. project faces onto plane orthogonal to ray
+2. Use dot product rule to determine edge hit
+	i.e. if dot product of vector from face vertex to ray
+	and vector from vertex to other vertex is zero,
+	then ray hit edge
+3. Detect planes coplanar with ray
+4. if edge collision, then jog ray, tracing during jog
+
+Pre-sorting mesh object vertices and faces before running meshmoprh
+The goal is to improve speed of creating edges, neighborhoods, findsing closest point, etc.
+---------------------------------------------------------------------
+Want path along edges that
+1. touches every vertex exactly once
+2. maximizes sequential pair-wise overlap
+	so as to minimize cache misses to ultimately minimize run time.
+
+simple idea 1 : sort by x then y then z
+
+**************************************************************************
+1. improve speed
+2. note that simulated annealing was not attempted because it would be too slow
+3. mesh surfaces near world bound are still being tweaked during morphing
+	especially for large exposed surfaces such as d000
+4. Assess validity of assumptions in README for input mesh files.
+	Alternatively, leave it to user to check assumptions using meshalyzer.
+5. small processes are shrunk to infinitely thin fingers for large
+	ECS widths. Need to enforce a minimum process diameter.
+
+Ideas to decrease RAM usage
+------------------------------
+Vertex Class
+COMPLETE	1. Remove double pC[3]. Compute from Face *cl.
+COMPLETE	2. Remove pointers to adjacent edges. Use adjacent faces.
+	3. Remove integer index. Use index into vector as proxy.
+
+Face Class
+COMPLETE	1. Remove Box*s. Compute box indices using face vertex locations.
+	2. Remove integer index. Use index into vector as proxy.
+
+Edge Class
+COMPLETE	1. Do not store v1,v2,o1,o2. Compute from f1 and f2.
+
+FROM MATLAB
+remove closest point from vertex:  117.985 MB
+remove adjacent edges from vertex: 86.0305 MB
+remove integer index from vertex:  9.83205 MB
+remove box* from face:             93.3643 MB
+remove integer index from face:    19.6556 MB
+remove vertex pointers from edges: 117.934 MB
+
+total 444.801 MB
+
+
