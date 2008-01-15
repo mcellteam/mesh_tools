@@ -1,0 +1,11 @@
+command
+time env LD_PRELOAD=/home/jed/install/lib/libtcmalloc.so meshmorph
+
+Assumptions
+1. The surface mesh has triangular faces.
+2. The mesh file format is used.
+3. Each face normal vector = (v2-v1)x(v3-v1) where vi is the vector location of vertex index vi, points outward, away from the mesh object.
+4. The mesh is fully closed.
+5. No duplicate vertices, i.e. two or more vertices with different indices and identical x,y,z values.
+6. No other files in directory with '.mesh' anywhere in the filename.
+7. Vertex and Face indices are numbered sequentially, i.e. the largest Vertex and Face index is equal to the number of vertices and faces in mesh.
