@@ -397,11 +397,11 @@ void unsetenv(const char* name)
 #endif
 
 // return: 0=success, -1=out_of_mem
-int setenv(const char* name, const char* value, int overwrite)
-{
-	assertx(overwrite);
-	return putenv(newString(hform("%s=%s",name,value)));
-}
+// int setenv(const char* name, const char* value, int overwrite)
+// {
+// 	assertx(overwrite);
+// 	return putenv(newString(hform("%s=%s",name,value)));
+// }
 
 const char* CreateHeader(int argc, char const** argv)
 {

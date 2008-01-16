@@ -211,8 +211,8 @@ inline double mysqrt(double a)
 }
 
 // extern void unsetenv(const char* name);
-extern int setenv(const char* name, const char* value,
-		  int overwrite); // 0=success
+// extern int setenv(const char* name, const char* value,
+// 		  int overwrite); // 0=success
 
 // Multi-line header, each line begins with "# " and ends with "\n"
 extern const char* CreateHeader(int argc, char const** argv);
