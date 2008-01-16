@@ -8,6 +8,8 @@
 using std::cerr;
 using std::ostream;
 
+int parsequestion(int, char const**);
+
 Options* Options::curopt=0;
 
 Options::Options(const char* pname)

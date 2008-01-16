@@ -33,7 +33,7 @@ typedef sighandler_t HHSIG_PF;
 #elif defined(SGICC)
 typedef void (*HHSIG_PF)(...);
 #else
-??
+#error Need definition for HHSIG_PF
 #endif
 
 #ifdef __DECCXX
@@ -94,13 +94,14 @@ class Conv<T *> {
 	inline static T *d(Univ e) { return reinterpret_cast<T *>(e); }
 };
 
+template<>
 class Conv<double> {
   public:
 	inline static Univ e(double e)
-	    { return reinterpret_cast<Univ>(floattoi64(e)); }
+	    { return static_cast<Univ>(floattoi64(e)); }
 	inline static double d(Univ e)
 	{
-	    uint64_t v = reinterpret_cast<uint64_t>(e);
+	    uint64_t v = static_cast<uint64_t>(e);
 	    return i64tofloat(v);
 	}
 };

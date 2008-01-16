@@ -4,6 +4,8 @@
 #ifndef Array_h
 #define Array_h
 
+#include <algorithm>
+
 #if 0
 {
 	static Array<Point> ar; ar.init(np);
@@ -37,38 +39,39 @@ class Array : public SArray<T> {
   private:
 	int n;
 	inline void resize(int ns) {
-		size=ns;
+		SArray<T>::size=ns;
 		// assertx(n<=size);
-		T* na=size?new T[size]:0;
+		T* na = SArray<T>::size ? new T[SArray<T>::size] : 0;
 		// in next line, Array<T> need for GNUG 2.4.5 sometimes
-		for (int i=0;i<(Array<T>::n);i++) na[i]=a[i];
-		delete[] a,a=na;
+		for (int i=0;i<(Array<T>::n);i++) na[i]=SArray<T>::a[i];
+		delete[] SArray<T>::a;
+                SArray<T>::a=na;
 	}
   public:
 	inline Array(int ne=0)			: SArray<T>(ne), n(ne) { }
 	inline ~Array()				{ }
 	inline int num() const			{ return n; }
-	inline void clear()			{ delete[] a,a=0; n=size=0; }
+	inline void clear()			{ delete[] SArray<T>::a; SArray<T>::a=0; n = SArray<T>::size = 0; }
 	inline void init(int ne) { // allocate ne, CLEAR if too small
-		if (ne>size) { clear(); resize(ne); }
+		if (ne>SArray<T>::size) { clear(); resize(ne); }
 		n=ne;
 	}
 	inline void need(int ne) { // allocate at least ne, COPY if too small
-		if (ne>size) resize(::max(int(n*1.5)+3,ne));
+		if (ne>SArray<T>::size) resize(std::max(int(n*1.5)+3,ne));
 		n=ne;
 	}
 	inline int add(int ne) { // ret: previous num()
 		int cn=n; need(n+ne); return cn;
 	}
 	inline Array<T>& operator+=(const T& e) {
-		int i=add(1); a[i]=e; return *this; // add() may allocate a[]
+		int i=add(1); SArray<T>::a[i]=e; return *this; // add() may allocate a[]
 	}
-	inline void squeeze() 			{ if (n<size) resize(n); }
+	inline void squeeze() 			{ if (n<SArray<T>::size) resize(n); }
 	// tighter assertions
 	// inline void ok(int i) const		{ assertx(i>=0 && i<n); }
 	inline void ok(int i) const		{ } 
-	inline const T& operator[](int i) const	{ ok(i); return a[i]; }
-	inline T& operator[](int i)		{ ok(i); return a[i]; }
+	inline const T& operator[](int i) const	{ ok(i); return SArray<T>::a[i]; }
+	inline T& operator[](int i)		{ ok(i); return SArray<T>::a[i]; }
 #ifdef CXX
 	// next for stupid cxx
 	inline operator const T*() const

@@ -11,6 +11,9 @@
 #include "Array.h"
 
 using std::ostream;
+int invert(const Frame& fi, Frame& fo);
+Frame transpose(const Frame& f);
+void transpose(const Frame& fi, Frame& fo);
 
 //*** Affine
 

@@ -41,7 +41,7 @@ static int sloannormal=0;
 // reduce options;
 static int nfaces=0;
 static double maxcrit=1e20;
-enum { Length=1, Inscribed=2} reducecrit;
+static enum { Length=1, Inscribed=2} reducecrit;
 
 // Declarations
 static void dofroma3d();

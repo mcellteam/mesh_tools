@@ -369,20 +369,20 @@ int GetenvValue(const char* varname)
 
 
 
-static const char* _findenv(const char* name, int& offset)
-{
-        const char* c;
-	int len=0;
-//	for (const char* c=name;*c && *c!='=';c++,len++);
-	for (c=name;*c && *c!='=';c++,len++);
-        for (char** p=environ;*p;p++)
-                if (!strncmp(*p,name,len))
-                        if (*(c=*p+len)=='=') {
-                                offset=p-environ;
-                                return ++c;
-                        }
-        return 0;
-}
+// static const char* _findenv(const char* name, int& offset)
+// {
+//         const char* c;
+// 	int len=0;
+// //	for (const char* c=name;*c && *c!='=';c++,len++);
+// 	for (c=name;*c && *c!='=';c++,len++);
+//         for (char** p=environ;*p;p++)
+//                 if (!strncmp(*p,name,len))
+//                         if (*(c=*p+len)=='=') {
+//                                 offset=p-environ;
+//                                 return ++c;
+//                         }
+//         return 0;
+// }
 
 #if 0
 // Access to 'environ' is not reentrant
