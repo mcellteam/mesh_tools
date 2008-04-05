@@ -1,5 +1,6 @@
 meshrefinexxl: meshrefinexxl.o
-	g++ meshrefinexxl.o -o meshrefinexxl $(STXXL_LINKER_OPTIONS) # -p
+#	g++ meshrefinexxl.o -o meshrefinexxl $(STXXL_LINKER_OPTIONS) # -p
+	g++ meshrefinexxl.o -o meshrefinexxl-node56 $(STXXL_LINKER_OPTIONS) # -p
 
 meshrefinexxl.o: meshrefinexxl.cc
 	g++ -c meshrefinexxl.cc $(STXXL_COMPILER_OPTIONS)
@@ -19,7 +20,7 @@ USE_MCSTL	?= no	# will be overriden from main Makefile
 USE_ICPC	?= no	# will be overriden from main Makefile
 
 #STXXL_ROOT	?= $(HOME)/work/stxxl
-STXXL_ROOT	?= $(HOME)/lib/stxxl-1.1.0
+STXXL_ROOT	?= $(HOME)/lib/stxxl-1.1.0-node56
 
 ifeq ($(strip $(USE_ICPC)),yes)
 COMPILER	?= icpc
@@ -51,7 +52,7 @@ WARNINGS	?= -Wall
 #DEBUG		?= -g -p # put here -g option to include the debug information into the binaries
 DEBUG		?= -g # put here -g option to include the debug information into the binaries
 
-LIBNAME		?= stxxl
+LIBNAME		?= stxxl-node56
 
 
 #### TROUBLESHOOTING

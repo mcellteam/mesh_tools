@@ -1,3 +1,8 @@
+Feb 2008
+not printing all adjacent faces of nonmanifold edge.
+For example just prints two adjacent faces but omits two others
+when edge has four adjacent faces.
+
 Dec 2007
 1. meshalyzer segfaults if face vertex index is larger than max vertex index
 2. 'meshalyzer -a -p directory' runs forever

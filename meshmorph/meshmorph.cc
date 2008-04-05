@@ -42,12 +42,14 @@ std::string OUTPUT_DATA_DIR = "./";
 
 int main(int argc,char **argv){
 
-  if (argc > 4 || argc<3)
+  if (argc != 3 && argc!=6)
   {
-    printf("\nSyntax: meshmorph input_dir output_dir [frozen_vertices_filename]\n\n");
-    printf("Description: morphs without moving the frozen vertices.\n");
-    printf("In the optional frozen vertex file, specifiy one frozen vertex per\n");
-    printf("line with the syntax 'object_name vertex_index'.\n\n");
+    //printf("\nSyntax: meshmorph input_dir output_dir [frozen_vertices_filename]\n\n");
+    printf("\nSyntax: meshmorph input_dir output_dir [target_ecw sep_weight angle_weight]\n\n");
+    printf("Default values for optional arguments are 20, 10, and 80, respectively.\n\n");
+    //printf("Description: morphs without moving the frozen vertices.\n");
+    //printf("In the optional frozen vertex file, specifiy one frozen vertex per\n");
+    //printf("line with the syntax 'object_name vertex_index'.\n\n");
     return 1;
   }
 
@@ -56,7 +58,7 @@ int main(int argc,char **argv){
 
   // declare time variable
   time_t currtime = time(NULL);
-  time_t begintime = currtime;
+ // time_t begintime = currtime;
 
   // save input directory
   char filename[FILENAME_SIZE];
@@ -87,7 +89,16 @@ int main(int argc,char **argv){
   //copyControlFile();
 
   // read frozen vertices
-  if(argc>3){ c.readFrozen(*++argv); }
+  //if(argc>3){ c.readFrozen(argv[3]); }
+
+  // read optional arguments
+  if(argc==6)
+  {
+    char *eptr;
+    TARGET_SEPARATION     = strtod(argv[3],&eptr);
+    SEPARATION_WEIGHT     = strtod(argv[4],&eptr);
+    ANGLE_STRETCH_WEIGHT  = strtod(argv[5],&eptr);
+  }
 
   // initialize space data structure
   Space s(c);
@@ -129,8 +140,45 @@ int main(int argc,char **argv){
   // save separation distances to file
   c.writeSeparationDistances();
 
+  // write intersected faces to file
+  stats.writeIntersected(0,&c);
+
   // create instance of moved-vertex tracking structure
   //VTrack pod;
+
+/*  // DEBUG
+  cout << "\n\n********** vertices with separation distance < 10 nm **********\n";
+  // for each object in container
+  for(std::vector<Object*>::iterator i=c.o.begin();i!=c.o.end();i++){
+    // for each vertex in object
+    for(std::vector<Vertex*>::iterator j=(*i)->v.begin();j!=(*i)->v.end();j++){
+      if((*j)->cl!=NULL && (binary_search(c.frozen.begin(),c.frozen.end(),*j)==false)){
+        // get closest point
+        double pC[3];
+        c.computePC((*j)->cl,*j,pC);
+        // compute separation vector
+        double ss[3];
+        for(int ii=0;ii<3;ii++){ ss[ii]=pC[ii]-(*j)->pN[ii]; }
+        // compute separation distance //////////
+        double sd = sqrt(dot(ss,ss));
+        if(sd<1.1){
+          //cout << "main: sd = " << sd << endl;
+          (*j)->printVertexCP();
+          //cout << endl;
+          //cout << "main: cp = ["
+          //      << pC[0] << " "
+          //      << pC[1] << " "
+          //      << pC[2] << "]\n";
+          //(*j)->cl->printFace((*j)->cl->v[0]->o->name);
+          //cout << endl << endl;
+        }
+      }
+    }
+  }
+  cout << "********** vertices with separation distance < 10 nm **********\n\n";
+  exit(0);
+*/  // DEBUG
+
 
   ////////// BEGIN LOOP //////////
   cout << endl;

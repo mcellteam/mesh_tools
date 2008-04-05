@@ -2126,9 +2126,6 @@ int main(int argc,char *argv[])
     return 1;
   }
   char *eptr;
-  cerr << "\n\nsizeof(bool)=" << sizeof(bool) << endl;
-  cerr << "\n\nsizeof(int)=" << sizeof(int) << endl;
-  cerr << "\n\nsizeof(long long int)=" << sizeof(long long int) << endl;
   double threshold = strtod(argv[2],&eptr)*strtod(argv[2],&eptr);
   // build object
   Object *o = processFile(argv[1]);

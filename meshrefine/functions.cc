@@ -166,16 +166,18 @@ bool refineMesh(Object &o,double t){
 	n = o.createNewSubdividedFaces();
 	fprintf(stderr,"complete. %d new faces.\n",n);
 	fflush(stderr);
-	return flag;
+        if (t<0) {return false;}
+        else {return flag;}
 }
 
 bool Edge::threshold(double t){
-	double l = getSqLength();
-	return l>t;
+  double l = getSqLength();
+  return l>t;
 }
 
 bool Object::thresholdEdges(double t)
 {
+        t = t*t;
 	bool flag = false;
 	for(std::vector<Face*>::iterator i=f.begin();i!=f.end();i++)
 	{
@@ -489,3 +491,19 @@ void printMesh(void_list *vlh,void_list *flh){
 	}
 }*/
 
+void printMesh(Object &o)
+{
+  ////////// write data to stdout /////////
+  // write out vertices
+  for (std::vector<Vertex*>::iterator i=o.v.begin();i!=o.v.end();i++)
+  {
+    Vertex *vv = *i;
+    printf("Vertex %i  %.15g %.15g %.15g\n",vv->index,vv->p[0],vv->p[1],vv->p[2]);
+  }
+  // write out face linked list
+  for (std::vector<Face*>::iterator i=o.f.begin();i!=o.f.end();i++)
+  {
+    Face *ff=*i;
+    printf("Face %i  %i %i %i\n",ff->index,ff->v[0]->index,ff->v[1]->index,ff->v[2]->index);
+  }
+}

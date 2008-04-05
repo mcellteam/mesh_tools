@@ -1,3 +1,5 @@
+FEB2008
+Suspect edge angles are incorrect. Compare to meshalyzer.
 
 Dec2007
 Triangulated surface intersection detection is a well-studied problem with solutions offered by RAPID and VCollide (~/lib/).

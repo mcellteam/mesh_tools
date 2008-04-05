@@ -1004,7 +1004,8 @@ public:
 	void sortAdjacentFaces(void);
 	Face* getNonAdjacentFaceOfVertex(Vertex*,Vertex*);
 	Face* getNonAdjacentFaceOfEdge(Vertex*,Edge*);
-	void summarize(void);
+	void summarize1(void);
+	void summarize2(void);
 	void countNonnice(int&,int&);
 	void countIntersections(int&,int&);
 	void reportVertexNiceness(int,std::string,Space&);
@@ -1012,12 +1013,18 @@ public:
 
 };
 
-void Container::summarize(void){
+void Container::summarize1(void){
 	// for each object, accumulate number of vertices and faces
 	for (std::vector<Object*>::iterator i=o.begin();i!=o.end();i++) {
 		object_count++;
 		vertex_count += (*i)->v.size();
 		face_count += (*i)->f.size();
+	}
+}
+
+void Container::summarize2(void){
+	// for each object, accumulate number of vertices and faces
+	for (std::vector<Object*>::iterator i=o.begin();i!=o.end();i++) {
 		edge_count += (*i)->e.size();
 	}
 }
@@ -1039,8 +1046,9 @@ Container::Container(void){
 	object_count=vertex_count=face_count=edge_count=0;
 	scanDir();
 	scanFiles();
-	summarize();
+	summarize1();
 	createEdges();
+	summarize2();
 	findVertexAdjacencies();
 	sortAdjacentFaces();
 	checkEdgeAngles();
@@ -2137,11 +2145,12 @@ void Monitor::identifyMeshRegionToUpdate(Space &s,Container &c){
 	}
 
 	// DEBUG
+        /*
 	if(set_seed!=NULL){
 		cout << "\n>>>>> SET_SEED VERTEX: " << set_seed->o->name << "->" << set_seed->index << endl;
 	} else {
 		cout << "\n>>>>> SET_SEED VERTEX: NULL" << endl;
-	}
+	}*/
 	// DEBUG
 
 	// grab Box* of worst vertex

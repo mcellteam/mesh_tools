@@ -3,6 +3,9 @@
 #include <float.h>
 #include <dirent.h>
 #include <set>
+#include <time.h>
+#include <sys/timeb.h>
+#include <sys/time.h>
 
 using std::cout;
 using std::endl;
@@ -522,9 +525,8 @@ struct Edata // edges
 
 struct Fdata // faces
 {
-  key index;    // from file
-  key v[3];	// index of vertex in context 
-                // of other vertices in object
+  key index;    // native, i.e. from file
+  key v[3];	// relative
 };
 
 struct FEdata
@@ -544,13 +546,18 @@ struct ObjectData
 
 struct Vdata // vertices
 {
-  key index;    // from file
+  key index;    // native, i.e. from file
   double x, y, z;
 };
 
 struct VEdata
 {
-  key adj_f[ADJACENT_FACES]; // vertex adjacent faces, relative
+  key adj_f[ADJACENT_FACES]; // indices of adjacent faces to vertex, relative
+                             // define first element of array
+                             // to store the array index of
+                             // the next available (i.e. empty)
+                             // element. so adj_f[0] must be
+                             // larger than 0.
 };
 
 vec_key border;     // keys to edges with only one face, relative
@@ -564,18 +571,44 @@ vec_key indistin_e; // keys to edges with indistinguishable vertices, relative
 vec_key indistin_v; // keys to indistinguishable vertices, relative
 key     miss_v;	    // number of missing vertices discovered
 ne_set  nonm_e;     // nonmanifold edges: pair<Edge key,face key>, relative
-vec_key nonman_e;   // keys to edges with more than two faces, relative
-vec_key nonman_v;   // keys to nonmanifold vertices, relative
 set_key orphan;     // vertices referenced by no face, relative
 bool    seq_v;      // true=sequential Vertex indexing,false=otherwise
-
-stxxl::vector<Edata>      e_vector;
-stxxl::vector<Fdata>      f_vector;
-stxxl::vector<FEdata>     fe_vector;
-stxxl::vector<ObjectData> object_vector;
 std::vector<Object>       objects;
-stxxl::vector<Vdata>      v_vector;
-stxxl::vector<VEdata>     ve_vector;
+
+//WORKStypedef stxxl::VECTOR_GENERATOR<key,16,32,8388608>::result new_vec_key;
+//WORKStypedef stxxl::VECTOR_GENERATOR<key,16,32,8388608>::result::iterator new_vk;
+typedef stxxl::VECTOR_GENERATOR<key,4,8,8388608>::result new_vec_key;
+typedef stxxl::VECTOR_GENERATOR<key,4,8,8388608>::result::iterator new_vk;
+new_vec_key nonman_e;   // keys to edges with more than two faces, relative
+
+typedef stxxl::VECTOR_GENERATOR<key,4,8,2097152>::result new_vec_key2;
+typedef stxxl::VECTOR_GENERATOR<key,4,8,2097152>::result::iterator new_vk2;
+new_vec_key2 nonman_v;   // keys to nonmanifold vertices, relative
+
+//typedef stxxl::VECTOR_GENERATOR<Edata,4,8,16777216>::result new_edata;
+typedef stxxl::VECTOR_GENERATOR<Edata,4,8,33554432>::result new_edata;
+new_edata e_vector;
+const new_edata & cev = e_vector;
+
+//typedef stxxl::VECTOR_GENERATOR<Fdata,4,8,16777216>::result new_fdata;
+typedef stxxl::VECTOR_GENERATOR<Fdata,4,8,33554432>::result new_fdata;
+new_fdata f_vector;
+const new_fdata & cfv = f_vector;
+
+typedef stxxl::VECTOR_GENERATOR<FEdata,4,8,33554432>::result new_fedata;
+new_fedata fe_vector;
+const new_fedata & cfev = fe_vector;
+
+stxxl::vector<ObjectData> object_vector;
+const stxxl::vector<ObjectData> & cov = object_vector;
+
+//stxxl::vector<Vdata>      v_vector;
+typedef stxxl::VECTOR_GENERATOR<Vdata,4,8,33554432>::result new_vdata;
+new_vdata v_vector;
+
+//typedef stxxl::VECTOR_GENERATOR<VEdata,4,16,16777216>::result new_vedata;
+typedef stxxl::VECTOR_GENERATOR<VEdata,4,8,33554432>::result new_vedata;
+new_vedata ve_vector;
 
 key vertex_index; // relative
 key face_index;   // relative
@@ -950,7 +983,7 @@ public:
   void updateEdge(key f,key object_id);
   void print(key object_id);
   void printCP(key object_id);
-  key getNewFace(key,key);
+  key getNewFace(key,key,key);
   bool isConsistent(key);
   bool getOrientation(key,key);
   double getSqLength(key object_id);
@@ -964,27 +997,46 @@ public:
 
   key get_v1() // relative
   {
-    return e_vector[e_id].v1; 
+    //return e_vector[e_id].v1; 
+    return cev[e_id].v1; 
   }
 
   key get_v2() // relative
   {
-    return e_vector[e_id].v2;
+    //return e_vector[e_id].v2;
+    return cev[e_id].v2;
   }
 
-  key get_f1() // relative
+  key get_f1(key vector_key) // relative
   {
-    return e_vector[e_id].f1;
+    //return e_vector[e_id].f1;
+    if(get_v1()==vector_key)
+    {
+      return cev[e_id].f1;
+    }
+    else
+    {
+      return cev[e_id].f2;
+    }
   }
 
-  key get_f2() // relative
+  key get_f2(key vector_key) // relative
   {
-    return e_vector[e_id].f2;
+    //return e_vector[e_id].f2;
+    if(get_v1()==vector_key)
+    {
+      return cev[e_id].f2;
+    }
+    else
+    {
+      return cev[e_id].f1;
+    }
   }
 
   key get_rel_key(key object_id) // relative
   { // absolute-absolute=relative
-    return e_id-object_vector[object_id].e_start;
+    //return e_id-object_vector[object_id].e_start;
+    return e_id-cov[object_id].e_start;
   }
 
   bool isManifold(key object_id)
@@ -1015,6 +1067,16 @@ public:
     f_id=i; // absolute
   }
 
+  F()
+  {
+    f_id=0; // absolute
+  }
+
+  void assign(key i) // absolute
+  {
+    f_id=i;
+  }
+
   key get_o(key v1,key v2)
   {
     if(get_v1_rel()!=v1 && get_v1_rel()!=v2) return get_v1_rel();
@@ -1030,17 +1092,20 @@ public:
 
   key get_v1_rel() // relative in v_vector
   {
-    return f_vector[f_id].v[0];
+    //return f_vector[f_id].v[0];
+    return cfv[f_id].v[0];
   }
 
   key get_v2_rel() // relative in v_vector
   {
-    return f_vector[f_id].v[1];
+    //return f_vector[f_id].v[1];
+    return cfv[f_id].v[1];
   }
 
   key get_v3_rel() // relative in v_vector
   {
-    return f_vector[f_id].v[2];
+    //return f_vector[f_id].v[2];
+    return cfv[f_id].v[2];
   }
 
   key get_abs_key() // absolute
@@ -1084,7 +1149,8 @@ public:
 
   key get_edge(int i)
   {
-    return fe_vector[fe_id].e[i];
+    //return fe_vector[fe_id].e[i];
+    return cfev[fe_id].e[i];
   }
 
 private:
@@ -1105,6 +1171,153 @@ public:
     return nonm_e.find(std::make_pair(edge,edge));
   }
 
+};
+
+class V
+{
+public:
+  bool isManifold(key,bool);
+  void getAdjacentEdges(key,std::vector<key>&);
+  bool scanAdjFaces(key,key,key,bool&);
+  void printCP();
+  void print(key object_id);
+  void printAdjacent(key object_id);
+
+  V(key i)
+  {
+    v_id=i; // absolute
+  }
+
+  key get_index()
+  {
+    return v_vector[v_id].index;
+  }
+
+  double get_x()
+  {
+    return v_vector[v_id].x;
+  }
+
+  double get_y()
+  {
+    return v_vector[v_id].y;
+  }
+
+  double get_z()
+  {
+    return v_vector[v_id].z;
+  }
+
+  key get_rel_key(key object_id) // absolute
+  { // absolute-absolute=relative
+    //return v_id-object_vector[object_id].v_start;
+    return v_id-cov[object_id].v_start;
+  }
+
+  key get_abs_key()
+  {
+    return v_id;
+  }
+
+private:
+  key v_id; // absolute
+};
+
+class VE
+{
+// access arrays of adjacent faces for vertices
+public:
+
+  VE(key i) // absolute
+  {
+    ve_id=i;
+  }
+
+  VE()
+  {
+    ve_id=0;
+  }
+
+  void assign(key i) // absolute 
+  {
+    ve_id=i;
+  }
+
+  void print(key object_id);
+
+  key* get_array()
+  {
+    return &ve_vector[ve_id].adj_f[0];
+  }
+
+  void getAf(std::vector<key> &vv)
+  {
+    //for(int i=0;i<ADJACENT_FACES;i++)
+    for(int i=1;i<ADJACENT_FACES;i++)
+    {
+      if(ve_vector[ve_id].adj_f[i]<0) break;
+      vv.push_back(ve_vector[ve_id].adj_f[i]);
+    }
+  }
+
+/*  unsigned int size()
+  {
+    for(int i=0;i<ADJACENT_FACES;i++)
+    {
+      if(ve_vector[ve_id].adj_f[i]<0) return i;
+    }
+    return ADJACENT_FACES;
+  }*/
+
+  unsigned int size()
+  {
+      return ve_vector[ve_id].adj_f[0]-1;
+  }
+
+/*  int get_next()
+  {
+    int i;
+    for(i=0;i<ADJACENT_FACES;i++)
+    {
+      if(ve_vector[ve_id].adj_f[i]<0){break;}
+    }
+    return i;
+  }
+  */
+
+  int get_next()
+  {
+    return ve_vector[ve_id].adj_f[0];
+  }
+
+  void set_next(key f,int next)
+  {
+    ve_vector[ve_id].adj_f[next] = f;
+    ve_vector[ve_id].adj_f[0]++;
+  }
+
+  void addFace(key f)
+  {
+    VEdata* ved = &ve_vector[ve_id];
+    int next = ved->adj_f[0]++;
+    // if array is full
+    if(next==ADJACENT_FACES)
+    {
+      cout << "\nError: increase ADJACENT_FACES (current value = "
+            << ADJACENT_FACES << ").\n";
+      cout << "face relative key = " << f << endl;
+      exit(0);
+    }
+    else
+    {
+      // the next spot is empty
+      ved->adj_f[next] = f;
+      //ved->adj_f[0]++;
+    }
+  }
+
+private:
+  key ve_id; // absolute
 };
 
 class Object
@@ -1129,6 +1342,8 @@ public:
   VE *GetVE(key id); // relative
   V *GetV(key id); // relative
   void findVertexAdjacencies(Container &c);
+  VE ve;
+  F f;
   
   Object (key i,std::string filename)
   {
@@ -1207,110 +1422,16 @@ private:
   double vol;		// object volume
 };
 
-class V
+/* *********************************************** */
+/* *********************************************** */
+/* *********************************************** */
+
+void V::printAdjacent(key object_id)
 {
-public:
-  bool isManifold(key,bool);
-  void getAdjacentEdges(key,std::vector<key>&);
-  bool scanAdjFaces(key,key,key,bool&);
-  void printCP();
-  void print(key object_id);
-
-  V(key i)
-  {
-    v_id=i; // absolute
-  }
-
-  key get_index()
-  {
-    return v_vector[v_id].index;
-  }
-
-  double get_x()
-  {
-    return v_vector[v_id].x;
-  }
-
-  double get_y()
-  {
-    return v_vector[v_id].y;
-  }
-
-  double get_z()
-  {
-    return v_vector[v_id].z;
-  }
-
-  key get_rel_key(key object_id) // absolute
-  { // absolute-absolute=relative
-    return v_id-object_vector[object_id].v_start;
-  }
-
-  key get_abs_key()
-  {
-    return v_id;
-  }
-
-private:
-  key v_id; // absolute
-};
-
-class VE
-{
-// access arrays of adjacent faces for vertices
-public:
-  VE(key i) // absolute
-  {
-    ve_id=i;
-  }
-
-  void print(key object_id);
-
-  key* get_array()
-  {
-    return &ve_vector[ve_id].adj_f[0];
-  }
-
-  void getAf(std::vector<key> &vv)
-  {
-    for(int i=0;i<ADJACENT_FACES;i++)
-    {
-      if(ve_vector[ve_id].adj_f[i]<0) break;
-      vv.push_back(ve_vector[ve_id].adj_f[i]);
-    }
-  }
-
-  unsigned int size()
-  {
-    for(int i=0;i<ADJACENT_FACES;i++)
-    {
-      if(ve_vector[ve_id].adj_f[i]<0) return i;
-    }
-    return ADJACENT_FACES;
-  }
-
-  int get_next()
-  {
-    int i;
-    for(i=0;i<ADJACENT_FACES;i++)
-    {
-      if(ve_vector[ve_id].adj_f[i]<0){break;}
-    }
-    return i;
-  }
-
-  void set_next(key f,int next)
-  {
-    ve_vector[ve_id].adj_f[next] = f;
-  }
-
-private:
-  key ve_id; // absolute
-};
-
-/* *********************************************** */
-/* *********************************************** */
-/* *********************************************** */
+  VE* ve_ptr = objects[object_id].GetVE(get_rel_key(object_id));
+  ve_ptr->print(object_id);
+  delete ve_ptr;
+}
 
 void E::print(key object_id)
 {
@@ -1331,20 +1452,24 @@ void E::print(key object_id)
         << " " << v_ptr->get_z()
         << endl;
   delete v_ptr;
-  F* f_ptr = objects[object_id].GetF(get_f1());
+  //F* f_ptr = objects[object_id].GetF(get_f1());
+  objects[object_id].f.assign(get_f1(get_v1()));
+  F* f_ptr = &objects[object_id].f;
   cout  << "Face " << f_ptr->get_index()
         << " " << f_ptr->get_v1_file(object_id)
         << " " << f_ptr->get_v2_file(object_id)
         << " " << f_ptr->get_v3_file(object_id)
         << endl;
-  delete f_ptr;
-  f_ptr = objects[object_id].GetF(get_f2());
+  //delete f_ptr;
+  //f_ptr = objects[object_id].GetF(get_f2());
+  objects[object_id].f.assign(get_f2(get_v1()));
+  f_ptr = &objects[object_id].f;
   cout  << "Face " << f_ptr->get_index()
         << " " << f_ptr->get_v1_file(object_id)
         << " " << f_ptr->get_v2_file(object_id)
         << " " << f_ptr->get_v3_file(object_id)
         << endl;
-  delete f_ptr;
+  //delete f_ptr;
 }
 
 void E::printCP(key object_id)
@@ -1419,9 +1544,19 @@ E* Object::GetE(key id) // relative
   return new E(e_id);
 }
 
-V *Object::GetV(key id) // relative
+V* Object::GetV(key id) // relative
 {
+  // DEBUG
+  //cout << "111"; cout.flush();
+  //cout << ", object_id="<<object_id<<", "; cout.flush();
+  //ObjectData* pp = &object_vector[object_id];
+  //cout << "222"; cout.flush();
+  //cout << "f_start=" << object_vector[object_id].f_start<< ", ";
+  //cout << "v_start=" << object_vector[object_id].v_start<< ", ";
+  //cout.flush();
   key v_id = object_vector[object_id].v_start + id; // absolute
+  //cout << "333"; cout.flush();
+  // DEBUG
   return new V(v_id);
 }
 
@@ -1455,12 +1590,15 @@ void VE::print(key object_id)
 {
   cout.precision(12);
   // for each adjacent face of vertex
-  for(int i=0;i<ADJACENT_FACES;i++)
+  //for(int i=0;i<ADJACENT_FACES;i++)
+  for(int i=1;i<ADJACENT_FACES;i++)
   {
     if(ve_vector[ve_id].adj_f[i]<0){break;}
-    F* f_ptr = objects[object_id].GetF(ve_vector[ve_id].adj_f[i]);
+    //F* f_ptr = objects[object_id].GetF(ve_vector[ve_id].adj_f[i]);
+    objects[object_id].f.assign(ve_vector[ve_id].adj_f[i]);
+    F* f_ptr = &objects[object_id].f;
     f_ptr->print(object_id);
-    delete f_ptr;
+    //delete f_ptr;
   }
 }
 
@@ -1680,6 +1818,24 @@ void scanFile (key object_id,std::string filename)
     cout << "name: " << filename << endl;
     cout.flush();
   }
+  // for tracking
+  cout << "Counting lines in input file .........................";
+  cout.flush();
+  int count=0;
+  // for every line in file
+  for(char *str=fgets(line,2048,FF);str!=NULL;str=fgets(line,2048,FF))
+  {
+    count++;
+  }
+  cout << count;
+  cout << "...complete.\n";cout.flush();
+  rewind(FF);
+  cout << "Reading object into memory .........................";
+  cout.flush();
+  int iii=1;
+  double goal = 0.2;
+  printf("0%%..");
+  fflush(stdout);
 
   // map<vertex index from file, relative vertex index>
   stxxl::map<key,key,kSortComp> vp(NODE_CACHE_SIZE,LEAF_CACHE_SIZE);
@@ -1687,6 +1843,7 @@ void scanFile (key object_id,std::string filename)
   // for every line in file
   for(char *str=fgets(line,2048,FF);str!=NULL;str=fgets(line,2048,FF))
   {
+    //cout << line;cout.flush();
     // skip leading whitespace
     while (strchr(" \t,",*str)!=NULL) { str++;}
     // if first character is V for Vertex
@@ -1767,9 +1924,19 @@ void scanFile (key object_id,std::string filename)
         found.insert(fd.index);
       }
     }
+    // track progress
+    double progress = static_cast<double>(iii++)/count;
+    if(progress>goal){
+      printf("%d%%..",static_cast<int>(goal*100));
+      fflush(stdout);
+      goal+=0.2;
+    }
   }
   vp.clear();
   fclose(FF);
+  printf("100%%..");
+  fflush(stdout);
+  cout << "complete.\n";cout.flush();
 }
 
 Object* Container::processFile(std::string filename)
@@ -1960,9 +2127,11 @@ void PrintObject(key object_id)
         -object_vector[object_id].f_start+1;
   for(int i=0;i<num;i++)
   {
-    F* f_ptr = objects[object_id].GetF(i);
+    //F* f_ptr = objects[object_id].GetF(i);
+    objects[object_id].f.assign(i);
+    F* f_ptr = &objects[object_id].f;
     f_ptr->print(object_id);
-    delete f_ptr;
+    //delete f_ptr;
   }
   cout << endl << endl;
 }
@@ -1979,7 +2148,7 @@ void PrintObjectSum(key object_id)
         << ", # faces = " << nf
         << ", # edges = " << ne << endl;
 }
-
+/*
 void addFace(VE* ve_ptr,key f)
 {
   int next = ve_ptr->get_next();
@@ -1996,6 +2165,26 @@ void addFace(VE* ve_ptr,key f)
     // the next spot is empty
     ve_ptr->set_next(f,next);
   }
+}*/
+
+void addFace(VE* ve_ptr,key f)
+{
+  ve_ptr->addFace(f);
+/*  int next = ve_ptr->get_next();
+  // if array is full
+  if(next==ADJACENT_FACES)
+  {
+    cout << "\nError: increase ADJACENT_FACES (current value = "
+          << ADJACENT_FACES << ").\n";
+    cout << "face relative key = " << f << endl;
+    exit(0);
+  }
+  else
+  {
+    // the next spot is empty
+    ve_ptr->set_next(f,next);
+  }
+  */
 }
 
 void Object::boundObject()
@@ -2055,47 +2244,132 @@ void PrintAdjacencies(Container &c)
   }
 }*/
 
+double getTime()
+{
+  //cout << "getTime(): begin\n"; 
+  cout.flush();
+  timeval tv;
+  gettimeofday(&tv,NULL);
+  //cout << "time = " << tv.tv_sec*1E6+tv.tv_usec << endl;
+  return tv.tv_sec*1E6+tv.tv_usec;
+  //return static_cast<int>(tv.tv_sec*1E6+tv.tv_usec);
+}
+
 void Object::findVertexAdjacencies(Container &c)
 {
+  //cout << "Finding vertex adjacencies .........................";
+  //cout.flush();
+  cout << "Finding vertex adjacencies .........................\n";
+  cout.flush();
   ObjectData od = object_vector[object_id];
   od.ve_start = c.getNextVE(); // absolute
-  // for each vertex in object
+  cout << "Create vertex adjacency containers .........................\n";
+  cout.flush();
+  // vertices in object
   int num=object_vector[object_id].v_end
         -object_vector[object_id].v_start+1;
+  // tracking
+  double trackingInterval = 0.01;
+  int goal = static_cast<int>(trackingInterval*num);
+  printf("0%%..");
+  fflush(stdout);
+  // declare time variable
+  double begintime = getTime();
+  // for each vertex in object
   for(int i=0;i<num;i++) // relative
   {
     // create matching ve_vector entry
     VEdata ved;
-    for(int j=0;j<ADJACENT_FACES;j++)
+    ved.adj_f[0]=1;
+    for(int j=1;j<ADJACENT_FACES;j++)
     {
       ved.adj_f[j]=-2;
     }
     ve_vector.push_back(ved);
+/**/    // DEBUG
+    // track progress
+    if(i>goal)
+    {
+      //double progress = static_cast<double>(i)/num;
+      printf("%g%%(%g verts/sec)..\n",static_cast<double>(i)/static_cast<double>(num)*100.0,num*trackingInterval/(getTime()-begintime));
+      fflush(stdout);
+      //goal+=trackingInterval;
+      //begintime = time(NULL);
+      begintime = getTime();
+      goal+=static_cast<int>(trackingInterval*num);
+    }
+    // DEBUG /**/
   }
-  // for each face in object
+  printf("100%%..complete.\n");
+ // printf("100%%(%g verts/sec)..\n",num*trackingInterval/(getTime()-begintime));
+  fflush(stdout);
+  cout << "Fill vertex adjacency containers .........................\n";
+  cout.flush();
+  printf("0%%..");
+  fflush(stdout);
+  // faces in object
   num=object_vector[object_id].f_end
         -object_vector[object_id].f_start+1;
+  //tracking
+  //goal = trackingInterval;
+  goal = static_cast<int>(trackingInterval*num);
+  // declare time variable
+  begintime = getTime();
+  double starttime = begintime;
+  // for each face in object
   for(int i=0;i<num;i++) // relative
   {
-    F* f_ptr = GetF(i);
+    //cout << i << endl;
+    //F* f_ptr = GetF(i);
+    f.assign(i);
+    F* f_ptr = &f;
     key th = f_ptr->get_rel_key(object_id);
-    VE* ve_ptr = GetVE(f_ptr->get_v1_rel());
-    addFace(ve_ptr,th);
-    delete ve_ptr;
-    ve_ptr = GetVE(f_ptr->get_v2_rel());
-    addFace(ve_ptr,th);
-    delete ve_ptr;
-    ve_ptr = GetVE(f_ptr->get_v3_rel());
-    addFace(ve_ptr,th);
-    delete f_ptr;
-    delete ve_ptr;
+    //VE* ve_ptr = GetVE(f_ptr->get_v1_rel());
+    ve.assign(f_ptr->get_v1_rel());
+    //addFace(ve_ptr,th);
+    addFace(&ve,th);
+    //delete ve_ptr;
+    //ve_ptr = GetVE(f_ptr->get_v2_rel());
+    ve.assign(f_ptr->get_v2_rel());
+    //addFace(ve_ptr,th);
+    addFace(&ve,th);
+    //delete ve_ptr;
+    //ve_ptr = GetVE(f_ptr->get_v3_rel());
+    ve.assign(f_ptr->get_v3_rel());
+    //addFace(ve_ptr,th);
+    addFace(&ve,th);
+    //delete f_ptr;
+    //delete ve_ptr;
+/**/    // DEBUG
+    // track progress
+    //double progress = static_cast<double>(i)/static_cast<double>(num);
+    if(i>goal)
+    {
+      printf("%g%%(%g faces/sec)..\n",static_cast<double>(i)/static_cast<double>(num)*100.0,num*trackingInterval/(getTime()-begintime));
+      //printf("%d%%(%g faces/sec)..\n",static_cast<int>(goal*100),num*0.05/(time(NULL)-begintime));
+      fflush(stdout);
+      //goal+=trackingInterval;
+      begintime = getTime();
+      //begintime = time(NULL);
+      goal+=static_cast<int>(trackingInterval*num);
+    }
+    // DEBUG /**/
   }
+  //printf("100%%(%g faces/sec)..\n",num*trackingInterval/(getTime()-begintime));
+  printf("100%%..complete.\n");
+  fflush(stdout);
   c.setNextVE(od.ve_start + face_index); // absolute+relative=absolute
   object_vector[object_id].ve_end = c.getNextV()-1; // relative
+  //cout << "complete.\n";cout.flush();
+  printf("...complete.\n");
+  fflush(stdout);
+  cout << "elapsed face processing time (usec): " << getTime()-starttime << endl;
 }
 
 bool checkIntegrity(void)
 {
+  cout << "Checking object integrity .........................";
+  cout.flush();
   bool good=true;
   // if duplicate vertex indices found
   if(dupl_v>0)
@@ -2149,6 +2423,7 @@ bool checkIntegrity(void)
     good=false;
   }
   // TODO check for contiguous face indexing, warning only
+  cout << "complete.\n";cout.flush();
   return good;
 }
 
@@ -2189,9 +2464,11 @@ void printFaceEdges(Container &c)
   for(int i=0;i<num;i++) // relative
   {
     cout << endl << endl;
-    F* f_ptr = objects[oid].GetF(i);
+    //F* f_ptr = objects[oid].GetF(i);
+    objects[oid].f.assign(i);
+    F* f_ptr = &objects[oid].f;
     f_ptr->print(oid);
-    delete f_ptr;
+    //delete f_ptr;
     FE* fe_ptr = objects[oid].GetFE(i);
     key triplet[3] = {fe_ptr->get_edge(0),
                       fe_ptr->get_edge(1),
@@ -2263,21 +2540,38 @@ void createEdges(Container &c)
   // map<pair<vertex key,vertex key>,edge key>
   //           for v_vector, for v_vector ,for e_vector; ALL relative 
   stxxl::map<std::pair<key,key>,key,pSort> hm(NODE_CACHE_SIZE,LEAF_CACHE_SIZE);
-  // for each face in object
+  // faces in object
   key num=object_vector[oid].f_end-object_vector[oid].f_start+1;
+  // tracking
+  double trackingInterval = 0.2;
+  int goal = static_cast<int>(trackingInterval*num);
+  printf("0%%..");
+  fflush(stdout);
+  // for each face in object
   for(key i=0;i<num;i++)
   {
-    F* f_ptr = objects[oid].GetF(i);
+    //F* f_ptr = objects[oid].GetF(i);
+    objects[oid].f.assign(i);
+    F* f_ptr = &objects[oid].f;
     // TODO pass relative index as key
     buildEdge(c,f_ptr->get_rel_key(oid),f_ptr->get_v1_rel(),f_ptr->get_v2_rel(),hm);
     buildEdge(c,f_ptr->get_rel_key(oid),f_ptr->get_v2_rel(),f_ptr->get_v3_rel(),hm);
     buildEdge(c,f_ptr->get_rel_key(oid),f_ptr->get_v3_rel(),f_ptr->get_v1_rel(),hm);
-    delete f_ptr;
+    //delete f_ptr;
+    // track progress
+    if(i>goal)
+    {
+      printf("%g%%..",static_cast<double>(i)/static_cast<double>(num)*100.0);
+      fflush(stdout);
+      goal+=static_cast<int>(trackingInterval*num);
+    }
   }
+  printf("100%%..complete.\n");
+  fflush(stdout);
   c.setNumE(edge_index);
   c.setNextE(object_vector[oid].e_start + edge_index);
   object_vector[oid].e_end = c.getNextE()-1;
-  cout << "complete.\n";cout.flush();
+  //cout << "complete.\n";cout.flush();
 }
 
 bool Object::isClosed(void)
@@ -2290,7 +2584,7 @@ bool Object::isClosed(void)
   {
     E* e_ptr = objects[object_id].GetE(i);
     // if edge has no adjacent face f2
-    if(e_ptr->get_f2()<0)
+    if(e_ptr->get_f2(e_ptr->get_v1())<0)
     {
       flag=false;
       // record offending edge
@@ -2302,38 +2596,52 @@ bool Object::isClosed(void)
 
 void V::getAdjacentEdges(key object_id,std::vector<key> &e)
 {
+  //double firsttime = getTime();
   key vid = get_rel_key(object_id);
   // gather adjacent faces of vertex
-  VE *ve_ptr = objects[object_id].GetVE(vid);
+  Object* o_ptr = &objects[object_id];
+  //objects[object_id].ve.assign(vid);
+  o_ptr->ve.assign(vid);
   std::vector<key> af;
-  ve_ptr->getAf(af);
-  delete ve_ptr;
+  //objects[object_id].ve.getAf(af);
+  o_ptr->ve.getAf(af);
+  //double secondtime = getTime();
+  //double preamble=0,secondloop=0;
+  //double ifclause=0,follow=0;
+  //double inner1=0,inner2=0,inner3=0,inner4=0;
   // for each adjacent face of vertex
   for (std::vector<key>::iterator i=af.begin();i!=af.end();i++)
   {
+    //double p1 = getTime();
     // gather edges of face
-    FE *fe_ptr = objects[object_id].GetFE(*i);
+    //FE *fe_ptr = objects[object_id].GetFE(*i);
+    FE *fe_ptr = o_ptr->GetFE(*i);
     // ep[i] == edge index, relative
     key triplet[3] = {fe_ptr->get_edge(0),
                       fe_ptr->get_edge(1),
                       fe_ptr->get_edge(2)};
     delete fe_ptr;
+    //double p2 = getTime();
     // for each edge of face
     for(int j=0;j<3;j++)
     {
+      //double pa = getTime();
       // if edge is undefined
       if(triplet[j]<0)
       {
         cout << "\nV::getAdjacentEdges: Error.\n"
               << "Face edge is missing.\n";
-        F *f_ptr = objects[object_id].GetF(*i);
+        //objects[object_id].f.assign(*i);
+        o_ptr->f.assign(*i);
+        //F *f_ptr = &objects[object_id].f;
+        F *f_ptr = &o_ptr->f;
         f_ptr->print(object_id);
-        delete f_ptr;
         for(int k=0;k<3;k++)
         {
           if((triplet[k]<0)==false)
           {
-            E *e_ptr = objects[object_id].GetE(triplet[k]);
+            //E *e_ptr = objects[object_id].GetE(triplet[k]);
+            E *e_ptr = o_ptr->GetE(triplet[k]);
             cout << "\nep[" << k << "]:" << endl; 
             e_ptr->print(object_id);
             delete e_ptr;
@@ -2341,35 +2649,73 @@ void V::getAdjacentEdges(key object_id,std::vector<key> &e)
         }
         exit(0);
       }
+      //double pa = getTime();
       // edge is ok
-      E *e_ptr = objects[object_id].GetE(triplet[j]);
+      //E *e_ptr = objects[object_id].GetE(triplet[j]);
+      E *e_ptr = o_ptr->GetE(triplet[j]);
       // if edge contains vertex
+      //double pb = getTime();
+      //double pc = pb,pd = pb;
       if(e_ptr->get_v1()==vid || e_ptr->get_v2()==vid)
       {
+        //pc = getTime();
         // add edge to vector
         e.push_back(triplet[j]);
+        //pd = getTime();
       }
+      //double pe = getTime();
       delete e_ptr;
+      //double pf = getTime();
+      //ifclause+=pb-pa;
+      //follow+=pc-pb;
+      //inner1+=pb-pa;
+      //inner2+=pe-pc;
+      //inner3+=pd-pc;
+      //inner4+=pf-pe;
     }
+    //double p3 = getTime();
+    //preamble+=p2-p1;
+    //secondloop+=p3-p2;
   }
+  //double thirdtime = getTime();
   // keep unique edges
   sort(e.begin(),e.end());
   std::vector<key>::iterator new_end = unique(e.begin(),e.end());
   e.assign(e.begin(),new_end);
+  //double fourthtime = getTime();
+/*  cout << "V::getAdjacentEdges: "
+       <<" delt1 = " << secondtime-firsttime
+       <<", firstloop = " << thirdtime-secondtime
+       <<" (= " << preamble << " + " << secondloop << ")"
+       <<", secondloop = " << secondloop
+       <<" (= " << ifclause << " + " << follow << ")"
+       <<", delt3 = " << fourthtime-thirdtime << endl;
+       */
+  //cout << "V::getAdjacentEdges: "
+  //     <<" pre_if = " << inner1
+  //     <<", if = " << inner2
+  //     <<", inside_if = " << inner3
+  //     <<", delete = " << inner4 << endl;
+  //cout.flush();
 }
 
 key F::getNewEdge(key object_id,key old,key vv)
 {
+  //double firsttime = getTime();
+  Object* o_ptr = &objects[object_id];
   // return face edge that contains vertex vv
   // and is different from old edge
   // 
   // find old edge in Face
   bool efound=false;
-  FE *fe_ptr = objects[object_id].GetFE(get_rel_key(object_id));
+  FE *fe_ptr = o_ptr->GetFE(get_rel_key(object_id));
+  //FE *fe_ptr = objects[object_id].GetFE(get_rel_key(object_id));
   key triplet[3] = {fe_ptr->get_edge(0),
                     fe_ptr->get_edge(1),
                     fe_ptr->get_edge(2)};
   delete fe_ptr;
+  //double secondtime = getTime();
+  //cout << "\nF::getNewEdge: " << "delt1 = " << secondtime-firsttime << endl; cout.flush();
   // for each edge of face
   for(int i=0;i<3;i++)
   {
@@ -2382,6 +2728,8 @@ key F::getNewEdge(key object_id,key old,key vv)
     }
     if(triplet[i]==old) {efound=true;}
   }
+  //double thirdtime = getTime();
+  //cout << "F::getNewEdge: " << "delt2 = " << thirdtime-secondtime << endl; cout.flush();
   // if old edge is not found in face
   if(efound==false)
   {
@@ -2390,12 +2738,15 @@ key F::getNewEdge(key object_id,key old,key vv)
     print(object_id);
     cout << endl;
     cout << "Old edge:\n";
-    E *e_ptr = objects[object_id].GetE(old);
+    E *e_ptr = o_ptr->GetE(old);
+    //E *e_ptr = objects[object_id].GetE(old);
     e_ptr->print(object_id);
     delete e_ptr;
     cout << endl;
     exit(0);
   }
+  //double fourthtime = getTime();
+  //cout << "F::getNewEdge: " << "delt3 = " << fourthtime-thirdtime << endl; cout.flush();
   // if current vertex not found in face
   if(get_v1_rel()!=vv && get_v2_rel()!=vv && get_v3_rel()!=vv)
   {
@@ -2404,22 +2755,28 @@ key F::getNewEdge(key object_id,key old,key vv)
     print(object_id);
     cout << endl;
     cout << "Current vertex:\n";
-    V *v_ptr = objects[object_id].GetV(vv);
+    V *v_ptr = o_ptr->GetV(vv);
+    //V *v_ptr = objects[object_id].GetV(vv);
     v_ptr->print(object_id);
     delete v_ptr;
     cout << endl << endl;
     exit(0);
   }
+  //double fifthtime = getTime();
+  //cout << "F::getNewEdge: " << "delt4 = " << fifthtime-fourthtime << endl; cout.flush();
   for(int i=0;i<3;i++)
   {
     if(triplet[i]!=old)
     {
-      E *e_ptr = objects[object_id].GetE(triplet[i]);
+      E *e_ptr = o_ptr->GetE(triplet[i]);
+      //E *e_ptr = objects[object_id].GetE(triplet[i]);
       key a = e_ptr->get_v1();
       key b = e_ptr->get_v2();
       delete e_ptr;
       if(a==vv || b==vv)
       {
+        //cout << "F::getNewEdge: " << "delt5 = " 
+        //      << getTime()-fifthtime << endl; cout.flush();
         return triplet[i];
       }
     }
@@ -2427,12 +2784,14 @@ key F::getNewEdge(key object_id,key old,key vv)
   cout << "\n\nFace::getNewEdge: Error. No edge on face contains current vertex \n"
         << "and is different from old vertex.\n\n";
   cout << "current vertex:\n";
-  V *v_ptr = objects[object_id].GetV(vv);
+  V *v_ptr = o_ptr->GetV(vv);
+  //V *v_ptr = objects[object_id].GetV(vv);
   v_ptr->print(object_id);
   delete v_ptr;
   cout << endl << endl;
   cout << "old edge:\n";
-  E *e_ptr = objects[object_id].GetE(old);
+  E *e_ptr = o_ptr->GetE(old);
+  //E *e_ptr = objects[object_id].GetE(old);
   e_ptr->print(object_id);
   delete e_ptr;
   cout << endl << endl;
@@ -2442,20 +2801,22 @@ key F::getNewEdge(key object_id,key old,key vv)
   exit(0);
 }
 
-key E::getNewFace(key object_id,key old)
+key E::getNewFace(key object_id,key old_face,key v)
 {
   // return the adjacent face that is
   // different from old adjacent face
-  if(old!=get_f1() && old!=get_f2()){
+  if(old_face!=get_f1(v) && old_face!=get_f2(v)){
     cout << "Error. Neither edge adjacent face matches old face.\n";
     exit(0);
   }
-  if(old==get_f1()){return get_f2();}
-  else {return get_f1();}
+  if(old_face==get_f1(v)){return get_f2(v);}
+  else {return get_f1(v);}
 }
 
 bool V::scanAdjFaces(key object_id,key se,key sf,bool &nonman)
 {
+  //double starttime = getTime();
+  Object* o_ptr = &objects[object_id];
   // collect touched edges
   std::vector<key> te;
   te.push_back(se);
@@ -2463,10 +2824,12 @@ bool V::scanAdjFaces(key object_id,key se,key sf,bool &nonman)
   std::vector<key> tf;
   tf.push_back(sf);
   // get new edge
-  F* sf_ptr = objects[object_id].GetF(sf);
+  o_ptr->f.assign(sf);
+  F* sf_ptr = &o_ptr->f;
+  //double zerothtime = getTime();
   se=sf_ptr->getNewEdge(object_id,se,get_rel_key(object_id));
-  delete sf_ptr;
-  E* se_ptr = objects[object_id].GetE(se);
+  //double firsttime = getTime();
+  E* se_ptr = o_ptr->GetE(se);
   bool man = se_ptr->isManifold(object_id);
   delete se_ptr;
   // if new edge is not manifold
@@ -2477,25 +2840,37 @@ bool V::scanAdjFaces(key object_id,key se,key sf,bool &nonman)
     nonman=true;
     return false;
   }
+  //double secondtime = getTime();
+  //double thirdtime = secondtime, fourthtime=secondtime, fifthtime=secondtime;
+  //double sixthtime=secondtime, seventhtime=secondtime, eighthtime=secondtime;
+  //double ninethtime=secondtime, tenthtime=secondtime;
+  //double inner1=0, inner2=0, inner3=0, inner4=0, inner5=0, inner6=0, inner7=0;
   // while new edge has not already been touched
   while(find(te.begin(),te.end(),se)==te.end())
   {
+    //thirdtime = getTime();
     // keep new edge
     te.push_back(se);
     // get new face
-    se_ptr = objects[object_id].GetE(se);
-    sf=se_ptr->getNewFace(object_id,sf);
+    se_ptr = o_ptr->GetE(se);
+    //fourthtime = getTime();
+    sf=se_ptr->getNewFace(object_id,sf,get_rel_key(object_id));
+    //fifthtime = getTime();
     delete se_ptr;
     if (sf<0) {break;}
     // keep new face
     tf.push_back(sf);
     // get new edge
-    sf_ptr = objects[object_id].GetF(sf);
+    o_ptr->f.assign(sf);
+    sf_ptr = &o_ptr->f;
+    //sixthtime = getTime();
     se=sf_ptr->getNewEdge(object_id,se,get_rel_key(object_id));
-    delete sf_ptr;
+    //seventhtime = getTime();
     // if new edge is not manifold
-    se_ptr = objects[object_id].GetE(se);
+    se_ptr = o_ptr->GetE(se);
+    //eighthtime = getTime();
     bool man = se_ptr->isManifold(object_id);
+    //ninethtime = getTime();
     delete se_ptr;
     if(man==false)
     {
@@ -2504,23 +2879,66 @@ bool V::scanAdjFaces(key object_id,key se,key sf,bool &nonman)
       nonman=true;
       return false;
     }
+    //tenthtime = getTime();
+    //inner1+=fourthtime-thirdtime;
+    //inner2+=fifthtime-fourthtime;
+    //inner3+=sixthtime-fifthtime;
+    //inner4+=seventhtime-sixthtime;
+    //inner5+=eighthtime-seventhtime;
+    //inner6+=ninethtime-eighthtime;
+    //inner7+=tenthtime-ninethtime;
   }
+  //double eleventhtime = getTime();
   // if number of touched faces != number of vertex adjacent faces
-  VE* ve_ptr = objects[object_id].GetVE(get_rel_key(object_id));
-  bool a = (tf.size()==ve_ptr->size());
-  delete ve_ptr;
+  o_ptr->ve.assign(get_rel_key(object_id));
+  bool a = (tf.size()==o_ptr->ve.size());
+  /*cout << "\nV::scanAdjFaces: "
+        << "delt0 = " << zerothtime-starttime
+        << "delt1 = " << firsttime-zerothtime
+        << "delt2 = " << secondtime-firsttime
+        << ", whileouter = " << eleventhtime-secondtime
+        << ", inner1 = " << inner1
+        << ", inner2 = " << inner2
+        << ", inner3 = " << inner3
+        << ", inner4 = " << inner4
+        << ", inner5 = " << inner5
+        << ", inner6 = " << inner6
+        << ", inner7 = " << inner7
+        << endl;
+        */
   return a;
 }
 
 bool V::isManifold(key object_id,bool flag)
 {
+  //cout << "\nV:isManifold: starting\n"; cout.flush();
+  //print(object_id);
+  //printAdjacent(object_id);
+  //cout << "\n\n"; cout.flush();
+  //ObjectData* aa = &object_vector[object_id];
+  Object* o_ptr = &objects[object_id];
   // try to "walk" around vertex adjacent faces
   // using adjacent face edges
   // if an edge is nonmanifold then abort mission
   // stop when the walk returns to starting adjacent face
 
   std::vector<key> e; // relative edge indices
+  //double firsttime = getTime();
   getAdjacentEdges(object_id,e);
+  //double secondtime = getTime();
+  //cout << "V::isManifold: delt = " << secondtime-firsttime << endl;
+  //cout.flush();
+  // DEBUG
+  //for(std::vector<key>::iterator i=e.begin();i!=e.end();i++)
+  //{
+  //  E* e_ptr = objects[object_id].GetE(*i);
+  //  e_ptr->print(object_id);
+  //  delete e_ptr;
+  //}
+  // DEBUG
+  //cout << "bbb"; cout.flush();
+  //ObjectData* bb = &object_vector[object_id];
+  //cout << "ccc"; cout.flush();
   if(e.empty()==true){
     cout << "\n\nVertex::isManifold: Error."
           << " Vertex was not an 'orphan', but has no edges.\n";
@@ -2530,21 +2948,42 @@ bool V::isManifold(key object_id,bool flag)
     exit(0);
   }
   // grab starting edge
-  E* se = objects[object_id].GetE(e.front());
+  //E* se = objects[object_id].GetE(e.front());
+  E* se = o_ptr->GetE(e.front());
   key cw=-2,ccw=-2;
   // if edge is manifold
+  //double thirdtime = getTime();
   if(se->isManifold(object_id)==true)
   {
+    // DEBUG
+    //cout << "\n\nstarting edge is manifold:\n";cout.flush();
+    //se->print(object_id);
+    //cout << "\n";cout.flush();
+    // DEBUG
     // grab starting face from edge
     // cw face should be clockwise from starting edge
     // relative to current vertex
     //
     // analyze f1
-    F *f_ptr = objects[object_id].GetF(se->get_f1());
+    //F *f_ptr = objects[object_id].GetF(se->get_f1());
+    //objects[object_id].f.assign(se->get_f1());
+    cw = se->get_f1(get_rel_key(object_id));
+    ccw = se->get_f2(get_rel_key(object_id));
+    // DEBUG
+    //cout << "\ncw face key = " << cw
+    //      << ", ccw face key = " << ccw << endl;
+    //cout.flush();
+    //o_ptr->f.assign(se->get_f1(get_rel_key(object_id)));
+    //F *f_ptr = &o_ptr->f;
+    //f_ptr->print(object_id);
+    //cout << "\n";cout.flush();
+    // DEBUG
+    /*
+    //F *f_ptr = &objects[object_id].f;
     key triplet[3] = {f_ptr->get_v1_rel(),
                       f_ptr->get_v2_rel(),
                       f_ptr->get_v3_rel()};
-    delete f_ptr;
+    //delete f_ptr;
     key e1 = se->get_v1();
     key e2 = se->get_v2();
     key a=-2,b=-2;
@@ -2556,6 +2995,7 @@ bool V::isManifold(key object_id,bool flag)
     else if(triplet[1]==e2) b=1;
     else if(triplet[2]==e2) b=2;
     else {cout << "Error. What the 2?\n";exit(0);}
+    cout << "a = " << a << ", b = " << b << endl << endl;
     if(
        (a==0 && b==1) ||
        (a==1 && b==2) ||
@@ -2563,13 +3003,13 @@ bool V::isManifold(key object_id,bool flag)
     {
       if(triplet[a]==get_rel_key(object_id))
       {
-        ccw = se->get_f1();
-        cw = se->get_f2();
+        ccw = se->get_f1(get_rel_key(object_id));
+        cw = se->get_f2(get_rel_key(object_id));
       }
       else if(triplet[b]==get_rel_key(object_id))
       {
-        cw = se->get_f1();
-        ccw = se->get_f2();
+        cw = se->get_f1(get_rel_key(object_id));
+        ccw = se->get_f2(get_rel_key(object_id));
       }
       else
       {
@@ -2585,13 +3025,13 @@ bool V::isManifold(key object_id,bool flag)
     {
       if(triplet[b]==get_rel_key(object_id))
       {
-        ccw = se->get_f1();
-        cw = se->get_f2();
+        ccw = se->get_f1(get_rel_key(object_id));
+        cw = se->get_f2(get_rel_key(object_id));
       }
       else if(triplet[a]==get_rel_key(object_id))
       {
-        cw = se->get_f1();
-        ccw = se->get_f2();
+        cw = se->get_f1(get_rel_key(object_id));
+        ccw = se->get_f2(get_rel_key(object_id));
       }
       else
       {
@@ -2604,6 +3044,7 @@ bool V::isManifold(key object_id,bool flag)
     {
       cout << "\nSomething weird happened.\n";exit(0);
     }
+    */
   }
   else
   {
@@ -2615,26 +3056,61 @@ bool V::isManifold(key object_id,bool flag)
     // TODO: report number of vertices for which manifoldness
     // was not determined and alert user
   }
+  //ObjectData* cc = &object_vector[object_id];
+  //cout << "ddd"; cout.flush();
 
   // try clockwise
-  F *sf= objects[object_id].GetF(cw); // cw=relative
+  //objects[object_id].f.assign(cw); // cw=relative
+  o_ptr->f.assign(cw); // cw=relative
+  //F *sf=&objects[object_id].f; // cw=relative
+  F *sf=&o_ptr->f; // cw=relative
   bool nonman=false;
+  //cout << "eee"; cout.flush();
+  //ObjectData* dd = &object_vector[object_id];
+  //cout << "fff"; cout.flush();
   // if fail i.e. not all adjacent faces touched
+  //double fourthtime = getTime();
+  //double fifthtime = fourthtime, sixthtime = fourthtime, seventhtime = fourthtime;
+  //double eighthtime = fourthtime, ninethtime = fourthtime, tenthtime = fourthtime;
   if(scanAdjFaces(object_id,se->get_rel_key(object_id),sf->get_rel_key(object_id),nonman)==false){
+    //cout << "ggg"; cout.flush();
+    //ObjectData* ee = &object_vector[object_id];
+    //cout << "hhh"; cout.flush();
     // if nonmanifold edge found, then bail
+    //fifthtime = getTime();
     if(nonman==true){return flag;}
     // if ccw face was set
     if((ccw<0)==false)
     {
+      //cout << "iii"; cout.flush();
+      //ObjectData* ff = &object_vector[object_id];
+      //cout << "jjj"; cout.flush();
       // try counter-clockwise
-      sf=objects[object_id].GetF(ccw); // ccw=relative
+      //objects[object_id].f.assign(ccw); // ccw=relative
+      o_ptr->f.assign(ccw); // ccw=relative
+      sf=&o_ptr->f; // ccw=relative
+      //sf=&objects[object_id].f; // ccw=relative
       // if fail i.e. all adjacent faces still not touched
+      //cout << "kkk"; cout.flush();
+      //ObjectData* gg = &object_vector[object_id];
+      //cout << "lll"; cout.flush();
+      //sixthtime = getTime();
       if(scanAdjFaces(object_id,se->get_rel_key(object_id),sf->get_rel_key(object_id),nonman)==false)
       {
+        //cout << "\n\nvertex is NOT manifold. Are you sure?\n\n";cout.flush();exit(0);
+        //cout << "mmm"; cout.flush();
+        //ObjectData* hh = &object_vector[object_id];
+        //cout << "nnn"; cout.flush();
         // record offending vertex
+        //seventhtime = getTime();
         nonman_v.push_back(get_rel_key(object_id));
         flag=false;
+        //eighthtime = getTime();
+        //cout << "ooo"; cout.flush();
+        //ObjectData* ii = &object_vector[object_id];
+        //cout << "ppp"; cout.flush();
       }
+      //ninethtime = getTime();
     }
     else
     {
@@ -2642,40 +3118,92 @@ bool V::isManifold(key object_id,bool flag)
       nonman_v.push_back((get_rel_key(object_id)));
       flag=false;
     }
+    //tenthtime = getTime();
   } // else all adjacent faces touched
-  delete sf;
+  //double eleventhtime = getTime();
+  //cout << "qqq"; cout.flush();
+  //ObjectData* jj = &object_vector[object_id];
+  //cout << "rrr\n"; cout.flush();
+  //cout << "V:isManifold: finished\n"; cout.flush();
+  //delete sf;
   delete se;
+  /*cout << "V::isManifold: "
+        << "delt1 = " << secondtime-firsttime
+        << ", delt2 = " << thirdtime-secondtime
+        << ", delt3 = " << fourthtime-thirdtime
+        << ", outerif = " << eleventhtime-fourthtime
+        << ", outerifbody = " << tenthtime-fifthtime
+        << ", innerif = " << ninethtime-sixthtime
+        << ", innerifbody = " << eighthtime-seventhtime
+        << endl;
+  cout.flush();
+  */
   return flag;
 }
 
 bool Object::verticesManifold(bool flag)
 {
+  cout << "\nObject::verticesManifold starting\n";
+  cout.flush();
   ///// if vertices are manifold /////
   ////// confirm that all adjacent faces /////
   ///// are consecutively reachable by edge hops /////
 
   // for each vertex in object
-  int num=object_vector[object_id].v_end
-        -object_vector[object_id].v_start+1;
+  //int num=object_vector[object_id].v_end
+  //      -object_vector[object_id].v_start+1;
+  int num=cov[object_id].v_end
+        -cov[object_id].v_start+1;
   for(int i=0;i<num;i++) // relative
   {
-    V* v_ptr = objects[object_id].GetV(i);
+    //double firsttime = getTime();
+    //V* v_ptr = objects[object_id].GetV(i);
+    //cout << "aaa"; cout.flush();
+    Object* o_ptr = &objects[object_id];
+    //cout << "zzz"; cout.flush();
+    //cout << "object name="<<o_ptr->GetName()<<endl;cout.flush();
+    V* v_ptr = o_ptr->GetV(i);
+    //cout << "bbb"; cout.flush();
     // if vertex is not an orphan
     sk j = orphan.find(v_ptr->get_rel_key(object_id));
+    //ObjectData* vv = &object_vector[object_id];
+    //cout << "ccc"; cout.flush();
+    //double secondtime = getTime();
+    //double thirdtime=secondtime,fourthtime=secondtime;
     if(j==orphan.end())
     {
+      //double thirdtime = getTime();
+      //ObjectData* zz = &object_vector[object_id];
+      //cout << "ddd"; cout.flush();
       flag = v_ptr->isManifold(object_id,flag);
+      //cout << "DDD"; cout.flush();
+      //ObjectData* tt = &object_vector[object_id];
+      //double fourthtime = getTime();
+      //cout << "Object::verticesManifold: vertex " << i << " of " << num
+      //      <<", delt = " << fourthtime-thirdtime << endl << endl << endl;
+      //cout.flush();
     }
+    //cout << "eee"; cout.flush();
+    //ObjectData* qq = &object_vector[object_id];
     delete v_ptr;
+    //cout << "fff"; cout.flush();
+    //ObjectData* pp = &object_vector[object_id];
+    //cout << "ggg\n"; cout.flush();
   }
+  cout << "\nObject::verticesManifold finished\n";
+  cout.flush();
   return flag;
 }
 
 bool Object::edgesManifold(bool flag)
 {
+  cout << "\nObject::edgesManifold starting\n";
+  cout.flush();
   // for each edge in object
-  int num=object_vector[object_id].e_end
-        -object_vector[object_id].e_start+1;
+  //int num=object_vector[object_id].e_end
+  //      -object_vector[object_id].e_start+1;
+  int num=cov[object_id].e_end
+        -cov[object_id].e_start+1;
   for(int i=0;i<num;i++) // relative
   {
     E* e_ptr = objects[object_id].GetE(i);
@@ -2687,6 +3215,8 @@ bool Object::edgesManifold(bool flag)
     }
     delete e_ptr;
   }
+  cout << "\nObject::edgesManifold finished\n";
+  cout.flush();
   return flag;
 }
 
@@ -2699,11 +3229,13 @@ bool Object::isManifold(void)
 bool E::getOrientation(key fid,key object_id)
 {
   // gather f1 vertices
-  F *f_ptr = objects[object_id].GetF(fid);
+  //F *f_ptr = objects[object_id].GetF(fid);
+  objects[object_id].f.assign(fid);
+  F *f_ptr = &objects[object_id].f;
   key f[3] = {f_ptr->get_v1_rel(),
     f_ptr->get_v2_rel(),
     f_ptr->get_v3_rel()};
-  delete f_ptr;
+  //delete f_ptr;
   key v1 = get_v1();
   key v2 = get_v2();
   if((f[0]==v1 && f[1]==v2) ||
@@ -2718,10 +3250,10 @@ bool E::getOrientation(key fid,key object_id)
 bool E::isConsistent(key object_id)
 {
   // border edge
-  if(get_f2()<0) { return true; }
+  if(get_f2(get_v1())<0) { return true; }
   // not border
-  bool a = getOrientation(get_f1(),object_id);
-  bool b = getOrientation(get_f2(),object_id);
+  bool a = getOrientation(get_f1(get_v1()),object_id);
+  bool b = getOrientation(get_f2(get_v1()),object_id);
   if(a==b){ return false; }
   else {return true;}
 }
@@ -2885,20 +3417,28 @@ struct SortByRndVec // comparison function
 
 void Object::vertexDistin(void)
 {
+  cout << "\nObject::vertexDistin: aaa"; cout.flush();
   ///// check vertex distinguishability /////
   vec_key verts;
   key start = object_vector[object_id].v_start;
   key finish = object_vector[object_id].v_end;
   for(key i=start;i<finish+1;i++) { verts.push_back(i); }
+  cout << "bbb"; cout.flush();
   // bound the main memory consumption by M
   // during sorting
   const unsigned M = 1024*1024*1024; // bytes
   // sort records by callers number
   stxxl::sort(verts.begin(),verts.end(),SortByRndVec(),M);
+  cout << "ccc\n"; cout.flush();
   // for each vector element
   vk j;
+  // DEBUG
+  key num = finish-start+1;
+  int k=1;
+  // DEBUG
   for(vk i=verts.begin();i!=verts.end();i++)
   {
+    //cout << "Object::vertexDistin: "<<k++<<" of "<<num<<endl;cout.flush();
     j=i;j++;
     if(j!=verts.end())
     {
@@ -2912,6 +3452,7 @@ void Object::vertexDistin(void)
       }
     }
   }
+  cout << "Object::vertexDistin: finish\n"; cout.flush();
 }
 
 void Container::vertexAdjacentFaces()
@@ -2924,9 +3465,11 @@ void Container::vertexAdjacentFaces()
         -object_vector[object_id].v_start+1;
   for(int i=0;i<num;i++) // relative
   {
-    VE* ve_ptr = objects[object_id].GetVE(i);
-    int n=static_cast<int>(ve_ptr->size());
-    delete ve_ptr;
+    //VE* ve_ptr = objects[object_id].GetVE(i);
+    objects[object_id].ve.assign(i);
+    //int n=static_cast<int>(ve_ptr->size());
+    int n=static_cast<int>(objects[object_id].ve.size());
+    //delete ve_ptr;
     // analyze vertex adjacent faces
     adjacent_face.x.push_back(n);
   }
@@ -3185,11 +3728,13 @@ void Container::areaAspectRatio()
   for(int i=0;i<num;i++) // relative
   {
     // compute face normal vector
-    F* f_ptr = objects[object_id].GetF(i);
+    //F* f_ptr = objects[object_id].GetF(i);
+    objects[object_id].f.assign(i);
+    F* f_ptr = &objects[object_id].f;
     double n[3];
     f_ptr->getNormal(object_id,n);
     double ar = f_ptr->getAspectRatio(object_id);
-    delete f_ptr;
+    //delete f_ptr;
     // compute face area = half normal vector length
     double aa=sqrt(dot(n,n))/2.0;
     ///// face area /////
@@ -3254,14 +3799,20 @@ void Container::processEdgeLengths()
 double E::getAngle(key object_id)
 {
   // get outward normals of edge faces
-  F* f1_ptr = objects[object_id].GetF(get_f1());
-  F* f2_ptr = objects[object_id].GetF(get_f2());
+  //F* f1_ptr = objects[object_id].GetF(get_f1());
+  F* f1_ptr = objects[object_id].GetF(get_f1(get_v1()));
+  //objects[object_id].f.assign(get_f1(get_v1()));
+  //F* f1_ptr = &objects[object_id].f;
+  //F* f2_ptr = objects[object_id].GetF(get_f2());
+  F* f2_ptr = objects[object_id].GetF(get_f2(get_v1()));
+  //objects[object_id].f.assign(get_f2(get_v1()));
+  //F* f2_ptr = &objects[object_id].f;
   key o2 = f2_ptr->get_o(get_v1(),get_v2());
   double n1[3],n2[3];
   f1_ptr->getNormal(object_id,n1);
   f2_ptr->getNormal(object_id,n2);
-  delete f1_ptr;
-  delete f2_ptr;
+  //delete f1_ptr;
+  //delete f2_ptr;
   // compute the cosine of angle between normals
   double normal_angle_cosine = dot(n1,n2)/sqrt(dot(n1,n1))/sqrt(dot(n2,n2));
   if(normal_angle_cosine >= 1) { return PI; }
@@ -3278,6 +3829,7 @@ double E::getAngle(key object_id)
   // dot product of refvec and n1
   double d = dot(refvec,n1);
   if(d==0.0) { return PI; }
+  //cout << "this one is legit:";
   return PI+d/fabs(d)*acos(normal_angle_cosine);
   // I EXPECT 0 <= angle < 2*PI
 }
@@ -3294,9 +3846,13 @@ void Container::computeEdgeAngles()
     // look for edge in nonmanifold vector
     if(std::find(nonman_e.begin(),nonman_e.end(),i)==nonman_e.end())
     {
-      if((e_ptr->get_f2()<0)==false)
+      if((e_ptr->get_f2(e_ptr->get_v1())<0)==false)
       {
         double angle = e_ptr->getAngle(object_id)*180/PI; // degrees
+        // DEBUG
+        //cout.precision(12);
+        //cout << angle << endl;
+        // DEBUG
         edge_angle.x.push_back(angle);
       }
     }
@@ -3314,7 +3870,9 @@ void Object::computeVolume()
         -object_vector[object_id].f_start+1;
   for(int i=0;i<num;i++) // relative
   {
-    F* f_ptr = GetF(i);
+    //F* f_ptr = GetF(i);
+    f.assign(i);
+    F* f_ptr = &f;
     V *v1_ptr = GetV(f_ptr->get_v1_rel());
     V *v2_ptr = GetV(f_ptr->get_v2_rel());
     V *v3_ptr = GetV(f_ptr->get_v3_rel());
@@ -3327,7 +3885,7 @@ void Object::computeVolume()
     double x3=v3_ptr->get_x();
     double y3=v3_ptr->get_y();
     double z3=v3_ptr->get_z();
-    delete f_ptr;
+    //delete f_ptr;
     delete v1_ptr;
     delete v2_ptr;
     delete v3_ptr;
@@ -3965,7 +4523,8 @@ void Object::printAttr(Container &c)
         int j=1;
         cout << "    mesh is manifold: # nonmanifold vertices - " << nonman_v.size() << endl;
         // for each nonmanifold vertex
-        for(vk i=nonman_v.begin();i!=nonman_v.end();i++){
+        //for(vk i=nonman_v.begin();i!=nonman_v.end();i++){
+        for(new_vk2 i=nonman_v.begin();i!=nonman_v.end();i++){
           cout << "    mesh is manifold: nonmanifold vertex # " << j++ << endl;
           V *v_ptr = objects[object_id].GetV(*i);
           if(strcmp(style,"cp")==false)
@@ -3988,7 +4547,8 @@ void Object::printAttr(Container &c)
         int j=1;
         cout << "    mesh is manifold: # nonmanifold edges - " << nonman_e.size() << endl;
         // for each nonmanifold edge
-        for(vk i=nonman_e.begin();i!=nonman_e.end();i++){
+        //for(vk i=nonman_e.begin();i!=nonman_e.end();i++){
+        for(new_vk i=nonman_e.begin();i!=nonman_e.end();i++){
           cout << "    mesh is manifold: nonmanifold edge # " << j++ << endl;
           E *e_ptr = objects[object_id].GetE(*i);
           if(strcmp(style,"cp")==false)
@@ -4468,6 +5028,7 @@ int main(int argc,char **argv)
       if(checkIntegrity())
       {
         o->findVertexAdjacencies(c);
+        //exit(0);
         createEdges(c);
         o->analyze(c);
       }

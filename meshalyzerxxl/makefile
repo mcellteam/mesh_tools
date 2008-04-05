@@ -1,7 +1,9 @@
 meshalyzerxxl: meshalyzerxxl.o
-	g++ meshalyzerxxl.o -o meshalyzerxxl $(STXXL_LINKER_OPTIONS) # -p
+#	g++ meshalyzerxxl.o -o meshalyzerxxl $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib -lprofiler -ltcmalloc
+#	g++ meshalyzerxxl.o -o meshalyzerxxl $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib
+	g++ meshalyzerxxl.o -o meshalyzerxxl64-node56 $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib
 
-meshalyzerxxl.o: meshalyzerxxl.cc
+meshalyzerxxl.o: meshalyzerxxl.cc makefile
 	g++ -c meshalyzerxxl.cc $(STXXL_COMPILER_OPTIONS)
 
 # This -*- Makefile -*- is intended for processing with GNU make.
@@ -18,8 +20,8 @@ USE_LINUX	?= yes	# set 'yes' if you run Linux, 'no' otherwise
 USE_MCSTL	?= no	# will be overriden from main Makefile
 USE_ICPC	?= no	# will be overriden from main Makefile
 
-#STXXL_ROOT	?= $(HOME)/work/stxxl
-STXXL_ROOT	?= $(HOME)/lib/stxxl-1.1.0
+#STXXL_ROOT	?= $(HOME)/lib/stxxl-1.1.0
+STXXL_ROOT	?= $(HOME)/lib/stxxl-1.1.0-64bit
 
 ifeq ($(strip $(USE_ICPC)),yes)
 COMPILER	?= icpc
@@ -48,10 +50,12 @@ LINKER		?= $(COMPILER)
 OPT		?= -O3 # compiler optimization level
 WARNINGS	?= -Wall
 #DEBUG		?= # put here -g option to include the debug information into the binaries
-#DEBUG		?= -g -p # put here -g option to include the debug information into the binaries
-DEBUG		?= -g # put here -g option to include the debug information into the binaries
+DEBUG		?= -g -m64# put here -g option to include the debug information into the binaries
+#DEBUG		?= -g # put here -g option to include the debug information into the binaries
+STXXL_LINKER_OPTIONS = -m64
 
-LIBNAME		?= stxxl
+#LIBNAME		?= stxxl
+LIBNAME		?= stxxl64
 
 
 #### TROUBLESHOOTING

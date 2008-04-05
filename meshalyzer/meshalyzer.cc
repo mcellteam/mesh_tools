@@ -18,6 +18,7 @@
 using std::map;
 using std::vector;
 using std::cout;
+using std::cerr;
 using std::endl;
 using std::left;
 using std::set;
@@ -105,6 +106,9 @@ int main(int argc,char **argv){
 	"       -q\n"+
 	"              Same as '-p' option, but prints vertex information\n"+
 	"              in dreamm custom points format.\n"+
+	"       -v\n"+
+	"              If folder passed as argument, then only print total\n"+
+	"              set volume and nothing else.\n"+
 	"\nJustin Kinney				2007/10/01\n";
 
 	// instantiate controls class
@@ -184,7 +188,7 @@ int main(int argc,char **argv){
 					cs.good_integrity=false;
 				}
 				// print stats
-				obj->print(cs);
+				if(cs.vol==false){obj->print(cs);}
 				// if no request for inter-object
 				// face intersection detection
 					if(cs.interf==false){
@@ -199,7 +203,8 @@ int main(int argc,char **argv){
 //		cs.analyzeCumulative(c);
 		cs.analyzeCumulative();
 		// print cumulative surface area, volume, 
-		cs.printCumulative(c);
+		if(cs.vol==false){cs.printCumulative(c);}
+                else {cout << c.countVol() << endl;}
 		// detect intersecting faces between objects
 		if(cs.interf==true){
 			// partition space

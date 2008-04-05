@@ -2265,7 +2265,7 @@ void Container::updateFile(const int group,bool flag,double tim) {
     Cfile.width(19);
     Cfile << left << min_edge_angle*180.0/PI;
     Cfile.width(13);
-	Cfile.precision(1);
+	Cfile.precision(4);
     Cfile << left << tim << endl;
 	Cfile.flush();
 	cout << "complete.\n";
@@ -2674,9 +2674,9 @@ void Container::buildMeshAfter(const int group) {
 		// create output filename
 		char file[FILENAME_SIZE];
 		if (APPEND_ITERATION_NUMBER_TO_MESH) {
-			sprintf(file,"%s%s_%s_%i.mesh",OUTPUT_DATA_DIR.c_str(),(*i)->name.c_str(),OUTPUT_SUFFIX,group);
+			sprintf(file,"%s%s%s_%i.mesh",OUTPUT_DATA_DIR.c_str(),(*i)->name.c_str(),OUTPUT_SUFFIX,group);
 		} else {
-			sprintf(file,"%s%s_%s.mesh",OUTPUT_DATA_DIR.c_str(),(*i)->name.c_str(),OUTPUT_SUFFIX);
+			sprintf(file,"%s%s%s.mesh",OUTPUT_DATA_DIR.c_str(),(*i)->name.c_str(),OUTPUT_SUFFIX);
 		}
 		// open output file
 		std::ofstream newfile;

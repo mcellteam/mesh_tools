@@ -61,7 +61,7 @@ bool APPEND_ITERATION_NUMBER_TO_MESH = false;
 // set to false to use a generic dat filename and write over existing dat file
 // e.g. if true, then use 'filename_1.dat'
 //		else if false, then use 'filename.dat'
-bool APPEND_ITERATION_NUMBER_TO_DISTANCES = true;
+bool APPEND_ITERATION_NUMBER_TO_DISTANCES = false;
 
 // set to true to prevent any new intersections of faces
 // set to false to allow new intersecting faces
@@ -110,7 +110,7 @@ bool MOVE_NONNICE_AND_INTERSECTED_FIRST = false;
 #define DOUBLE_EPSILON	  		1E-10
 
 // subdivide space into cubes with sides of SPACE_LENGTH in size
-#define SPACE_LENGTH	80 // nm
+#define SPACE_LENGTH	20 // nm
 
 // When searching for closest surface point to a given vertex,
 // the subdivided space box of given vertex will be searched,
@@ -121,7 +121,7 @@ bool MOVE_NONNICE_AND_INTERSECTED_FIRST = false;
 //
 // choose such that NUM_ADJACENT_BOXES >= SEARCH_RADIUS/SPACE_LENGTH
 //#define NUM_ADJACENT_BOXES  1
-#define NUM_ADJACENT_BOXES  2
+#define NUM_ADJACENT_BOXES  8
 
 #define BIG_BOX 160 // NUM_ADJACENT_BOXES*SPACE_LENGTH nm
 
@@ -149,37 +149,21 @@ bool MOVE_NONNICE_AND_INTERSECTED_FIRST = false;
 #define CLOSEST_POINT_COSINE	0.70711
 
 // if USE_EDGE_REFERENCE_LENGTH == true
-// then compare edge lengths to EDGE_REFERENCE_LENGTH
+// then compare edge lengths to mean edge length in object
+// as computed during initialization.
 // else use original length of each edge
-bool USE_EDGE_REFERENCE_LENGTH = true;
-#define EDGE_REFERENCE_LENGTH	35 // nm
+bool USE_EDGE_REFERENCE_LENGTH = false;
+//#define EDGE_REFERENCE_LENGTH	35 // nm
 
 // Force Function Weights
 // Weights are normalized during the force calculation,
 // so all that matters is the ratio of the four weights.
 // ANGLE_STRETCH_WEIGHT is 5X to 10X weaker than the other forces
 
-// original weights
-//#define INTERSECTION_WEIGHT 	 0.1  // nN
-//#define EDGE_STRETCH_WEIGHT 	29.9  // nN/nm
-//#define SEPARATION_WEIGHT		60.0  // nN/nm
-//#define ANGLE_STRETCH_WEIGHT 	10.0  // nN
-#define INTERSECTION_WEIGHT 	 0.1  // nN
-#define EDGE_STRETCH_WEIGHT 	14.9  // nN/nm
-#define SEPARATION_WEIGHT	70.0  // nN/nm
-#define ANGLE_STRETCH_WEIGHT 	15.0  // nN
-//#define INTERSECTION_WEIGHT 	97.0  // nN
-//#define EDGE_STRETCH_WEIGHT 	 1.0  // nN/nm
-//#define SEPARATION_WEIGHT		 1.0  // nN/nm
-//#define ANGLE_STRETCH_WEIGHT 	 1.0  // nN
-//#define INTERSECTION_WEIGHT 	 0.1  // nN
-//#define EDGE_STRETCH_WEIGHT 	 0.1  // nN/nm
-//#define SEPARATION_WEIGHT		99.7  // nN/nm
-//#define ANGLE_STRETCH_WEIGHT     0.1  // nN
-//#define INTERSECTION_WEIGHT 	 0.1  // nN
-//#define EDGE_STRETCH_WEIGHT 	 0.9  // nN/nm
-//#define SEPARATION_WEIGHT		 1.0  // nN/nm
-//#define ANGLE_STRETCH_WEIGHT    98.0  // nN
+double INTERSECTION_WEIGHT  = 0.1;  // nN
+double EDGE_STRETCH_WEIGHT  = 9.9;  // nN/nm
+double SEPARATION_WEIGHT    = 10.0;  // nN/nm
+double ANGLE_STRETCH_WEIGHT = 80.0;  // nN
 // NOTE THESE MUST SUM TO 100!!!!!!!!!!!!!!!
 
 // The displacement of each vertex is equal to
@@ -195,16 +179,16 @@ bool USE_EDGE_REFERENCE_LENGTH = true;
 //#define GAIN_SCALE				1.0	// nN/(nm/s)
 
 // Number of groups of GROUP_SIZE vertex moves to execute.
-#define NUM_GROUPS	30
-//#define NUM_GROUPS	1
+#define NUM_GROUPS 30
+//#define NUM_GROUPS 1
 
 // size of vertex movie refractory period
 // i.e. the minimum number of steps between moves of the same vertex
 #define REFRACTORY_PERIOD 1000
 //#define REFRACTORY_PERIOD 10
 
-#define MAX_TOUCHES 20
-//#define MAX_TOUCHES 1
+//#define MAX_TOUCHES 20
+#define MAX_TOUCHES 5
 
 // energy epsilon used after each group to decide if max_gain is to be lowered
 // if ENERGY_WINDOW averaged energy on two consecutive iterations before group
@@ -228,6 +212,7 @@ bool USE_EDGE_REFERENCE_LENGTH = true;
 
 // number of vertex moves per group
 #define GROUP_SIZE 1e6
+//#define GROUP_SIZE 2e6
 //#define GROUP_SIZE 1e5
 //#define GROUP_SIZE 1e4
 //#define GROUP_SIZE 1e3
@@ -242,9 +227,10 @@ bool USE_EDGE_REFERENCE_LENGTH = true;
 
 // desired distance between object surfaces
 //#define TARGET_SEPARATION			0.5   // nm
-//#define TARGET_SEPARATION			9.5   // nm
-//#define TARGET_SEPARATION			19.5   // nm
-#define TARGET_SEPARATION			30   // nm
+//#define TARGET_SEPARATION			10   // nm
+double TARGET_SEPARATION  = 19.5;   // nm
+//#define TARGET_SEPARATION			41   // nm
+//#define TARGET_SEPARATION			32   // nm
 #define LOOP_TARGET_SEPARATION	50.0   // nm
 //
 //#define TARGET_SEPARATION			50.5   // nm
@@ -259,8 +245,8 @@ bool USE_EDGE_REFERENCE_LENGTH = true;
 // i.e. if (disp>MAX_ACTUAL_DISPL_SQ)
 //      then disp=MAX_ACTUAL_DISPL_SQ
 //#define MAX_ACTUAL_DISPL_SQ		9	// nm*nm
-#define MAX_ACTUAL_DISPL_SQ		2500	// nm*nm
-//#define MAX_ACTUAL_DISPL_SQ		36	// nm*nm
+//#define MAX_ACTUAL_DISPL_SQ		2500	// nm*nm
+#define MAX_ACTUAL_DISPL_SQ		100	// nm*nm
 
 // maximum allowed runtime in seconds
 #define MAX_RUNTIME  561600  // 6.5 days
@@ -280,7 +266,8 @@ bool USE_EDGE_REFERENCE_LENGTH = true;
 //#define OUTPUT_DATA_DIR	"/tmp/paper2/80nm/output/"
 //#define OUTPUT_DATA_DIR	"/tmp/paper3/20_equal_edges/edge_5_sep_90_angle_5_equal_edges/"
 
-#define OUTPUT_SUFFIX			"MORPHED"
+//#define OUTPUT_SUFFIX			"_MORPHED"
+#define OUTPUT_SUFFIX			""
 #define MAIN_LOG_FILE			"main.log"
 #define SPACE_LOG_FILE			"space.log"
 #define CONT_LOG_FILE			"cont.log"

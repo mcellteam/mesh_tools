@@ -522,6 +522,9 @@ public:
 							// [2]=max edge angle threshold set
 							// [3]=min edge length threshold set
 							// [4]=max edge length threshold set
+    bool vol;				// true if '-v', false otherwise
+							// true=print set volume and nothing else
+							// false=do nothing special
 	// cumulative statistics
 	double bb[6];			// bounding box [xmin,ymin,zmin,xmax,ymax,zmax]
 	double wbb[6];			// bounding box [xmin,ymin,zmin,xmax,ymax,zmax]
@@ -555,7 +558,7 @@ Controls::Controls(void){
 	// command line arguments
 	inpath.clear();
 	outpath.clear();
-    folder=attr=print=interf=false;
+    folder=attr=print=interf=vol=false;
 	signal[0]=signal[1]=signal[2]=signal[3]=signal[4]=false;
     thresholds[0]=thresholds[1]=thresholds[2]=thresholds[3]=thresholds[4]=0.0;
 	// cumulative statistics

@@ -1,5 +1,5 @@
 command
-time env LD_PRELOAD=/home/jed/install/lib/libtcmalloc.so meshmorph
+must use setenv LD_LIBRARY_PATH ~/install/googleperf64/lib/
 
 Assumptions
 1. The surface mesh has triangular faces.
