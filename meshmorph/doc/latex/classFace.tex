@@ -1,0 +1,260 @@
+\section{Face Class Reference}
+\label{classFace}\index{Face@{Face}}
+{\tt \#include $<$face.h$>$}
+
+Collaboration diagram for Face:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classFace__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Face} \& {\bf operator=} ({\bf Face} const \&)
+\item 
+{\bf Face} (int const \&, int const \&, int const \&, int const \&, {\bf vec\_\-vp} \&)
+\item 
+{\bf Face} ({\bf Face} const \&)
+\item 
+bool {\bf is\-Match} (int i, std::string const \&name) const
+\item 
+void {\bf print} (std::ostream \&) const
+\item 
+void {\bf print\-CP} (std::ostream \&) const
+\item 
+void {\bf add\-Edge} ({\bf Edge} $\ast$)
+\item 
+void {\bf get\-Bounding\-Box} ({\bf hxa7241\_\-graphics::Vector3r} \&lower, {\bf hxa7241\_\-graphics::Vector3r} \&upper) const
+\item 
+void {\bf get\-Vertex\-Coord} ({\bf vector3} const $\ast$\&, {\bf vector3} const $\ast$\&, {\bf vector3} const $\ast$\&) const
+\item 
+double {\bf get\-Angle} ({\bf Vertex} const $\ast$const v) const
+\item 
+double {\bf get\-Angle\-Proxy} ({\bf Vertex} const $\ast$const) const 
+\item 
+double {\bf get\-Aspect\-Ratio} ({\bf vector3} \&, {\bf Vertex} const $\ast$\&) const
+\item 
+double {\bf get\-Aspect\-Ratio\-Force\-Energy} ({\bf Vertex} const $\ast$const v, {\bf vector3} \&force, bool compute\_\-force) const 
+\item 
+void {\bf update\-Normal} (void)
+\item 
+bool {\bf get\-Flag} (void) const
+\item 
+void {\bf set\-Flag} (void)
+\item 
+void {\bf clear\-Flag} (void)
+\item 
+int {\bf get\-Index} (void) const
+\item 
+{\bf Edge} $\ast$ {\bf get\-Edge} (int const \&i)
+\item 
+{\bf Vertex} $\ast$ {\bf get\-Vertex} (int const \&i) const 
+\item 
+{\bf vector3} const $\ast$ {\bf get\-Normal} (void) const
+\item 
+double {\bf compute\-Area} (void)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Face@{Face}!Face@{Face}}
+\index{Face@{Face}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Face::Face (int const \& {\em in}, int const \& {\em v1}, int const \& {\em v2}, int const \& {\em v3}, {\bf vec\_\-vp} \& {\em vp})}\label{classFace_ab9295fd3031b7935fa26c8a6260b481}
+
+
+Creat instance of \doxyref{Face}{p.}{classFace} class. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em line}]Single line from input mesh file. \item[\mbox{$\leftarrow$} {\em vp}]Implicit mapping from vertex index to vertex pointer. \end{description}
+\end{Desc}
+\index{Face@{Face}!Face@{Face}}
+\index{Face@{Face}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Face::Face ({\bf Face} const \&)}\label{classFace_fb1843b8cdc5aaaa4875ea5550bc3493}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Face@{Face}!operator=@{operator=}}
+\index{operator=@{operator=}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Face} \& Face::operator= ({\bf Face} const \&)}\label{classFace_cd891436f2dc7977dbc6a49ce81209c4}
+
+
+\index{Face@{Face}!isMatch@{isMatch}}
+\index{isMatch@{isMatch}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Face::is\-Match (int {\em i}, std::string const \& {\em name}) const}\label{classFace_7273f790f7b5cb5a4bbcb26d5906b515}
+
+
+Compare input face index and object name to this face's index and object name.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em i}]Input face index. \item[\mbox{$\leftarrow$} {\em name}]Input face parent object name. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if indices and names match; false otherwise. \end{Desc}
+\index{Face@{Face}!print@{print}}
+\index{print@{print}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::print (std::ostream \& {\em target}) const}\label{classFace_9eb0f65300ecfc4382a562ce38af6bb7}
+
+
+Print identifying face information to output stream.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Face@{Face}!printCP@{printCP}}
+\index{printCP@{printCP}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::print\-CP (std::ostream \& {\em target}) const}\label{classFace_2065da4c85bd140413ad08526025e53d}
+
+
+Print to output stream the position of each vertex of this face in DREa\-MM custom points format.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Face@{Face}!addEdge@{addEdge}}
+\index{addEdge@{addEdge}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::add\-Edge ({\bf Edge} $\ast$ {\em ptr})}\label{classFace_2e1c36f943740d503af6af28400b5a1e}
+
+
+Add input edge pointer to this face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em ptr}]\doxyref{Edge}{p.}{classEdge} of interest. \end{description}
+\end{Desc}
+\index{Face@{Face}!getBoundingBox@{getBoundingBox}}
+\index{getBoundingBox@{getBoundingBox}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::get\-Bounding\-Box ({\bf hxa7241\_\-graphics::Vector3r} \& {\em lower}, {\bf hxa7241\_\-graphics::Vector3r} \& {\em upper}) const}\label{classFace_d72c67513d0cf94806d1d62b4e79033a}
+
+
+Calculate bounding box of this face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em lower}]Lower corner of bounding box of this face. \item[\mbox{$\rightarrow$} {\em upper}]Upper corner of bounding box of this face. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Limiting extent of face in ith direction. \end{Desc}
+\index{Face@{Face}!getVertexCoord@{getVertexCoord}}
+\index{getVertexCoord@{getVertexCoord}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::get\-Vertex\-Coord ({\bf vector3} const $\ast$\& {\em v0}, {\bf vector3} const $\ast$\& {\em v1}, {\bf vector3} const $\ast$\& {\em v2}) const}\label{classFace_0ff0c505774feeac45b4ed01c6bd4eb8}
+
+
+Get pointers to face vertex positions. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em v0}]Pointer to position of first vertex. \item[\mbox{$\rightarrow$} {\em v1}]Pointer to position of second vertex. \item[\mbox{$\rightarrow$} {\em v2}]Pointer to position of third vertex. \end{description}
+\end{Desc}
+\index{Face@{Face}!getAngle@{getAngle}}
+\index{getAngle@{getAngle}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Face::get\-Angle ({\bf Vertex} const $\ast$const  {\em v}) const}\label{classFace_df9ee7f383efc1a1135c3dd4b5531c37}
+
+
+\index{Face@{Face}!getAngleProxy@{getAngleProxy}}
+\index{getAngleProxy@{getAngleProxy}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Face::get\-Angle\-Proxy ({\bf Vertex} const $\ast$ const {\em vv}) const}\label{classFace_530452fc98f07048050bfca34a5ca469}
+
+
+Calculate and retun a ratio of face edge lengths that behaves similarly to interior face angle. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em vv}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Ratio of length of opposite edge to sum of adjacent edges to vertex of interest. \end{Desc}
+\index{Face@{Face}!getAspectRatio@{getAspectRatio}}
+\index{getAspectRatio@{getAspectRatio}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Face::get\-Aspect\-Ratio ({\bf vector3} \& {\em alt}, {\bf Vertex} const $\ast$\& {\em worst}) const}\label{classFace_a5e6b46c326d300d0e420ce24143be1d}
+
+
+Calculate and return aspect ratio of this face. \begin{Desc}
+\item[Returns:]\doxyref{Face}{p.}{classFace} aspect ratio as longest edge divided by perpendicular triangle height. \end{Desc}
+\index{Face@{Face}!getAspectRatioForceEnergy@{getAspectRatioForceEnergy}}
+\index{getAspectRatioForceEnergy@{getAspectRatioForceEnergy}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Face::get\-Aspect\-Ratio\-Force\-Energy ({\bf Vertex} const $\ast$const  {\em vv}, {\bf vector3} \& {\em force}, bool {\em compute\_\-force}) const}\label{classFace_56c867ff1a40d2421e715adfab398aa3}
+
+
+Compute and return the force vector and energy due to the aspect ratio of this face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\rightarrow$} {\em force}]Cumulative force. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true then compute force vector; otherwise compute energy only. \end{description}
+\end{Desc}
+\index{Face@{Face}!updateNormal@{updateNormal}}
+\index{updateNormal@{updateNormal}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::update\-Normal (void)}\label{classFace_fab8bab0149873704b6dc2bad0ceb1ed}
+
+
+Calculate and record face normal (not guaranteed to be unit vector). \index{Face@{Face}!getFlag@{getFlag}}
+\index{getFlag@{getFlag}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Face::get\-Flag (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classFace_d5a435045d47259da8a745b3b2f3866b}
+
+
+Get flag of this face. \begin{Desc}
+\item[Returns:]Flag value. \end{Desc}
+\index{Face@{Face}!setFlag@{setFlag}}
+\index{setFlag@{setFlag}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::set\-Flag (void)\hspace{0.3cm}{\tt  [inline]}}\label{classFace_f715c08998f029c39f9ab0e70071e91a}
+
+
+Set flag of this face to true. \index{Face@{Face}!clearFlag@{clearFlag}}
+\index{clearFlag@{clearFlag}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Face::clear\-Flag (void)\hspace{0.3cm}{\tt  [inline]}}\label{classFace_950a31e1f2dda519ae3a4023cfdc43b0}
+
+
+Reset flag of this face to false. \index{Face@{Face}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Face::get\-Index (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classFace_aa2388588d19089070f914f500f535ad}
+
+
+Get face index. \begin{Desc}
+\item[Returns:]The face index. \end{Desc}
+\index{Face@{Face}!getEdge@{getEdge}}
+\index{getEdge@{getEdge}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Edge}$\ast$ Face::get\-Edge (int const \& {\em i})\hspace{0.3cm}{\tt  [inline]}}\label{classFace_92fd27b43a9096ca1200dd9351a37cb7}
+
+
+Get one of edges of this face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em i}]\doxyref{Edge}{p.}{classEdge} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]The ith edge. \end{Desc}
+\index{Face@{Face}!getVertex@{getVertex}}
+\index{getVertex@{getVertex}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex}$\ast$ Face::get\-Vertex (int const \& {\em i}) const\hspace{0.3cm}{\tt  [inline]}}\label{classFace_139cf7aeff67ced45a85f404607ade56}
+
+
+Get pointer to face vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em i}]Index (0,1,2) of face vertex of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Pointer to vertex of this face. \end{Desc}
+\index{Face@{Face}!getNormal@{getNormal}}
+\index{getNormal@{getNormal}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} const$\ast$ Face::get\-Normal (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classFace_c4ab940f378cea25d89a9d4398e793ae}
+
+
+Return face normal (not guaranteed to be unit vector). \begin{Desc}
+\item[Returns:]\doxyref{Face}{p.}{classFace} normal. \end{Desc}
+\index{Face@{Face}!computeArea@{computeArea}}
+\index{computeArea@{computeArea}!Face@{Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Face::compute\-Area (void)\hspace{0.3cm}{\tt  [inline]}}\label{classFace_5f25dd4b4f5c8ec3423f95efa2d110f3}
+
+
+Calculate face area. \begin{Desc}
+\item[Returns:]\doxyref{Face}{p.}{classFace} area. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf face.h}\item 
+{\bf face.cc}\end{CompactItemize}

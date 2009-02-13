@@ -1,0 +1,379 @@
+\section{Intersecting\_\-Faces Class Reference}
+\label{classIntersecting__Faces}\index{Intersecting_Faces@{Intersecting\_\-Faces}}
+{\tt \#include $<$intersecting\_\-faces.h$>$}
+
+Collaboration diagram for Intersecting\_\-Faces:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=109pt]{classIntersecting__Faces__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf vec\_\-fp} $\ast$ {\bf get\-Intersecting\-Faces\-RHS} ({\bf Face} const $\ast$const)
+\item 
+int {\bf get\-Num\-Unique\-Verts} ({\bf Face} const $\ast$const, {\bf Face} const $\ast$const, int $\ast$const) const
+\item 
+int {\bf get\-Count\-Of\-Int\-Faces} (bool)
+\item 
+bool {\bf check\-Face\-Edge\-Int} ({\bf Face} const $\ast$const, {\bf Face} const $\ast$const) const
+\item 
+bool {\bf check\-Edge\-Edge\-Intersection} ({\bf Face} const $\ast$const, {\bf Face} const $\ast$const) const
+\item 
+bool {\bf faces\-Parallel} ({\bf Face} const $\ast$const, {\bf Face} const $\ast$const) const
+\item 
+bool {\bf faces\-Coplanar} ({\bf Face} const $\ast$const, {\bf Face} const $\ast$const) const
+\item 
+bool {\bf face\-Intersects\-Face} ({\bf Face} const $\ast$const haystack, {\bf Face} const $\ast$const needle)
+\item 
+bool {\bf face\-Is\-Intersected\-RHS} ({\bf Face} const $\ast$const) const
+\item 
+bool {\bf find\-And\-Record\-New\-Face\-Int} ({\bf Face} $\ast$const)
+\item 
+bool {\bf vert\-Adj\-Faces\-Have\-New\-Int} ({\bf Vertex} const $\ast$const)
+\item 
+bool {\bf check\-Face\-Face\-Ints} ({\bf Face} const $\ast$const, {\bf Face} const $\ast$const) const
+\item 
+bool {\bf detect\-New\-Face\-Ints} ({\bf Face} $\ast$const)
+\item 
+void {\bf get\-Nice\-Set} ({\bf v\_\-set} \&, {\bf hashset\_\-v} \&)
+\item 
+{\bf hashset\_\-v} {\bf get\-Nice\-Check\-Set} ({\bf Vertex} const $\ast$const)
+\item 
+void {\bf add\-Face\-To\-Face} ({\bf Face} $\ast$const, {\bf Face} const $\ast$const)
+\item 
+void {\bf remove\-Old\-Intersections} ({\bf Vertex} const $\ast$const, {\bf hashset\_\-v} \&)
+\item 
+void {\bf update\-New\-Intersections} ({\bf Vertex} const $\ast$const, {\bf hashset\_\-v} \&)
+\item 
+void {\bf find\-All\-Face\-Intersections} (void)
+\item 
+void {\bf set\-Face\-Not\-Intersected\-LHS} ({\bf Face} const $\ast$const)
+\item 
+void {\bf remove\-Face\-From\-Face\-Int} ({\bf Face} $\ast$const haystack, {\bf Face} const $\ast$const needle)
+\item 
+void {\bf get\-Face\-Intersection\-Force} ({\bf Face} $\ast$const f, {\bf vector3} \&total\_\-force)
+\item 
+void {\bf get\-Face\-Face\-Int\-Force} ({\bf Face} $\ast$const lhs, {\bf Face} $\ast$const rhs, {\bf vector3} \&)
+\item 
+bool {\bf face\-Is\-Intersected\-LHS} ({\bf Face} const $\ast$const face) const
+\item 
+{\bf htff\_\-cit} {\bf begin} (void)
+\item 
+{\bf htff\_\-cit} {\bf end} (void)
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Intersecting\_\-Faces} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!instance@{instance}}
+\index{instance@{instance}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Intersecting\_\-Faces} \& Intersecting\_\-Faces::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classIntersecting__Faces_8ccec8bb3cfc50e4ad98ff13c1f8ec8f}
+
+
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!getIntersectingFacesRHS@{getIntersectingFacesRHS}}
+\index{getIntersectingFacesRHS@{getIntersectingFacesRHS}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vec\_\-fp} $\ast$ Intersecting\_\-Faces::get\-Intersecting\-Faces\-RHS ({\bf Face} const $\ast$ const {\em face})}\label{classIntersecting__Faces_293abeb5536fd3d69c82f44775d28396}
+
+
+Return the stored collection of faces that intersect the input \doxyref{Face}{p.}{classFace}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]Intersected face of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Pointer to collection of interecting faces of input face. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!getNumUniqueVerts@{getNumUniqueVerts}}
+\index{getNumUniqueVerts@{getNumUniqueVerts}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Intersecting\_\-Faces::get\-Num\-Unique\-Verts ({\bf Face} const $\ast$ const {\em cf}, {\bf Face} const $\ast$ const {\em of}, int $\ast$ const {\em single\_\-shared}) const}\label{classIntersecting__Faces_d812af27b814d33dc7a59de051302a1b}
+
+
+Count number of unique vertices for pair of faces, and, if exactly one shared vertex, then identify shared vertex in each face.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em cf}]The current face. \item[\mbox{$\leftarrow$} {\em of}]The other face. \item[\mbox{$\rightarrow$} {\em single\_\-shared}]If exactly one shared vertex, then save it's identity in each face. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Number of unique vertices for pair of faces. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!getCountOfIntFaces@{getCountOfIntFaces}}
+\index{getCountOfIntFaces@{getCountOfIntFaces}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Intersecting\_\-Faces::get\-Count\-Of\-Int\-Faces (bool {\em detect\_\-self})}\label{classIntersecting__Faces_a1a58bcebe21681324ab18ac410383b2}
+
+
+Calculate and return the number of intersecting face pairs in model or only the number of intersecting pairs from faces of the same object. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em detect\_\-self}]If true then only count intersections between faces of the same object. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Count of pairs of intersecting faces. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!checkFaceEdgeInt@{checkFaceEdgeInt}}
+\index{checkFaceEdgeInt@{checkFaceEdgeInt}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::check\-Face\-Edge\-Int ({\bf Face} const $\ast$ {\em const}, {\bf Face} const $\ast$ {\em const}) const}\label{classIntersecting__Faces_afeb4b57fe4b16e5b5af73c300eaf64f}
+
+
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!checkEdgeEdgeIntersection@{checkEdgeEdgeIntersection}}
+\index{checkEdgeEdgeIntersection@{checkEdgeEdgeIntersection}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::check\-Edge\-Edge\-Intersection ({\bf Face} const $\ast$ const {\em cf}, {\bf Face} const $\ast$ const {\em of}) const}\label{classIntersecting__Faces_19dfb2b12487547e5d2322b6f8f2e549}
+
+
+For a pair of faces, each edge of each face is checked for intersection with an edge of the other face.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em cf}]The current face. \item[\mbox{$\leftarrow$} {\em of}]The other face. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if faces intersect, otherwise false. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!facesParallel@{facesParallel}}
+\index{facesParallel@{facesParallel}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::faces\-Parallel ({\bf Face} const $\ast$ const {\em cf}, {\bf Face} const $\ast$ const {\em of}) const}\label{classIntersecting__Faces_bdd45262cca89eafcdbe8e2c40560001}
+
+
+Check if pair of faces are parallel.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em cf}]The current face. \item[\mbox{$\leftarrow$} {\em of}]The other face. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if faces are parallel, otherwise false. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!facesCoplanar@{facesCoplanar}}
+\index{facesCoplanar@{facesCoplanar}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::faces\-Coplanar ({\bf Face} const $\ast$ {\em const}, {\bf Face} const $\ast$ {\em const}) const}\label{classIntersecting__Faces_8aa976ef7b7f18ba88985889692e42d5}
+
+
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!faceIntersectsFace@{faceIntersectsFace}}
+\index{faceIntersectsFace@{faceIntersectsFace}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::face\-Intersects\-Face ({\bf Face} const $\ast$const {\em lhs}, {\bf Face} const $\ast$const {\em rhs})}\label{classIntersecting__Faces_40b7910a771bb321d66967a738f5501a}
+
+
+Determine if an intersection between two faces is recorded in class. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em lhs}]\doxyref{Face}{p.}{classFace} pointer to use as key of intersecting faces table. \item[\mbox{$\leftarrow$} {\em rhs}]Putative intersecting face of lhs face. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if rhs is found in collection of intersecting faces for lhs (with note to the directionality of check); otherwise false. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!faceIsIntersectedRHS@{faceIsIntersectedRHS}}
+\index{faceIsIntersectedRHS@{faceIsIntersectedRHS}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::face\-Is\-Intersected\-RHS ({\bf Face} const $\ast$ const {\em face}) const}\label{classIntersecting__Faces_533016761a360de5de059ce179acd1a1}
+
+
+Strongly determine if input face is recorded in class as being intersected. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if face is used as key in intersecting faces container and has faces stored as intersecting.; otherwise false. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!findAndRecordNewFaceInt@{findAndRecordNewFaceInt}}
+\index{findAndRecordNewFaceInt@{findAndRecordNewFaceInt}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::find\-And\-Record\-New\-Face\-Int ({\bf Face} $\ast$ const {\em face})}\label{classIntersecting__Faces_c1bb38e2d09c62762bfa566bdb21bdf5}
+
+
+Find and record all intersecting faces of input face.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if current face is intersected, false otherwise. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!vertAdjFacesHaveNewInt@{vertAdjFacesHaveNewInt}}
+\index{vertAdjFacesHaveNewInt@{vertAdjFacesHaveNewInt}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::vert\-Adj\-Faces\-Have\-New\-Int ({\bf Vertex} const $\ast$ const {\em v})}\label{classIntersecting__Faces_d0b9954e791421bbdbcdc0aa6bc13a88}
+
+
+Check if any adjacent face of current vertex is intersected.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]The current vertex. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if any adjacent face of vertex is intersected, false otherwise. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!checkFaceFaceInts@{checkFaceFaceInts}}
+\index{checkFaceFaceInts@{checkFaceFaceInts}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::check\-Face\-Face\-Ints ({\bf Face} const $\ast$ const {\em cf}, {\bf Face} const $\ast$ const {\em of}) const}\label{classIntersecting__Faces_f15a18276918e03d465d56b9b25af3b1}
+
+
+For a pair of faces, each edge of each face is checked for intersection with other face.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em cf}]The current face. \item[\mbox{$\leftarrow$} {\em of}]The other face. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if faces intersect, otherwise false. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!detectNewFaceInts@{detectNewFaceInts}}
+\index{detectNewFaceInts@{detectNewFaceInts}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::detect\-New\-Face\-Ints ({\bf Face} $\ast$ const {\em face})}\label{classIntersecting__Faces_95e540a24135003654fa037dbfaa25a0}
+
+
+Search for new face intersections with input face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if new face intersections are detected; false otherwise. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!getNiceSet@{getNiceSet}}
+\index{getNiceSet@{getNiceSet}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::get\-Nice\-Set ({\bf v\_\-set} \& {\em full\_\-search\_\-faces}, {\bf hashset\_\-v} \& {\em vertices})}\label{classIntersecting__Faces_0a15c1e789d63ebcb8d0d9b8198ecd32}
+
+
+Check niceness of each collected vertex, and, if niceness changed, then add vertex to set of verticess requiring a full closest point search.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em full\_\-search\_\-faces}]The collection of vertices requiring full search. \item[\mbox{$\leftarrow$} {\em vertices}]Collection of vertices whose niceness may have changed. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!getNiceCheckSet@{getNiceCheckSet}}
+\index{getNiceCheckSet@{getNiceCheckSet}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf hashset\_\-v} Intersecting\_\-Faces::get\-Nice\-Check\-Set ({\bf Vertex} const $\ast$ const {\em v})}\label{classIntersecting__Faces_540d46017e3f03c2e26052b31e99ded1}
+
+
+Collect vertices whose niceness may have changed after vertex move due to face intersections.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]The current vertex. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Collection of vertices whose niceness may have changed. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!addFaceToFace@{addFaceToFace}}
+\index{addFaceToFace@{addFaceToFace}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::add\-Face\-To\-Face ({\bf Face} $\ast$ const {\em lhs}, {\bf Face} const $\ast$ const {\em rhs})}\label{classIntersecting__Faces_412a607e81b48c4d51a6947cb32b2569}
+
+
+Record an intersection between two faces.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em lhs}]\doxyref{Face}{p.}{classFace} pointer to use as key of intersecting faces table. \item[\mbox{$\leftarrow$} {\em rhs}]Intersecting face of lhs face. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!removeOldIntersections@{removeOldIntersections}}
+\index{removeOldIntersections@{removeOldIntersections}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::remove\-Old\-Intersections ({\bf Vertex} const $\ast$ const {\em v}, {\bf hashset\_\-v} \& {\em vertices})}\label{classIntersecting__Faces_5605b62ecf28cc1f44518b7e6acbb4f8}
+
+
+Remove intersections of adjacent faces to current vertex from intersection list, and add all vertices of intersecting faces to set of vertices whose niceness may have changed.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]The current vertex. \item[\mbox{$\leftarrow$} {\em vertices}]Collection of vertices whose niceness may have changed. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!updateNewIntersections@{updateNewIntersections}}
+\index{updateNewIntersections@{updateNewIntersections}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::update\-New\-Intersections ({\bf Vertex} const $\ast$ const {\em v}, {\bf hashset\_\-v} \& {\em vertices})}\label{classIntersecting__Faces_d0b67f47b2af8f1f131009503cbc8a2a}
+
+
+Check for face intersections of each adjacent face of current vertex, and add all vertices of intersecting faces to set of vertices whose niceness may have changed.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]The current vertex. \item[\mbox{$\leftarrow$} {\em vertices}]Collection of vertices whose niceness may have changed. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!findAllFaceIntersections@{findAllFaceIntersections}}
+\index{findAllFaceIntersections@{findAllFaceIntersections}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::find\-All\-Face\-Intersections (void)}\label{classIntersecting__Faces_864360dc51339359609a9dec82defe06}
+
+
+Find and record all face intersections. \index{Intersecting_Faces@{Intersecting\_\-Faces}!setFaceNotIntersectedLHS@{setFaceNotIntersectedLHS}}
+\index{setFaceNotIntersectedLHS@{setFaceNotIntersectedLHS}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::set\-Face\-Not\-Intersected\-LHS ({\bf Face} const $\ast$ const {\em face})}\label{classIntersecting__Faces_308378379127c964fb70a1dad0fae0de}
+
+
+Remove records of intersections for input face (with note that search is not exhaustive).
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} of interest. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!removeFaceFromFaceInt@{removeFaceFromFaceInt}}
+\index{removeFaceFromFaceInt@{removeFaceFromFaceInt}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::remove\-Face\-From\-Face\-Int ({\bf Face} $\ast$const  {\em lhs}, {\bf Face} const $\ast$const {\em rhs})}\label{classIntersecting__Faces_2ba705827cb13702fe3c88836220561a}
+
+
+Remove record of intersection between input faces.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em lhs}]\doxyref{Face}{p.}{classFace} pointer to use as key of intersecting faces table. \item[\mbox{$\leftarrow$} {\em rhs}]Intersecting face of lhs face that is to be removed. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!getFaceIntersectionForce@{getFaceIntersectionForce}}
+\index{getFaceIntersectionForce@{getFaceIntersectionForce}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::get\-Face\-Intersection\-Force ({\bf Face} $\ast$const  {\em face}, {\bf vector3} \& {\em total\_\-force})}\label{classIntersecting__Faces_290a606147e644bfacb3f18703375d66}
+
+
+Calculate total force vector on current face due to intersection with other faces.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]The current face. \item[\mbox{$\rightarrow$} {\em total\_\-force}]Intersection force is added to total\_\-force. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!getFaceFaceIntForce@{getFaceFaceIntForce}}
+\index{getFaceFaceIntForce@{getFaceFaceIntForce}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Intersecting\_\-Faces::get\-Face\-Face\-Int\-Force ({\bf Face} $\ast$const  {\em lhs}, {\bf Face} $\ast$const  {\em rhs}, {\bf vector3} \& {\em total\_\-force})}\label{classIntersecting__Faces_953945694b5e7ec20f81d953bb651e43}
+
+
+Calculate force vector on lhs face due to intersection with rhs face.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em lhs}]The current face. \item[\mbox{$\leftarrow$} {\em rhs}]The other face. \item[\mbox{$\rightarrow$} {\em total\_\-force}]Intersection force is added to total\_\-force. \end{description}
+\end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!faceIsIntersectedLHS@{faceIsIntersectedLHS}}
+\index{faceIsIntersectedLHS@{faceIsIntersectedLHS}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Intersecting\_\-Faces::face\-Is\-Intersected\-LHS ({\bf Face} const $\ast$const {\em face}) const\hspace{0.3cm}{\tt  [inline]}}\label{classIntersecting__Faces_a4bcdf24d391444ef8a941762fd61d43}
+
+
+Weakly determine if input face is recorded in class as being intersected. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if face is used as key in intersecting faces container (with no further checks); otherwise false. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!begin@{begin}}
+\index{begin@{begin}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf htff\_\-cit} Intersecting\_\-Faces::begin (void)\hspace{0.3cm}{\tt  [inline]}}\label{classIntersecting__Faces_3001ff5e44da230f952f7c0c9e23ce0c}
+
+
+Get an iterator pointing to first intersecting face. \begin{Desc}
+\item[Returns:]Iterator pointing to beginning of intersecting faces container. \end{Desc}
+\index{Intersecting_Faces@{Intersecting\_\-Faces}!end@{end}}
+\index{end@{end}!Intersecting_Faces@{Intersecting\_\-Faces}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf htff\_\-cit} Intersecting\_\-Faces::end (void)\hspace{0.3cm}{\tt  [inline]}}\label{classIntersecting__Faces_5d2b8047ec822cad682ac0bdfff3b0d2}
+
+
+Get an iterator pointing to one past the last intersecting face. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last intersecting face. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf intersecting\_\-faces.h}\item 
+{\bf intersecting\_\-faces.cc}\end{CompactItemize}

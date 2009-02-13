@@ -1,0 +1,155 @@
+\section{hxa7241\_\-graphics::Octree\-Root Class Reference}
+\label{classhxa7241__graphics_1_1OctreeRoot}\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::OctreeRoot}}
+{\tt \#include $<$Octree\-Implementation.h$>$}
+
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Root:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=232pt]{classhxa7241__graphics_1_1OctreeRoot__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Root} (const {\bf Vector3r} \&position, real size\-Of\-Cube, dword max\-Items\-Per\-Cell, dword max\-Level\-Count, real min\-Cell\-Size)
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf $\sim$Octree\-Root} ()
+\item 
+{\bf Octree\-Root} (const {\bf Octree\-Root} \&)
+\item 
+{\bf Octree\-Root} \& {\bf operator=} (const {\bf Octree\-Root} \&)
+\item 
+bool {\bf insert} (const void $\ast$p\-Item, const {\bf Octree\-Agent\-V} \&agent)
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+bool {\bf remove} (const void $\ast$p\-Item, const {\bf Octree\-Agent\-V} \&agent)
+\item 
+void {\bf visit} ({\bf Octree\-Visitor\-V} \&visitor) const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+bool {\bf is\-Empty} () const
+\item 
+void {\bf get\-Info} (dword root\-Wrapper\-Byte\-Size, dword \&byte\-Size, dword \&leaf\-Count, dword \&item\-Count, dword \&max\-Depth) const
+\item 
+const {\bf Vector3r} \& {\bf get\-Position} () const
+\item 
+real {\bf get\-Size} () const
+\item 
+dword {\bf get\-Max\-Item\-Count\-Per\-Cell} () const
+\item 
+dword {\bf get\-Max\-Level\-Count} () const
+\item 
+real {\bf get\-Min\-Cell\-Size} () const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static void {\bf continue\-Visit} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data, {\bf Octree\-Visitor\-V} \&visitor)
+\begin{CompactList}\small\item\em statics -------------------------------------------------------------------- \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation class for the \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} template.
+
+p\-Root\-Cell\_\-m can be null, or point to an \doxyref{Octree\-Cell}{p.}{classhxa7241__graphics_1_1OctreeCell} instance.\par
+\par
+
+
+At construction, p\-Root\-Cell\_\-m is set to a legal value.\par
+ At destruction, p\-Root\-Cell\_\-m is deleted.\par
+ Whenever p\-Root\-Cell\_\-m is modified, it must be deleted then set to a legal value.\par
+ A legal value is: either 0, or the value from invocation of 'new'. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!OctreeRoot@{OctreeRoot}}
+\index{OctreeRoot@{OctreeRoot}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Root::Octree\-Root (const {\bf Vector3r} \& {\em position}, real {\em size\-Of\-Cube}, dword {\em max\-Items\-Per\-Cell}, dword {\em max\-Level\-Count}, real {\em min\-Cell\-Size})}\label{classhxa7241__graphics_1_1OctreeRoot_7a1c6a606e9adf05871c055b89d4374c}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!~OctreeRoot@{$\sim$OctreeRoot}}
+\index{~OctreeRoot@{$\sim$OctreeRoot}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Root::$\sim$Octree\-Root ()}\label{classhxa7241__graphics_1_1OctreeRoot_b39f0fcdc286c563692dc03a07668dc3}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!OctreeRoot@{OctreeRoot}}
+\index{OctreeRoot@{OctreeRoot}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Root::Octree\-Root (const {\bf Octree\-Root} \&)}\label{classhxa7241__graphics_1_1OctreeRoot_647330ec8bfeec42204deb11424a7a06}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Root} \& Octree\-Root::operator= (const {\bf Octree\-Root} \&)}\label{classhxa7241__graphics_1_1OctreeRoot_4cb94840043915af398a92d7a5094ffb}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!insert@{insert}}
+\index{insert@{insert}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Octree\-Root::insert (const void $\ast$ {\em p\-Item}, const {\bf Octree\-Agent\-V} \& {\em agent})}\label{classhxa7241__graphics_1_1OctreeRoot_78d548a33bfc453ad34bac28513975cc}
+
+
+commands ------------------------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!remove@{remove}}
+\index{remove@{remove}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Octree\-Root::remove (const void $\ast$ {\em p\-Item}, const {\bf Octree\-Agent\-V} \& {\em agent})}\label{classhxa7241__graphics_1_1OctreeRoot_674a25660370049a0abc883b570fa0ea}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!visit@{visit}}
+\index{visit@{visit}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Root::visit ({\bf Octree\-Visitor\-V} \& {\em visitor}) const}\label{classhxa7241__graphics_1_1OctreeRoot_b75c3b0cbf7424cf45b08b275bb6d4ce}
+
+
+queries -------------------------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Octree\-Root::is\-Empty () const}\label{classhxa7241__graphics_1_1OctreeRoot_8eb4830e521b4b9ea9e926f42ee07887}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!getInfo@{getInfo}}
+\index{getInfo@{getInfo}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Root::get\-Info (dword {\em root\-Wrapper\-Byte\-Size}, dword \& {\em byte\-Size}, dword \& {\em leaf\-Count}, dword \& {\em item\-Count}, dword \& {\em max\-Depth}) const}\label{classhxa7241__graphics_1_1OctreeRoot_f6d915235693b71c06686144cd224e27}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& Octree\-Root::get\-Position () const}\label{classhxa7241__graphics_1_1OctreeRoot_200ff7f2e2d3213437535f07021dbdfe}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!getSize@{getSize}}
+\index{getSize@{getSize}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real Octree\-Root::get\-Size () const}\label{classhxa7241__graphics_1_1OctreeRoot_877a933a326a54cc5e3dac03fa40cd06}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!getMaxItemCountPerCell@{getMaxItemCountPerCell}}
+\index{getMaxItemCountPerCell@{getMaxItemCountPerCell}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}dword Octree\-Root::get\-Max\-Item\-Count\-Per\-Cell () const}\label{classhxa7241__graphics_1_1OctreeRoot_1ff78be3bcf149987d60b49f57700ad1}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!getMaxLevelCount@{getMaxLevelCount}}
+\index{getMaxLevelCount@{getMaxLevelCount}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}dword Octree\-Root::get\-Max\-Level\-Count () const}\label{classhxa7241__graphics_1_1OctreeRoot_b4048fa55e9222bbf3716faeed3b595a}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!getMinCellSize@{getMinCellSize}}
+\index{getMinCellSize@{getMinCellSize}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real Octree\-Root::get\-Min\-Cell\-Size () const}\label{classhxa7241__graphics_1_1OctreeRoot_a061a8e2cc29b7674fe0522e9c4b36c6}
+
+
+\index{hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}!continueVisit@{continueVisit}}
+\index{continueVisit@{continueVisit}!hxa7241_graphics::OctreeRoot@{hxa7241\_\-graphics::Octree\-Root}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Root::continue\-Visit (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data}, {\bf Octree\-Visitor\-V} \& {\em visitor})\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1OctreeRoot_886f24f550bc0d50fb64c4b0c6de64f9}
+
+
+statics -------------------------------------------------------------------- 
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf Octree\-Implementation.h}\item 
+{\bf Octree\-Implementation.cc}\end{CompactItemize}

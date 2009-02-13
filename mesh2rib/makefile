@@ -1,7 +1,7 @@
 CC = gcc
 DEFS =
-FLAGS = -O2 -m486
-LIBS = -lfl -lm
+FLAGS = -O3 -march=athlon-xp
+LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 
 SHELL = /bin/sh

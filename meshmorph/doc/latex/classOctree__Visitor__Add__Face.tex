@@ -1,0 +1,87 @@
+\section{Octree\_\-Visitor\_\-Add\_\-Face Class Reference}
+\label{classOctree__Visitor__Add__Face}\index{Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}}
+{\tt \#include $<$octree\_\-visitor\_\-add\_\-face.h$>$}
+
+Inheritance diagram for Octree\_\-Visitor\_\-Add\_\-Face:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classOctree__Visitor__Add__Face__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for Octree\_\-Visitor\_\-Add\_\-Face:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=305pt]{classOctree__Visitor__Add__Face__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\_\-Visitor\_\-Add\_\-Face} ({\bf Face} $\ast$f, {\bf Vector3r} low, {\bf Vector3r} up, {\bf Vector3r} newlow, {\bf Vector3r} newup)
+\item 
+virtual {\bf $\sim$Octree\_\-Visitor\_\-Add\_\-Face} ()
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+virtual void {\bf visit\-Root} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data)
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual void {\bf visit\-Branch} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Leaf} (const Array$<$ const {\bf Face} $\ast$ $>$ \&items, const {\bf Octree\-Data} \&octree\-Data)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}!Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}}
+\index{Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}!Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Add\_\-Face::Octree\_\-Visitor\_\-Add\_\-Face ({\bf Face} $\ast$ {\em f}, {\bf Vector3r} {\em low}, {\bf Vector3r} {\em up}, {\bf Vector3r} {\em newlow}, {\bf Vector3r} {\em newup})}\label{classOctree__Visitor__Add__Face_db38cdeab4451574e82de62436eccc92}
+
+
+\index{Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}!~Octree_Visitor_Add_Face@{$\sim$Octree\_\-Visitor\_\-Add\_\-Face}}
+\index{~Octree_Visitor_Add_Face@{$\sim$Octree\_\-Visitor\_\-Add\_\-Face}!Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Add\_\-Face::$\sim$Octree\_\-Visitor\_\-Add\_\-Face ()\hspace{0.3cm}{\tt  [virtual]}}\label{classOctree__Visitor__Add__Face_eefe99397b298adf2d39ff5424e505f3}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}!visitRoot@{visitRoot}}
+\index{visitRoot@{visitRoot}!Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Add\_\-Face::visit\-Root (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Add__Face_76dc5ddfc1b1cee4e627afc9048df787}
+
+
+commands ------------------------------------------------------------------- 
+
+Called by Octree when visit traversal is at the root.\par
+\par
+ To continue deeper, implementation calls Octree\-Root::continue\-Visit( p\-Root\-Cell, octree\-Data, $\ast$this ). p\-Root\-Cell can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]Octree\-Data \end{Desc}
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_30b2c5b03acb6c75b40d79a86e015878}.\index{Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}!visitBranch@{visitBranch}}
+\index{visitBranch@{visitBranch}!Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Add\_\-Face::visit\-Branch (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Add__Face_8e769977a13dd46138f600f1e8bf31e1}
+
+
+Called by Octree when visit traversal is at a branch.\par
+\par
+ To continue deeper, implementation calls Octree\-Branch::continue\-Visit( sub\-Cells, octree\-Data, sub\-Cell\-Index, $\ast$this ) for any/all sub\-Cell\-Index values. sub\-Cells elements can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]Octree\-Data \end{Desc}
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_e62544f5cde1e32e7fd1515e0b8d110d}.\index{Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}!visitLeaf@{visitLeaf}}
+\index{visitLeaf@{visitLeaf}!Octree_Visitor_Add_Face@{Octree\_\-Visitor\_\-Add\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Add\_\-Face::visit\-Leaf (const Array$<$ const {\bf Face} $\ast$ $>$ \& {\em items}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Add__Face_175ce3b3d35bcef0113fdd611b24c91d}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf octree\_\-visitor\_\-add\_\-face.h}\item 
+{\bf octree\_\-visitor\_\-add\_\-face.cc}\end{CompactItemize}

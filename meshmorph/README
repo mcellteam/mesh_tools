@@ -1,5 +1,4 @@
-command
-must use setenv LD_LIBRARY_PATH ~/install/googleperf64/lib/
+type 'doxygen' to generate documentation
 
 Assumptions
 1. The surface mesh has triangular faces.

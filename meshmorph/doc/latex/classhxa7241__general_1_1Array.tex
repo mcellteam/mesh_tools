@@ -1,0 +1,198 @@
+\section{hxa7241\_\-general::Array$<$ TYPE $>$ Class Template Reference}
+\label{classhxa7241__general_1_1Array}\index{hxa7241_general::Array@{hxa7241\_\-general::Array}}
+{\tt \#include $<$Array.h$>$}
+
+Collaboration diagram for hxa7241\_\-general::Array$<$ TYPE $>$:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=115pt]{classhxa7241__general_1_1Array__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Array} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf Array} (dword length)
+\item 
+{\bf $\sim$Array} ()
+\item 
+{\bf Array} (const {\bf Array} \&)
+\item 
+{\bf Array} \& {\bf operator=} (const {\bf Array} \&)
+\item 
+void {\bf set\-Length} (dword length)
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+void {\bf swap} ({\bf Array} \&)
+\item 
+void {\bf append} (const TYPE \&)
+\item 
+void {\bf remove} (int index)
+\item 
+void {\bf zero\-Storage} ()
+\item 
+TYPE $\ast$ {\bf get\-Storage} ()
+\item 
+TYPE \& {\bf operator[$\,$]} (int index)
+\item 
+dword {\bf get\-Length} () const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+bool {\bf is\-Empty} () const
+\item 
+const TYPE $\ast$ {\bf get\-Storage} () const
+\item 
+const TYPE \& {\bf operator[$\,$]} (int index) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static dword {\bf get\-Max\-Length} ()
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+void {\bf assign} (const {\bf Array}$<$ TYPE $>$ \&)
+\begin{CompactList}\small\item\em implementation ------------------------------------------------------------- \item\end{CompactList}\item 
+void {\bf acquire\-Storage} (dword length, bool is\-Copied)
+\end{CompactItemize}
+\subsection*{Static Protected Member Functions}
+\begin{CompactItemize}
+\item 
+static void {\bf copy\-Objects} (TYPE $\ast$l\-Val\-Start, const TYPE $\ast$r\-Val\-Start, dword length)
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class TYPE$>$ class hxa7241\_\-general::Array$<$ TYPE $>$}
+
+A simpler, compacter alternative to std::vector.\par
+\par
+
+
+Length is explicit - there is no hidden reserve.\par
+\par
+
+
+$\ast$ p\-Storage\_\-m is 0 or a valid address\par
+ $\ast$ length\_\-m is $>$= 0 and $<$= \doxyref{get\-Max\-Length()}{p.}{classhxa7241__general_1_1Array_d20af64d14392e5a5f6a771951721a70} (DWORD\_\-MAX)\par
+ 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!Array@{Array}}
+\index{Array@{Array}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::{\bf Array} ()}\label{classhxa7241__general_1_1Array_19c8ccd416430b948bece58b6ef0cd65}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!Array@{Array}}
+\index{Array@{Array}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::{\bf Array} (dword {\em length})\hspace{0.3cm}{\tt  [explicit]}}\label{classhxa7241__general_1_1Array_e34427d138a69a24c3b483627d0d5825}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!~Array@{$\sim$Array}}
+\index{~Array@{$\sim$Array}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::$\sim${\bf Array} ()}\label{classhxa7241__general_1_1Array_910ed166575ac746c058a54e1f50828e}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!Array@{Array}}
+\index{Array@{Array}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::{\bf Array} (const {\bf Array}$<$ TYPE $>$ \&)}\label{classhxa7241__general_1_1Array_11de2e2cecf48880a62508619d7caab1}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf Array}$<$ TYPE $>$ \& {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::operator= (const {\bf Array}$<$ TYPE $>$ \&)}\label{classhxa7241__general_1_1Array_108e643b3185767e2cc2911b62d68df2}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!setLength@{setLength}}
+\index{setLength@{setLength}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::set\-Length (dword {\em length})}\label{classhxa7241__general_1_1Array_5dca0cb17cbbe92caab48328a65ab9d4}
+
+
+commands ------------------------------------------------------------------- 
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!swap@{swap}}
+\index{swap@{swap}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::swap ({\bf Array}$<$ TYPE $>$ \&)}\label{classhxa7241__general_1_1Array_27f99dbdb82416aefe4ab98d61cefdc6}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!append@{append}}
+\index{append@{append}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::append (const TYPE \&)}\label{classhxa7241__general_1_1Array_6c0da347dae749198cdca92fe0974eff}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!remove@{remove}}
+\index{remove@{remove}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::remove (int {\em index})}\label{classhxa7241__general_1_1Array_df64ea9c922348d908936c9130800473}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!zeroStorage@{zeroStorage}}
+\index{zeroStorage@{zeroStorage}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::zero\-Storage ()}\label{classhxa7241__general_1_1Array_dd0d285c045512bb7d7084293a85875a}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!getStorage@{getStorage}}
+\index{getStorage@{getStorage}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ TYPE $\ast$ {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::get\-Storage ()\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__general_1_1Array_56bd54118d903d09b4c75cc48c6a9e69}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!operator[]@{operator[]}}
+\index{operator[]@{operator[]}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ TYPE \& {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::operator[$\,$] (int {\em index})\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__general_1_1Array_1680c1ea351c611606f8e65377f5753f}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!getLength@{getLength}}
+\index{getLength@{getLength}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ dword {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::get\-Length () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__general_1_1Array_e0192970720698950334458e62244921}
+
+
+queries -------------------------------------------------------------------- 
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ bool {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::is\-Empty () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__general_1_1Array_5d0848f151f59bf43f6c7e2d194e5515}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!getMaxLength@{getMaxLength}}
+\index{getMaxLength@{getMaxLength}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ dword {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::get\-Max\-Length ()\hspace{0.3cm}{\tt  [inline, static]}}\label{classhxa7241__general_1_1Array_d20af64d14392e5a5f6a771951721a70}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!getStorage@{getStorage}}
+\index{getStorage@{getStorage}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ const TYPE $\ast$ {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::get\-Storage () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__general_1_1Array_9a86a5038cd279d96ca583120340a584}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!operator[]@{operator[]}}
+\index{operator[]@{operator[]}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ const TYPE \& {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::operator[$\,$] (int {\em index}) const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__general_1_1Array_d2489b8310652a6b58a66df9d6a6a5f8}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!assign@{assign}}
+\index{assign@{assign}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::assign (const {\bf Array}$<$ TYPE $>$ \&)\hspace{0.3cm}{\tt  [protected]}}\label{classhxa7241__general_1_1Array_ce96e08be4773e3bc1b31eaf73fce215}
+
+
+implementation ------------------------------------------------------------- 
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!acquireStorage@{acquireStorage}}
+\index{acquireStorage@{acquireStorage}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::acquire\-Storage (dword {\em length}, bool {\em is\-Copied})\hspace{0.3cm}{\tt  [protected]}}\label{classhxa7241__general_1_1Array_51db8453fcef1a51d478202d025fae64}
+
+
+\index{hxa7241_general::Array@{hxa7241\_\-general::Array}!copyObjects@{copyObjects}}
+\index{copyObjects@{copyObjects}!hxa7241_general::Array@{hxa7241\_\-general::Array}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-general::Array}$<$ TYPE $>$::copy\-Objects (TYPE $\ast$ {\em l\-Val\-Start}, const TYPE $\ast$ {\em r\-Val\-Start}, dword {\em length})\hspace{0.3cm}{\tt  [static, protected]}}\label{classhxa7241__general_1_1Array_050e82ca928bcda017ce73b3682f768e}
+
+
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Array.h}\end{CompactItemize}

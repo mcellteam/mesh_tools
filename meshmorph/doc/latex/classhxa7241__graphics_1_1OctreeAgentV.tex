@@ -1,0 +1,118 @@
+\section{hxa7241\_\-graphics::Octree\-Agent\-V Class Reference}
+\label{classhxa7241__graphics_1_1OctreeAgentV}\index{hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::OctreeAgentV}}
+{\tt \#include $<$Octree\-Auxiliary.h$>$}
+
+Inheritance diagram for hxa7241\_\-graphics::Octree\-Agent\-V:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{classhxa7241__graphics_1_1OctreeAgentV__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+virtual {\bf $\sim$Octree\-Agent\-V} ()
+\item 
+virtual bool {\bf is\-Overlapping\-Cell\-V} (const void $\ast$p\-Item, const {\bf Vector3r} \&lower\-Corner, const {\bf Vector3r} \&upper\-Corner) const=0
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual dword {\bf get\-Subcell\-Overlaps\-V} (const void $\ast$p\-Item, const {\bf Vector3r} \&lower, const {\bf Vector3r} \&middle, const {\bf Vector3r} \&upper) const=0
+\end{CompactItemize}
+\subsection*{Static Public Attributes}
+\begin{CompactItemize}
+\item 
+static const dword {\bf ALL\_\-INSIDE} = 0x0000FFFF
+\begin{CompactList}\small\item\em constants ------------------------------------------------------------------ \item\end{CompactList}\item 
+static const dword {\bf ALL\_\-OUTSIDE} = 0x00000000
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Agent\-V} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Agent abstract base, for \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} implementation use.\par
+\par
+
+
+Return value of get\-Subcell\-Overlaps\-V is 8 bits, each bit is a bool corresponding to a subcell, the high bit for subcell 7, the low bit for subcell 0.\par
+\par
+
+
+Subcell numbering: \small\begin{alltt}
+    y z       6 7
+    |/   2 3  4 5
+     -x  0 1
+ \end{alltt}
+\normalsize 
+ in binary: \small\begin{alltt}
+    y z           110 111
+    |/   010 011  100 101
+     -x  000 001
+ \end{alltt}
+\normalsize 
+
+
+\begin{Desc}
+\item[See also:]\doxyref{Octree\-Cell}{p.}{classhxa7241__graphics_1_1OctreeCell} 
+
+\doxyref{Octree\-Branch}{p.}{classhxa7241__graphics_1_1OctreeBranch} 
+
+\doxyref{Octree\-Leaf}{p.}{classhxa7241__graphics_1_1OctreeLeaf} \end{Desc}
+
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}!OctreeAgentV@{OctreeAgentV}}
+\index{OctreeAgentV@{OctreeAgentV}!hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}hxa7241\_\-graphics::Octree\-Agent\-V::Octree\-Agent\-V ()\hspace{0.3cm}{\tt  [inline, protected]}}\label{classhxa7241__graphics_1_1OctreeAgentV_19043bdcd8c7e685c032db8ef5bb8316}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}!~OctreeAgentV@{$\sim$OctreeAgentV}}
+\index{~OctreeAgentV@{$\sim$OctreeAgentV}!hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual hxa7241\_\-graphics::Octree\-Agent\-V::$\sim$Octree\-Agent\-V ()\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeAgentV_5f96881e48a77c3157e4e0fcc3249c56}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}!isOverlappingCellV@{isOverlappingCellV}}
+\index{isOverlappingCellV@{isOverlappingCellV}!hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual bool hxa7241\_\-graphics::Octree\-Agent\-V::is\-Overlapping\-Cell\-V (const void $\ast$ {\em p\-Item}, const {\bf Vector3r} \& {\em lower\-Corner}, const {\bf Vector3r} \& {\em upper\-Corner}) const\hspace{0.3cm}{\tt  [pure virtual]}}\label{classhxa7241__graphics_1_1OctreeAgentV_25a8bdfe6e2bfcc9dc307c22915a32ef}
+
+
+queries -------------------------------------------------------------------- 
+
+
+
+Implemented in {\bf hxa7241\_\-graphics::Octree\-Agent$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeAgent_2640e4adca884dc4531a93215ef9f75c}, and {\bf hxa7241\_\-graphics::Octree\-Agent$<$ Face $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeAgent_2640e4adca884dc4531a93215ef9f75c}.\index{hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}!getSubcellOverlapsV@{getSubcellOverlapsV}}
+\index{getSubcellOverlapsV@{getSubcellOverlapsV}!hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual dword hxa7241\_\-graphics::Octree\-Agent\-V::get\-Subcell\-Overlaps\-V (const void $\ast$ {\em p\-Item}, const {\bf Vector3r} \& {\em lower}, const {\bf Vector3r} \& {\em middle}, const {\bf Vector3r} \& {\em upper}) const\hspace{0.3cm}{\tt  [pure virtual]}}\label{classhxa7241__graphics_1_1OctreeAgentV_219e72c02f6845a5802349ef6d8bf115}
+
+
+
+
+Implemented in {\bf hxa7241\_\-graphics::Octree\-Agent$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeAgent_1f3c0ce8e9f03e52de13262e095a2968}, and {\bf hxa7241\_\-graphics::Octree\-Agent$<$ Face $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeAgent_1f3c0ce8e9f03e52de13262e095a2968}.
+
+\subsection{Member Data Documentation}
+\index{hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}!ALL_INSIDE@{ALL\_\-INSIDE}}
+\index{ALL_INSIDE@{ALL\_\-INSIDE}!hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const dword {\bf hxa7241\_\-graphics::Octree\-Agent\-V::ALL\_\-INSIDE} = 0x0000FFFF\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1OctreeAgentV_575e0cac525016eca33639630683230c}
+
+
+constants ------------------------------------------------------------------ 
+
+\index{hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}!ALL_OUTSIDE@{ALL\_\-OUTSIDE}}
+\index{ALL_OUTSIDE@{ALL\_\-OUTSIDE}!hxa7241_graphics::OctreeAgentV@{hxa7241\_\-graphics::Octree\-Agent\-V}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const dword {\bf hxa7241\_\-graphics::Octree\-Agent\-V::ALL\_\-OUTSIDE} = 0x00000000\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1OctreeAgentV_44d70782aaf6ad8eefc46d41efb93d44}
+
+
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Octree\-Auxiliary.h}\end{CompactItemize}

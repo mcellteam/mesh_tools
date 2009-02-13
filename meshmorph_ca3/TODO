@@ -1,0 +1,223 @@
+Accomplished
+-------------
+
+Added --disable_messages condition to the printing
+of intersected faces.
+
+In Intersecting_Faces::updateNewIntersections was detecting face intersections
+but was not recording them. So added bool argument to Intersecting_Faces::detectNewFaceInts
+to optionally record face intersections.
+
+Had to modify Refractory::vertexIsMoveCandidate so that if vertex is nonnice
+then it does not have to have a closest point to be a move candidate.
+Something is wrong with detecting closest point for nonnice vertices.
+It will be important that closest point is initialized to vertex's current position.
+
+// High priority
+#######################
+
+Had to modify Refractory::vertexIsMoveCandidate so that if vertex is nonnice
+then it does not have to have a closest point to be a move candidate.
+Something is wrong with detecting closest point for nonnice vertices.
+It will be important that closest point is initialized to vertex's current position.
+
+Something is weird with nonnice and intersecting faces code.
+1) The largest reduction in nonnice vertices and int. faces occurs on the first group.
+    Subsequent groups show diminished progress in removing nonnice vertices.
+2) The # of nonnice verts and especially int. faces is different from last group
+    of one execution of meshmorph to first group of subsequent execution of meshmorph
+    using the output of the first execution as input to the second execution.
+
+
+Meshmorph does not like coincident surfaces.
+
+Progress meters are inaccurate for CA3 synapse.
+
+Add option to set undetermined vertices to nonnice. Currently, they are set to nice.
+
+Add option to turnoff closestFaceCheck
+
+high separation weight (0.8) crushes thin processes
+
+remove CLOSEST_POINT_COSINE and CLOSEST_POINT_SINE keep CLOSEST_POINT_ANGLE
+Why is CLOSEST_POINT_ANGLE reported incorrectly in command....
+
+explicitely clear files that are being appended to.
+
+replace my vector3 with Wm4::Vector3.
+
+Rigorously tune MIN_SEARCH_CONE_RADIUS, by parameter sweep and recording elapsed time for
+1E6 ecw measurements.
+
+Improve void Log::writeSepDistances (int const & group)
+Needs acceleration and progress reports and improved coding style.
+  Each Octree visitor allocates and deallocates 10 doubles.
+  This may be the cause of the slowdown.
+  Need re-initialize member function for visitor,
+  so instantiate single visitor and reuse many times with new search region.
+  bool Container::findClosestPtToBarycenter (vector3 const & pt,Face * const f,
+  and elsewhere.
+
+Improve formatting in Log::statusFileInit (void).
+
+consider rebuilding octree after each group
+since my octree update scheme does not rebalance
+should only result in slowdown, not inaccuracy.
+gathering octree stats could inform whether this is necessary
+
+fix gain_scheduling
+
+// Low priority
+#######################
+add detailed comments from source code to doxygen.
+
+Here are a few other general comments, but I doubt that anything simple
+can or should be done, either because the fix would be complex, or
+because the potential problems are minor, or are mitigated by other
+factors.
+
+  - there are some fairly long functions; this is mainly a problem if
+    the function has complex control flow, if the code is not
+    particularly clean, or if you are developing in a group with other
+    people.  Since none of these seem to be the case here, there's
+    little point, I think.  The code looks clean enough and
+    straightforward enough that a handful of longer functions are not
+    really a problem.
+
+  - there are some fairly terse variable names; again, not so much of a
+    problem if the functions are short, the control flow clear, and the
+    developers few, as in this case.  but if you expect to turn it over
+    to someone for maintenance, or if you expected to develop with a
+    group of people, you'd want to make sure the variable names were a
+    little more verbose, probably.
+
+  - You've got the start of a beautiful man page.  You might make it a
+    full man page by modifying the mcell man page I've attached.
+
+
+Add following to meshmorph.
+  << "  Running on azzuri at Wed Sep 24 12:11:51 2008\n\n"
+
+Store octree max instead of width in controls.
+
+protect from buffer overruns
+
+record octree statistics to file, e.g. histogram of cell sizes,
+histogram of faces per box, or min,max,median instead
+
+fix doxygen documentation for octree files
+
+-----------
+separation springs (moved and region)
+stretch springs (adjacent to moved)
+angle springs (all edges of adjacent faces to moved)
+
+// NOTE the niceness of barycenters should be calculated.
+// For now, I assume no nonnice vertices or barycenters.
+// container.cc :1310
+
+consider making checkClosestFace period a global constant
+
+replace simple if-else with ternary conditional '?'
+
+3) use a single map to hold all constants (int, double, string)
+   map is string->instance of TypedValue
+   Note the singleton class will have two fields
+     1) string
+     2) union , which makes efficient use of memory to access same memory, interpreted in different ways
+   use enum to code different data types
+
+Consider not updating vertex and face normal,
+and position in tree after every move. Instead
+set face to 'dirty' and recompute only if needed.
+In State::assignNewVertexCoords
+    updateAdjacentFacesInTree(v);
+    updateAdjFaceBoundingBoxes(v);
+  v->updateAdjacentFaceNormals();
+Ideas for marking as dirty
+1) in face set normal vector to 0,0,0
+2) in vector set normal vector to 0,0,0
+3) best of all, use bool in face and vertex classes
+
+Consider switching from map (virtual displacement -> vertex)
+to array of bins with linked lists of vd-vertex pairs hanging off.
+Use next and previous are pointers to pointer
+To remove item in list,
+*p=n;
+if (n) n->p=p;
+
+Seems that less than one vertex on average changes its closest face per vertex move.
+What is the identity of this vertex?
+
+use flag instead of hashset or set or vector with sort and unique
+
+Perform code coverage analysis:
+  Include -fprofile-arcs -ftest-coverage in compile flags
+  Run gcov on output.
+
+In Refractory::determineTryAgainOrMoveOn , decreasing move size is NOT always the
+  best idea for each of the refraction violations. Sometimes taking a bigger step
+  would be better. Delineate these rules.
+
+In State::recordVertAdjFaceEdgeAngles // NOTE THIS ALGORITHM LIKELY TO CHECK EDGES TWICE.
+
+Consider using for_each STL pg 161 meyers book.
+
+Oct2007
+Ideas from Jed for improving speed of meshmorph (Oct2007)
+----------------------------------------------
+1. use closest vertex as closest point
+	(closest vertex and closest point will converge as edge length -> 0)
+2. fully morph small regions
+
+Improving speed of classifying niceness of vertices
+--------------------------------------------------
+After picking ray for tracing
+1. project faces onto plane orthogonal to ray
+2. Use dot product rule to determine edge hit
+	i.e. if dot product of vector from face vertex to ray
+	and vector from vertex to other vertex is zero,
+	then ray hit edge
+3. Detect planes coplanar with ray
+4. if edge collision, then jog ray, tracing during jog
+
+Pre-sorting mesh object vertices and faces before running meshmoprh
+The goal is to improve speed of creating edges, neighborhoods, findsing closest point, etc.
+---------------------------------------------------------------------
+Want path along edges that
+1. touches every vertex exactly once
+2. maximizes sequential pair-wise overlap
+	so as to minimize cache misses to ultimately minimize run time.
+
+simple idea 1 : sort by x then y then z
+
+**************************************************************************
+1. improve speed
+2. note that simulated annealing was not attempted because it would be too slow
+3. mesh surfaces near world bound are still being tweaked during morphing
+	especially for large exposed surfaces such as d000
+4. Assess validity of assumptions in README for input mesh files.
+	Alternatively, leave it to user to check assumptions using meshalyzer.
+5. small processes are shrunk to infinitely thin fingers for large
+	ECS widths. Need to enforce a minimum process diameter.
+--------------------
+--------------------
+--------------------
+
+command:
+time ~/src/mesh_tools/meshmorph/diagnostic/meshmorph
+-i ecw_50_sep_45_angle_45 -o out_limited -t 20 -s 45 -a 45
+-f ecw_50_sep_45_angle_45/frozen_vertices_input1.dat
+
+*******************************
+
+THOUGHTS
+---------
+
+Typical shape of neuropil is cylinder.
+Shrinking diameter of meshed cylinder without changing its length
+requires a change in aspect rati of faces.
+This potentially has implications for forces on faces as
+function of aspect ratio.
+
+

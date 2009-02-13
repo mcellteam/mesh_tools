@@ -1,0 +1,163 @@
+\section{Vertex\_\-Schedule Class Reference}
+\label{classVertex__Schedule}\index{Vertex_Schedule@{Vertex\_\-Schedule}}
+{\tt \#include $<$vertex\_\-schedule.h$>$}
+
+Collaboration diagram for Vertex\_\-Schedule:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{classVertex__Schedule__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void {\bf calculate\-Move\-Location} ({\bf Vertex} $\ast$const)
+\item 
+void {\bf collect\-Vertices\-To\-Move\-Next} (const int \&)
+\item 
+void {\bf read\-Vertex\-Sequence} (const char $\ast$filename)
+\item 
+{\bf vp\_\-cit} {\bf begin\-Vset} (void) const
+\item 
+{\bf vp\_\-cit} {\bf end\-Vset} (void) const
+\item 
+void {\bf increment\-Num\-Moved\-Verts\-Group} (void)
+\item 
+{\bf vector3} const $\ast$ {\bf get\-Vertex\-Destination} (void) const
+\item 
+{\bf Vertex} $\ast$ {\bf get\-Current\-Vertex} (void) const
+\item 
+{\bf Vertex} $\ast$ {\bf get\-Seed\-Vertex} (void) const
+\item 
+int {\bf get\-Num\-Moved\-Verts\-Group} (void) const
+\item 
+void {\bf set\-Num\-Moved\-Verts\-Group} (int const \&init\_\-value)
+\item 
+bool {\bf no\-More\-Vertices\-To\-Move} (void) const
+\item 
+int {\bf get\-Reference\-Count\-Moved\-Verts} (void) const
+\item 
+bool {\bf no\-Set\-Vertices\-Moved} (void) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Vertex\_\-Schedule} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!instance@{instance}}
+\index{instance@{instance}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex\_\-Schedule} \& Vertex\_\-Schedule::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classVertex__Schedule_73029813663350a537c863c67976bcb6}
+
+
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!calculateMoveLocation@{calculateMoveLocation}}
+\index{calculateMoveLocation@{calculateMoveLocation}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex\_\-Schedule::calculate\-Move\-Location ({\bf Vertex} $\ast$ const {\em v})}\label{classVertex__Schedule_7132091b660efa36c5eb3e1dd0934967}
+
+
+Calculate and record move location of input vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} attempting a move. \end{description}
+\end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!collectVerticesToMoveNext@{collectVerticesToMoveNext}}
+\index{collectVerticesToMoveNext@{collectVerticesToMoveNext}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex\_\-Schedule::collect\-Vertices\-To\-Move\-Next (const int \& {\em group})}\label{classVertex__Schedule_c3621ca9569e5a38e5daffdad2cb0775}
+
+
+Identify and record a collection of vertices to move next. \index{Vertex_Schedule@{Vertex\_\-Schedule}!readVertexSequence@{readVertexSequence}}
+\index{readVertexSequence@{readVertexSequence}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex\_\-Schedule::read\-Vertex\-Sequence (const char $\ast$ {\em filename})}\label{classVertex__Schedule_dec602593611f7ebea28143926679b94}
+
+
+Process vertex move sequence data. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]File containing a list of vertices to be moved in order. \end{description}
+\end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!beginVset@{beginVset}}
+\index{beginVset@{beginVset}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Vertex\_\-Schedule::begin\-Vset (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_768f889614599162ae3d70981e791d6a}
+
+
+Get an iterator pointing to the first in the collection of vertices to move next. \begin{Desc}
+\item[Returns:]Iterator pointing to the first vertex to move next. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!endVset@{endVset}}
+\index{endVset@{endVset}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Vertex\_\-Schedule::end\-Vset (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_e2ef596b2c4a47b69be3c3f822d7bcfc}
+
+
+Get an iterator pointing to one past the last in the collection of vertices to move next. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last vertex to move next. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!incrementNumMovedVertsGroup@{incrementNumMovedVertsGroup}}
+\index{incrementNumMovedVertsGroup@{incrementNumMovedVertsGroup}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex\_\-Schedule::increment\-Num\-Moved\-Verts\-Group (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_8bf86d52437824c1b78ca0f5ed9e5c0c}
+
+
+Increment the number of moved vertices in group. \index{Vertex_Schedule@{Vertex\_\-Schedule}!getVertexDestination@{getVertexDestination}}
+\index{getVertexDestination@{getVertexDestination}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} const$\ast$ Vertex\_\-Schedule::get\-Vertex\-Destination (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_3ae6a55e230276a631d20949138dd9c4}
+
+
+Retrieve the location to which current vertex is attempting to move. \begin{Desc}
+\item[Returns:]Recorded move location of current vertex. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!getCurrentVertex@{getCurrentVertex}}
+\index{getCurrentVertex@{getCurrentVertex}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex}$\ast$ Vertex\_\-Schedule::get\-Current\-Vertex (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_eece2662bcd81cbf2fdfa4d1c6d53410}
+
+
+Retrieve vertex attempting to move now. \begin{Desc}
+\item[Returns:]Pointer to vertex attempting to move now. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!getSeedVertex@{getSeedVertex}}
+\index{getSeedVertex@{getSeedVertex}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex}$\ast$ Vertex\_\-Schedule::get\-Seed\-Vertex (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_4935f3472cc6c77042c7032a063b5de7}
+
+
+Retrieve pointer to seed vertex of collection of vertices to move. \begin{Desc}
+\item[Returns:]Pointer to seed vertex. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!getNumMovedVertsGroup@{getNumMovedVertsGroup}}
+\index{getNumMovedVertsGroup@{getNumMovedVertsGroup}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Vertex\_\-Schedule::get\-Num\-Moved\-Verts\-Group (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_802d1b6d13c9f3d82325f80590f46e03}
+
+
+Retrieve the number of vertices moved so far in this group. \begin{Desc}
+\item[Returns:]The number of vertices moved so far in this group. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!setNumMovedVertsGroup@{setNumMovedVertsGroup}}
+\index{setNumMovedVertsGroup@{setNumMovedVertsGroup}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex\_\-Schedule::set\-Num\-Moved\-Verts\-Group (int const \& {\em init\_\-value})\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_9588d4a7a1da405bc8bb5c533b337c32}
+
+
+Initialize number of moved vertices in group. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em init\_\-value}]Initial value of number of moved vertices. \end{description}
+\end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!noMoreVerticesToMove@{noMoreVerticesToMove}}
+\index{noMoreVerticesToMove@{noMoreVerticesToMove}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Vertex\_\-Schedule::no\-More\-Vertices\-To\-Move (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_bfe2aad2c1fc3178288702906940e764}
+
+
+Check if more vertices in collection to move. \begin{Desc}
+\item[Returns:]True if no more vertices to move; false otherwise. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!getReferenceCountMovedVerts@{getReferenceCountMovedVerts}}
+\index{getReferenceCountMovedVerts@{getReferenceCountMovedVerts}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Vertex\_\-Schedule::get\-Reference\-Count\-Moved\-Verts (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_1710822552824e6934e207010456519f}
+
+
+Retrieve the number of moved vertices in group at start of last set of moved vertices. \begin{Desc}
+\item[Returns:]Reference count of moved vertices in group. \end{Desc}
+\index{Vertex_Schedule@{Vertex\_\-Schedule}!noSetVerticesMoved@{noSetVerticesMoved}}
+\index{noSetVerticesMoved@{noSetVerticesMoved}!Vertex_Schedule@{Vertex\_\-Schedule}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Vertex\_\-Schedule::no\-Set\-Vertices\-Moved (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex__Schedule_4d1f64b9e725eab1b672c545cba5e2b7}
+
+
+Determine if any vertices were moved from last set of move candidates. \begin{Desc}
+\item[Returns:]True if no vertices were moved; false otherwise. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf vertex\_\-schedule.h}\item 
+{\bf vertex\_\-schedule.cc}\end{CompactItemize}

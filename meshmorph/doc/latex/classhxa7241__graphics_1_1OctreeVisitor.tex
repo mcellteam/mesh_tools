@@ -1,0 +1,162 @@
+\section{hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$ Class Template Reference}
+\label{classhxa7241__graphics_1_1OctreeVisitor}\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::OctreeVisitor}}
+{\tt \#include $<$Octree.h$>$}
+
+Inheritance diagram for hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=404pt]{classhxa7241__graphics_1_1OctreeVisitor__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=137pt]{classhxa7241__graphics_1_1OctreeVisitor__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+virtual {\bf $\sim$Octree\-Visitor} ()
+\item 
+virtual void {\bf visit\-Root\-V} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data)
+\begin{CompactList}\small\item\em void-to-type forwarders \item\end{CompactList}\item 
+virtual void {\bf visit\-Branch\-V} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Leaf\-V} (const {\bf Array}$<$ const void $\ast$ $>$ \&items, const {\bf Octree\-Data} \&octree\-Data)
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Visitor} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+virtual void {\bf visit\-Root} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data)=0
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual void {\bf visit\-Branch} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data)=0
+\item 
+virtual void {\bf visit\-Leaf} (const {\bf Array}$<$ const TYPE $\ast$ $>$ \&items, const {\bf Octree\-Data} \&octree\-Data)=0
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class TYPE$>$ class hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$}
+
+Visitor abstract base, for client use with \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree}.\par
+\par
+
+
+Client of \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} must define a concrete derivative of Octree\-Visitor$<$Item\-Type$>$.\par
+\par
+
+
+This is a reversal of the Visitor pattern: it allows an operation to be performed with the \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree}, except the \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} is merely read from and it is the visitor that is modified.\par
+\par
+
+
+The visit methods are called by the tree nodes during the visit operation. The parameters supply the cell and boundary info. The implementation can call visit on the supplied cell.\par
+\par
+
+
+The implementation of visit\-Branch needs to make the \doxyref{Octree\-Data}{p.}{classhxa7241__graphics_1_1OctreeData} to be given in each call of visit.
+
+Subcell numbering: \small\begin{alltt}
+    y z       6 7
+    |/   2 3  4 5
+     -x  0 1
+ \end{alltt}
+\normalsize 
+ in binary: \small\begin{alltt}
+    y z           110 111
+    |/   010 011  100 101
+     -x  000 001
+ \end{alltt}
+\normalsize 
+
+
+The \_\-\_\-\_\-V methods simply apply a type-cast to void$\ast$s and forward to their abstract counterparts.\par
+\par
+ 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!OctreeVisitor@{OctreeVisitor}}
+\index{OctreeVisitor@{OctreeVisitor}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::{\bf Octree\-Visitor} ()\hspace{0.3cm}{\tt  [inline, protected]}}\label{classhxa7241__graphics_1_1OctreeVisitor_7055025ef0b10d6f6f35e636f62de785}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!~OctreeVisitor@{$\sim$OctreeVisitor}}
+\index{~OctreeVisitor@{$\sim$OctreeVisitor}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ virtual {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::$\sim${\bf Octree\-Visitor} ()\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeVisitor_35e6ed22803d5fbc29bb2994a0bf9fe0}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!visitRootV@{visitRootV}}
+\index{visitRootV@{visitRootV}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::visit\-Root\-V (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeVisitor_61cd041a87e104914494e99b5e9e7d8c}
+
+
+void-to-type forwarders 
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor\-V} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitorV_ed002d0f93c17840c621f5840cf986e4}.\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!visitBranchV@{visitBranchV}}
+\index{visitBranchV@{visitBranchV}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::visit\-Branch\-V (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeVisitor_4e64e47d68d32ff6aac07bee49d8a84a}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor\-V} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitorV_69b3d1549ed26d237d9c515cc7ced0b4}.\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!visitLeafV@{visitLeafV}}
+\index{visitLeafV@{visitLeafV}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::visit\-Leaf\-V (const {\bf Array}$<$ const void $\ast$ $>$ \& {\em items}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeVisitor_bff12c6a7b9272b870d6c834ec92359c}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor\-V} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitorV_f805548bf0aca7122981d021a9846a9d}.\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!visitRoot@{visitRoot}}
+\index{visitRoot@{visitRoot}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ virtual void {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::visit\-Root (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, pure virtual]}}\label{classhxa7241__graphics_1_1OctreeVisitor_30b2c5b03acb6c75b40d79a86e015878}
+
+
+commands ------------------------------------------------------------------- 
+
+Called by \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} when visit traversal is at the root.\par
+\par
+ To continue deeper, implementation calls \doxyref{Octree\-Root::continue\-Visit}{p.}{classhxa7241__graphics_1_1OctreeRoot_886f24f550bc0d50fb64c4b0c6de64f9}( p\-Root\-Cell, octree\-Data, $\ast$this ). p\-Root\-Cell can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]\doxyref{Octree\-Data}{p.}{classhxa7241__graphics_1_1OctreeData} \end{Desc}
+
+
+Implemented in {\bf Octree\_\-Visitor\_\-Check\_\-Face} \doxyref{}{p.}{classOctree__Visitor__Check__Face_b760cdd0db55cd5e0a365007ab400d1a}, {\bf Octree\_\-Visitor\_\-Face} \doxyref{}{p.}{classOctree__Visitor__Face_0012a0413872dccf1c1358be7b4b9bc0}, {\bf Octree\_\-Visitor\_\-Measure} \doxyref{}{p.}{classOctree__Visitor__Measure_e12e73c31293ea5320acef16a49d14b6}, and {\bf Octree\_\-Visitor\_\-Update} \doxyref{}{p.}{classOctree__Visitor__Update_fc42ef265d0a074c51f403abc5dfa45f}.\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!visitBranch@{visitBranch}}
+\index{visitBranch@{visitBranch}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ virtual void {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::visit\-Branch (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, pure virtual]}}\label{classhxa7241__graphics_1_1OctreeVisitor_e62544f5cde1e32e7fd1515e0b8d110d}
+
+
+Called by \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} when visit traversal is at a branch.\par
+\par
+ To continue deeper, implementation calls \doxyref{Octree\-Branch::continue\-Visit}{p.}{classhxa7241__graphics_1_1OctreeBranch_13c4d758a1c9b38f166e916c87ba1469}( sub\-Cells, octree\-Data, sub\-Cell\-Index, $\ast$this ) for any/all sub\-Cell\-Index values. sub\-Cells elements can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]\doxyref{Octree\-Data}{p.}{classhxa7241__graphics_1_1OctreeData} \end{Desc}
+
+
+Implemented in {\bf Octree\_\-Visitor\_\-Check\_\-Face} \doxyref{}{p.}{classOctree__Visitor__Check__Face_3846d9a9d6a0c0bf5adf34b324295c87}, {\bf Octree\_\-Visitor\_\-Face} \doxyref{}{p.}{classOctree__Visitor__Face_982568defaf668997aceedd9eb69ff15}, {\bf Octree\_\-Visitor\_\-Measure} \doxyref{}{p.}{classOctree__Visitor__Measure_ab709f718cb6f6bd3d3ad4411749be04}, and {\bf Octree\_\-Visitor\_\-Update} \doxyref{}{p.}{classOctree__Visitor__Update_d9cb612bcad88d9bf13ecefc52c5f6d6}.\index{hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}!visitLeaf@{visitLeaf}}
+\index{visitLeaf@{visitLeaf}!hxa7241_graphics::OctreeVisitor@{hxa7241\_\-graphics::Octree\-Visitor}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ virtual void {\bf hxa7241\_\-graphics::Octree\-Visitor}$<$ TYPE $>$::visit\-Leaf (const {\bf Array}$<$ const TYPE $\ast$ $>$ \& {\em items}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, pure virtual]}}\label{classhxa7241__graphics_1_1OctreeVisitor_b03a9f159ae112fcfec4f6f657b58653}
+
+
+Called by \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} when visit traversal is at a leaf.\par
+\par
+ \begin{Desc}
+\item[See also:]\doxyref{Octree\-Data}{p.}{classhxa7241__graphics_1_1OctreeData} \end{Desc}
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Octree.h}\end{CompactItemize}

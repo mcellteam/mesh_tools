@@ -1,0 +1,135 @@
+\section{hxa7241\_\-graphics::Octree\-Bound Class Reference}
+\label{classhxa7241__graphics_1_1OctreeBound}\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::OctreeBound}}
+{\tt \#include $<$Octree\-Auxiliary.h$>$}
+
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Bound:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=133pt]{classhxa7241__graphics_1_1OctreeBound__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Bound} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf Octree\-Bound} (const {\bf Vector3r} \&position\-Of\-Lower\-Corner, real size)
+\item 
+{\bf Octree\-Bound} (const {\bf Octree\-Bound} \&parent\-Cell\-Bound, dword sub\-Cell\-Index)
+\item 
+{\bf $\sim$Octree\-Bound} ()
+\item 
+{\bf Octree\-Bound} (const {\bf Octree\-Bound} \&)
+\item 
+{\bf Octree\-Bound} \& {\bf operator=} (const {\bf Octree\-Bound} \&)
+\item 
+const {\bf Vector3r} \& {\bf get\-Lower\-Corner} () const
+\begin{CompactList}\small\item\em \doxyref{Octree\-Bound}{p.}{classhxa7241__graphics_1_1OctreeBound} ----------------------------------------------------------------. \item\end{CompactList}\item 
+const {\bf Vector3r} \& {\bf get\-Upper\-Corner} () const
+\item 
+const {\bf Vector3r} \& {\bf get\-Center} () const
+\item 
+real {\bf get\-Radius} () const
+\item 
+real {\bf get\-Size} () const
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Geometric data for the bound of an octree cell.\par
+\par
+
+
+Constant.\par
+\par
+
+
+Radius is that of the circumsphere.\par
+\par
+
+
+Subcell numbering: \small\begin{alltt}
+    y z       6 7
+    |/   2 3  4 5
+     -x  0 1
+ \end{alltt}
+\normalsize 
+ in binary: \small\begin{alltt}
+    y z           110 111
+    |/   010 011  100 101
+     -x  000 001
+ \end{alltt}
+\normalsize 
+ 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!OctreeBound@{OctreeBound}}
+\index{OctreeBound@{OctreeBound}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Bound::Octree\-Bound ()}\label{classhxa7241__graphics_1_1OctreeBound_104e42dc39b274fecda123f95c0dcf91}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!OctreeBound@{OctreeBound}}
+\index{OctreeBound@{OctreeBound}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Bound::Octree\-Bound (const {\bf Vector3r} \& {\em position\-Of\-Lower\-Corner}, real {\em size})}\label{classhxa7241__graphics_1_1OctreeBound_82bf086c05629a8a92808a3c612e9772}
+
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!OctreeBound@{OctreeBound}}
+\index{OctreeBound@{OctreeBound}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Bound::Octree\-Bound (const {\bf Octree\-Bound} \& {\em parent\-Cell\-Bound}, dword {\em sub\-Cell\-Index})}\label{classhxa7241__graphics_1_1OctreeBound_008f2def7a4be54de13cc05e2ac26385}
+
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!~OctreeBound@{$\sim$OctreeBound}}
+\index{~OctreeBound@{$\sim$OctreeBound}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Bound::$\sim$Octree\-Bound ()}\label{classhxa7241__graphics_1_1OctreeBound_cc9cc3280cc16c4d4d34d75f8a0d7865}
+
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!OctreeBound@{OctreeBound}}
+\index{OctreeBound@{OctreeBound}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Bound::Octree\-Bound (const {\bf Octree\-Bound} \&)}\label{classhxa7241__graphics_1_1OctreeBound_2d7b15b774db6339eaaf596cf39df26b}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Bound} \& Octree\-Bound::operator= (const {\bf Octree\-Bound} \&)}\label{classhxa7241__graphics_1_1OctreeBound_39b24075864904724cf361cdc018686f}
+
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!getLowerCorner@{getLowerCorner}}
+\index{getLowerCorner@{getLowerCorner}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& hxa7241\_\-graphics::Octree\-Bound::get\-Lower\-Corner () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeBound_858ad10e88ccf025f2b577bc381fee4b}
+
+
+\doxyref{Octree\-Bound}{p.}{classhxa7241__graphics_1_1OctreeBound} ----------------------------------------------------------------. 
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!getUpperCorner@{getUpperCorner}}
+\index{getUpperCorner@{getUpperCorner}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& hxa7241\_\-graphics::Octree\-Bound::get\-Upper\-Corner () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeBound_0ac17d2c15cf94b2c46390e5a7b1bc86}
+
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!getCenter@{getCenter}}
+\index{getCenter@{getCenter}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& hxa7241\_\-graphics::Octree\-Bound::get\-Center () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeBound_153e9e87954fe9a29131eeaaae191b01}
+
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!getRadius@{getRadius}}
+\index{getRadius@{getRadius}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Octree\-Bound::get\-Radius () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeBound_948a0230a9f94957fee0b3053d3613d0}
+
+
+\index{hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}!getSize@{getSize}}
+\index{getSize@{getSize}!hxa7241_graphics::OctreeBound@{hxa7241\_\-graphics::Octree\-Bound}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Octree\-Bound::get\-Size () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeBound_ff03cb49b27826f794da2062251f72be}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf Octree\-Auxiliary.h}\item 
+{\bf Octree\-Auxiliary.cc}\end{CompactItemize}

@@ -1,0 +1,5 @@
+base referer
+rect $classVertex.html 203,192 270,216
+rect $classObject.html 174,417 240,441
+rect $classEdge.html 128,327 184,351
+rect $structvector3.html 198,7 270,31

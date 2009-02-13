@@ -1,0 +1,335 @@
+\section{Refractory Class Reference}
+\label{classRefractory}\index{Refractory@{Refractory}}
+{\tt \#include $<$refractory.h$>$}
+
+Collaboration diagram for Refractory:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=88pt]{classRefractory__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+int {\bf num\-Recorded\-Vertex\-Moves} ({\bf Vertex} $\ast$)
+\item 
+int {\bf get\-Num\-Vert\-Refracted\-N} (void) const
+\item 
+int {\bf get\-Num\-Vert\-Refracted\-Int} (void) const
+\item 
+int {\bf get\-Num\-Vert\-Refracted\-Ang} (void) const
+\item 
+int {\bf get\-Num\-Vert\-Refracted\-Small\-Disp} (void) const
+\item 
+int {\bf get\-Num\-Vert\-Refracted\-Octree\-Vio} (void) const
+\item 
+bool {\bf is\-Refracted} ({\bf Vertex} $\ast$const)
+\item 
+bool {\bf vertex\-Is\-Move\-Candidate} ({\bf Vertex} $\ast$const v)
+\item 
+bool {\bf vertex\-Moves\-Are\-Recorded} ({\bf Vertex} $\ast$)
+\item 
+void {\bf refract\-Vertex\-For\-Small\-Disp\-Vio} ({\bf Vertex} $\ast$const)
+\item 
+void {\bf refract\-Vertex\-For\-Int\-Vio} ({\bf Vertex} $\ast$const)
+\item 
+void {\bf refract\-Vertfor\-Angle\-Vio} ({\bf Vertex} $\ast$const)
+\item 
+void {\bf refract\-Vertfor\-Octree\-Vio} ({\bf Vertex} $\ast$v)
+\item 
+void {\bf refract\-Vert\-For\-Num\-Vio} ({\bf Vertex} $\ast$const)
+\item 
+void {\bf update\-Vert\-Move\-Distr} ({\bf Vertex} $\ast$const, {\bf ti\_\-it} \&)
+\item 
+void {\bf enforce\-Maxdisplacement} ({\bf Vertex} $\ast$const, {\bf vector3} \&)
+\item 
+void {\bf update\-Successful\-Move} (const int \&, {\bf Vertex} $\ast$const)
+\item 
+void {\bf reset\-For\-New\-Group} (void)
+\item 
+{\bf vp\_\-cit} {\bf get\-Next\-Vertex} (const int \&group, {\bf vp\_\-cit}, bool const, bool const, bool const)
+\item 
+{\bf vp\_\-cit} {\bf begin\-N} (void) const
+\item 
+{\bf vp\_\-cit} {\bf end\-N} (void) const
+\item 
+{\bf vp\_\-cit} {\bf begin\-Int} (void) const
+\item 
+{\bf vp\_\-cit} {\bf end\-Int} (void) const
+\item 
+{\bf vp\_\-cit} {\bf begin\-Ang} (void) const
+\item 
+{\bf vp\_\-cit} {\bf end\-Ang} (void) const
+\item 
+{\bf vp\_\-cit} {\bf begin\-Small\-Disp} (void) const
+\item 
+{\bf vp\_\-cit} {\bf end\-Small\-Disp} (void) const
+\item 
+{\bf vp\_\-cit} {\bf begin\-Octree\-Vio} (void) const
+\item 
+{\bf vp\_\-cit} {\bf end\-Octree\-Vio} (void) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Refractory} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Refractory@{Refractory}!instance@{instance}}
+\index{instance@{instance}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Refractory} \& Refractory::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classRefractory_5c2c61e4313547213a521ae1d106b7b8}
+
+
+\index{Refractory@{Refractory}!numRecordedVertexMoves@{numRecordedVertexMoves}}
+\index{numRecordedVertexMoves@{numRecordedVertexMoves}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Refractory::num\-Recorded\-Vertex\-Moves ({\bf Vertex} $\ast$ {\em v})}\label{classRefractory_4632669e6e443738508471015b2c7cd2}
+
+
+Get number of recorded moves for input vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Number of recorded moves found for vertex. \end{Desc}
+\index{Refractory@{Refractory}!getNumVertRefractedN@{getNumVertRefractedN}}
+\index{getNumVertRefractedN@{getNumVertRefractedN}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Refractory::get\-Num\-Vert\-Refracted\-N (void) const}\label{classRefractory_c4c57da847f5cffe7ffcf4cea07c717c}
+
+
+Get number of vertices currently in refraction for filling their quota of moves per group. \begin{Desc}
+\item[Returns:]Number of vertices refracted for moving MAX\_\-TOUCHES times. \end{Desc}
+\index{Refractory@{Refractory}!getNumVertRefractedInt@{getNumVertRefractedInt}}
+\index{getNumVertRefractedInt@{getNumVertRefractedInt}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Refractory::get\-Num\-Vert\-Refracted\-Int (void) const}\label{classRefractory_e5a1b6956b49f8e984e0f79bb19d00f2}
+
+
+Get number of vertices currently in refraction for resulting in intersected faces. \begin{Desc}
+\item[Returns:]Number of vertices refracted for resulting in intersected faces. \end{Desc}
+\index{Refractory@{Refractory}!getNumVertRefractedAng@{getNumVertRefractedAng}}
+\index{getNumVertRefractedAng@{getNumVertRefractedAng}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Refractory::get\-Num\-Vert\-Refracted\-Ang (void) const}\label{classRefractory_9b0512460e9be2fb4a5bd29a5462a91d}
+
+
+Get number of vertices currently in refraction for resulting in extreme angles. \begin{Desc}
+\item[Returns:]Number of vertices refracted for resulting in extreme angles. \end{Desc}
+\index{Refractory@{Refractory}!getNumVertRefractedSmallDisp@{getNumVertRefractedSmallDisp}}
+\index{getNumVertRefractedSmallDisp@{getNumVertRefractedSmallDisp}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Refractory::get\-Num\-Vert\-Refracted\-Small\-Disp (void) const}\label{classRefractory_518691b6f7b3d8d5811b42588f167f20}
+
+
+Get number of vertices currently in refraction for having unacceptably small virtual displacements. \begin{Desc}
+\item[Returns:]Number of vertices refracted for resulting in small virtual displacements.. \end{Desc}
+\index{Refractory@{Refractory}!getNumVertRefractedOctreeVio@{getNumVertRefractedOctreeVio}}
+\index{getNumVertRefractedOctreeVio@{getNumVertRefractedOctreeVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Refractory::get\-Num\-Vert\-Refracted\-Octree\-Vio (void) const}\label{classRefractory_088d1dea7c651d2869b070e155331d71}
+
+
+Get number of vertices currently in refraction for breaching boundarsy of octree. \begin{Desc}
+\item[Returns:]Number of vertices refracted for breaching octree boundary. \end{Desc}
+\index{Refractory@{Refractory}!isRefracted@{isRefracted}}
+\index{isRefracted@{isRefracted}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Refractory::is\-Refracted ({\bf Vertex} $\ast$ const {\em v})}\label{classRefractory_f168eb29dcbf3017c5566d792ddd1a39}
+
+
+Determine if input vertex is currently in refractory period. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if refracted; false otherwise. \end{Desc}
+\index{Refractory@{Refractory}!vertexIsMoveCandidate@{vertexIsMoveCandidate}}
+\index{vertexIsMoveCandidate@{vertexIsMoveCandidate}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Refractory::vertex\-Is\-Move\-Candidate ({\bf Vertex} $\ast$const {\em v})}\label{classRefractory_085b1700e2281d6a63762f0cd542ac70}
+
+
+Determine if vertex is allowed to move. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if allowed to move; false otherwise. \end{Desc}
+\index{Refractory@{Refractory}!vertexMovesAreRecorded@{vertexMovesAreRecorded}}
+\index{vertexMovesAreRecorded@{vertexMovesAreRecorded}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Refractory::vertex\-Moves\-Are\-Recorded ({\bf Vertex} $\ast$ {\em v})}\label{classRefractory_dd7c0b681eec0811050b1536b356872b}
+
+
+Check if any moves by input vertex are recorded in this class. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if recorded moves found for vertex. \end{Desc}
+\index{Refractory@{Refractory}!refractVertexForSmallDispVio@{refractVertexForSmallDispVio}}
+\index{refractVertexForSmallDispVio@{refractVertexForSmallDispVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::refract\-Vertex\-For\-Small\-Disp\-Vio ({\bf Vertex} $\ast$ const {\em v})}\label{classRefractory_885ba1830dd5d45e721aed4259929c4e}
+
+
+Put input vertex into refractory state (period when vertex cannot move) for attempting such a small move. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} to be refracted. \end{description}
+\end{Desc}
+\index{Refractory@{Refractory}!refractVertexForIntVio@{refractVertexForIntVio}}
+\index{refractVertexForIntVio@{refractVertexForIntVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::refract\-Vertex\-For\-Int\-Vio ({\bf Vertex} $\ast$ const {\em v})}\label{classRefractory_9b5a722bf75242e5565dcbb8dd15d267}
+
+
+Put input vertex into refractory state (period when vertex cannot move) for resulting in face intersections with every attempted move. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} to be refracted. \end{description}
+\end{Desc}
+\index{Refractory@{Refractory}!refractVertforAngleVio@{refractVertforAngleVio}}
+\index{refractVertforAngleVio@{refractVertforAngleVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::refract\-Vertfor\-Angle\-Vio ({\bf Vertex} $\ast$ const {\em v})}\label{classRefractory_f6233064884ff93c8b85748aa059babf}
+
+
+Put input vertex into refractory state (period when vertex cannot move) for ulting in very small (near 0) or very large (near 2$\ast$pi) angles with every attempted move. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} to be refracted. \end{description}
+\end{Desc}
+\index{Refractory@{Refractory}!refractVertforOctreeVio@{refractVertforOctreeVio}}
+\index{refractVertforOctreeVio@{refractVertforOctreeVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::refract\-Vertfor\-Octree\-Vio ({\bf Vertex} $\ast$ {\em v})}\label{classRefractory_371fb86c20dc565931fe2608594c631d}
+
+
+Put input vertex into refractory state (period when vertex cannot move) for passing the octree boundary limits with every attempted move. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} to be refracted. \end{description}
+\end{Desc}
+\index{Refractory@{Refractory}!refractVertForNumVio@{refractVertForNumVio}}
+\index{refractVertForNumVio@{refractVertForNumVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::refract\-Vert\-For\-Num\-Vio ({\bf Vertex} $\ast$ const {\em v})}\label{classRefractory_ae0a729ba4fcfe0fd260ac26f21bfd19}
+
+
+Put input vertex into refractory state (period when vertex cannot move) for being moved too many times. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} to be refracted. \end{description}
+\end{Desc}
+\index{Refractory@{Refractory}!updateVertMoveDistr@{updateVertMoveDistr}}
+\index{updateVertMoveDistr@{updateVertMoveDistr}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::update\-Vert\-Move\-Distr ({\bf Vertex} $\ast$ {\em const}, {\bf ti\_\-it} \&)}\label{classRefractory_316854c9d80f1f823ea78093137b2c15}
+
+
+\index{Refractory@{Refractory}!enforceMaxdisplacement@{enforceMaxdisplacement}}
+\index{enforceMaxdisplacement@{enforceMaxdisplacement}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::enforce\-Maxdisplacement ({\bf Vertex} $\ast$ const {\em v}, {\bf vector3} \& {\em new\_\-pos})}\label{classRefractory_af94e7bf90ebe1eccd81645f1efb3498}
+
+
+Enforce maximum vertex displacment policy. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} being moved. \item[\mbox{$\rightarrow$} {\em new\_\-pos}]New Position of input vertex. \end{description}
+\end{Desc}
+\index{Refractory@{Refractory}!updateSuccessfulMove@{updateSuccessfulMove}}
+\index{updateSuccessfulMove@{updateSuccessfulMove}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::update\-Successful\-Move (const int \& {\em group}, {\bf Vertex} $\ast$ const {\em v})}\label{classRefractory_0ce38616a3f3693df1d31a3759a5d3e9}
+
+
+Update class after successful vertex move. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]Last moved vertex. \end{description}
+\end{Desc}
+\index{Refractory@{Refractory}!resetForNewGroup@{resetForNewGroup}}
+\index{resetForNewGroup@{resetForNewGroup}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Refractory::reset\-For\-New\-Group (void)}\label{classRefractory_07d48b1f7698df19906badd9df0747e2}
+
+
+Clear class members for new group of moved vertices. \index{Refractory@{Refractory}!getNextVertex@{getNextVertex}}
+\index{getNextVertex@{getNextVertex}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::get\-Next\-Vertex (const int \& {\em group}, {\bf vp\_\-cit} {\em v}, bool const {\em int\_\-flag}, bool const {\em ang\_\-flag}, bool const {\em outside\_\-octree})}\label{classRefractory_2156e3267acb297729fb0e2d94a7ca78}
+
+
+Decide whether to try moving the same vertex again or give up and try moving another vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em int\_\-flag}]True if vertex move resulted in new face intersections; false otherwise. \item[\mbox{$\leftarrow$} {\em ang\_\-flag}]True if vertex move resulted in extreme angles; false otherwise. \item[\mbox{$\leftarrow$} {\em outside\_\-octree}]True if vertex move breached octree boundary; false otherwise. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Iterator pointing to next vertex move candidate. \end{Desc}
+\index{Refractory@{Refractory}!beginN@{beginN}}
+\index{beginN@{beginN}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::begin\-N (void) const}\label{classRefractory_b50c1de1c3359333d9916ea74a4e505a}
+
+
+Get an iterator pointing to the first in the collection of vertices refracted for moving MAX\_\-TOUCHES times. \begin{Desc}
+\item[Returns:]Iterator pointing to the first refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!endN@{endN}}
+\index{endN@{endN}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::end\-N (void) const}\label{classRefractory_48383fc9ad9308f33dd29389ea7f3b04}
+
+
+Get an iterator pointing to one past the last in the collection of vertices refracted for moving MAX\_\-TOUCHES times. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!beginInt@{beginInt}}
+\index{beginInt@{beginInt}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::begin\-Int (void) const}\label{classRefractory_70c2b4efb010b44a6443e6326f1dd62f}
+
+
+Get an iterator pointing to the first in the collection of vertices refracted for resulting in intersected faces. \begin{Desc}
+\item[Returns:]Iterator pointing to the first refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!endInt@{endInt}}
+\index{endInt@{endInt}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::end\-Int (void) const}\label{classRefractory_5827084b221695e0c4ef2b0a27c6b270}
+
+
+Get an iterator pointing to one past the last in the collection of vertices refracted for resulting in intersected faces. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!beginAng@{beginAng}}
+\index{beginAng@{beginAng}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::begin\-Ang (void) const}\label{classRefractory_6b5e66e2a7213713505391496a82d231}
+
+
+Get an iterator pointing to the first in the collection of vertices refracted for resulting in extreme angles. \begin{Desc}
+\item[Returns:]Iterator pointing to the first refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!endAng@{endAng}}
+\index{endAng@{endAng}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::end\-Ang (void) const}\label{classRefractory_ef359fca1f797be8c80480edc55c9f49}
+
+
+Get an iterator pointing to one past the last in the collection of vertices refracted for resulting in extreme angles. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!beginSmallDisp@{beginSmallDisp}}
+\index{beginSmallDisp@{beginSmallDisp}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::begin\-Small\-Disp (void) const}\label{classRefractory_93cf4e10481b927f278e143c14745d03}
+
+
+Get an iterator pointing to the first in the collection of vertices refracted for having an unacceptably small virtual displacement. \begin{Desc}
+\item[Returns:]Iterator pointing to the first refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!endSmallDisp@{endSmallDisp}}
+\index{endSmallDisp@{endSmallDisp}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::end\-Small\-Disp (void) const}\label{classRefractory_44f925ed5faf46265d77f1bd7e4b7c22}
+
+
+Get an iterator pointing to one past the last in the collection of vertices refracted for having an unacceptably small virtual displacement. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!beginOctreeVio@{beginOctreeVio}}
+\index{beginOctreeVio@{beginOctreeVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::begin\-Octree\-Vio (void) const}\label{classRefractory_3e7b2cc26ac5554b19bd34712924816e}
+
+
+Get an iterator pointing to the first in the collection of vertices refracted for breaching boundary of octree. \begin{Desc}
+\item[Returns:]Iterator pointing to the first refracted vertex. \end{Desc}
+\index{Refractory@{Refractory}!endOctreeVio@{endOctreeVio}}
+\index{endOctreeVio@{endOctreeVio}!Refractory@{Refractory}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vp\_\-cit} Refractory::end\-Octree\-Vio (void) const}\label{classRefractory_2cbac882d8076c016663b9ae3129ca1d}
+
+
+Get an iterator pointing to one past the last in the collection of vertices refracted for breaching boundary of octree. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last refracted vertex. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf refractory.h}\item 
+{\bf refractory.cc}\end{CompactItemize}

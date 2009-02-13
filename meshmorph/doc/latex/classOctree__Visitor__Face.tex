@@ -1,0 +1,109 @@
+\section{Octree\_\-Visitor\_\-Face Class Reference}
+\label{classOctree__Visitor__Face}\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+{\tt \#include $<$octree\_\-visitor\_\-face.h$>$}
+
+Inheritance diagram for Octree\_\-Visitor\_\-Face:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classOctree__Visitor__Face__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for Octree\_\-Visitor\_\-Face:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{classOctree__Visitor__Face__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\_\-Visitor\_\-Face} ({\bf Vector3r}, {\bf Vector3r})
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+virtual {\bf $\sim$Octree\_\-Visitor\_\-Face} ()
+\item 
+{\bf fp\_\-it} {\bf mybegin} (void)
+\item 
+{\bf fp\_\-it} {\bf myend} (void)
+\item 
+int {\bf num\_\-faces} (void)
+\item 
+int {\bf num\_\-leaves} (void)
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+virtual void {\bf visit\-Root} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Branch} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Leaf} (const Array$<$ const {\bf Face} $\ast$ $>$ \&items, const {\bf Octree\-Data} \&octree\-Data)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Face::Octree\_\-Visitor\_\-Face ({\bf Vector3r}, {\bf Vector3r})}\label{classOctree__Visitor__Face_abdc8e42ba87a767d3c10fba6f83ac8c}
+
+
+standard object services --------------------------------------------------- 
+
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!~Octree_Visitor_Face@{$\sim$Octree\_\-Visitor\_\-Face}}
+\index{~Octree_Visitor_Face@{$\sim$Octree\_\-Visitor\_\-Face}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Face::$\sim$Octree\_\-Visitor\_\-Face ()\hspace{0.3cm}{\tt  [virtual]}}\label{classOctree__Visitor__Face_38bbbae9a0088ff39b83894f8085a03f}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!mybegin@{mybegin}}
+\index{mybegin@{mybegin}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf fp\_\-it} Octree\_\-Visitor\_\-Face::mybegin (void)\hspace{0.3cm}{\tt  [inline]}}\label{classOctree__Visitor__Face_3bf38552b1e3c6020dd4b6df0f589ae8}
+
+
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!myend@{myend}}
+\index{myend@{myend}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf fp\_\-it} Octree\_\-Visitor\_\-Face::myend (void)\hspace{0.3cm}{\tt  [inline]}}\label{classOctree__Visitor__Face_ca7ed3d14c0016a7c7d4be0588b699fc}
+
+
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!num_faces@{num\_\-faces}}
+\index{num_faces@{num\_\-faces}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Octree\_\-Visitor\_\-Face::num\_\-faces (void)\hspace{0.3cm}{\tt  [inline]}}\label{classOctree__Visitor__Face_9901ce5624d28305a1b4ca068887b06f}
+
+
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!num_leaves@{num\_\-leaves}}
+\index{num_leaves@{num\_\-leaves}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Octree\_\-Visitor\_\-Face::num\_\-leaves (void)\hspace{0.3cm}{\tt  [inline]}}\label{classOctree__Visitor__Face_48cd59c487907434b9e2c09a3fa4ef52}
+
+
+\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!visitRoot@{visitRoot}}
+\index{visitRoot@{visitRoot}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Face::visit\-Root (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Face_0012a0413872dccf1c1358be7b4b9bc0}
+
+
+commands ------------------------------------------------------------------- octree visitor overrides 
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_30b2c5b03acb6c75b40d79a86e015878}.\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!visitBranch@{visitBranch}}
+\index{visitBranch@{visitBranch}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Face::visit\-Branch (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Face_982568defaf668997aceedd9eb69ff15}
+
+
+Called by Octree when visit traversal is at a branch.\par
+\par
+ To continue deeper, implementation calls Octree\-Branch::continue\-Visit( sub\-Cells, octree\-Data, sub\-Cell\-Index, $\ast$this ) for any/all sub\-Cell\-Index values. sub\-Cells elements can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]Octree\-Data \end{Desc}
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_e62544f5cde1e32e7fd1515e0b8d110d}.\index{Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}!visitLeaf@{visitLeaf}}
+\index{visitLeaf@{visitLeaf}!Octree_Visitor_Face@{Octree\_\-Visitor\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Face::visit\-Leaf (const Array$<$ const {\bf Face} $\ast$ $>$ \& {\em items}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Face_92c63f2034aab5e10c47bcfb8fe1ee61}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf octree\_\-visitor\_\-face.h}\item 
+{\bf octree\_\-visitor\_\-face.cc}\end{CompactItemize}

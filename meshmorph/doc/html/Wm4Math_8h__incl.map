@@ -1,0 +1,5 @@
+base referer
+rect $Wm4FoundationLIB_8h.html 340,32 505,56
+rect $Wm4System_8h.html 164,56 284,80
+rect $Wm4Math_8inl.html 168,104 280,128
+rect $Wm4MathMCR_8h.html 157,152 291,176

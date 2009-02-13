@@ -1,0 +1,503 @@
+\section{Container Class Reference}
+\label{classContainer}\index{Container@{Container}}
+{\tt \#include $<$container.h$>$}
+
+Collaboration diagram for Container:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=246pt]{classContainer__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+int {\bf get\-Vertex\-Count} (void) const
+\item 
+int {\bf get\-Face\-Count} (void) const
+\item 
+int {\bf get\-Edge\-Count} (void) const
+\item 
+void {\bf bound\-World} (void)
+\item 
+void {\bf write\-Summary} (std::ostream \&)
+\item 
+void {\bf scan\-Dir} (void)
+\item 
+void {\bf scan\-Files} (void)
+\item 
+void {\bf assess\-File} ({\bf Object} $\ast$const, char const $\ast$)
+\item 
+void {\bf scan\-File} ({\bf Object} $\ast$const, char const $\ast$)
+\item 
+void {\bf compute\-Vertex\-Normals} (void)
+\item 
+void {\bf create\-Edges} (void)
+\item 
+void {\bf find\-Vert\-Adj} (void)
+\item 
+void {\bf read\-Frozen} (char const $\ast$)
+\item 
+void {\bf sort\-Adjacent\-Faces} (void)
+\item 
+void {\bf deleteme\_\-check\-Closest\-Face} (int const \&, int const \&, std::string)
+\item 
+void {\bf check\-Closest\-Face} (int const \&, std::string)
+\item 
+void {\bf check\-Closest\-Face2} (int const \&, std::string)
+\item 
+void {\bf check\-Closest\-Face3} (int const \&, std::string)
+\item 
+void {\bf check\-Faces} (std::string)
+\item 
+void {\bf check\-Faces\-In\-Octree} (void)
+\item 
+void {\bf print\-Region\-In\-Octree} (void)
+\item 
+void {\bf write\-Mesh\-Data} (int const \&) const 
+\item 
+void {\bf find\-Closest\-Face\-To\-Each\-Vertex} (void)
+\item 
+void {\bf find\-Closest\-Pt\-In\-Face\-To\-Location} ({\bf vector3} const \&pt, {\bf Face} const $\ast$const face, {\bf vector3} \&p, double \&square\-D) const
+\item 
+void {\bf find\-Pt\-In\-Face\-Where\-Normal\-Int} ({\bf vector3} const \&pt, {\bf vector3} n, double const \&, {\bf Face} const $\ast$const face, {\bf vector3} \&p, double \&square\-D) const
+\item 
+bool {\bf face\-Lies\-Opposite\-To\-Normal} ({\bf vector3} const \&, {\bf Face} const $\ast$const face, {\bf vector3} const \&n) const 
+\item 
+bool {\bf bounding\-Box\-Fully\-In\-Search\-Region} ({\bf vec\_\-d} const \&sr, {\bf vec\_\-d} const \&bb) const
+\item 
+bool {\bf vertex\-Outside\-Octree\-Bounds} ({\bf vector3} const $\ast$const new\_\-pos)
+\item 
+bool {\bf closest\-Pt\-Is\-In\-Search\-Cone} ({\bf vector3} const \&pt, {\bf vector3} const \&p, {\bf vector3} const \&n, double const \&) const
+\item 
+bool {\bf find\-Closest\-Pt\-To\-Barycenter\-Among\-Faces} ({\bf vector3} const \&, {\bf Face} $\ast$const f, {\bf fp\_\-cit}, {\bf fp\_\-cit}, double const \&cone\_\-radius, {\bf vector3} \&, double \&, {\bf Face} $\ast$\&, int \&) const
+\item 
+bool {\bf find\-Closest\-Pt\-To\-Vertex\-Among\-Faces} ({\bf Vertex} const $\ast$const, {\bf fp\_\-cit}, {\bf fp\_\-cit}, double const \&, {\bf vector3} \&, double \&, {\bf Face} $\ast$\&, int \&) const
+\item 
+bool {\bf find\-Closest\-Pt\-To\-Vertex} ({\bf Vertex} const $\ast$const, {\bf vector3} \&, double \&, {\bf Face} $\ast$\&) const
+\item 
+bool {\bf find\-Closest\-Pt\-To\-Barycenter} ({\bf vector3} const \&pt, {\bf Face} $\ast$const f, {\bf vector3} \&, double \&, {\bf Face} $\ast$\&) const
+\item 
+double {\bf get\-Min\-Edge\-Angle} (void) const
+\item 
+double {\bf get\-World} (int const \&) const 
+\item 
+{\bf vec\_\-d} {\bf get\-Spherical\-Cone\-Bounding\-Box} ({\bf vector3} const \&pt, {\bf vector3} n, double const \&cone\_\-radius) const
+\item 
+{\bf mmap\_\-oi} {\bf load\-Map} (char const $\ast$, {\bf s\_\-set} \&)
+\item 
+{\bf Object} $\ast$ {\bf get\-Object\-Pointer} (std::string) const 
+\item 
+std::vector$<$ {\bf Complex} $>$ {\bf load\-Vector} (const char $\ast$filename, {\bf s\_\-set} \&not\_\-found)
+\item 
+bool {\bf vertex\-Is\-Frozen} ({\bf Vertex} $\ast$const v) const
+\item 
+int {\bf get\-File\-Count} (void) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Container} \& {\bf instance} (void)
+\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+{\bf hxa7241\_\-graphics::Octree}$<$ {\bf Face} $>$ $\ast$ {\bf octree}
+\item 
+{\bf vec\_\-o} {\bf o}
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Container@{Container}!instance@{instance}}
+\index{instance@{instance}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Container} \& Container::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classContainer_e4646d7b418a9b302db245f074ad8ec5}
+
+
+\index{Container@{Container}!getVertexCount@{getVertexCount}}
+\index{getVertexCount@{getVertexCount}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Container::get\-Vertex\-Count (void) const}\label{classContainer_31f05695581593644aafa457cc2b2bc8}
+
+
+Get the total number of vertices in the input data. \begin{Desc}
+\item[Returns:]The total number of vertices in the input data. \end{Desc}
+\index{Container@{Container}!getFaceCount@{getFaceCount}}
+\index{getFaceCount@{getFaceCount}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Container::get\-Face\-Count (void) const}\label{classContainer_570049d28d9b59a6b314fdbe9978f056}
+
+
+Get the total number of faces in the input data. \begin{Desc}
+\item[Returns:]The total number of faces in the input data. \end{Desc}
+\index{Container@{Container}!getEdgeCount@{getEdgeCount}}
+\index{getEdgeCount@{getEdgeCount}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Container::get\-Edge\-Count (void) const}\label{classContainer_c805cd419c41dbc672b081b88bcb6552}
+
+
+Get the total number of edges in the input data. \begin{Desc}
+\item[Returns:]The total number of edges in the input data. \end{Desc}
+\index{Container@{Container}!boundWorld@{boundWorld}}
+\index{boundWorld@{boundWorld}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::bound\-World (void)}\label{classContainer_a5fc905c668cc9f7909b9bbcf5beee65}
+
+
+Calculate and record limits of model along each prinicpal axis. \index{Container@{Container}!writeSummary@{writeSummary}}
+\index{writeSummary@{writeSummary}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::write\-Summary (std::ostream \& {\em target})}\label{classContainer_a4e9a37eb14178872c1b735aed195eda}
+
+
+Write description and summary of this class to output stream. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Container@{Container}!scanDir@{scanDir}}
+\index{scanDir@{scanDir}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::scan\-Dir (void)}\label{classContainer_e49ee77c3921f10fcc057f61b307251b}
+
+
+Find all .mesh files in input directory. \index{Container@{Container}!scanFiles@{scanFiles}}
+\index{scanFiles@{scanFiles}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::scan\-Files (void)}\label{classContainer_d46293c789ebc22aa77b938b85979800}
+
+
+For each .mesh file found in input directory build an instance of object class.
+
+\begin{Desc}
+\item[Returns:]Void. \end{Desc}
+\index{Container@{Container}!assessFile@{assessFile}}
+\index{assessFile@{assessFile}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::assess\-File ({\bf Object} $\ast$ const {\em obj}, char const $\ast$ {\em filename})}\label{classContainer_06befe7555d878137526e7eddd1feec3}
+
+
+Scan input data file once to count total number of vertices and faces in the object. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em obj}]Pointer to parent \doxyref{Object}{p.}{classObject}. \item[\mbox{$\leftarrow$} {\em filename}]Input file name. \end{description}
+\end{Desc}
+\index{Container@{Container}!scanFile@{scanFile}}
+\index{scanFile@{scanFile}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::scan\-File ({\bf Object} $\ast$ const {\em obj}, char const $\ast$ {\em filename})}\label{classContainer_1f2ebe727eb7f5d77f77ff9f8e60f339}
+
+
+Build \doxyref{Object}{p.}{classObject} from input file data. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em obj}]Pointer to parent \doxyref{Object}{p.}{classObject}. \item[\mbox{$\leftarrow$} {\em filename}]Input file name. \end{description}
+\end{Desc}
+\index{Container@{Container}!computeVertexNormals@{computeVertexNormals}}
+\index{computeVertexNormals@{computeVertexNormals}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::compute\-Vertex\-Normals (void)}\label{classContainer_b103cc06097fab5f1a7204572d7c60c5}
+
+
+Calculate and record the normal vector of each vertex in the model. \index{Container@{Container}!createEdges@{createEdges}}
+\index{createEdges@{createEdges}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::create\-Edges (void)}\label{classContainer_4ea77ab7f90acdf56e51e04ddef48808}
+
+
+For each object build instance of edge class using face and vertex class data. \index{Container@{Container}!findVertAdj@{findVertAdj}}
+\index{findVertAdj@{findVertAdj}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::find\-Vert\-Adj (void)}\label{classContainer_3406171e70819424f595b04e4c37efc9}
+
+
+For each vertex in each object add pointers to adjacent faces of vertex to vertex class. \index{Container@{Container}!readFrozen@{readFrozen}}
+\index{readFrozen@{readFrozen}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::read\-Frozen (char const $\ast$ {\em filename})}\label{classContainer_e63666838eb9afa04f2a54fdec3820f0}
+
+
+Process frozen vertex data. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Frozen vertex file name. \end{description}
+\end{Desc}
+\index{Container@{Container}!sortAdjacentFaces@{sortAdjacentFaces}}
+\index{sortAdjacentFaces@{sortAdjacentFaces}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::sort\-Adjacent\-Faces (void)}\label{classContainer_a91178ecc1710c316c27f54ed0ede0a9}
+
+
+Sort adjacent faces of each vertex in model. \index{Container@{Container}!deleteme_checkClosestFace@{deleteme\_\-checkClosestFace}}
+\index{deleteme_checkClosestFace@{deleteme\_\-checkClosestFace}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::deleteme\_\-check\-Closest\-Face (int const \&, int const \&, std::string)}\label{classContainer_b88ab4f62ffb44dcc2db6650fe405dce}
+
+
+\index{Container@{Container}!checkClosestFace@{checkClosestFace}}
+\index{checkClosestFace@{checkClosestFace}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::check\-Closest\-Face (int const \& {\em group}, std::string {\em suffix})}\label{classContainer_5350a46003ff8160b0125a6058c7603c}
+
+
+Find the closest face of each vertex in container and compare with closest face stored in vertex class.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Number of group of vertices being moved. \item[\mbox{$\leftarrow$} {\em suffix}]String to append to file name to identify when in the program the file was written. \end{description}
+\end{Desc}
+\index{Container@{Container}!checkClosestFace2@{checkClosestFace2}}
+\index{checkClosestFace2@{checkClosestFace2}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::check\-Closest\-Face2 (int const \&, std::string)}\label{classContainer_bebf935e5f2bcbfa593861a88693aa1e}
+
+
+\index{Container@{Container}!checkClosestFace3@{checkClosestFace3}}
+\index{checkClosestFace3@{checkClosestFace3}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::check\-Closest\-Face3 (int const \&, std::string)}\label{classContainer_063be9bc92dbc325ac5911550da8a8e9}
+
+
+\index{Container@{Container}!checkFaces@{checkFaces}}
+\index{checkFaces@{checkFaces}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::check\-Faces (std::string {\em s})}\label{classContainer_35bf9908f07f7a95a44af9878d41629f}
+
+
+Check that all faces have flag set to false. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em s}]Error message if face found with flag set to true. \end{description}
+\end{Desc}
+\index{Container@{Container}!checkFacesInOctree@{checkFacesInOctree}}
+\index{checkFacesInOctree@{checkFacesInOctree}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::check\-Faces\-In\-Octree (void)}\label{classContainer_2b2598775cc2a322fc7ded1d7a54f899}
+
+
+Check that all faces are present in appropriate octree cells. \index{Container@{Container}!printRegionInOctree@{printRegionInOctree}}
+\index{printRegionInOctree@{printRegionInOctree}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::print\-Region\-In\-Octree (void)}\label{classContainer_4b1cfa76345dbe77dd8b2b04bb742eee}
+
+
+Print octree overlapping region. \index{Container@{Container}!writeMeshData@{writeMeshData}}
+\index{writeMeshData@{writeMeshData}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::write\-Mesh\-Data (int const \& {\em group}) const}\label{classContainer_a1c33ec2055ed34432ee1deb355e8930}
+
+
+Write to file the current position of all mesh objects. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]The current group number from \doxyref{meshmorph.cc}{p.}{meshmorph_8cc}. \end{description}
+\end{Desc}
+\index{Container@{Container}!findClosestFaceToEachVertex@{findClosestFaceToEachVertex}}
+\index{findClosestFaceToEachVertex@{findClosestFaceToEachVertex}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::find\-Closest\-Face\-To\-Each\-Vertex (void)}\label{classContainer_ba37bd114f68b67a78dc4c09e8029abb}
+
+
+Find and record the closest face to each vertex in the model. \index{Container@{Container}!findClosestPtInFaceToLocation@{findClosestPtInFaceToLocation}}
+\index{findClosestPtInFaceToLocation@{findClosestPtInFaceToLocation}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::find\-Closest\-Pt\-In\-Face\-To\-Location ({\bf vector3} const \& {\em pt}, {\bf Face} const $\ast$const {\em face}, {\bf vector3} \& {\em closest\_\-point}, double \& {\em f\-Sqr\-Distance}) const}\label{classContainer_837dbd3229fe0507a940cec75883405c}
+
+
+Find closest point in face to input location.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em pt}]Location of interest. \item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} on which closest point to input location will be identified. \item[\mbox{$\rightarrow$} {\em closest\_\-point}]Closest point position, if found. \item[\mbox{$\rightarrow$} {\em f\-Sqr\-Distance}]Squared distance between input location and closest point, if found. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if closest point found; otherwise false. \end{Desc}
+\index{Container@{Container}!findPtInFaceWhereNormalInt@{findPtInFaceWhereNormalInt}}
+\index{findPtInFaceWhereNormalInt@{findPtInFaceWhereNormalInt}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Container::find\-Pt\-In\-Face\-Where\-Normal\-Int ({\bf vector3} const \& {\em pt}, {\bf vector3} {\em n}, double const \& {\em cone\_\-radius}, {\bf Face} const $\ast$const {\em face}, {\bf vector3} \& {\em intersection\_\-point}, double \& {\em f\-Sqr\-Distance}) const}\label{classContainer_abfb5b26e0d1018db39bb5994645c2c7}
+
+
+Find intersection point of vertex normal vector and input face.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em pt}]Location of interest. \item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} on which intersection point of normal vector will be identified. \item[\mbox{$\rightarrow$} {\em intersection\_\-point}]Intersection point position, if found. \item[\mbox{$\rightarrow$} {\em f\-Sqr\-Distance}]Squared distance between input location and intersection point, if found. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if intersection point found; otherwise false. \end{Desc}
+\index{Container@{Container}!faceLiesOppositeToNormal@{faceLiesOppositeToNormal}}
+\index{faceLiesOppositeToNormal@{faceLiesOppositeToNormal}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::face\-Lies\-Opposite\-To\-Normal ({\bf vector3} const \& {\em pt}, {\bf Face} const $\ast$const {\em face}, {\bf vector3} const \& {\em nn}) const}\label{classContainer_d1d134db6575e05a59b9d1e553a37db1}
+
+
+Determine if entire input face lies in hemispace opposite to normal vector at input location. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em pt}]Location of interest. \item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} of interest. \item[\mbox{$\leftarrow$} {\em nn}]Normal vector of this face. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if entire face lies opposite to normal vector; false otherwise. \end{Desc}
+\index{Container@{Container}!boundingBoxFullyInSearchRegion@{boundingBoxFullyInSearchRegion}}
+\index{boundingBoxFullyInSearchRegion@{boundingBoxFullyInSearchRegion}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::bounding\-Box\-Fully\-In\-Search\-Region ({\bf vec\_\-d} const \& {\em sr}, {\bf vec\_\-d} const \& {\em bb}) const}\label{classContainer_f6c9062691e697dbc3a36066b70094a6}
+
+
+Determine if input bounding box is fully inside the input search region. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em sr}]Search region [xmin,xmax,ymin,ymax,zmin,zmax]. \item[\mbox{$\leftarrow$} {\em bb}]Bounding box [xmin,xmax,ymin,ymax,zmin,zmax]. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if bounding box is fully inside search region; false otherwise. \end{Desc}
+\index{Container@{Container}!vertexOutsideOctreeBounds@{vertexOutsideOctreeBounds}}
+\index{vertexOutsideOctreeBounds@{vertexOutsideOctreeBounds}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::vertex\-Outside\-Octree\-Bounds ({\bf vector3} const $\ast$const  {\em new\_\-pos})}\label{classContainer_44faaf0d36151e1bef4e82167ff56c36}
+
+
+Check if moved vertex has breached octree boundary.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em new\_\-pos}]The new position of current vertex. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if vertex has moved to a location outside of octree bounday, false otherwise. \end{Desc}
+\index{Container@{Container}!closestPtIsInSearchCone@{closestPtIsInSearchCone}}
+\index{closestPtIsInSearchCone@{closestPtIsInSearchCone}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::closest\-Pt\-Is\-In\-Search\-Cone ({\bf vector3} const \& {\em pt}, {\bf vector3} const \& {\em p}, {\bf vector3} const \& {\em n}, double const \& {\em sqd\_\-sep\_\-dist}) const}\label{classContainer_565ad9f08462161c38360f7f3b16f3d9}
+
+
+Determine if closest point is inside search cone. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em pt}]Point of interest. \item[\mbox{$\leftarrow$} {\em p}]Closest point of interest. \item[\mbox{$\leftarrow$} {\em n}]\doxyref{Vertex}{p.}{classVertex} normal vector. \item[\mbox{$\leftarrow$} {\em sqd\_\-sep\_\-dist}]Squared distance between point and vertex. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if point is inside vertex search cone; false otherwise; \end{Desc}
+\index{Container@{Container}!findClosestPtToBarycenterAmongFaces@{findClosestPtToBarycenterAmongFaces}}
+\index{findClosestPtToBarycenterAmongFaces@{findClosestPtToBarycenterAmongFaces}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::find\-Closest\-Pt\-To\-Barycenter\-Among\-Faces ({\bf vector3} const \& {\em pt}, {\bf Face} $\ast$const  {\em f}, {\bf fp\_\-cit} {\em begin}, {\bf fp\_\-cit} {\em end}, double const \& {\em cone\_\-radius}, {\bf vector3} \& {\em p}, double \& {\em square\-D}, {\bf Face} $\ast$\& {\em ncl}, int \& {\em faces\_\-checked}) const}\label{classContainer_91bf3d22d0a3ce63c3bb80bab6946e35}
+
+
+Find closest point to tile's barycenter among input faces. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em pt}]Barycenter of face tile for which closest point is searched. \item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} on which tile is located. \item[\mbox{$\leftarrow$} {\em begin}]Iterator pointing to first face in vector of faces to check. \item[\mbox{$\leftarrow$} {\em end}]Iterator pointing to one past the last face in vector of faces to check. \item[\mbox{$\rightarrow$} {\em p}]Closest point position, if found. \item[\mbox{$\rightarrow$} {\em square\-D}]Squared distance between vertex and closest point, if found. \item[\mbox{$\rightarrow$} {\em ncl}]Parent face of closest point, if found. \item[\mbox{$\rightarrow$} {\em faces\_\-checked}]Cumulative number of faces checked. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if closest point found; otherwise false. \end{Desc}
+\index{Container@{Container}!findClosestPtToVertexAmongFaces@{findClosestPtToVertexAmongFaces}}
+\index{findClosestPtToVertexAmongFaces@{findClosestPtToVertexAmongFaces}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::find\-Closest\-Pt\-To\-Vertex\-Among\-Faces ({\bf Vertex} const $\ast$ const {\em v}, {\bf fp\_\-cit} {\em begin}, {\bf fp\_\-cit} {\em end}, double const \& {\em cone\_\-radius}, {\bf vector3} \& {\em p}, double \& {\em square\-D}, {\bf Face} $\ast$\& {\em ncl}, int \& {\em faces\_\-checked}) const}\label{classContainer_4d781e1e289f742adf6e71a632de530c}
+
+
+Find closest point to vertex among input faces.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em begin}]Iterator pointing to first face in vector of faces to check. \item[\mbox{$\leftarrow$} {\em end}]Iterator pointing to one past the last face in vector of faces to check. \item[\mbox{$\rightarrow$} {\em p}]Closest point position, if found. \item[\mbox{$\rightarrow$} {\em square\-D}]Squared distance between vertex and closest point, if found. \item[\mbox{$\rightarrow$} {\em ncl}]Parent face of closest point, if found. \item[\mbox{$\rightarrow$} {\em faces\_\-checked}]Cumulative number of faces checked. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if closest point found; otherwise false. \end{Desc}
+\index{Container@{Container}!findClosestPtToVertex@{findClosestPtToVertex}}
+\index{findClosestPtToVertex@{findClosestPtToVertex}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::find\-Closest\-Pt\-To\-Vertex ({\bf Vertex} const $\ast$ const {\em v}, {\bf vector3} \& {\em p}, double \& {\em sqd}, {\bf Face} $\ast$\& {\em ncl}) const}\label{classContainer_6ff5eef4c44b9e539b0fafd6cd3951c0}
+
+
+Find the closest point to a vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} for which closest point is searched. \item[\mbox{$\rightarrow$} {\em p}]Closest point position, if found. \item[\mbox{$\rightarrow$} {\em sqd}]Squared distance between vertex and closest point, if found. \item[\mbox{$\rightarrow$} {\em ncl}]Parent face of closest point, if found. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if closest point found; otherwise false. \end{Desc}
+\index{Container@{Container}!findClosestPtToBarycenter@{findClosestPtToBarycenter}}
+\index{findClosestPtToBarycenter@{findClosestPtToBarycenter}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::find\-Closest\-Pt\-To\-Barycenter ({\bf vector3} const \& {\em pt}, {\bf Face} $\ast$const  {\em f}, {\bf vector3} \& {\em p}, double \& {\em sqd}, {\bf Face} $\ast$\& {\em ncl}) const}\label{classContainer_6a3bb520f8dbcf3fedda302851ca1574}
+
+
+Find the closest point to a tile's barycenter. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em pt}]Barycenter of face tile for which closest point is searched. \item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} on which tile is located. \item[\mbox{$\rightarrow$} {\em p}]Closest point position, if found. \item[\mbox{$\rightarrow$} {\em sqd}]Squared distance between barycenter and closest point, if found. \item[\mbox{$\rightarrow$} {\em ncl}]Parent face of closest point, if found. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if closest point found; otherwise false. \end{Desc}
+\index{Container@{Container}!getMinEdgeAngle@{getMinEdgeAngle}}
+\index{getMinEdgeAngle@{getMinEdgeAngle}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Container::get\-Min\-Edge\-Angle (void) const}\label{classContainer_05aadd9612e660c318188c1bb6d08168}
+
+
+Find the edge in model with smallest angle and return angle. \begin{Desc}
+\item[Returns:]Smallest edge angle in radians. \end{Desc}
+\index{Container@{Container}!getWorld@{getWorld}}
+\index{getWorld@{getWorld}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Container::get\-World (int const \& {\em axis}) const}\label{classContainer_52f51ec2336524ab9dee6e34bbaf5817}
+
+
+Return the world limit along input axis. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em axis}]Requested direction 0,1,2,3,4,5 == -x,+x,-y,+y,-z,+z. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]World limit along ith axis. \end{Desc}
+\index{Container@{Container}!getSphericalConeBoundingBox@{getSphericalConeBoundingBox}}
+\index{getSphericalConeBoundingBox@{getSphericalConeBoundingBox}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vec\_\-d} Container::get\-Spherical\-Cone\-Bounding\-Box ({\bf vector3} const \& {\em pt}, {\bf vector3} {\em n}, double const \& {\em cone\_\-radius}) const}\label{classContainer_61686822f39e2081f28e55b4588575df}
+
+
+Compute axis-aligned bounding box of spherical cone. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em pt}]Point of interest. \item[\mbox{$\leftarrow$} {\em n}]Normal vector at point of interest. \item[\mbox{$\leftarrow$} {\em cone\_\-radius}]Spherical cone radius. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Bounding box along principal axes [xmin,xmax,ymin,ymax,zmin,zmax]. \end{Desc}
+\index{Container@{Container}!loadMap@{loadMap}}
+\index{loadMap@{loadMap}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf mmap\_\-oi} Container::load\-Map (char const $\ast$, {\bf s\_\-set} \&)}\label{classContainer_411e568e6df9c842916a57e81bf7b18c}
+
+
+\index{Container@{Container}!getObjectPointer@{getObjectPointer}}
+\index{getObjectPointer@{getObjectPointer}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Object} $\ast$ Container::get\-Object\-Pointer (std::string {\em name}) const}\label{classContainer_73fa40d6071c9bec7535f17cc1e605e7}
+
+
+Get pointer to object with matching name. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em name}]Name of object of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Pointer to object with name that matches the input name; otherwise NULL. \end{Desc}
+\index{Container@{Container}!loadVector@{loadVector}}
+\index{loadVector@{loadVector}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$ {\bf Complex} $>$ Container::load\-Vector (const char $\ast$ {\em filename}, {\bf s\_\-set} \& {\em not\_\-found})}\label{classContainer_2bddb5801b2a1b80d19974184405a452}
+
+
+Parse input file of vertices (obejct name and vertex index) and store data. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Input file name. \item[\mbox{$\rightarrow$} {\em not\_\-found}]Set of object names from file that were not found in input data. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Stored object data. \end{Desc}
+\index{Container@{Container}!vertexIsFrozen@{vertexIsFrozen}}
+\index{vertexIsFrozen@{vertexIsFrozen}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Container::vertex\-Is\-Frozen ({\bf Vertex} $\ast$const {\em v}) const\hspace{0.3cm}{\tt  [inline]}}\label{classContainer_18d7d38743a6da8e383f6d59280066d0}
+
+
+Check if vertex is frozen. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if vertex is frozen; otherwise false; \end{Desc}
+\index{Container@{Container}!getFileCount@{getFileCount}}
+\index{getFileCount@{getFileCount}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Container::get\-File\-Count (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classContainer_b5b53af75606a8358b48efdea451227f}
+
+
+Get number of input mesh files. \begin{Desc}
+\item[Returns:]Number of input files. \end{Desc}
+
+
+\subsection{Member Data Documentation}
+\index{Container@{Container}!octree@{octree}}
+\index{octree@{octree}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf hxa7241\_\-graphics::Octree}$<${\bf Face}$>$$\ast$ {\bf Container::octree}}\label{classContainer_4df52f9f8477885e34143f8e5dffec8d}
+
+
+\index{Container@{Container}!o@{o}}
+\index{o@{o}!Container@{Container}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vec\_\-o} {\bf Container::o}}\label{classContainer_c3ac0ef8e13fb01215064cd9bd24ff85}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf container.h}\item 
+{\bf container.cc}\end{CompactItemize}

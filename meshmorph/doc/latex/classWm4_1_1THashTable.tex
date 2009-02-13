@@ -1,0 +1,101 @@
+\section{Wm4::THash\-Table$<$ TKEY, TVALUE $>$ Class Template Reference}
+\label{classWm4_1_1THashTable}\index{Wm4::THashTable@{Wm4::THashTable}}
+{\tt \#include $<$Wm4THash\-Table.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf THash\-Table} (int i\-Table\-Size)
+\item 
+{\bf $\sim$THash\-Table} ()
+\item 
+int {\bf Get\-Quantity} () const
+\item 
+bool {\bf Insert} (const TKEY \&rt\-Key, const TVALUE \&rt\-Value)
+\item 
+TVALUE $\ast$ {\bf Find} (const TKEY \&rt\-Key) const
+\item 
+bool {\bf Remove} (const TKEY \&rt\-Key)
+\item 
+void {\bf Remove\-All} ()
+\item 
+TVALUE $\ast$ {\bf Get\-First} (TKEY $\ast$pt\-Key) const 
+\item 
+TVALUE $\ast$ {\bf Get\-Next} (TKEY $\ast$pt\-Key) const 
+\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+int($\ast$ {\bf User\-Hash\-Function} )(const TKEY \&)
+\end{CompactItemize}
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+class \textbf{Hash\-Item}
+\end{CompactItemize}
+\subsubsection*{template$<$class TKEY, class TVALUE$>$ class Wm4::THash\-Table$<$ TKEY, TVALUE $>$}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Wm4::THashTable@{Wm4::THash\-Table}!THashTable@{THashTable}}
+\index{THashTable@{THashTable}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::{\bf THash\-Table} (int {\em i\-Table\-Size})}\label{classWm4_1_1THashTable_05d0fde75e604e1989f973aba962cdab}
+
+
+\index{Wm4::THashTable@{Wm4::THash\-Table}!~THashTable@{$\sim$THashTable}}
+\index{~THashTable@{$\sim$THashTable}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::$\sim${\bf THash\-Table} ()}\label{classWm4_1_1THashTable_2e92c138d5b8d79707d64ee92fce350b}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Wm4::THashTable@{Wm4::THash\-Table}!GetQuantity@{GetQuantity}}
+\index{GetQuantity@{GetQuantity}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ int {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::Get\-Quantity () const}\label{classWm4_1_1THashTable_1189daf8ca9e2d2ad632a3580dc98694}
+
+
+\index{Wm4::THashTable@{Wm4::THash\-Table}!Insert@{Insert}}
+\index{Insert@{Insert}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ bool {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::Insert (const TKEY \& {\em rt\-Key}, const TVALUE \& {\em rt\-Value})}\label{classWm4_1_1THashTable_b5efe8cb55456a64349cf1d746decc34}
+
+
+\index{Wm4::THashTable@{Wm4::THash\-Table}!Find@{Find}}
+\index{Find@{Find}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ TVALUE $\ast$ {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::Find (const TKEY \& {\em rt\-Key}) const}\label{classWm4_1_1THashTable_4808a6bab88e7de28b3d6d2544a7cc4e}
+
+
+\index{Wm4::THashTable@{Wm4::THash\-Table}!Remove@{Remove}}
+\index{Remove@{Remove}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ bool {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::Remove (const TKEY \& {\em rt\-Key})}\label{classWm4_1_1THashTable_28d65bfd9a9b47f21b4fe756f35c626f}
+
+
+\index{Wm4::THashTable@{Wm4::THash\-Table}!RemoveAll@{RemoveAll}}
+\index{RemoveAll@{RemoveAll}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ void {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::Remove\-All ()}\label{classWm4_1_1THashTable_8feedf143991fe1335205714ed88cdbf}
+
+
+\index{Wm4::THashTable@{Wm4::THash\-Table}!GetFirst@{GetFirst}}
+\index{GetFirst@{GetFirst}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ TVALUE $\ast$ {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::Get\-First (TKEY $\ast$ {\em pt\-Key}) const}\label{classWm4_1_1THashTable_5fe79643bf8f360877a3dc0347791694}
+
+
+\index{Wm4::THashTable@{Wm4::THash\-Table}!GetNext@{GetNext}}
+\index{GetNext@{GetNext}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ TVALUE $\ast$ {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::Get\-Next (TKEY $\ast$ {\em pt\-Key}) const}\label{classWm4_1_1THashTable_1a8a201de9f85ef2dd1f3b732e68231e}
+
+
+
+
+\subsection{Member Data Documentation}
+\index{Wm4::THashTable@{Wm4::THash\-Table}!UserHashFunction@{UserHashFunction}}
+\index{UserHashFunction@{UserHashFunction}!Wm4::THashTable@{Wm4::THash\-Table}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TKEY, class TVALUE$>$ int($\ast$ {\bf Wm4::THash\-Table}$<$ TKEY, TVALUE $>$::{\bf User\-Hash\-Function})(const TKEY \&)}\label{classWm4_1_1THashTable_e3d78c4cd8804bdd07b0f8dec64efd7b}
+
+
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Wm4THash\-Table.h}\end{CompactItemize}

@@ -1,0 +1,219 @@
+\section{State Class Reference}
+\label{classState}\index{State@{State}}
+{\tt \#include $<$state.h$>$}
+
+Collaboration diagram for State:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=75pt]{classState__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf v\_\-set} {\bf get\-Verts\-For\-Full\-Closest\-Pt\-Search} ({\bf Vertex} const $\ast$const, {\bf vector3} const \&, {\bf vector3} const \&)
+\item 
+{\bf v\_\-set} {\bf get\-Verts\-For\-Partial\-Closest\-Pt\-Search} ({\bf vector3} const \&, {\bf vector3} const \&)
+\item 
+void {\bf record\-Vert\-Adj\-Face\-Edge\-Angles} ({\bf Vertex} const $\ast$const)
+\item 
+{\bf Search\_\-Stats} {\bf update\-Closest\-Face\-To\-Vertices} ({\bf Vertex} $\ast$const, {\bf v\_\-set} \&, {\bf v\_\-set} \&)
+\item 
+void {\bf update\-Adjacent\-Faces\-In\-Tree} ({\bf Vertex} const $\ast$const)
+\item 
+void {\bf update\-Vertex\-VD} ({\bf Vertex} $\ast$const)
+\item 
+bool {\bf extreme\-Angle\-Found} (void) const
+\item 
+bool {\bf assign\-New\-Vertex\-Coords} ({\bf Vertex} $\ast$const, {\bf vector3} const $\ast$const, {\bf vector3} const \&, bool \&, bool \&, bool \&)
+\item 
+bool {\bf angle\-Change\-Is\-Wrong} (float const \&, float const \&) const
+\item 
+bool {\bf vertex\-Outside\-Octree\-Bounds} ({\bf vector3} const $\ast$const)
+\item 
+void {\bf update\-Vertex\-Normals} ({\bf v\_\-set} \&fs)
+\item 
+void {\bf update\-Adjacent\-Faces\-In\-Octree} ({\bf Vertex} $\ast$const v, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const adjacent\_\-face\_\-lower, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const adjacent\_\-face\_\-upper)
+\item 
+void {\bf update\-Octree} ({\bf Vertex} $\ast$const v, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const old\_\-adjacent\_\-face\_\-lower, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const old\_\-adjacent\_\-face\_\-upper, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const new\_\-adjacent\_\-face\_\-lower, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const new\_\-adjacent\_\-face\_\-upper)
+\item 
+float {\bf get\-VD2} (void)
+\item 
+void {\bf set\-VD2} (float const \&sqd\_\-disp)
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf State} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{State@{State}!instance@{instance}}
+\index{instance@{instance}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf State} \& State::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classState_cd3aa3488c0124d7d4774ff0f7250685}
+
+
+\index{State@{State}!getVertsForFullClosestPtSearch@{getVertsForFullClosestPtSearch}}
+\index{getVertsForFullClosestPtSearch@{getVertsForFullClosestPtSearch}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf v\_\-set} State::get\-Verts\-For\-Full\-Closest\-Pt\-Search ({\bf Vertex} const $\ast$ const {\em v}, {\bf vector3} const \& {\em lower}, {\bf vector3} const \& {\em upper})}\label{classState_79777af274b0b24c635b88ddbe939c28}
+
+
+Collect vertices whose closest point may now lie anywhere. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]The current vertex. \item[\mbox{$\leftarrow$} {\em lower}]Lower corner of desired search region. \item[\mbox{$\leftarrow$} {\em upper}]Upper corner of desired search region. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Vertex}{p.}{classVertex} pointers requiring full closest point search. \end{Desc}
+\index{State@{State}!getVertsForPartialClosestPtSearch@{getVertsForPartialClosestPtSearch}}
+\index{getVertsForPartialClosestPtSearch@{getVertsForPartialClosestPtSearch}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf v\_\-set} State::get\-Verts\-For\-Partial\-Closest\-Pt\-Search ({\bf vector3} const \& {\em lower}, {\bf vector3} const \& {\em upper})}\label{classState_dc783c8a19fb81acb36dc6985bf14dc7}
+
+
+Collect vertices whose closest point may now lie on an adjacent face of current vertex.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em lower}]Lower corner of desired search region. \item[\mbox{$\leftarrow$} {\em upper}]Upper corner of desired search region. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Vertex}{p.}{classVertex} pointers requiring partial closest point search. \end{Desc}
+\index{State@{State}!recordVertAdjFaceEdgeAngles@{recordVertAdjFaceEdgeAngles}}
+\index{recordVertAdjFaceEdgeAngles@{recordVertAdjFaceEdgeAngles}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void State::record\-Vert\-Adj\-Face\-Edge\-Angles ({\bf Vertex} const $\ast$ const {\em v})}\label{classState_2a79e1de329991765d02ade4199e64c8}
+
+
+Record all edge angles from adjacent faces to input vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\index{State@{State}!updateClosestFaceToVertices@{updateClosestFaceToVertices}}
+\index{updateClosestFaceToVertices@{updateClosestFaceToVertices}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Search\_\-Stats} State::update\-Closest\-Face\-To\-Vertices ({\bf Vertex} $\ast$ const {\em v}, {\bf v\_\-set} \& {\em fs}, {\bf v\_\-set} \& {\em ps})}\label{classState_44c20530fad7b5e4543571b30bdd850d}
+
+
+Search for new closest point to input vertices.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]The current vertex. \item[\mbox{$\leftarrow$} {\em fs}]Hashed set of vertex pointers requiring full closest point search. \item[\mbox{$\leftarrow$} {\em ps}]Vector of vertex pointers requiring partial closest point search. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Collection of vertex counts quantifying how often the closest face to vertex changed. \end{Desc}
+\index{State@{State}!updateAdjacentFacesInTree@{updateAdjacentFacesInTree}}
+\index{updateAdjacentFacesInTree@{updateAdjacentFacesInTree}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void State::update\-Adjacent\-Faces\-In\-Tree ({\bf Vertex} const $\ast$ const {\em v})}\label{classState_00e926331052fea5700da67f7d1bb3db}
+
+
+Update the location of adjacent faces to moved vertex in octree. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]Last moved vertex. \end{description}
+\end{Desc}
+\index{State@{State}!updateVertexVD@{updateVertexVD}}
+\index{updateVertexVD@{updateVertexVD}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void State::update\-Vertex\-VD ({\bf Vertex} $\ast$ const {\em v})}\label{classState_8ed5ca2a5be6e2c161240f9caaea80b3}
+
+
+The virtual displacement of all vertices on adjacent faces of moved vertex will have changed, so update the appropriate maps.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]The current vertex. \end{description}
+\end{Desc}
+\index{State@{State}!extremeAngleFound@{extremeAngleFound}}
+\index{extremeAngleFound@{extremeAngleFound}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool State::extreme\-Angle\-Found (void) const}\label{classState_06e73d7906137e42ca970187a16e4e0e}
+
+
+Require vertex move to not worsen the condition of extreme angles. \begin{Desc}
+\item[Returns:]True if vertex move is an extreme angle violation; false if move passed the extreme angle test. \end{Desc}
+\index{State@{State}!assignNewVertexCoords@{assignNewVertexCoords}}
+\index{assignNewVertexCoords@{assignNewVertexCoords}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool State::assign\-New\-Vertex\-Coords ({\bf Vertex} $\ast$ const {\em v}, {\bf vector3} const $\ast$ const {\em new\_\-pos}, {\bf vector3} const \& {\em old\_\-pos}, bool \& {\em face\_\-intersection}, bool \& {\em extreme\_\-angle}, bool \& {\em outside\_\-octree})}\label{classState_6afda204e91dd271e65a2b1189f4f06a}
+
+
+Attempt move by input vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} to move. \item[\mbox{$\leftarrow$} {\em new\_\-pos}]New location of vertex after move. \item[\mbox{$\rightarrow$} {\em face\_\-intersection}]True if interecting faces were detected and move was aborted. \item[\mbox{$\rightarrow$} {\em extreme\_\-angle}]True if extreme angles (near 0 or 2$\ast$pi) were detected and move was aborted. \item[\mbox{$\rightarrow$} {\em outside\_\-octree}]True if vertex move breached octree boundary and move was aborted. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if move successful; false otherwise and vertex does not move. \end{Desc}
+\index{State@{State}!angleChangeIsWrong@{angleChangeIsWrong}}
+\index{angleChangeIsWrong@{angleChangeIsWrong}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool State::angle\-Change\-Is\-Wrong (float const \& {\em old\_\-angle}, float const \& {\em new\_\-angle}) const}\label{classState_61b50db4d6a224a2275776803f633bc9}
+
+
+Determine if extreme angle improved. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em old\_\-angle}]Extreme angle before the last vertex move. \item[\mbox{$\leftarrow$} {\em new\_\-angle}]Extreme angle after the last vertex move. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]False if the change improved the angle; true otherwise. \end{Desc}
+\index{State@{State}!vertexOutsideOctreeBounds@{vertexOutsideOctreeBounds}}
+\index{vertexOutsideOctreeBounds@{vertexOutsideOctreeBounds}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool State::vertex\-Outside\-Octree\-Bounds ({\bf vector3} const $\ast$ {\em const})}\label{classState_f7b810832e889c7cd1ac949240ddd099}
+
+
+\index{State@{State}!updateVertexNormals@{updateVertexNormals}}
+\index{updateVertexNormals@{updateVertexNormals}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void State::update\-Vertex\-Normals ({\bf v\_\-set} \& {\em fs})}\label{classState_d79a27db8482298f63e9f5a43ec54a8c}
+
+
+Update vertex normals of vertices around moved vertex.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em fs}]Hashed set of vertex pointers requiring full closest point search. \end{description}
+\end{Desc}
+\index{State@{State}!updateAdjacentFacesInOctree@{updateAdjacentFacesInOctree}}
+\index{updateAdjacentFacesInOctree@{updateAdjacentFacesInOctree}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void State::update\-Adjacent\-Faces\-In\-Octree ({\bf Vertex} $\ast$const {\em v}, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em adjacent\_\-face\_\-lower}, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em adjacent\_\-face\_\-upper})}\label{classState_f27c97f19211d07041274058804dc0e7}
+
+
+Update the octree with the new position of input adjacent faces to moved vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]Moved vertex. \item[\mbox{$\leftarrow$} {\em adjacent\_\-face\_\-lower}]Pointer to lower corner of pre-move bounding box of first adjacent face to moved vertex. \item[\mbox{$\leftarrow$} {\em adjacent\_\-face\_\-upper}]Pointer to upper corner of pre-move bounding box of first adjacent face to moved vertex. \end{description}
+\end{Desc}
+\index{State@{State}!updateOctree@{updateOctree}}
+\index{updateOctree@{updateOctree}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void State::update\-Octree ({\bf Vertex} $\ast$const {\em v}, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em old\_\-adjacent\_\-face\_\-lower}, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em old\_\-adjacent\_\-face\_\-upper}, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em new\_\-adjacent\_\-face\_\-lower}, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em new\_\-adjacent\_\-face\_\-upper})}\label{classState_3fde06ff5fde9a07028ddcc9f0375da5}
+
+
+Update the location of moved vertex adjacent faces in the octree. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]Moved vertex. \item[\mbox{$\leftarrow$} {\em old\_\-adjacent\_\-face\_\-lower}]Pointer to lower corner of old bounding box of first adjacent face to moved vertex. \item[\mbox{$\leftarrow$} {\em old\_\-adjacent\_\-face\_\-upper}]Pointer to upper corner of old bounding box of first adjacent face to moved vertex. \item[\mbox{$\leftarrow$} {\em new\_\-adjacent\_\-face\_\-lower}]Pointer to lower corner of new bounding box of first adjacent face to moved vertex. \item[\mbox{$\leftarrow$} {\em new\_\-adjacent\_\-face\_\-upper}]Pointer to upper corner of new bounding box of first adjacent face to moved vertex. \end{description}
+\end{Desc}
+\index{State@{State}!getVD2@{getVD2}}
+\index{getVD2@{getVD2}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}float State::get\-VD2 (void)\hspace{0.3cm}{\tt  [inline]}}\label{classState_71ce175c245ca2d7925b3ddd9e072f70}
+
+
+Return stored virtual displacement squared. \begin{Desc}
+\item[Returns:]Squared virtual displacement. \end{Desc}
+\index{State@{State}!setVD2@{setVD2}}
+\index{setVD2@{setVD2}!State@{State}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void State::set\-VD2 (float const \& {\em sqd\_\-disp})\hspace{0.3cm}{\tt  [inline]}}\label{classState_b9acb3ffd6d4945c08f3cf432ed97124}
+
+
+Set stored virtual displacement squared. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em sqd\_\-disp}]Squared virtual displacement. \end{description}
+\end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf state.h}\item 
+{\bf state.cc}\end{CompactItemize}

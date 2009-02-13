@@ -1,0 +1,116 @@
+\section{hxa7241\_\-graphics::Octree\-Dimensions Class Reference}
+\label{classhxa7241__graphics_1_1OctreeDimensions}\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::OctreeDimensions}}
+{\tt \#include $<$Octree\-Auxiliary.h$>$}
+
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Dimensions:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=139pt]{classhxa7241__graphics_1_1OctreeDimensions__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Dimensions} (const {\bf Vector3r} \&position\-Of\-Lower\-Corner, real size, dword max\-Item\-Count\-Per\-Cell, dword max\-Level\-Count, real min\-Cell\-Size)
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf $\sim$Octree\-Dimensions} ()
+\item 
+{\bf Octree\-Dimensions} (const {\bf Octree\-Dimensions} \&)
+\item 
+{\bf Octree\-Dimensions} \& {\bf operator=} (const {\bf Octree\-Dimensions} \&)
+\item 
+const {\bf Vector3r} \& {\bf get\-Position} () const
+\begin{CompactList}\small\item\em \doxyref{Octree\-Dimensions}{p.}{classhxa7241__graphics_1_1OctreeDimensions} -----------------------------------------------------------. \item\end{CompactList}\item 
+real {\bf get\-Size} () const
+\item 
+dword {\bf get\-Max\-Item\-Count\-Per\-Cell} () const
+\item 
+dword {\bf get\-Max\-Level\-Count} () const
+\item 
+real {\bf get\-Min\-Cell\-Size} () const
+\item 
+bool {\bf is\-Subdivide} (dword item\-Count, dword level, real size) const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Global octree data -- one instance for whole octree.\par
+\par
+
+
+Constant.
+
+size\_\-m $>$= 0\par
+ max\-Items\-Per\-Cell\_\-m $>$= 1\par
+ max\-Level\_\-m $>$= 0 and $<$= MAX\_\-LEVEL\par
+ min\-Size\_\-m $>$= MIN\_\-SIZE and $<$= size\_\-m\par
+ 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!OctreeDimensions@{OctreeDimensions}}
+\index{OctreeDimensions@{OctreeDimensions}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Dimensions::Octree\-Dimensions (const {\bf Vector3r} \& {\em position\-Of\-Lower\-Corner}, real {\em size}, dword {\em max\-Item\-Count\-Per\-Cell}, dword {\em max\-Level\-Count}, real {\em min\-Cell\-Size})}\label{classhxa7241__graphics_1_1OctreeDimensions_8833b81e598e0b1cc7b98daee31288ee}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!~OctreeDimensions@{$\sim$OctreeDimensions}}
+\index{~OctreeDimensions@{$\sim$OctreeDimensions}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Dimensions::$\sim$Octree\-Dimensions ()}\label{classhxa7241__graphics_1_1OctreeDimensions_ffbe2fcaf3db49be65431d6c01060615}
+
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!OctreeDimensions@{OctreeDimensions}}
+\index{OctreeDimensions@{OctreeDimensions}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Dimensions::Octree\-Dimensions (const {\bf Octree\-Dimensions} \&)}\label{classhxa7241__graphics_1_1OctreeDimensions_4199b3e8021c23a27d9a9a6cf820c90f}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Dimensions} \& Octree\-Dimensions::operator= (const {\bf Octree\-Dimensions} \&)}\label{classhxa7241__graphics_1_1OctreeDimensions_bc30f675fd6ea1af90dbac8b35aa8e76}
+
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& hxa7241\_\-graphics::Octree\-Dimensions::get\-Position () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeDimensions_4c7bd5dd4adc2dac72c9436576400f7b}
+
+
+\doxyref{Octree\-Dimensions}{p.}{classhxa7241__graphics_1_1OctreeDimensions} -----------------------------------------------------------. 
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!getSize@{getSize}}
+\index{getSize@{getSize}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Octree\-Dimensions::get\-Size () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeDimensions_e8157dd7145cdfc09053c0764be008bd}
+
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!getMaxItemCountPerCell@{getMaxItemCountPerCell}}
+\index{getMaxItemCountPerCell@{getMaxItemCountPerCell}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}dword hxa7241\_\-graphics::Octree\-Dimensions::get\-Max\-Item\-Count\-Per\-Cell () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeDimensions_0ed4f1e98ce964e4db1b962d6081a95c}
+
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!getMaxLevelCount@{getMaxLevelCount}}
+\index{getMaxLevelCount@{getMaxLevelCount}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}dword hxa7241\_\-graphics::Octree\-Dimensions::get\-Max\-Level\-Count () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeDimensions_566756ecf78d3ec6108fc46931cb4673}
+
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!getMinCellSize@{getMinCellSize}}
+\index{getMinCellSize@{getMinCellSize}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Octree\-Dimensions::get\-Min\-Cell\-Size () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeDimensions_16b54be6af6e83883c70d9a6931ecbd3}
+
+
+\index{hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}!isSubdivide@{isSubdivide}}
+\index{isSubdivide@{isSubdivide}!hxa7241_graphics::OctreeDimensions@{hxa7241\_\-graphics::Octree\-Dimensions}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Octree\-Dimensions::is\-Subdivide (dword {\em item\-Count}, dword {\em level}, real {\em size}) const}\label{classhxa7241__graphics_1_1OctreeDimensions_eb7d8289a3348734e224bc6c2f075e97}
+
+
+queries -------------------------------------------------------------------- 
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf Octree\-Auxiliary.h}\item 
+{\bf Octree\-Auxiliary.cc}\end{CompactItemize}

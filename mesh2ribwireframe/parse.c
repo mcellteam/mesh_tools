@@ -1600,10 +1600,10 @@ yyreduce:
     return(1);
   }
   pop->n_verts=4;
-  pop->vertex_index[0]=vertex_array[vert_1-1]->vertex_index;
-  pop->vertex_index[1]=vertex_array[vert_2-1]->vertex_index;
-  pop->vertex_index[2]=vertex_array[vert_3-1]->vertex_index;
-  pop->vertex_index[3]=vertex_array[vert_4-1]->vertex_index;
+  pop->vertex_index[0]=vertex_array[vert_1-1]->vertex_count;
+  pop->vertex_index[1]=vertex_array[vert_2-1]->vertex_count;
+  pop->vertex_index[2]=vertex_array[vert_3-1]->vertex_count;
+  pop->vertex_index[3]=vertex_array[vert_4-1]->vertex_count;
   plp->polygon=pop;
   if (polygon_tail==NULL) {
     polygon_tail=plp;

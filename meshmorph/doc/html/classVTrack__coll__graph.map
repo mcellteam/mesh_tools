@@ -1,0 +1,5 @@
+base referer
+rect $classVertex.html 45,111 112,135
+rect $classObject.html 112,201 179,225
+rect $classFace.html 135,7 185,31
+rect $classEdge.html 195,111 251,135

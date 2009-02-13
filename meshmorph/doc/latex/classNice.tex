@@ -1,0 +1,271 @@
+\section{Nice Class Reference}
+\label{classNice}\index{Nice@{Nice}}
+{\tt \#include $<$nice.h$>$}
+
+Collaboration diagram for Nice:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=73pt]{classNice__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+int {\bf get\-Nonnice\-Count} (bool)
+\item 
+int {\bf get\-Vertex\-Nice\-Val} ({\bf Vertex} const $\ast$const) const 
+\item 
+bool {\bf find\-Extra\-Point} ({\bf Vertex} const $\ast$const, {\bf vector3} \&, {\bf fp\_\-cit} const \&) const
+\item 
+bool {\bf update\-Vertex\-Niceness} ({\bf Vertex} $\ast$const)
+\item 
+bool {\bf set\-Vertex\-Niceness} ({\bf Vertex} $\ast$const, {\bf vec\_\-op} \&)
+\item 
+bool {\bf get\-Crossed\-Obj\-From\-Vert\-To\-Extra} ({\bf Vertex} const $\ast$const, {\bf vector3} const \&, {\bf vec\_\-op} \&) const
+\item 
+bool {\bf get\-Crossed\-Obj\-From\-Extra\-To\-Limit} ({\bf vector3} const \&, {\bf vector3} const \&, {\bf vec\_\-op} \&) const
+\item 
+bool {\bf vertex\-Is\-Nice} ({\bf Vertex} const $\ast$const) const 
+\item 
+bool {\bf get\-Point\-Outside\-Object} ({\bf Vertex} const $\ast$const, {\bf vector3} \&, {\bf vec\_\-op} \&) const
+\item 
+void {\bf get\-Crossed\-Objects} ({\bf Vertex} const $\ast$const, {\bf vec\_\-op} \&) const
+\item 
+void {\bf get\-Vert\-Adj\-Face\-Ray} ({\bf vector3} \&, {\bf vector3} \&, {\bf fp\_\-cit} const \&) const
+\item 
+void {\bf get\-Penetrated\-Objs} ({\bf vec\_\-fp} \&, {\bf vec\_\-fp} \&, {\bf vec\_\-op} \&) const
+\item 
+void {\bf get\-Objects\-From\-Edge\-Hits} ({\bf vec\_\-op} \&edge\_\-hits, {\bf vec\_\-op} \&objs) const
+\item 
+void {\bf find\-Odd\-Objects} ({\bf vec\_\-op} \&, {\bf vec\_\-op} \&) const
+\item 
+void {\bf get\-Rays\-To\-World\-Limit} ({\bf vector3} const \&, double[6][3]) const 
+\item 
+void {\bf set\-Vertex\-Nice\-Val} (int const \&, {\bf Vertex} $\ast$const)
+\item 
+void {\bf find\-Nonnice\-Vertices} (void)
+\item 
+{\bf face\_\-grp} {\bf find\-Int\-Faces\-Along\-Ray} ({\bf Vertex} const $\ast$const, {\bf vector3} const \&, {\bf vector3} const \&) const
+\item 
+{\bf vhm\_\-cit} {\bf begin\-Nice} (void) const
+\item 
+{\bf vhm\_\-cit} {\bf end\-Nice} (void) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Nice} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Nice@{Nice}!instance@{instance}}
+\index{instance@{instance}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Nice} \& Nice::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classNice_0e7a8f2b7f6c9e5a41b4f0a106a7614e}
+
+
+\index{Nice@{Nice}!getNonniceCount@{getNonniceCount}}
+\index{getNonniceCount@{getNonniceCount}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Nice::get\-Nonnice\-Count (bool {\em detect\_\-self})}\label{classNice_240dbc4371a3b6931b38dda59bd827a0}
+
+
+Count the number of nonnice vertices in model. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em detect\_\-self}]If true then only count vertices inside their parent object. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Number of nonnice vertices. \end{Desc}
+\index{Nice@{Nice}!getVertexNiceVal@{getVertexNiceVal}}
+\index{getVertexNiceVal@{getVertexNiceVal}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Nice::get\-Vertex\-Nice\-Val ({\bf Vertex} const $\ast$ const {\em v}) const}\label{classNice_b4bb5fcc411699c7a0c937f912ba2cfc}
+
+
+Get nice value of vertex with code described in \doxyref{nice.cc}{p.}{nice_8cc}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Nice}{p.}{classNice} value of vertex. \end{Desc}
+\index{Nice@{Nice}!findExtraPoint@{findExtraPoint}}
+\index{findExtraPoint@{findExtraPoint}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Nice::find\-Extra\-Point ({\bf Vertex} const $\ast$ const {\em v}, {\bf vector3} \& {\em extra\_\-obj\_\-pt}, {\bf fp\_\-cit} const \& {\em adjacent\_\-face}) const}\label{classNice_59b64767fd42e4febb07a31037930853}
+
+
+Identify a location near the vertex of interest guaranteed to be outside of the parent object of vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\rightarrow$} {\em extra\_\-obj\_\-pt}]Location outside of vertex parent object, if successfully found. \item[\mbox{$\leftarrow$} {\em adjacent\_\-face}]Iterator pointing to vertex adjacent face to use as parent of extracellular location. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]1 if extra-object location identified; 0 otherwise. \end{Desc}
+\index{Nice@{Nice}!updateVertexNiceness@{updateVertexNiceness}}
+\index{updateVertexNiceness@{updateVertexNiceness}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Nice::update\-Vertex\-Niceness ({\bf Vertex} $\ast$ const {\em v})}\label{classNice_cbba0af11271c50201e5d3fdd6c77df5}
+
+
+Evaluate niceness of vertex with ray tracing and record and return result. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if vertex niceness changed since last check; false otherwise. \end{Desc}
+\index{Nice@{Nice}!setVertexNiceness@{setVertexNiceness}}
+\index{setVertexNiceness@{setVertexNiceness}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Nice::set\-Vertex\-Niceness ({\bf Vertex} $\ast$ const {\em v}, {\bf vec\_\-op} \& {\em crossed\_\-objects})}\label{classNice_8bda94694b244b3f2c147cdcdc07fc11}
+
+
+Record new nice value based on collection of objects crossed in ray trace from vertex to world limits. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em crossed\_\-objects}]Collection of objects crossed in ray trace from vertex to world limits. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if vertex niceness changed since last check; false otherwise. \end{Desc}
+\index{Nice@{Nice}!getCrossedObjFromVertToExtra@{getCrossedObjFromVertToExtra}}
+\index{getCrossedObjFromVertToExtra@{getCrossedObjFromVertToExtra}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Nice::get\-Crossed\-Obj\-From\-Vert\-To\-Extra ({\bf Vertex} const $\ast$ const {\em v}, {\bf vector3} const \& {\em extra\_\-obj\_\-pt}, {\bf vec\_\-op} \& {\em crossed\_\-objects}) const}\label{classNice_c6523ebcf3dd3ab3ae2cc4df228552d1}
+
+
+Identify and collect objects crossed during ray tracing from input vertex to extra-object location. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em extra\_\-obj\_\-pt}]Location guaranteed to be outside vertex parent object. \item[\mbox{$\rightarrow$} {\em crossed\_\-objects}]Collection of object crossed during ray trace from vertex to extra-object point. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if any edges were intersected by ray; false otherwise. \end{Desc}
+\index{Nice@{Nice}!getCrossedObjFromExtraToLimit@{getCrossedObjFromExtraToLimit}}
+\index{getCrossedObjFromExtraToLimit@{getCrossedObjFromExtraToLimit}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Nice::get\-Crossed\-Obj\-From\-Extra\-To\-Limit ({\bf vector3} const \& {\em extra\_\-obj\_\-pt}, {\bf vector3} const \& {\em world\_\-limit}, {\bf vec\_\-op} \& {\em crossed\_\-objects}) const}\label{classNice_64131de8b343337f44ac395432301d2f}
+
+
+Find and return objects crossed during ray trace from extra-object point to world limit. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em extra\_\-obj\_\-pt}]Location guaranteed to be outside of object of interest. \item[\mbox{$\leftarrow$} {\em world\_\-limit}]Ray will be traced to the world limit. \item[\mbox{$\rightarrow$} {\em crossed\_\-objects}]Collection of objects crossed during ray trace. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if any edges were intersected by ray; false otherwise. \end{Desc}
+\index{Nice@{Nice}!vertexIsNice@{vertexIsNice}}
+\index{vertexIsNice@{vertexIsNice}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Nice::vertex\-Is\-Nice ({\bf Vertex} const $\ast$ const {\em v}) const}\label{classNice_63af897cc818697a97bc5710216be3b7}
+
+
+Check if vertex is recorded as being nice. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if vertex is nice; false otherwise. \end{Desc}
+\index{Nice@{Nice}!getPointOutsideObject@{getPointOutsideObject}}
+\index{getPointOutsideObject@{getPointOutsideObject}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Nice::get\-Point\-Outside\-Object ({\bf Vertex} const $\ast$ const {\em v}, {\bf vector3} \& {\em extra\_\-obj\_\-pt}, {\bf vec\_\-op} \& {\em crossed\_\-objects}) const}\label{classNice_69a3315d47dbf2a553d1eb2d84d81b07}
+
+
+Identify a location guaranteed to be outside the parent object of the vertex of interest and identify object crossings between point and current vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\rightarrow$} {\em extra\_\-obj\_\-pt}]Location guaranteed to be outside vertex parent object. \item[\mbox{$\rightarrow$} {\em crossed\_\-objects}]Collection of crossed objects between vertex and extra-object location. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if extra-object location found; false otherwise. \end{Desc}
+\index{Nice@{Nice}!getCrossedObjects@{getCrossedObjects}}
+\index{getCrossedObjects@{getCrossedObjects}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::get\-Crossed\-Objects ({\bf Vertex} const $\ast$ const {\em v}, {\bf vec\_\-op} \& {\em all\_\-crossed\_\-objects}) const}\label{classNice_63e2b67ff6019d9e699ab5fdec131a4e}
+
+
+Collect and return objects inside which vertex lies as determined by ray tracing. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\rightarrow$} {\em all\_\-crossed\_\-objects}]Collection of objects inside which vertex lies. \end{description}
+\end{Desc}
+\index{Nice@{Nice}!getVertAdjFaceRay@{getVertAdjFaceRay}}
+\index{getVertAdjFaceRay@{getVertAdjFaceRay}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::get\-Vert\-Adj\-Face\-Ray ({\bf vector3} \& {\em centroid}, {\bf vector3} \& {\em extra\_\-obj\_\-pt}, {\bf fp\_\-cit} const \& {\em f}) const}\label{classNice_6ef97573fef2dd9e4028d32404f37dcb}
+
+
+Calculate ray from adjacent face centroid along face normal small distance. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em centroid}]One endpoint of ray. \item[\mbox{$\rightarrow$} {\em extra\_\-obj\_\-pt}]Other endpoint of ray. \item[\mbox{$\leftarrow$} {\em f}]Iterator pointing to adjacent face of vertex of interest. \end{description}
+\end{Desc}
+\index{Nice@{Nice}!getPenetratedObjs@{getPenetratedObjs}}
+\index{getPenetratedObjs@{getPenetratedObjs}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::get\-Penetrated\-Objs ({\bf vec\_\-fp} \& {\em crossed\_\-faces}, {\bf vec\_\-fp} \& {\em crossed\_\-faces\_\-on\_\-edge}, {\bf vec\_\-op} \& {\em odd\_\-objects}) const}\label{classNice_530da5dd310d3114b7495593f11047f4}
+
+
+Collect the objects for which ray not only intersected but certainly changed sides of object, i.e. inside to outside or outside to inside. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em crossed\_\-faces}]Faces intersected by ray strictly in face interior. \item[\mbox{$\leftarrow$} {\em crossed\_\-faces\_\-on\_\-edge}]Faces intercted by ray on edge. \item[\mbox{$\rightarrow$} {\em odd\_\-objects}]Objects for which ray changed sides. \end{description}
+\end{Desc}
+\index{Nice@{Nice}!getObjectsFromEdgeHits@{getObjectsFromEdgeHits}}
+\index{getObjectsFromEdgeHits@{getObjectsFromEdgeHits}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::get\-Objects\-From\-Edge\-Hits ({\bf vec\_\-op} \& {\em edge\_\-hits}, {\bf vec\_\-op} \& {\em objs}) const}\label{classNice_2d469432f18c28e88b9992aebb132395}
+
+
+Coalesce pairs of same-object edge hits into single object hits. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em edge\_\-hits}]Collection of objects intersected on edge by ray. \item[\mbox{$\rightarrow$} {\em objs}]Collection of intersected objects inferred from edge hits. \end{description}
+\end{Desc}
+\index{Nice@{Nice}!findOddObjects@{findOddObjects}}
+\index{findOddObjects@{findOddObjects}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::find\-Odd\-Objects ({\bf vec\_\-op} \&, {\bf vec\_\-op} \&) const}\label{classNice_0ebe9ba0e93a7b97fd324914af605b4d}
+
+
+\index{Nice@{Nice}!getRaysToWorldLimit@{getRaysToWorldLimit}}
+\index{getRaysToWorldLimit@{getRaysToWorldLimit}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::get\-Rays\-To\-World\-Limit ({\bf vector3} const \&, double[6][3]) const}\label{classNice_0d7099fe4a836c96f6922e9dd50ffecd}
+
+
+\index{Nice@{Nice}!setVertexNiceVal@{setVertexNiceVal}}
+\index{setVertexNiceVal@{setVertexNiceVal}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::set\-Vertex\-Nice\-Val (int const \& {\em newval}, {\bf Vertex} $\ast$ const {\em v})}\label{classNice_7f56f56d6bb507d7d5a13f97a3bdc9c7}
+
+
+Set nice value of vertex with code described in \doxyref{nice.cc}{p.}{nice_8cc}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em newval}]Set niceval of input vertex to new value. \item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \end{description}
+\end{Desc}
+\index{Nice@{Nice}!findNonniceVertices@{findNonniceVertices}}
+\index{findNonniceVertices@{findNonniceVertices}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Nice::find\-Nonnice\-Vertices (void)}\label{classNice_7182baa27280717eaae32dc04543ad00}
+
+
+Find and record all nonnice vertices in model. \index{Nice@{Nice}!findIntFacesAlongRay@{findIntFacesAlongRay}}
+\index{findIntFacesAlongRay@{findIntFacesAlongRay}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf face\_\-grp} Nice::find\-Int\-Faces\-Along\-Ray ({\bf Vertex} const $\ast$ const {\em v}, {\bf vector3} const \& {\em origin}, {\bf vector3} const \& {\em end}) const}\label{classNice_2588a8f90692a7b20a88a5a8a8c100ce}
+
+
+Check a collection of faces for interection with input line segment. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em origin}]One end of line segment. \item[\mbox{$\leftarrow$} {\em end}]Other end of line segment. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Collection of faces that interect input line segment along an edge or strictly interior of face. \end{Desc}
+\index{Nice@{Nice}!beginNice@{beginNice}}
+\index{beginNice@{beginNice}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vhm\_\-cit} Nice::begin\-Nice (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classNice_bfe44fa4a6225393c93eed8c128af13c}
+
+
+Get an iterator pointing to first nonnice vertex. \begin{Desc}
+\item[Returns:]Iterator pointing to beginning of nonnice vertex container. \end{Desc}
+\index{Nice@{Nice}!endNice@{endNice}}
+\index{endNice@{endNice}!Nice@{Nice}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vhm\_\-cit} Nice::end\-Nice (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classNice_400a9465e49d8fcf1339d28eadc2fd1e}
+
+
+Get an iterator pointing to one past the last nonnice vertex. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last nonnice vertex. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf nice.h}\item 
+{\bf nice.cc}\end{CompactItemize}

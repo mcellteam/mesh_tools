@@ -1,0 +1,81 @@
+\section{Octree\_\-Visitor\_\-Remove\_\-Face Class Reference}
+\label{classOctree__Visitor__Remove__Face}\index{Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}}
+{\tt \#include $<$octree\_\-visitor\_\-remove\_\-face.h$>$}
+
+Inheritance diagram for Octree\_\-Visitor\_\-Remove\_\-Face:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classOctree__Visitor__Remove__Face__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for Octree\_\-Visitor\_\-Remove\_\-Face:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{classOctree__Visitor__Remove__Face__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\_\-Visitor\_\-Remove\_\-Face} ({\bf Face} $\ast$, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r})
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+virtual {\bf $\sim$Octree\_\-Visitor\_\-Remove\_\-Face} ()
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+virtual void {\bf visit\-Root} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Branch} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Leaf} (const Array$<$ const {\bf Face} $\ast$ $>$ \&items, const {\bf Octree\-Data} \&octree\-Data)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}!Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}}
+\index{Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}!Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Remove\_\-Face::Octree\_\-Visitor\_\-Remove\_\-Face ({\bf Face} $\ast$, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r})}\label{classOctree__Visitor__Remove__Face_aa229b03d617bcf87c95693622a9216f}
+
+
+standard object services --------------------------------------------------- 
+
+\index{Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}!~Octree_Visitor_Remove_Face@{$\sim$Octree\_\-Visitor\_\-Remove\_\-Face}}
+\index{~Octree_Visitor_Remove_Face@{$\sim$Octree\_\-Visitor\_\-Remove\_\-Face}!Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Remove\_\-Face::$\sim$Octree\_\-Visitor\_\-Remove\_\-Face ()\hspace{0.3cm}{\tt  [virtual]}}\label{classOctree__Visitor__Remove__Face_3028635e5e78ee4be315d3b9b6a7b9a0}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}!visitRoot@{visitRoot}}
+\index{visitRoot@{visitRoot}!Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Remove\_\-Face::visit\-Root (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Remove__Face_8264a86589a55f608099caa8183caeb8}
+
+
+commands ------------------------------------------------------------------- octree visitor overrides 
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_30b2c5b03acb6c75b40d79a86e015878}.\index{Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}!visitBranch@{visitBranch}}
+\index{visitBranch@{visitBranch}!Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Remove\_\-Face::visit\-Branch (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Remove__Face_e1e01c34a6292f6f1519f4240cdbd620}
+
+
+Called by Octree when visit traversal is at a branch.\par
+\par
+ To continue deeper, implementation calls Octree\-Branch::continue\-Visit( sub\-Cells, octree\-Data, sub\-Cell\-Index, $\ast$this ) for any/all sub\-Cell\-Index values. sub\-Cells elements can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]Octree\-Data \end{Desc}
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_e62544f5cde1e32e7fd1515e0b8d110d}.\index{Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}!visitLeaf@{visitLeaf}}
+\index{visitLeaf@{visitLeaf}!Octree_Visitor_Remove_Face@{Octree\_\-Visitor\_\-Remove\_\-Face}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Remove\_\-Face::visit\-Leaf (const Array$<$ const {\bf Face} $\ast$ $>$ \& {\em items}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Remove__Face_958fd3c32dc11d95178d727b2352d6df}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf octree\_\-visitor\_\-remove\_\-face.h}\item 
+{\bf octree\_\-visitor\_\-remove\_\-face.cc}\end{CompactItemize}

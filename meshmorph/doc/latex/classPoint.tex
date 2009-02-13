@@ -1,0 +1,86 @@
+\section{Point Class Reference}
+\label{classPoint}\index{Point@{Point}}
+{\tt \#include $<$point.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Point} (double, double, double)
+\item 
+void {\bf add} (double, double, double)
+\item 
+void {\bf clear} (void)
+\item 
+double {\bf get\-Sq\-D} (void) const
+\item 
+double {\bf get\-Closest\-X} (void) const
+\item 
+double {\bf get\-Closest\-Y} (void) const
+\item 
+double {\bf get\-Closest\-Z} (void) const
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Point@{Point}!Point@{Point}}
+\index{Point@{Point}!Point@{Point}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Point::Point (double {\em j}, double {\em k}, double {\em l})}\label{classPoint_a20b22a6c0530d1c52ad963eb36fe536}
+
+
+Initialize point class. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em j}]X-component of seed point. \item[\mbox{$\leftarrow$} {\em k}]Y-component of seed point. \item[\mbox{$\leftarrow$} {\em l}]Z-component of seed point. \end{description}
+\end{Desc}
+
+
+\subsection{Member Function Documentation}
+\index{Point@{Point}!add@{add}}
+\index{add@{add}!Point@{Point}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Point::add (double {\em j}, double {\em k}, double {\em l})}\label{classPoint_6938afca6d4cd230f4d530cd6ae16b80}
+
+
+Calculate distance from input point to stored vertex and record point if closer than stored point. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em j}]X-component of input point. \item[\mbox{$\leftarrow$} {\em k}]Y-component of input point. \item[\mbox{$\leftarrow$} {\em l}]Z-component of input point. \end{description}
+\end{Desc}
+\index{Point@{Point}!clear@{clear}}
+\index{clear@{clear}!Point@{Point}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Point::clear (void)}\label{classPoint_94c329b9d3931d52caaf9b78b51af862}
+
+
+Rest point class. \index{Point@{Point}!getSqD@{getSqD}}
+\index{getSqD@{getSqD}!Point@{Point}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Point::get\-Sq\-D (void) const}\label{classPoint_380d4bd8b7e69e1627fbcbfa6dc54aa2}
+
+
+Get squared distance between point of interest and closest point. \begin{Desc}
+\item[Returns:]Squared distance between point of interest and closest point. \end{Desc}
+\index{Point@{Point}!getClosestX@{getClosestX}}
+\index{getClosestX@{getClosestX}!Point@{Point}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Point::get\-Closest\-X (void) const}\label{classPoint_d3bece00dbeb2b861647e8bf7458303c}
+
+
+Get x-component of closest location found. \begin{Desc}
+\item[Returns:]X-component of closest location found. \end{Desc}
+\index{Point@{Point}!getClosestY@{getClosestY}}
+\index{getClosestY@{getClosestY}!Point@{Point}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Point::get\-Closest\-Y (void) const}\label{classPoint_d2263a9c0fd712341f7ea6f64f20e708}
+
+
+Get y-component of closest location found. \begin{Desc}
+\item[Returns:]Y-component of closest location found. \end{Desc}
+\index{Point@{Point}!getClosestZ@{getClosestZ}}
+\index{getClosestZ@{getClosestZ}!Point@{Point}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Point::get\-Closest\-Z (void) const}\label{classPoint_456c02ba981b5ed95cc154acfbb1edb6}
+
+
+Get z-component of closest location found. \begin{Desc}
+\item[Returns:]Z-component of closest location found. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf point.h}\item 
+{\bf point.cc}\end{CompactItemize}

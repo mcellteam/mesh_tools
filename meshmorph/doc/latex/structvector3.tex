@@ -1,0 +1,143 @@
+\section{vector3 Struct Reference}
+\label{structvector3}\index{vector3@{vector3}}
+{\tt \#include $<$meshmorph.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf vector3} (void)
+\item 
+{\bf vector3} (double x, double y, double z)
+\item 
+{\bf vector3} \& {\bf operator=} (const {\bf vector3} \&v)
+\item 
+{\bf vector3} \& {\bf operator+=} (double a)
+\item 
+{\bf vector3} \& {\bf operator-=} (double a)
+\item 
+{\bf vector3} \& {\bf operator+=} (const {\bf vector3} \&v)
+\item 
+{\bf vector3} \& {\bf operator $\ast$=} (double a)
+\item 
+{\bf vector3} {\bf operator-} (const {\bf vector3} \&v) const
+\item 
+{\bf vector3} {\bf operator $\ast$} (double a) const
+\item 
+{\bf vector3} {\bf operator+} (double a) const
+\item 
+{\bf vector3} {\bf operator+} (const {\bf vector3} \&v) const
+\item 
+{\bf vector3} {\bf operator/} (double a) const
+\item 
+double {\bf dot} (const {\bf vector3} \&v) const
+\item 
+double {\bf length} (void) const
+\item 
+{\bf vector3} {\bf cross} (const {\bf vector3} \&v) const
+\item 
+void {\bf print} (std::ostream \&target) const
+\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+double {\bf p} [3]
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{vector3@{vector3}!vector3@{vector3}}
+\index{vector3@{vector3}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}vector3::vector3 (void)\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_9cc5c01ba835acaf8450eba934082b60}
+
+
+\index{vector3@{vector3}!vector3@{vector3}}
+\index{vector3@{vector3}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}vector3::vector3 (double {\em x}, double {\em y}, double {\em z})\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_c26d9c3a6c6cdf051570770815ed56cd}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{vector3@{vector3}!operator=@{operator=}}
+\index{operator=@{operator=}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3}\& vector3::operator= (const {\bf vector3} \& {\em v})\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_926905b93ee84a3fe6fe431527fe963d}
+
+
+\index{vector3@{vector3}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3}\& vector3::operator+= (double {\em a})\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_c819a0b38b5482718079a0edc4706c76}
+
+
+\index{vector3@{vector3}!operator-=@{operator-=}}
+\index{operator-=@{operator-=}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3}\& vector3::operator-= (double {\em a})\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_ab64d64ab09c7a9187174f3ebd05021a}
+
+
+\index{vector3@{vector3}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3}\& vector3::operator+= (const {\bf vector3} \& {\em v})\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_f680c4ef829b28ccfa064c60ae0cbe41}
+
+
+\index{vector3@{vector3}!operator *=@{operator $\ast$=}}
+\index{operator *=@{operator $\ast$=}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3}\& vector3::operator $\ast$= (double {\em a})\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_a0eeff8878896dd37af24220bf9f0d89}
+
+
+\index{vector3@{vector3}!operator-@{operator-}}
+\index{operator-@{operator-}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} vector3::operator- (const {\bf vector3} \& {\em v}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_7917d8f839872d5f107cb5dd4239ef62}
+
+
+\index{vector3@{vector3}!operator *@{operator $\ast$}}
+\index{operator *@{operator $\ast$}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} vector3::operator $\ast$ (double {\em a}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_400f6166d46a8a8ef27ebd401fe56a46}
+
+
+\index{vector3@{vector3}!operator+@{operator+}}
+\index{operator+@{operator+}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} vector3::operator+ (double {\em a}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_76ef174c8f0f5d7b35be3c22baf6ec4f}
+
+
+\index{vector3@{vector3}!operator+@{operator+}}
+\index{operator+@{operator+}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} vector3::operator+ (const {\bf vector3} \& {\em v}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_586fe5d8bfa9b20470aa8b01407d8a3d}
+
+
+\index{vector3@{vector3}!operator/@{operator/}}
+\index{operator/@{operator/}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} vector3::operator/ (double {\em a}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_19c3ff118634eb77e0572292c5d2aa96}
+
+
+\index{vector3@{vector3}!dot@{dot}}
+\index{dot@{dot}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double vector3::dot (const {\bf vector3} \& {\em v}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_82f3dc9b33d92b0382d73c8f2745ead8}
+
+
+\index{vector3@{vector3}!length@{length}}
+\index{length@{length}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double vector3::length (void) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_8e6316e1db80fcded3840f703560c3d0}
+
+
+\index{vector3@{vector3}!cross@{cross}}
+\index{cross@{cross}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} vector3::cross (const {\bf vector3} \& {\em v}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_b0cdde2821ccf93d4189ebbac351268f}
+
+
+\index{vector3@{vector3}!print@{print}}
+\index{print@{print}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void vector3::print (std::ostream \& {\em target}) const\hspace{0.3cm}{\tt  [inline]}}\label{structvector3_dc15d3f833f7a62149fd0a888b9fa5c1}
+
+
+
+
+\subsection{Member Data Documentation}
+\index{vector3@{vector3}!p@{p}}
+\index{p@{p}!vector3@{vector3}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double {\bf vector3::p}[3]}\label{structvector3_89904ef9d7c3ce1b8261834001f3133e}
+
+
+
+
+The documentation for this struct was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf meshmorph.h}\end{CompactItemize}

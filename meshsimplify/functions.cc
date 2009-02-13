@@ -165,9 +165,9 @@ void addPointersToFaces(void_list *flh,hashtable_v &hmv){
 	// for each face
 	for (q=flh;q!=NULL;q=q->next) {
 		f=(Face*)q->data;
-		f->v1=hmv[static_cast<int>(f->v1)];
-		f->v2=hmv[static_cast<int>(f->v2)];
-		f->v3=hmv[static_cast<int>(f->v3)];
+		f->v1=hmv[reinterpret_cast<int>(f->v1)];
+		f->v2=hmv[reinterpret_cast<int>(f->v2)];
+		f->v3=hmv[reinterpret_cast<int>(f->v3)];
 	}
 }
 

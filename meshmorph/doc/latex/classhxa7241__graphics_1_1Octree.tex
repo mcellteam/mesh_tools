@@ -1,0 +1,205 @@
+\section{hxa7241\_\-graphics::Octree$<$ TYPE $>$ Class Template Reference}
+\label{classhxa7241__graphics_1_1Octree}\index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+{\tt \#include $<$Octree.h$>$}
+
+Collaboration diagram for hxa7241\_\-graphics::Octree$<$ TYPE $>$:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=232pt]{classhxa7241__graphics_1_1Octree__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree} (const {\bf Vector3r} \&position\-Of\-Lower\-Corner, real size\-Of\-Cube, dword max\-Item\-Count\-Per\-Cell, dword max\-Level\-Count, real min\-Cell\-Size)
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf $\sim$Octree} ()
+\item 
+{\bf Octree} (const {\bf Octree} \&)
+\item 
+{\bf Octree} \& {\bf operator=} (const {\bf Octree} \&)
+\item 
+bool {\bf insert} (const TYPE \&item, const {\bf Octree\-Agent}$<$ TYPE $>$ \&agent)
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+bool {\bf remove} (const TYPE \&item, const {\bf Octree\-Agent}$<$ TYPE $>$ \&agent)
+\item 
+void {\bf visit} ({\bf Octree\-Visitor}$<$ TYPE $>$ \&visitor) const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+bool {\bf is\-Empty} () const
+\item 
+void {\bf get\-Info} (dword \&byte\-Size, dword \&leaf\-Count, dword \&item\-Ref\-Count, dword \&max\-Depth) const
+\item 
+const {\bf Vector3r} \& {\bf get\-Position} () const
+\item 
+real {\bf get\-Size} () const
+\item 
+dword {\bf get\-Max\-Item\-Count\-Per\-Cell} () const
+\item 
+dword {\bf get\-Max\-Level\-Count} () const
+\item 
+real {\bf get\-Min\-Cell\-Size} () const
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class TYPE$>$ class hxa7241\_\-graphics::Octree$<$ TYPE $>$}
+
+\doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} based spatial index.\par
+\par
+
+
+Client must define concrete derivatives of Octree\-Agent$<$Item\-Type$>$ and Octree\-Visitor$<$Item\-Type$>$.\par
+\par
+
+
+max\-Item\-Count\-Per\-Cell is ignored where max\-Level\-Count or min\-Cell\-Size is reached. \par
+\par
+
+
+The octree is cubical and axis aligned, partitions are axis aligned, partitions divide in half, each level partitions the previous level in all three axiss.\par
+\par
+
+
+Storage is contracted or expanded as needed by item insertion and removal. \par
+\par
+
+
+(Occupies, very approximately, 20 bytes per point item. maybe...)\par
+\par
+
+
+\doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} is only an index: it points to client items, it does not manage storage of items themselves.\par
+\par
+
+
+\begin{Desc}
+\item[See also:]\doxyref{Octree\-Agent}{p.}{classhxa7241__graphics_1_1OctreeAgent} 
+
+\doxyref{Octree\-Visitor}{p.}{classhxa7241__graphics_1_1OctreeVisitor}\end{Desc}
+The octree structure follows the Composite pattern.\par
+\par
+
+
+This template wrapper ensures the items indexed by the octree, and the agents and visitors used when accessing them are, of matching types. All algorithmic work is delegated to \doxyref{Octree\-Root}{p.}{classhxa7241__graphics_1_1OctreeRoot} and \doxyref{Octree\-Cell}{p.}{classhxa7241__graphics_1_1OctreeCell} derivatives in Octree\-Implementation, which work with abstract base interfaces and void pointers.\par
+\par
+
+
+For the insertion and removal commands, the agent provides an interface for the octree to query the typeless item, and for the visit query, the visitor provides callbacks to read tree nodes for carrying out the visit operation. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!Octree@{Octree}}
+\index{Octree@{Octree}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::{\bf Octree} (const {\bf Vector3r} \& {\em position\-Of\-Lower\-Corner}, real {\em size\-Of\-Cube}, dword {\em max\-Item\-Count\-Per\-Cell}, dword {\em max\-Level\-Count}, real {\em min\-Cell\-Size})\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_944f0b9fbb05beefb427492604d677ea}
+
+
+standard object services --------------------------------------------------- 
+
+Constructs a particular format of octree.\par
+\par
+  $\ast$ size\-Of\-Cube is desired length along a side\par
+ $\ast$ max\-Item\-Count\-Per\-Cell is desired max item pointers per leaf\par
+ $\ast$ max\-Level\-Count is desired max depth of tree\par
+ $\ast$ min\-Cell\-Size is desired min size of cells\par
+ \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!~Octree@{$\sim$Octree}}
+\index{~Octree@{$\sim$Octree}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::$\sim${\bf Octree} ()\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_996b0ca6208ac65b4e0fe492ba512de2}
+
+
+\index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!Octree@{Octree}}
+\index{Octree@{Octree}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::{\bf Octree} (const {\bf Octree}$<$ TYPE $>$ \&)\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_bc9d63a9de7ebe339fb59441853d4814}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf Octree}$<$ TYPE $>$ \& {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::operator= (const {\bf Octree}$<$ TYPE $>$ \&)\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_55ea755c45f60d1a1546c1e74abadfc4}
+
+
+Can throw storage allocation exceptions. In such cases the octree is unmodified. \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!insert@{insert}}
+\index{insert@{insert}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ bool {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::insert (const TYPE \& {\em item}, const {\bf Octree\-Agent}$<$ TYPE $>$ \& {\em agent})\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_d46b7fd6b1239727b49462cc05fff5bd}
+
+
+commands ------------------------------------------------------------------- 
+
+Add pointer(s) to the item to the octree.\par
+\par
+ (If an item has non-zero volume, it may have pointers in multiple cells.)\par
+\par
+ \begin{Desc}
+\item[Returns:]is the item inserted -- false if item not inside root bound  Can throw storage allocation exceptions. In such cases the octree remains structurally ok, but the item will not be fully added, -- call this method again or the remove method. \end{Desc}
+\begin{Desc}
+\item[See also:]\doxyref{remove}{p.}{classhxa7241__graphics_1_1Octree_d43ca9852a49ac39915c75886d08e368}, \doxyref{Octree\-Agent}{p.}{classhxa7241__graphics_1_1OctreeAgent} \end{Desc}
+\index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!remove@{remove}}
+\index{remove@{remove}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ bool {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::remove (const TYPE \& {\em item}, const {\bf Octree\-Agent}$<$ TYPE $>$ \& {\em agent})\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_d43ca9852a49ac39915c75886d08e368}
+
+
+Removes pointer(s) to the item from the octree.\par
+\par
+ (If an item has non-zero volume, it may have pointers in multiple cells.)\par
+\par
+ \begin{Desc}
+\item[Returns:]is the item removed -- false if item wasn't present  Can throw storage allocation exceptions. In such cases the octree remains structurally ok, but the item will not be fully removed, -- call this method again or the insert method. \end{Desc}
+\begin{Desc}
+\item[See also:]\doxyref{insert}{p.}{classhxa7241__graphics_1_1Octree_d46b7fd6b1239727b49462cc05fff5bd}, \doxyref{Octree\-Agent}{p.}{classhxa7241__graphics_1_1OctreeAgent} \end{Desc}
+\index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!visit@{visit}}
+\index{visit@{visit}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::visit ({\bf Octree\-Visitor}$<$ TYPE $>$ \& {\em visitor}) const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_b1e060abcc50911c00dcdd0c295e4402}
+
+
+queries -------------------------------------------------------------------- 
+
+Execute a visit query operation. \begin{Desc}
+\item[See also:]\doxyref{Octree\-Visitor}{p.}{classhxa7241__graphics_1_1OctreeVisitor} \end{Desc}
+\index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!isEmpty@{isEmpty}}
+\index{isEmpty@{isEmpty}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ bool {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::is\-Empty () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_08e61f7746c10d74a3709dd8b7e17583}
+
+
+Reports if the octree is empty. \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!getInfo@{getInfo}}
+\index{getInfo@{getInfo}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ void {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::get\-Info (dword \& {\em byte\-Size}, dword \& {\em leaf\-Count}, dword \& {\em item\-Ref\-Count}, dword \& {\em max\-Depth}) const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_dd7f1b0d6725a61023b8115a467a2796}
+
+
+Provides stats on the octree.\par
+\par
+  $\ast$ byte\-Size is size in bytes\par
+ $\ast$ leaf\-Count is number of leafs\par
+ $\ast$ item\-Ref\-Count is total number of item pointers in all leafs\par
+ $\ast$ max\-Depth is deepest depth of tree\par
+ \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ const {\bf Vector3r} \& {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::get\-Position () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_a9e1abf0d8d06acf394a7fcd4d1a7fcb}
+
+
+Gives the position supplied at construction. \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!getSize@{getSize}}
+\index{getSize@{getSize}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ real {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::get\-Size () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_fc7cfe60e40751420cce7ba890b3f010}
+
+
+Gives the size supplied at construction. \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!getMaxItemCountPerCell@{getMaxItemCountPerCell}}
+\index{getMaxItemCountPerCell@{getMaxItemCountPerCell}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ dword {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::get\-Max\-Item\-Count\-Per\-Cell () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_4032abd9e481aa257a3ededb90d3933e}
+
+
+Gives the leaf pointer limit supplied at construction. \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!getMaxLevelCount@{getMaxLevelCount}}
+\index{getMaxLevelCount@{getMaxLevelCount}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ dword {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::get\-Max\-Level\-Count () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_97844414ff11d60b560e20aacb483283}
+
+
+Gives the depth limit supplied at construction. \index{hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}!getMinCellSize@{getMinCellSize}}
+\index{getMinCellSize@{getMinCellSize}!hxa7241_graphics::Octree@{hxa7241\_\-graphics::Octree}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ real {\bf hxa7241\_\-graphics::Octree}$<$ TYPE $>$::get\-Min\-Cell\-Size () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Octree_31ddc022702545032fe62edb3ffdf279}
+
+
+Gives the size limit supplied at construction. 
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Octree.h}\end{CompactItemize}

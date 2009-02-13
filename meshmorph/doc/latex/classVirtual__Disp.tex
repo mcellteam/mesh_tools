@@ -1,0 +1,259 @@
+\section{Virtual\_\-Disp Class Reference}
+\label{classVirtual__Disp}\index{Virtual_Disp@{Virtual\_\-Disp}}
+{\tt \#include $<$virtual\_\-disp.h$>$}
+
+Collaboration diagram for Virtual\_\-Disp:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=93pt]{classVirtual__Disp__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void {\bf build\-Virt\-Disp\-Map\-Complement} (void)
+\item 
+bool {\bf find\-Virt\-Disp\-To\-Vert\-Assoc} ({\bf Vertex} $\ast$const, float const \&, {\bf tv\_\-it} \&)
+\item 
+void {\bf build\-Virt\-Disp\-Map} (const int \&)
+\item 
+void {\bf set\-Virtual\-Disp} ({\bf Vertex} $\ast$const, float const \&)
+\item 
+void {\bf update\-Virtual\-Disp} ({\bf Vertex} $\ast$const, bool const, float const \&)
+\item 
+void {\bf remove\-Virt\-Disp\-To\-Vert\-Assoc} ({\bf Vertex} $\ast$const, float const \&)
+\item 
+bool {\bf get\-Vert\-And\-Rank} ({\bf Vertex} $\ast$const, {\bf tv\_\-it} \&, int \&)
+\item 
+void {\bf reset\-For\-New\-Group} (const int \&)
+\item 
+void {\bf remove\-Vert\-From\-All\-Maps} ({\bf Vertex} $\ast$)
+\item 
+void {\bf validate\-Virt\-Disp\-Map\-Complement} (void)
+\item 
+void {\bf validate\-Virt\-Disp\-Map2} (void)
+\item 
+void {\bf validate\-Virt\-Disp\-Map} (void) const
+\item 
+void {\bf add\-Ad\-To\-Seed\-Ad} (const int \&count, double ad)
+\item 
+void {\bf add\-Vd\-To\-Seed\-Vd} (const int \&count)
+\item 
+{\bf s\_\-cit} {\bf begin\-Seed\-Act\-Disp} (void)
+\item 
+{\bf s\_\-cit} {\bf end\-Seed\-Act\-Disp} (void)
+\item 
+{\bf s\_\-cit} {\bf begin\-Seed\-Virt\-Disp} (void)
+\item 
+{\bf s\_\-cit} {\bf end\-Seed\-Virt\-Disp} (void)
+\item 
+{\bf tv\_\-crit} {\bf get\-Seed} (void)
+\item 
+int {\bf get\-Num\-Verts\-In\-Virt\-Disp\-Map} (void)
+\item 
+void {\bf advance\-Seed\-To\-Next\-Largest\-Vert} (void)
+\item 
+void {\bf reset\-Seed\-To\-Largest\-Vert} (void)
+\item 
+{\bf tv\_\-cit} {\bf begin\-Virt\-Disp\-Map} (void)
+\item 
+{\bf tv\_\-crit} {\bf rend\-Virt\-Disp\-Map} (void)
+\item 
+{\bf tv\_\-cit} {\bf end\-Virt\-Disp\-Map} (void)
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Virtual\_\-Disp} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Virtual_Disp@{Virtual\_\-Disp}!instance@{instance}}
+\index{instance@{instance}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Virtual\_\-Disp} \& Virtual\_\-Disp::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classVirtual__Disp_cfa60cce91fdade84b2030b81d70ad22}
+
+
+\index{Virtual_Disp@{Virtual\_\-Disp}!buildVirtDispMapComplement@{buildVirtDispMapComplement}}
+\index{buildVirtDispMapComplement@{buildVirtDispMapComplement}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::build\-Virt\-Disp\-Map\-Complement (void)}\label{classVirtual__Disp_abf9ca3e97dd2046dd148e6d6affe4b2}
+
+
+Build v\_\-to\_\-vd2, the complement map of vd2\_\-to\_\-v. \index{Virtual_Disp@{Virtual\_\-Disp}!findVirtDispToVertAssoc@{findVirtDispToVertAssoc}}
+\index{findVirtDispToVertAssoc@{findVirtDispToVertAssoc}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Virtual\_\-Disp::find\-Virt\-Disp\-To\-Vert\-Assoc ({\bf Vertex} $\ast$ const {\em v}, float const \& {\em sqd\_\-vd}, {\bf tv\_\-it} \& {\em match})}\label{classVirtual__Disp_e04623758bf027aa71daa89499cd3d80}
+
+
+Find and return element in vd2\_\-to\_\-v that matches input vertex and squared virtual displacement. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em sqd\_\-vd}]Squared virtual displacement of vertex. \item[\mbox{$\rightarrow$} {\em match}]Iterator to matching vd2\_\-to\_\-v element, if found; \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if match found; false otherwise. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!buildVirtDispMap@{buildVirtDispMap}}
+\index{buildVirtDispMap@{buildVirtDispMap}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::build\-Virt\-Disp\-Map (const int \& {\em group})}\label{classVirtual__Disp_32764f06734a84946095b7703579e24f}
+
+
+Build vd2\_\-to\_\-v (which maps squared virtual dispacement to vertex pointer). \index{Virtual_Disp@{Virtual\_\-Disp}!setVirtualDisp@{setVirtualDisp}}
+\index{setVirtualDisp@{setVirtualDisp}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::set\-Virtual\-Disp ({\bf Vertex} $\ast$ const {\em v}, float const \& {\em sqd\_\-vd})}\label{classVirtual__Disp_ac2a04238e5a737cf6c36541ad6792a2}
+
+
+Record association between input vertex and squared virtual displacement, removing any previous associations. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em sqd\_\-vd}]Squared virtual displacement of vertex. \end{description}
+\end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!updateVirtualDisp@{updateVirtualDisp}}
+\index{updateVirtualDisp@{updateVirtualDisp}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::update\-Virtual\-Disp ({\bf Vertex} $\ast$ const {\em v}, bool const {\em vertex\_\-has\_\-closest\_\-pt}, float const \& {\em gain})}\label{classVirtual__Disp_33379e963a47834a0122fbeb19e9946c}
+
+
+Calculate and record the virtual displacement and input vertex association. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em vertex\_\-has\_\-closest\_\-pt}]If true then add vertex to maps; \item[\mbox{$\leftarrow$} {\em gain}]Proportionality constant between force and position. otherwise remove associations referencing input vertex. \end{description}
+\end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!removeVirtDispToVertAssoc@{removeVirtDispToVertAssoc}}
+\index{removeVirtDispToVertAssoc@{removeVirtDispToVertAssoc}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::remove\-Virt\-Disp\-To\-Vert\-Assoc ({\bf Vertex} $\ast$ const {\em v}, float const \& {\em sqd\_\-vd})}\label{classVirtual__Disp_2fb07b39a6b1d4473706d2ced2a04046}
+
+
+Find and remove associations between input squared virtual displacement and input vertex in vd2\_\-to\_\-v map. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\leftarrow$} {\em sqd\_\-vd}]Squared virtual displacement associated with vertex. \end{description}
+\end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!getVertAndRank@{getVertAndRank}}
+\index{getVertAndRank@{getVertAndRank}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Virtual\_\-Disp::get\-Vert\-And\-Rank ({\bf Vertex} $\ast$ const {\em v}, {\bf tv\_\-it} \& {\em match}, int \& {\em rank})}\label{classVirtual__Disp_a8252db47113f41f6d19837d67047af6}
+
+
+Find vertex in map, record rank in ordering by squared virtual displacment, and return iterator to element. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\rightarrow$} {\em match}]Iterator to first element that matches input vertex. \item[\mbox{$\rightarrow$} {\em rank}]Numbering of match in sort by displacement (larget to smallest). \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if match found; false otherwise. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!resetForNewGroup@{resetForNewGroup}}
+\index{resetForNewGroup@{resetForNewGroup}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::reset\-For\-New\-Group (const int \& {\em group})}\label{classVirtual__Disp_72688ec1d2c12ed94e94b6c5c61782ad}
+
+
+Re-initialize class before beginning a new group. \index{Virtual_Disp@{Virtual\_\-Disp}!removeVertFromAllMaps@{removeVertFromAllMaps}}
+\index{removeVertFromAllMaps@{removeVertFromAllMaps}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::remove\-Vert\-From\-All\-Maps ({\bf Vertex} $\ast$ {\em v})}\label{classVirtual__Disp_4f9258377da0925215ca52bf691ca4a9}
+
+
+Remove associations of input vertex from all virtual displacement maps. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of to be removed. \end{description}
+\end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!validateVirtDispMapComplement@{validateVirtDispMapComplement}}
+\index{validateVirtDispMapComplement@{validateVirtDispMapComplement}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::validate\-Virt\-Disp\-Map\-Complement (void)}\label{classVirtual__Disp_20fa93aacf0b48d62d3686e4a152f4da}
+
+
+Perform data integrity check on vertex to virtual displacement map. \index{Virtual_Disp@{Virtual\_\-Disp}!validateVirtDispMap2@{validateVirtDispMap2}}
+\index{validateVirtDispMap2@{validateVirtDispMap2}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::validate\-Virt\-Disp\-Map2 (void)}\label{classVirtual__Disp_9c81295d353c61a4a95fc9218522cea7}
+
+
+Perform data integrity check on virtual displacement to vertex map by checking that displacements are not Na\-N, that the vertex is not NULL, that the displacement is less than threshold value, that closest face to vertex is not NULL, and comparing a calculated virtual displacement to stored displacement. \index{Virtual_Disp@{Virtual\_\-Disp}!validateVirtDispMap@{validateVirtDispMap}}
+\index{validateVirtDispMap@{validateVirtDispMap}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::validate\-Virt\-Disp\-Map (void) const}\label{classVirtual__Disp_20df52b786213c729616ab8f88398642}
+
+
+Perform data integrity check on virtual displacement to vertex map by checking for duplicate vertices. \index{Virtual_Disp@{Virtual\_\-Disp}!addAdToSeedAd@{addAdToSeedAd}}
+\index{addAdToSeedAd@{addAdToSeedAd}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::add\-Ad\-To\-Seed\-Ad (const int \& {\em count}, double {\em ad})\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_aa0c0bdf53fa066c8704d10fd8905424}
+
+
+Store seed actual displacement to detect steady state of model. \index{Virtual_Disp@{Virtual\_\-Disp}!addVdToSeedVd@{addVdToSeedVd}}
+\index{addVdToSeedVd@{addVdToSeedVd}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::add\-Vd\-To\-Seed\-Vd (const int \& {\em count})\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_ad13cf3e9d384b274d3a37794a672be8}
+
+
+Store seed virtual displacement to detect steady state of model. \index{Virtual_Disp@{Virtual\_\-Disp}!beginSeedActDisp@{beginSeedActDisp}}
+\index{beginSeedActDisp@{beginSeedActDisp}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf s\_\-cit} Virtual\_\-Disp::begin\-Seed\-Act\-Disp (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_d99378952251481898b7c0d4d5eae606}
+
+
+Get an iterator pointing to the first element in seed actual displacement vector. \begin{Desc}
+\item[Returns:]Iterator pointing to the first seed actual displacement element. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!endSeedActDisp@{endSeedActDisp}}
+\index{endSeedActDisp@{endSeedActDisp}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf s\_\-cit} Virtual\_\-Disp::end\-Seed\-Act\-Disp (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_3e4cf6ee6648b2e12729db2650d2a291}
+
+
+Get an iterator pointing to one past the last element in seed actual displacement vector. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last seed actual displacement element. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!beginSeedVirtDisp@{beginSeedVirtDisp}}
+\index{beginSeedVirtDisp@{beginSeedVirtDisp}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf s\_\-cit} Virtual\_\-Disp::begin\-Seed\-Virt\-Disp (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_74031bc702c271dc5ae52847d0a9d292}
+
+
+Get an iterator pointing to the first element in seed virtual displacement vector. \begin{Desc}
+\item[Returns:]Iterator pointing to the first seed virtual displacement element. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!endSeedVirtDisp@{endSeedVirtDisp}}
+\index{endSeedVirtDisp@{endSeedVirtDisp}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf s\_\-cit} Virtual\_\-Disp::end\-Seed\-Virt\-Disp (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_6c141cbfd6ae72fbfb26259f27b95438}
+
+
+Get an iterator pointing to one past the last element in seed virtual displacement vector. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last seed virtual displacement element. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!getSeed@{getSeed}}
+\index{getSeed@{getSeed}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf tv\_\-crit} Virtual\_\-Disp::get\-Seed (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_4869832a48074eae8916af65d53cea9c}
+
+
+Retrieve an iterator pointing to seed of collection of vertices to move. \begin{Desc}
+\item[Returns:]Iterator pointing to element of virtual displacment map. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!getNumVertsInVirtDispMap@{getNumVertsInVirtDispMap}}
+\index{getNumVertsInVirtDispMap@{getNumVertsInVirtDispMap}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Virtual\_\-Disp::get\-Num\-Verts\-In\-Virt\-Disp\-Map (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_545e0127fe993d7687fefb08e2fa14b5}
+
+
+Retrieve number of vertices in virtual displacement map. \begin{Desc}
+\item[Returns:]Number of elements in virtual displacement map. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!advanceSeedToNextLargestVert@{advanceSeedToNextLargestVert}}
+\index{advanceSeedToNextLargestVert@{advanceSeedToNextLargestVert}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::advance\-Seed\-To\-Next\-Largest\-Vert (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_af22a985122a4623f0184a25c56fc59c}
+
+
+Advance iterator to point to next element in map sorted by virtual displacement. \index{Virtual_Disp@{Virtual\_\-Disp}!resetSeedToLargestVert@{resetSeedToLargestVert}}
+\index{resetSeedToLargestVert@{resetSeedToLargestVert}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Virtual\_\-Disp::reset\-Seed\-To\-Largest\-Vert (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_4c93b55c0f7071cc6e38b6864ed1f8c6}
+
+
+Reset iterator to point to first element in map sorted by virtual displacement. \index{Virtual_Disp@{Virtual\_\-Disp}!beginVirtDispMap@{beginVirtDispMap}}
+\index{beginVirtDispMap@{beginVirtDispMap}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf tv\_\-cit} Virtual\_\-Disp::begin\-Virt\-Disp\-Map (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_7fa99fc73caddddb05ce75a1066bceee}
+
+
+Get an iterator pointing to the first element in virtual displacement map. \begin{Desc}
+\item[Returns:]Iterator pointing to the first virtual displacement element. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!rendVirtDispMap@{rendVirtDispMap}}
+\index{rendVirtDispMap@{rendVirtDispMap}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf tv\_\-crit} Virtual\_\-Disp::rend\-Virt\-Disp\-Map (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_16f6da6582de05dc703cf578eb4c1226}
+
+
+Get a reverse iterator pointing to one past the last element in virtual displacement map. \begin{Desc}
+\item[Returns:]Reverse iterator pointing to one past the last virtual displacement element. \end{Desc}
+\index{Virtual_Disp@{Virtual\_\-Disp}!endVirtDispMap@{endVirtDispMap}}
+\index{endVirtDispMap@{endVirtDispMap}!Virtual_Disp@{Virtual\_\-Disp}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf tv\_\-cit} Virtual\_\-Disp::end\-Virt\-Disp\-Map (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVirtual__Disp_3eea4a3c599f5e0e372a91329aaf3001}
+
+
+Get an iterator pointing to one past the last element in virtual displacement map. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last virtual displacement element. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf virtual\_\-disp.h}\item 
+{\bf virtual\_\-disp.cc}\end{CompactItemize}

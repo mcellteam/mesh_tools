@@ -1,0 +1,475 @@
+\section{Vertex Class Reference}
+\label{classVertex}\index{Vertex@{Vertex}}
+{\tt \#include $<$vertex.h$>$}
+
+Collaboration diagram for Vertex:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=122pt]{classVertex__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Vertex} (int const \&, double const \&x, double const \&y, double const \&z, {\bf Object} $\ast$const)
+\item 
+{\bf Vertex} ({\bf Vertex} const \&)
+\item 
+{\bf Vertex} \& {\bf operator=} ({\bf Vertex} const \&)
+\item 
+void {\bf print} (std::ostream \&) const
+\item 
+void {\bf print\-CP} (std::ostream \&) const
+\item 
+void {\bf set\-New\-Pos} ({\bf vector3} const $\ast$const)
+\item 
+void {\bf set\-Normal} (void)
+\item 
+void {\bf get\-Bounding\-Box} ({\bf vector3} \&, {\bf vector3} \&) const 
+\item 
+void {\bf update\-Adj\-Face\-Bounding\-Boxes} (void)
+\item 
+void {\bf define\-Local\-Region} ({\bf vector3} \&, {\bf vector3} \&)
+\item 
+void {\bf get\-Adj\-Vertices} ({\bf vec\_\-vp} \&) const
+\item 
+void {\bf get\-Adjacent\-Edges} ({\bf vec\_\-ep} \&) const
+\item 
+double {\bf get\-Sq\-Sep\-Dist} (void) const
+\item 
+double {\bf get\-Sq\-Virtual\-Disp} (double)
+\item 
+{\bf vector3} {\bf get\-New\-Pos} (double)
+\item 
+void {\bf record\-Adj\-Face\-Bounding\-Boxes} ({\bf hxa7241\_\-graphics::Vector3r} $\ast$const adjacent\_\-face\_\-lower, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const adjacent\_\-face\_\-upper)
+\item 
+void {\bf get\-Total\-Force\-Energy} ({\bf vector3} \&) const
+\item 
+void {\bf get\-Adj\-Face\-Int\-Force} ({\bf vector3} \&) const
+\item 
+double {\bf get\-Ecw\-Force\-Energy} ({\bf vector3} \&, bool) const
+\item 
+double {\bf get\-Edge\-Stretch\-Force\-Energy} ({\bf vector3} \&, bool) const
+\item 
+double {\bf get\-Face\-Aspect\-Ratio\-Force\-Energy} ({\bf vector3} \&, bool) const
+\item 
+double {\bf get\-Edge\-Angle\-Force\-Energy} ({\bf vector3} \&, bool) const
+\item 
+{\bf Face} $\ast$ {\bf get\-Face\-Not\-Adj\-To\-Vertex} ({\bf Vertex} const $\ast$const) const 
+\item 
+void {\bf update\-Adjacent\-Face\-Normals} (void)
+\item 
+int {\bf get\-Last\-Refractory\-Iter} (void)
+\item 
+void {\bf set\-Last\-Refractory\-Iter} (int i)
+\item 
+void {\bf sort\-Adjacent\-Faces} (void)
+\item 
+{\bf vector3} {\bf get\-Normal} (void) const
+\item 
+int {\bf get\-Index} (void) const
+\item 
+int {\bf get\-Num\-Adj\-Faces} (void) const
+\item 
+bool {\bf face\-Is\-Adjacent} ({\bf Face} $\ast$face) const
+\item 
+bool {\bf is\-Match} (int const \&i, std::string const \&name) const
+\item 
+void {\bf add\-Adjacent\-Face} ({\bf Face} $\ast$face)
+\item 
+double const $\ast$ {\bf get\-Coord} (int const \&axis) const
+\item 
+{\bf Face} $\ast$ {\bf get\-Closest\-Face} (void)
+\item 
+void {\bf set\-Face} ({\bf Face} $\ast$const face)
+\item 
+{\bf vector3} const $\ast$ {\bf get\-Pos} (void) const
+\item 
+void {\bf set\-Pos} (double const \&x, double const \&y, double const \&z)
+\item 
+{\bf Object} const $\ast$ {\bf get\-Object} (void) const
+\item 
+{\bf fp\_\-cit} {\bf begin} (void) const
+\item 
+{\bf fp\_\-cit} {\bf end} (void) const
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Vertex@{Vertex}!Vertex@{Vertex}}
+\index{Vertex@{Vertex}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Vertex::Vertex (int const \& {\em in}, double const \& {\em x}, double const \& {\em y}, double const \& {\em z}, {\bf Object} $\ast$ const {\em q})}\label{classVertex_6ebff1d17d628f435c2655520e57eb63}
+
+
+Create new instance of \doxyref{Vertex}{p.}{classVertex} class.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em line}]Single line from input mesh file. \item[\mbox{$\leftarrow$} {\em q}]Pointer to parent \doxyref{Object}{p.}{classObject}. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!Vertex@{Vertex}}
+\index{Vertex@{Vertex}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Vertex::Vertex ({\bf Vertex} const \&)}\label{classVertex_42156e0f7298c47e00f172a5f504028a}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Vertex@{Vertex}!operator=@{operator=}}
+\index{operator=@{operator=}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex} \& Vertex::operator= ({\bf Vertex} const \&)}\label{classVertex_d20da0d28fba10d6151cc8c5d756fff6}
+
+
+\index{Vertex@{Vertex}!print@{print}}
+\index{print@{print}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::print (std::ostream \& {\em target}) const}\label{classVertex_ef328a4374db75403a25eb165c1b7066}
+
+
+Print identifying vertex information to output stream.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!printCP@{printCP}}
+\index{printCP@{printCP}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::print\-CP (std::ostream \& {\em target}) const}\label{classVertex_277422e73e7ec49cec4239bfe0b98dbb}
+
+
+Print to output stream the vertex position in DREa\-MM custom points format.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!setNewPos@{setNewPos}}
+\index{setNewPos@{setNewPos}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::set\-New\-Pos ({\bf vector3} const $\ast$ const {\em new\_\-position})}\label{classVertex_0e4d93fd1fd7e411c857492d0d7b328a}
+
+
+Set new location for this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em new\_\-position}]New candidate position for this vertex. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!setNormal@{setNormal}}
+\index{setNormal@{setNormal}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::set\-Normal (void)}\label{classVertex_338d57acc6a9e485afd0374fb8772fa2}
+
+
+Calculate and store vertex normal vector computed as a weighted sum of adjacent face normals. \index{Vertex@{Vertex}!getBoundingBox@{getBoundingBox}}
+\index{getBoundingBox@{getBoundingBox}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::get\-Bounding\-Box ({\bf vector3} \& {\em lower}, {\bf vector3} \& {\em upper}) const}\label{classVertex_e968d8051fc4b83620920b6a149021cb}
+
+
+Calculate and return vertex bounding box as bounding box of collection of adjacent faces. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em lower}]Lower corner of bounding box of collection of vertex adjacent faces. \item[\mbox{$\rightarrow$} {\em upper}]Upper corner of bounding box of collection of vertex adjacent faces. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!updateAdjFaceBoundingBoxes@{updateAdjFaceBoundingBoxes}}
+\index{updateAdjFaceBoundingBoxes@{updateAdjFaceBoundingBoxes}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::update\-Adj\-Face\-Bounding\-Boxes (void)}\label{classVertex_1d9a88b8e7d1ffc4cc7b5679718bc307}
+
+
+\index{Vertex@{Vertex}!defineLocalRegion@{defineLocalRegion}}
+\index{defineLocalRegion@{defineLocalRegion}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::define\-Local\-Region ({\bf vector3} \& {\em lower}, {\bf vector3} \& {\em upper})}\label{classVertex_f396f8cd8dcbac71a3db0c63fa39bf2e}
+
+
+Calculate region around this vertex that is influenced by moving this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em lower}]Lower corner of local region. \item[\mbox{$\rightarrow$} {\em upper}]Upper corner of local region. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getAdjVertices@{getAdjVertices}}
+\index{getAdjVertices@{getAdjVertices}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::get\-Adj\-Vertices ({\bf vec\_\-vp} \& {\em adjacent\_\-vertices}) const}\label{classVertex_f5e00a98124f61e7c6877e8b843a50e2}
+
+
+Collect and return vertices adjacent to this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em adjacent\_\-vertices}]Adjacent vertices of this vertex. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getAdjacentEdges@{getAdjacentEdges}}
+\index{getAdjacentEdges@{getAdjacentEdges}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::get\-Adjacent\-Edges ({\bf vec\_\-ep} \& {\em adjacent\_\-edges}) const}\label{classVertex_9698fd8ed0d0ecc74b08d25dfeb483d1}
+
+
+Collect and return edges adjacent to this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em adjacent\_\-edges}]Adjacent edges of this vertex. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getSqSepDist@{getSqSepDist}}
+\index{getSqSepDist@{getSqSepDist}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Vertex::get\-Sq\-Sep\-Dist (void) const}\label{classVertex_08bdf63722a596fecada59dbc6a2ce67}
+
+
+Calculare and return squared extracellular width of this vertex. \begin{Desc}
+\item[Returns:]Squared extracellular width of this vertex. \end{Desc}
+\index{Vertex@{Vertex}!getSqVirtualDisp@{getSqVirtualDisp}}
+\index{getSqVirtualDisp@{getSqVirtualDisp}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Vertex::get\-Sq\-Virtual\-Disp (double {\em gain})}\label{classVertex_d9fce6dd07b9f8053a0ee2f1dbfeba77}
+
+
+Calculate and return the squared virtual displacement of this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em gain}]Proportionality constant between force and displacement. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Squared virtual displacement of this vertex. \end{Desc}
+\index{Vertex@{Vertex}!getNewPos@{getNewPos}}
+\index{getNewPos@{getNewPos}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} Vertex::get\-New\-Pos (double {\em gain})}\label{classVertex_a7922650d655b0c69dbb3ba675021e59}
+
+
+Calculate new vertex position. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em gain}]Proportionality between force and displacement. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]New vertex location. \end{Desc}
+\index{Vertex@{Vertex}!recordAdjFaceBoundingBoxes@{recordAdjFaceBoundingBoxes}}
+\index{recordAdjFaceBoundingBoxes@{recordAdjFaceBoundingBoxes}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::record\-Adj\-Face\-Bounding\-Boxes ({\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em adjacent\_\-face\_\-lower}, {\bf hxa7241\_\-graphics::Vector3r} $\ast$const {\em adjacent\_\-face\_\-upper})}\label{classVertex_8e996499ae0772ff3d6bcd5f92066859}
+
+
+Record bounding box of each adjacent face of this vertex. \index{Vertex@{Vertex}!getTotalForceEnergy@{getTotalForceEnergy}}
+\index{getTotalForceEnergy@{getTotalForceEnergy}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::get\-Total\-Force\-Energy ({\bf vector3} \& {\em force}) const}\label{classVertex_c3a429d23891886ccb68c09967638c7e}
+
+
+Calculate and return total force at this vertex, but energy is not computed. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em force}]Input force plus calculated force from all contributions. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getAdjFaceIntForce@{getAdjFaceIntForce}}
+\index{getAdjFaceIntForce@{getAdjFaceIntForce}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::get\-Adj\-Face\-Int\-Force ({\bf vector3} \& {\em force}) const}\label{classVertex_6ae08a26f3d0b1e812e02d62965e09da}
+
+
+Calculate and return force and/or energy at this vertex due to adjacent face intersections. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em force}]Input force plus calculated adjacent face intersection contribution. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getEcwForceEnergy@{getEcwForceEnergy}}
+\index{getEcwForceEnergy@{getEcwForceEnergy}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Vertex::get\-Ecw\-Force\-Energy ({\bf vector3} \& {\em force}, bool {\em compute\_\-force}) const}\label{classVertex_9c451f0241ff1b35caf91373efb977c1}
+
+
+Calculate and return the vertex force vector and energy due to the vertex extracellular width.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em force}]The force vector due to the extracellular width is added to the input force. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true, then compute force and energy; otherwise, compute only the energy. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getEdgeStretchForceEnergy@{getEdgeStretchForceEnergy}}
+\index{getEdgeStretchForceEnergy@{getEdgeStretchForceEnergy}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Vertex::get\-Edge\-Stretch\-Force\-Energy ({\bf vector3} \& {\em force}, bool {\em compute\_\-force}) const}\label{classVertex_2c0df9425320b0e9cb53f710b6d0591d}
+
+
+Calculate and return force and/or energy at this vertex due to stretch of adjacent edges. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em force}]Input force plus calculated edge stretch contribution. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true then compute force and energy; otherwise compute energy only. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Current energy stored in adjacent edge stretch. \end{Desc}
+\index{Vertex@{Vertex}!getFaceAspectRatioForceEnergy@{getFaceAspectRatioForceEnergy}}
+\index{getFaceAspectRatioForceEnergy@{getFaceAspectRatioForceEnergy}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Vertex::get\-Face\-Aspect\-Ratio\-Force\-Energy ({\bf vector3} \& {\em force}, bool {\em compute\_\-force}) const}\label{classVertex_ae7528d909b3bc6f31a74713e5a520d5}
+
+
+Calculate and return force and/or energy at this vertex due to aspect ratio of adjacent faces. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em force}]Input force plus calculated adjacent face contribution. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true then compute force and energy; otherwise compute energy only. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Current energy stored in adjacent face aspect ratios. \end{Desc}
+\index{Vertex@{Vertex}!getEdgeAngleForceEnergy@{getEdgeAngleForceEnergy}}
+\index{getEdgeAngleForceEnergy@{getEdgeAngleForceEnergy}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Vertex::get\-Edge\-Angle\-Force\-Energy ({\bf vector3} \& {\em force}, bool {\em compute\_\-force}) const}\label{classVertex_79b6556c8128e338848f4148126cf5c6}
+
+
+Calculate and return force and/or energy at this vertex due to distribution of edge angles in adjacent faces of this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em force}]Input force plus calculated edge stretch contribution. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true then compute force and energy; otherwise compute energy only. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Current energy stored in adjacent face edge angles. \end{Desc}
+\index{Vertex@{Vertex}!getFaceNotAdjToVertex@{getFaceNotAdjToVertex}}
+\index{getFaceNotAdjToVertex@{getFaceNotAdjToVertex}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Face} $\ast$ Vertex::get\-Face\-Not\-Adj\-To\-Vertex ({\bf Vertex} const $\ast$ const {\em avoided\_\-vertex}) const}\label{classVertex_3c4e5c26165558d81dc32ea2876e87f6}
+
+
+Find and return an adjacent face to this vertex that does not contain the input vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em avoided\_\-vertex}]\doxyref{Vertex}{p.}{classVertex} that adjacent face must not reference. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Pointer to adjacent face of this vertex. \end{Desc}
+\index{Vertex@{Vertex}!updateAdjacentFaceNormals@{updateAdjacentFaceNormals}}
+\index{updateAdjacentFaceNormals@{updateAdjacentFaceNormals}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::update\-Adjacent\-Face\-Normals (void)}\label{classVertex_b8f027f61bdbecdf10135be8b54b9a77}
+
+
+Recalculate normal vectors of faces adjacent to this vertex. \index{Vertex@{Vertex}!getLastRefractoryIter@{getLastRefractoryIter}}
+\index{getLastRefractoryIter@{getLastRefractoryIter}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Vertex::get\-Last\-Refractory\-Iter (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_f2136c527a0a5881fc34399ed8ec6459}
+
+
+\index{Vertex@{Vertex}!setLastRefractoryIter@{setLastRefractoryIter}}
+\index{setLastRefractoryIter@{setLastRefractoryIter}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::set\-Last\-Refractory\-Iter (int {\em i})\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_8b77fc93f9f23b3660a87b7180780c92}
+
+
+\index{Vertex@{Vertex}!sortAdjacentFaces@{sortAdjacentFaces}}
+\index{sortAdjacentFaces@{sortAdjacentFaces}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::sort\-Adjacent\-Faces (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_33ec689fc3b54c151218b450a36c9440}
+
+
+Sort stored adjacent faces to this vertex by face pointer. \index{Vertex@{Vertex}!getNormal@{getNormal}}
+\index{getNormal@{getNormal}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} Vertex::get\-Normal (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_a59ca2c107b5ebf845465cde1e27b509}
+
+
+Get stored vertex normal vector.
+
+\begin{Desc}
+\item[Returns:]\doxyref{Vertex}{p.}{classVertex} normal vector. Note vector length is not necessarily of unit length. \end{Desc}
+\index{Vertex@{Vertex}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Vertex::get\-Index (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_0487c340a3a1559f4a8e45d8a7b0f9e2}
+
+
+Return the index of vertex as recorded from input file.
+
+\begin{Desc}
+\item[Returns:]\doxyref{Vertex}{p.}{classVertex} index. \end{Desc}
+\index{Vertex@{Vertex}!getNumAdjFaces@{getNumAdjFaces}}
+\index{getNumAdjFaces@{getNumAdjFaces}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Vertex::get\-Num\-Adj\-Faces (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_b01da7ba35653cce77dfd96d3ec04872}
+
+
+Calculate and return the number of stored adjacent faces to this vertex. \begin{Desc}
+\item[Returns:]Number of stored adjacent faces to this vertex. \end{Desc}
+\index{Vertex@{Vertex}!faceIsAdjacent@{faceIsAdjacent}}
+\index{faceIsAdjacent@{faceIsAdjacent}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Vertex::face\-Is\-Adjacent ({\bf Face} $\ast$ {\em face}) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_5d17892f8483a0d7c168a47c1a561557}
+
+
+Determine if input face is adjacent to this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if input face is found among stored adjcent faces of this vertes; false otherwise. \end{Desc}
+\index{Vertex@{Vertex}!isMatch@{isMatch}}
+\index{isMatch@{isMatch}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Vertex::is\-Match (int const \& {\em i}, std::string const \& {\em name}) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_bb086dcb3e4f4fd2098ffdba5ac8c019}
+
+
+Compare input vertex index and object name to this vertex's index and object name. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em i}]Input vertex index. \item[\mbox{$\leftarrow$} {\em name}]Input vertex parent object name. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if indices and names match; false otherwise. \end{Desc}
+\index{Vertex@{Vertex}!addAdjacentFace@{addAdjacentFace}}
+\index{addAdjacentFace@{addAdjacentFace}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::add\-Adjacent\-Face ({\bf Face} $\ast$ {\em face})\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_2f7d68842e13eaf8423e0a00d23beb04}
+
+
+Record input face as adjacent to this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]New adjacent face to this vertex. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getCoord@{getCoord}}
+\index{getCoord@{getCoord}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double const$\ast$ Vertex::get\-Coord (int const \& {\em axis}) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_a9d753c6db6816f5a6d649dc06b2bab4}
+
+
+Retrieve one coordinate of position of this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em axis}]Axis of interest (0,1,2==x,y,z axis respectively). \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]The position coordinate of this vertex with index equal to axis. \end{Desc}
+\index{Vertex@{Vertex}!getClosestFace@{getClosestFace}}
+\index{getClosestFace@{getClosestFace}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Face}$\ast$ Vertex::get\-Closest\-Face (void)\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_d6c234ee24e36b3d350a472769adcef4}
+
+
+Retrieve the stored face on which the closest point to this vertex should lie. \begin{Desc}
+\item[Returns:]Stored closest face pointer. \end{Desc}
+\index{Vertex@{Vertex}!setFace@{setFace}}
+\index{setFace@{setFace}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::set\-Face ({\bf Face} $\ast$const  {\em face})\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_d18dc62be3daf37e8796f557b93acc25}
+
+
+Record the stored face on which the closest point to this vertex should lie. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]Pointer to closet face to this vertex.. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getPos@{getPos}}
+\index{getPos@{getPos}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} const$\ast$ Vertex::get\-Pos (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_6806afb3595d95814da949e54feb9105}
+
+
+Retrieve the current position of this vertex. \begin{Desc}
+\item[Returns:]Pointer to this vertex. \end{Desc}
+\index{Vertex@{Vertex}!setPos@{setPos}}
+\index{setPos@{setPos}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Vertex::set\-Pos (double const \& {\em x}, double const \& {\em y}, double const \& {\em z})\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_01f45c280d33aa0ccb6037bdb9c02583}
+
+
+Set the position of this vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em x}]X coordinate. \item[\mbox{$\leftarrow$} {\em y}]Y coordinate. \item[\mbox{$\leftarrow$} {\em z}]Z coordinate. \end{description}
+\end{Desc}
+\index{Vertex@{Vertex}!getObject@{getObject}}
+\index{getObject@{getObject}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Object} const$\ast$ Vertex::get\-Object (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_3f1a260d589727b4deddac476429e37b}
+
+
+Retrieve a pointer to the parent \doxyref{Object}{p.}{classObject} of this vertex. \begin{Desc}
+\item[Returns:]Pointer to parent object of this vertex. \end{Desc}
+\index{Vertex@{Vertex}!begin@{begin}}
+\index{begin@{begin}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf fp\_\-cit} Vertex::begin (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_7ebc259c68c71408ecc67662d64e9ec0}
+
+
+Get an iterator pointing to the first in the collection of adjacent faces to this vertex. \begin{Desc}
+\item[Returns:]Iterator pointing to the first adjacent face. \end{Desc}
+\index{Vertex@{Vertex}!end@{end}}
+\index{end@{end}!Vertex@{Vertex}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf fp\_\-cit} Vertex::end (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classVertex_4bb81e4284f35a668f19495419a23abb}
+
+
+Get an iterator pointing to one past the last in the collection of adjacent faces to this vertex. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last adjacent face. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf vertex.h}\item 
+{\bf vertex.cc}\end{CompactItemize}

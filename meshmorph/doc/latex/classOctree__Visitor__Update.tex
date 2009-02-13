@@ -1,0 +1,81 @@
+\section{Octree\_\-Visitor\_\-Update Class Reference}
+\label{classOctree__Visitor__Update}\index{Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}}
+{\tt \#include $<$octree\_\-visitor\_\-update.h$>$}
+
+Inheritance diagram for Octree\_\-Visitor\_\-Update:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classOctree__Visitor__Update__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for Octree\_\-Visitor\_\-Update:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=305pt]{classOctree__Visitor__Update__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\_\-Visitor\_\-Update} ({\bf Face} $\ast$, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r})
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+virtual {\bf $\sim$Octree\_\-Visitor\_\-Update} ()
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+virtual void {\bf visit\-Root} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Branch} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Leaf} (const Array$<$ const {\bf Face} $\ast$ $>$ \&items, const {\bf Octree\-Data} \&octree\-Data)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}!Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}}
+\index{Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}!Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Update::Octree\_\-Visitor\_\-Update ({\bf Face} $\ast$, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r}, {\bf Vector3r})}\label{classOctree__Visitor__Update_7093410f63c98795f816fb60ac26adf8}
+
+
+standard object services --------------------------------------------------- 
+
+\index{Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}!~Octree_Visitor_Update@{$\sim$Octree\_\-Visitor\_\-Update}}
+\index{~Octree_Visitor_Update@{$\sim$Octree\_\-Visitor\_\-Update}!Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Update::$\sim$Octree\_\-Visitor\_\-Update ()\hspace{0.3cm}{\tt  [virtual]}}\label{classOctree__Visitor__Update_2b41eaf26e433332ef72ba1bd6d740f0}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}!visitRoot@{visitRoot}}
+\index{visitRoot@{visitRoot}!Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Update::visit\-Root (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Update_fc42ef265d0a074c51f403abc5dfa45f}
+
+
+commands ------------------------------------------------------------------- octree visitor overrides 
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_30b2c5b03acb6c75b40d79a86e015878}.\index{Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}!visitBranch@{visitBranch}}
+\index{visitBranch@{visitBranch}!Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Update::visit\-Branch (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Update_d9cb612bcad88d9bf13ecefc52c5f6d6}
+
+
+Called by Octree when visit traversal is at a branch.\par
+\par
+ To continue deeper, implementation calls Octree\-Branch::continue\-Visit( sub\-Cells, octree\-Data, sub\-Cell\-Index, $\ast$this ) for any/all sub\-Cell\-Index values. sub\-Cells elements can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]Octree\-Data \end{Desc}
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_e62544f5cde1e32e7fd1515e0b8d110d}.\index{Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}!visitLeaf@{visitLeaf}}
+\index{visitLeaf@{visitLeaf}!Octree_Visitor_Update@{Octree\_\-Visitor\_\-Update}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Update::visit\-Leaf (const Array$<$ const {\bf Face} $\ast$ $>$ \& {\em items}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Update_e4450785e1fc3da61f53f4c5f6b1710d}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf octree\_\-visitor\_\-update.h}\item 
+{\bf octree\_\-visitor\_\-update.cc}\end{CompactItemize}

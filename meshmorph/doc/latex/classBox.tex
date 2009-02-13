@@ -1,0 +1,187 @@
+\section{Box Class Reference}
+\label{classBox}\index{Box@{Box}}
+{\tt \#include $<$box.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Box} (int a, int b, int c)
+\item 
+void {\bf print\-Box} (double const \&, double const \&, double const \&) const
+\item 
+void {\bf remove\-Face} ({\bf Face} const $\ast$const)
+\item 
+double {\bf xmin} (double const \&index) const 
+\item 
+double {\bf xmax} (double const \&index) const 
+\item 
+double {\bf ymin} (double const \&index) const 
+\item 
+double {\bf ymax} (double const \&index) const 
+\item 
+double {\bf zmin} (double const \&index) const 
+\item 
+double {\bf zmax} (double const \&index) const 
+\item 
+{\bf fp\_\-cit} {\bf begin} (void) const
+\item 
+{\bf fp\_\-cit} {\bf end} (void) const
+\item 
+int {\bf get\-Num\-Faces} (void) const
+\item 
+void {\bf sort\-Faces} (void)
+\item 
+void {\bf add\-Face} ({\bf Face} $\ast$const face)
+\item 
+void {\bf clear\-Faces} (void)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Box@{Box}!Box@{Box}}
+\index{Box@{Box}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Box::Box (int {\em a}, int {\em b}, int {\em c})\hspace{0.3cm}{\tt  [inline]}}\label{classBox_8ceea801f061303440d547e6de96ed15}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Box@{Box}!printBox@{printBox}}
+\index{printBox@{printBox}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Box::print\-Box (double const \& {\em min\_\-x}, double const \& {\em min\_\-y}, double const \& {\em min\_\-z}) const}\label{classBox_03cb6f7dd339fe8ed2daaead47e3c233}
+
+
+Print \doxyref{Box}{p.}{classBox} identifiers. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em min\_\-x}]Negative x limiting extent of all geometry in the world. \item[\mbox{$\leftarrow$} {\em min\_\-y}]Negative y limiting extent of all geometry in the world. \item[\mbox{$\leftarrow$} {\em min\_\-z}]Negative z limiting extent of all geometry in the world. \end{description}
+\end{Desc}
+\index{Box@{Box}!removeFace@{removeFace}}
+\index{removeFace@{removeFace}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Box::remove\-Face ({\bf Face} const $\ast$ const {\em face})}\label{classBox_58035b92d28c1e3fb1bc04d20fec97bf}
+
+
+Remove face from collection of faces that intersect this box. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} to remove. \end{description}
+\end{Desc}
+\index{Box@{Box}!xmin@{xmin}}
+\index{xmin@{xmin}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Box::xmin (double const \& {\em index}) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_0a9631077a2c938e8bbe45c0b6bec59a}
+
+
+Get the limiting extent in the negative x direction of all geometry in the world. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em index}]Index of box in x direction. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Negative x limiting extent of all geometry in the world. \end{Desc}
+\index{Box@{Box}!xmax@{xmax}}
+\index{xmax@{xmax}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Box::xmax (double const \& {\em index}) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_cf0a0c221d64146d9f8b2f5a772038cf}
+
+
+Get the limiting extent in the positive x direction of all geometry in the world. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em index}]Index of box in x direction. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Positive x limiting extent of all geometry in the world. \end{Desc}
+\index{Box@{Box}!ymin@{ymin}}
+\index{ymin@{ymin}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Box::ymin (double const \& {\em index}) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_60f76fc0d48af25cf906aa96cb1aa944}
+
+
+Get the limiting extent in the negative y direction of all geometry in the world. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em index}]Index of box in y direction. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Negative y limiting extent of all geometry in the world. \end{Desc}
+\index{Box@{Box}!ymax@{ymax}}
+\index{ymax@{ymax}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Box::ymax (double const \& {\em index}) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_2fb9d6fe39d563a021bd4725c8d84634}
+
+
+Get the limiting extent in the positive y direction of all geometry in the world. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em index}]Index of box in y direction. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Positive y limiting extent of all geometry in the world. \end{Desc}
+\index{Box@{Box}!zmin@{zmin}}
+\index{zmin@{zmin}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Box::zmin (double const \& {\em index}) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_b6f00da127af9c746e4723bdbfddeece}
+
+
+Get the limiting extent in the negative z direction of all geometry in the world. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em index}]Index of box in z direction. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Negative z limiting extent of all geometry in the world. \end{Desc}
+\index{Box@{Box}!zmax@{zmax}}
+\index{zmax@{zmax}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Box::zmax (double const \& {\em index}) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_bbf63f5408755906977917d9e63d6ab2}
+
+
+Get the limiting extent in the positive z direction of all geometry in the world. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em index}]Index of box in z direction. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Positive z limiting extent of all geometry in the world. \end{Desc}
+\index{Box@{Box}!begin@{begin}}
+\index{begin@{begin}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf fp\_\-cit} Box::begin (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_d5d3eb1aaa92dbc504bac6c526678814}
+
+
+Get an iterator pointing to the first in the collection of faces that intersect this \doxyref{Box}{p.}{classBox}. \begin{Desc}
+\item[Returns:]Iterator pointing to the first interecting face. \end{Desc}
+\index{Box@{Box}!end@{end}}
+\index{end@{end}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf fp\_\-cit} Box::end (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_6443877100d8112aa7f43c7c7bf558d9}
+
+
+Get an iterator pointing to one past the last face in the collection of faces that intersect this \doxyref{Box}{p.}{classBox}. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last interecting face. \end{Desc}
+\index{Box@{Box}!getNumFaces@{getNumFaces}}
+\index{getNumFaces@{getNumFaces}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Box::get\-Num\-Faces (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classBox_5f9bb15224f7397c28c10b6dc1a12826}
+
+
+Get the number faces that intersect this box. \begin{Desc}
+\item[Returns:]The number of faces that intersect this box. \end{Desc}
+\index{Box@{Box}!sortFaces@{sortFaces}}
+\index{sortFaces@{sortFaces}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Box::sort\-Faces (void)\hspace{0.3cm}{\tt  [inline]}}\label{classBox_eb537040e7350e791cf9696d471ae22c}
+
+
+Sort the collection of faces that intersect this box. \index{Box@{Box}!addFace@{addFace}}
+\index{addFace@{addFace}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Box::add\-Face ({\bf Face} $\ast$const  {\em face})\hspace{0.3cm}{\tt  [inline]}}\label{classBox_5fec0fd5b1d599ef1a881d3dfdc856b9}
+
+
+Add face to collection of faces that intersect this box. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]\doxyref{Face}{p.}{classFace} to add. \end{description}
+\end{Desc}
+\index{Box@{Box}!clearFaces@{clearFaces}}
+\index{clearFaces@{clearFaces}!Box@{Box}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Box::clear\-Faces (void)\hspace{0.3cm}{\tt  [inline]}}\label{classBox_85f6a66cec3d58411e8def8f5d7c1db1}
+
+
+Remove all faces from collection of faces that intersect this box. 
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf box.h}\item 
+{\bf box.cc}\end{CompactItemize}

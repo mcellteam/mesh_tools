@@ -1,0 +1,952 @@
+%!PS-Adobe-2.0
+%%Creator: dot version 2.8 (Fri Nov 17 20:26:27 UTC 2006)
+%%For: (jkinney) Justin Kinney
+%%Title: G
+%%Pages: (atend)
+%%BoundingBox: 36 36 610 404
+%%EndComments
+save
+%%BeginProlog
+/DotDict 200 dict def
+DotDict begin
+
+/setupLatin1 {
+mark
+/EncodingVector 256 array def
+ EncodingVector 0
+
+ISOLatin1Encoding 0 255 getinterval putinterval
+EncodingVector 45 /hyphen put
+
+% Set up ISO Latin 1 character encoding
+/starnetISO {
+        dup dup findfont dup length dict begin
+        { 1 index /FID ne { def }{ pop pop } ifelse
+        } forall
+        /Encoding EncodingVector def
+        currentdict end definefont
+} def
+/Times-Roman starnetISO def
+/Times-Italic starnetISO def
+/Times-Bold starnetISO def
+/Times-BoldItalic starnetISO def
+/Helvetica starnetISO def
+/Helvetica-Oblique starnetISO def
+/Helvetica-Bold starnetISO def
+/Helvetica-BoldOblique starnetISO def
+/Courier starnetISO def
+/Courier-Oblique starnetISO def
+/Courier-Bold starnetISO def
+/Courier-BoldOblique starnetISO def
+cleartomark
+} bind def
+
+%%BeginResource: procset graphviz 0 0
+/coord-font-family /Times-Roman def
+/default-font-family /Times-Roman def
+/coordfont coord-font-family findfont 8 scalefont def
+
+/InvScaleFactor 1.0 def
+/set_scale {
+	dup 1 exch div /InvScaleFactor exch def
+	dup scale
+} bind def
+
+% styles
+/solid { [] 0 setdash } bind def
+/dashed { [9 InvScaleFactor mul dup ] 0 setdash } bind def
+/dotted { [1 InvScaleFactor mul 6 InvScaleFactor mul] 0 setdash } bind def
+/invis {/fill {newpath} def /stroke {newpath} def /show {pop newpath} def} bind def
+/bold { 2 setlinewidth } bind def
+/filled { } bind def
+/unfilled { } bind def
+/rounded { } bind def
+/diagonals { } bind def
+
+% hooks for setting color 
+/nodecolor { sethsbcolor } bind def
+/edgecolor { sethsbcolor } bind def
+/graphcolor { sethsbcolor } bind def
+/nopcolor {pop pop pop} bind def
+
+/beginpage {	% i j npages
+	/npages exch def
+	/j exch def
+	/i exch def
+	/str 10 string def
+	npages 1 gt {
+		gsave
+			coordfont setfont
+			0 0 moveto
+			(\() show i str cvs show (,) show j str cvs show (\)) show
+		grestore
+	} if
+} bind def
+
+/set_font {
+	findfont exch
+	scalefont setfont
+} def
+
+% draw aligned label in bounding box aligned to current point
+/alignedtext {			% width adj text
+	/text exch def
+	/adj exch def
+	/width exch def
+	gsave
+		width 0 gt {
+			text stringwidth pop adj mul 0 rmoveto
+		} if
+		[] 0 setdash
+		text show
+	grestore
+} def
+
+/boxprim {				% xcorner ycorner xsize ysize
+		4 2 roll
+		moveto
+		2 copy
+		exch 0 rlineto
+		0 exch rlineto
+		pop neg 0 rlineto
+		closepath
+} bind def
+
+/ellipse_path {
+	/ry exch def
+	/rx exch def
+	/y exch def
+	/x exch def
+	matrix currentmatrix
+	newpath
+	x y translate
+	rx ry scale
+	0 0 1 0 360 arc
+	setmatrix
+} bind def
+
+/endpage { showpage } bind def
+/showpage { } def
+
+/layercolorseq
+	[	% layer color sequence - darkest to lightest
+		[0 0 0]
+		[.2 .8 .8]
+		[.4 .8 .8]
+		[.6 .8 .8]
+		[.8 .8 .8]
+	]
+def
+
+/layerlen layercolorseq length def
+
+/setlayer {/maxlayer exch def /curlayer exch def
+	layercolorseq curlayer 1 sub layerlen mod get
+	aload pop sethsbcolor
+	/nodecolor {nopcolor} def
+	/edgecolor {nopcolor} def
+	/graphcolor {nopcolor} def
+} bind def
+
+/onlayer { curlayer ne {invis} if } def
+
+/onlayers {
+	/myupper exch def
+	/mylower exch def
+	curlayer mylower lt
+	curlayer myupper gt
+	or
+	{invis} if
+} def
+
+/curlayer 0 def
+
+%%EndResource
+%%EndProlog
+%%BeginSetup
+14 default-font-family set_font
+1 setmiterlimit
+% /arrowlength 10 def
+% /arrowwidth 5 def
+
+% make sure pdfmark is harmless for PS-interpreters other than Distiller
+/pdfmark where {pop} {userdict /pdfmark /cleartomark load put} ifelse
+% make '<<' and '>>' safe on PS Level 1 devices
+/languagelevel where {pop languagelevel}{1} ifelse
+2 lt {
+    userdict (<<) cvn ([) cvn load put
+    userdict (>>) cvn ([) cvn load put
+} if
+
+%%EndSetup
+%%Page: 1 1
+%%PageBoundingBox: 36 36 610 404
+%%PageOrientation: Portrait
+gsave
+36 36 574 368 boxprim clip newpath
+36 36 translate
+0 0 1 beginpage
+1.0000 set_scale
+4 4 translate 0 rotate
+0.000 0.000 1.000 graphcolor
+0.000 0.000 1.000 graphcolor
+newpath -6 -6 moveto
+-6 366 lineto
+572 366 lineto
+572 -6 lineto
+closepath
+fill
+0.000 0.000 1.000 graphcolor
+newpath -6 -6 moveto
+-6 366 lineto
+572 366 lineto
+572 -6 lineto
+closepath
+stroke
+0.000 0.000 0.000 graphcolor
+10.00 /FreeSans.ttf set_font
+% Node1
+gsave 10 dict begin
+filled
+0.000 0.000 0.749 nodecolor
+newpath 188 169 moveto
+328 169 lineto
+328 188 lineto
+188 188 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 188 169 moveto
+328 169 lineto
+328 188 lineto
+188 188 lineto
+closepath
+stroke
+gsave 10 dict begin
+196 175 moveto
+(Octree_Visitor_Add_Face)
+[7.92 5.52 3.84 3.84 6.24 6.24 5.04 6.72 2.88 5.28 2.88 3.84 6.24 4.08 5.04 6.72 6.48 6.48 5.04 4.8 6.24 5.52 6.24]
+xshow
+end grestore
+end grestore
+% Node2
+[ /Rect [ 176 272 404 290 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($classhxa7241__graphics_1_1OctreeVisitor.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 176 271 moveto
+404 271 lineto
+404 290 lineto
+176 290 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 176 271 moveto
+404 271 lineto
+404 290 lineto
+176 290 lineto
+closepath
+stroke
+gsave 10 dict begin
+184 277 moveto
+(hxa7241_graphics::OctreeVisitor< Face >)
+[6.48 6 6.24 6.48 6.48 6.48 6.48 5.04 6.48 4.08 6.24 6.48 6.48 2.88 5.52 5.28 3.36 3.36 7.92 5.52 3.84 3.84 6.24 6.24 6.72 2.88 5.28 2.88 3.84 6.24 4.08 8.4 3.12 4.8 6.24 5.52 6.24 3.12 8.4]
+xshow
+end grestore
+end grestore
+% Node2->Node1
+gsave 10 dict begin
+solid
+0.667 0.776 0.439 edgecolor
+newpath 284 261 moveto
+277 239 266 204 261 188 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.667 0.776 0.439 edgecolor
+newpath 281 262 moveto
+287 271 lineto
+287 260 lineto
+closepath
+fill
+0.667 0.776 0.439 edgecolor
+newpath 281 262 moveto
+287 271 lineto
+287 260 lineto
+closepath
+stroke
+end grestore
+end grestore
+% Node3
+[ /Rect [ 196 341 384 359 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($classhxa7241__graphics_1_1OctreeVisitorV.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 196 340 moveto
+385 340 lineto
+385 359 lineto
+196 359 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 196 340 moveto
+385 340 lineto
+385 359 lineto
+196 359 lineto
+closepath
+stroke
+gsave 10 dict begin
+203 346 moveto
+(hxa7241_graphics::OctreeVisitorV)
+[6.48 6 6.24 6.48 6.48 6.48 6.48 5.04 6.48 4.08 6.24 6.48 6.48 2.88 5.52 5.28 3.36 3.36 7.92 5.52 3.84 3.84 6.24 6.24 6.72 2.88 5.28 2.88 3.84 6.24 4.08 6.96]
+xshow
+end grestore
+end grestore
+% Node3->Node2
+gsave 10 dict begin
+solid
+0.667 0.776 0.439 edgecolor
+newpath 290 330 moveto
+290 317 290 300 290 290 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.667 0.776 0.439 edgecolor
+newpath 287 330 moveto
+290 340 lineto
+294 330 lineto
+closepath
+fill
+0.667 0.776 0.439 edgecolor
+newpath 287 330 moveto
+290 340 lineto
+294 330 lineto
+closepath
+stroke
+end grestore
+end grestore
+% Node4
+[ /Rect [ 0 272 158 290 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($classhxa7241__graphics_1_1Vector3r.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 0 271 moveto
+159 271 lineto
+159 290 lineto
+0 290 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 0 271 moveto
+159 271 lineto
+159 290 lineto
+0 290 lineto
+closepath
+stroke
+gsave 10 dict begin
+7 277 moveto
+(hxa7241_graphics::Vector3r)
+[6.48 6 6.24 6.48 6.48 6.48 6.48 5.04 6.48 4.08 6.24 6.48 6.48 2.88 5.52 5.28 3.36 3.36 6.24 6.24 5.52 3.84 6.24 4.08 6.48 4.08]
+xshow
+end grestore
+end grestore
+% Node4->Node1
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 106 266 moveto
+144 244 212 206 242 188 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 104 263 moveto
+97 271 lineto
+107 269 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 104 263 moveto
+97 271 lineto
+107 269 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+205 243 moveto
+(mylower)
+[9.84 6 2.88 6.24 8.16 6.24 4.08]
+xshow
+204 232 moveto
+(myupper)
+[9.84 6 6.48 6.48 6.48 6.24 4.08]
+xshow
+201 221 moveto
+(newupper)
+[6.48 6.24 8.16 6.48 6.48 6.48 6.24 4.08]
+xshow
+202 210 moveto
+(newlower)
+[6.48 6.24 8.16 2.88 6.24 8.16 6.24 4.08]
+xshow
+end grestore
+end grestore
+% Node5
+[ /Rect [ 428 272 466 290 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($classFace.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 428 271 moveto
+467 271 lineto
+467 290 lineto
+428 290 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 428 271 moveto
+467 271 lineto
+467 290 lineto
+428 290 lineto
+closepath
+stroke
+gsave 10 dict begin
+435 277 moveto
+(Face)
+[4.8 6.24 5.52 6.24]
+xshow
+end grestore
+end grestore
+% Node5->Node1
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 418 271 moveto
+416 271 415 270 413 270 curveto
+372 259 355 275 320 252 curveto
+301 238 305 225 290 208 curveto
+284 201 276 193 270 188 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 417 274 moveto
+428 274 lineto
+419 268 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 417 274 moveto
+428 274 lineto
+419 268 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+323 227 moveto
+(face)
+[3.6 6.24 5.52 6.24]
+xshow
+end grestore
+end grestore
+% Node6
+[ /Rect [ 486 170 536 188 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($classVertex.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 486 169 moveto
+536 169 lineto
+536 188 lineto
+486 188 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 486 169 moveto
+536 169 lineto
+536 188 lineto
+486 188 lineto
+closepath
+stroke
+gsave 10 dict begin
+494 175 moveto
+(Vertex)
+[6.24 6.24 4.08 3.84 6 6]
+xshow
+end grestore
+end grestore
+% Node5->Node6
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 455 261 moveto
+463 243 474 216 481 208 curveto
+486 200 493 193 499 188 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 451 260 moveto
+451 271 lineto
+458 263 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 451 260 moveto
+451 271 lineto
+458 263 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+480 227 moveto
+(cl)
+[5.52 2.88]
+xshow
+end grestore
+end grestore
+% Node9
+[ /Rect [ 464 1 514 19 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($classObject.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 464 0 moveto
+514 0 lineto
+514 19 lineto
+464 19 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 464 0 moveto
+514 0 lineto
+514 19 lineto
+464 19 lineto
+closepath
+stroke
+gsave 10 dict begin
+472 6 moveto
+(Object)
+[7.92 6.48 2.88 6.24 5.52 3.84]
+xshow
+end grestore
+end grestore
+% Node5->Node9
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 422 265 moveto
+418 261 415 256 412 252 curveto
+382 194 392 169 405 106 curveto
+408 88 410 82 421 68 curveto
+436 47 459 29 474 19 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 420 268 moveto
+430 271 lineto
+424 262 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 420 268 moveto
+430 271 lineto
+424 262 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+405 125 moveto
+(ff)
+[3.6 3.6]
+xshow
+end grestore
+end grestore
+% Node8
+[ /Rect [ 430 69 472 87 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($classEdge.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 430 68 moveto
+472 68 lineto
+472 87 lineto
+430 87 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 430 68 moveto
+472 68 lineto
+472 87 lineto
+430 87 lineto
+closepath
+stroke
+gsave 10 dict begin
+438 74 moveto
+(Edge)
+[6.48 6.48 6.48 6.24]
+xshow
+end grestore
+end grestore
+% Node5->Node8
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 437 262 moveto
+426 239 411 201 416 168 curveto
+420 139 423 132 435 106 curveto
+437 99 441 92 445 87 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 434 263 moveto
+441 271 lineto
+440 260 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 434 263 moveto
+441 271 lineto
+440 260 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+415 181 moveto
+(f1)
+[3.6 6.48]
+xshow
+415 170 moveto
+(f2)
+[3.6 6.48]
+xshow
+end grestore
+end grestore
+% Node6->Node5
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 509 198 moveto
+507 214 501 236 490 252 curveto
+484 260 475 266 467 271 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 512 198 moveto
+510 188 lineto
+506 198 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 512 198 moveto
+510 188 lineto
+506 198 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+508 227 moveto 7.0 -0.5 (v) alignedtext
+end grestore
+end grestore
+% Node6->Node9
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 509 159 moveto
+504 122 494 45 490 19 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 506 159 moveto
+510 169 lineto
+512 159 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 506 159 moveto
+510 169 lineto
+512 159 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+498 75 moveto
+(fv)
+[3.6 6]
+xshow
+end grestore
+end grestore
+% Node6->Node8
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 493 162 moveto
+489 158 486 154 483 150 curveto
+469 129 459 101 454 87 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 490 164 moveto
+500 169 lineto
+495 159 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 490 164 moveto
+500 169 lineto
+495 159 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+482 141 moveto
+(v2)
+[6 6.48]
+xshow
+482 130 moveto
+(o1)
+[6.24 6.48]
+xshow
+482 119 moveto
+(o2)
+[6.24 6.48]
+xshow
+482 108 moveto
+(v1)
+[6 6.48]
+xshow
+end grestore
+end grestore
+% Node7
+[ /Rect [ 480 341 534 359 ]
+  /Border [ 0 0 0 ]
+  /Action << /Subtype /URI /URI ($structvector3.html) >>
+  /Subtype /Link
+/ANN pdfmark
+gsave 10 dict begin
+filled
+0.000 0.000 1.000 nodecolor
+newpath 480 340 moveto
+535 340 lineto
+535 359 lineto
+480 359 lineto
+closepath
+fill
+0.000 0.000 0.000 nodecolor
+newpath 480 340 moveto
+535 340 lineto
+535 359 lineto
+480 359 lineto
+closepath
+stroke
+gsave 10 dict begin
+487 346 moveto
+(vector3)
+[6 6.24 5.52 3.84 6.24 4.08 6.48]
+xshow
+end grestore
+end grestore
+% Node7->Node5
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 491 332 moveto
+479 319 464 301 455 290 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 489 335 moveto
+498 340 lineto
+494 330 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 489 335 moveto
+498 340 lineto
+494 330 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+484 313 moveto 7.0 -0.5 (n) alignedtext
+end grestore
+end grestore
+% Node7->Node6
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 510 330 moveto
+514 302 520 251 516 208 curveto
+515 201 514 194 513 188 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 507 330 moveto
+509 340 lineto
+513 330 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 507 330 moveto
+509 340 lineto
+513 330 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+518 283 moveto 7.0 -0.5 (n) alignedtext
+518 272 moveto 7.0 -0.5 (p) alignedtext
+end grestore
+end grestore
+% Node9->Node6
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 514 25 moveto
+518 29 522 33 524 38 curveto
+545 82 534 101 524 150 curveto
+523 156 519 163 517 169 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 516 22 moveto
+506 19 lineto
+512 28 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 516 22 moveto
+506 19 lineto
+512 28 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+538 75 moveto 7.0 -0.5 (o) alignedtext
+end grestore
+end grestore
+% Node8->Node5
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 451 97 moveto
+450 140 448 239 447 271 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 455 97 moveto
+451 87 lineto
+448 97 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 455 97 moveto
+451 87 lineto
+448 97 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+452 176 moveto 7.0 -0.5 (e) alignedtext
+end grestore
+end grestore
+% Node8->Node9
+gsave 10 dict begin
+dashed
+0.776 0.753 0.804 edgecolor
+newpath 462 59 moveto
+469 46 478 29 484 19 curveto
+stroke
+gsave 10 dict begin
+solid
+1 setlinewidth
+0.776 0.753 0.804 edgecolor
+newpath 459 58 moveto
+457 68 lineto
+465 61 lineto
+closepath
+fill
+0.776 0.753 0.804 edgecolor
+newpath 459 58 moveto
+457 68 lineto
+465 61 lineto
+closepath
+stroke
+end grestore
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+471 41 moveto
+(fe)
+[3.6 6.24]
+xshow
+end grestore
+end grestore
+endpage
+showpage
+grestore
+%%PageTrailer
+%%EndPage: 1
+%%Trailer
+%%Pages: 1
+end
+restore
+%%EOF

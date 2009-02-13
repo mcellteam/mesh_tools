@@ -1,0 +1,83 @@
+\section{Grid Struct Reference}
+\label{structGrid}\index{Grid@{Grid}}
+{\tt \#include $<$grid.h$>$}
+
+Collaboration diagram for Grid:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=51pt]{structGrid__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Grid} ({\bf Face} $\ast$)
+\item 
+void {\bf compute\-Barycenter} ({\bf vector3} \&, int, int, {\bf Face} $\ast$)
+\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+{\bf vector3} {\bf unit\_\-u}
+\item 
+{\bf vector3} {\bf unit\_\-v}
+\item 
+double {\bf uv\_\-vert1\_\-u}
+\item 
+double {\bf uv\_\-vert2} [2]
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Grid@{Grid}!Grid@{Grid}}
+\index{Grid@{Grid}!Grid@{Grid}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Grid::Grid ({\bf Face} $\ast$ {\em f})}\label{structGrid_84af02c866fa15ccc742ce92be1d3add}
+
+
+Create instance of \doxyref{Grid}{p.}{structGrid}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} of interes. \end{description}
+\end{Desc}
+
+
+\subsection{Member Function Documentation}
+\index{Grid@{Grid}!computeBarycenter@{computeBarycenter}}
+\index{computeBarycenter@{computeBarycenter}!Grid@{Grid}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Grid::compute\-Barycenter ({\bf vector3} \& {\em p}, int {\em index}, int {\em n}, {\bf Face} $\ast$ {\em f})}\label{structGrid_4bec6611a861dd9f6f421277dba468b6}
+
+
+Compute barycenter of face tile. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em p}]Barycenter of face tile. \item[\mbox{$\leftarrow$} {\em index}]Index of face tile. \item[\mbox{$\leftarrow$} {\em n}]Not sure what this is. \item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} of interes. \end{description}
+\end{Desc}
+
+
+\subsection{Member Data Documentation}
+\index{Grid@{Grid}!unit_u@{unit\_\-u}}
+\index{unit_u@{unit\_\-u}!Grid@{Grid}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} {\bf Grid::unit\_\-u}}\label{structGrid_4b1f1e9f12cdde6494df39eec543c4b4}
+
+
+\index{Grid@{Grid}!unit_v@{unit\_\-v}}
+\index{unit_v@{unit\_\-v}!Grid@{Grid}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vector3} {\bf Grid::unit\_\-v}}\label{structGrid_b9d3eedb8715609e39b3681112bd8060}
+
+
+\index{Grid@{Grid}!uv_vert1_u@{uv\_\-vert1\_\-u}}
+\index{uv_vert1_u@{uv\_\-vert1\_\-u}!Grid@{Grid}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double {\bf Grid::uv\_\-vert1\_\-u}}\label{structGrid_a29a486f9d214661cf021226bed94857}
+
+
+\index{Grid@{Grid}!uv_vert2@{uv\_\-vert2}}
+\index{uv_vert2@{uv\_\-vert2}!Grid@{Grid}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double {\bf Grid::uv\_\-vert2}[2]}\label{structGrid_b6b9e0a31025f80a13b01d655aa0abed}
+
+
+
+
+The documentation for this struct was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf grid.h}\item 
+{\bf grid.cc}\end{CompactItemize}

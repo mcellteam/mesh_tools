@@ -1,0 +1,6 @@
+base referer
+rect $box_8h.html 260,75 319,99
+rect $face_8h.html 129,175 193,199
+rect $meshmorph_8h.html 503,150 617,174
+rect $vertex_8h.html 251,175 328,199
+rect $object_8h.html 377,224 452,248

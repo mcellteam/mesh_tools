@@ -1,0 +1,272 @@
+\section{hxa7241\_\-graphics::Vector3r Class Reference}
+\label{classhxa7241__graphics_1_1Vector3r}\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+{\tt \#include $<$Vector3r.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Vector3r} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf Vector3r} (real x, real y, real z)
+\item 
+{\bf $\sim$Vector3r} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf Vector3r} (const {\bf Vector3r} \&)
+\item 
+{\bf Vector3r} \& {\bf operator=} (const {\bf Vector3r} \&)
+\item 
+{\bf Vector3r} \& {\bf set} (real x, real y, real z)
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+{\bf Vector3r} \& {\bf operator+=} (const {\bf Vector3r} \&)
+\item 
+{\bf Vector3r} \& {\bf operator-=} (const {\bf Vector3r} \&)
+\item 
+{\bf Vector3r} \& {\bf operator $\ast$=} (const {\bf Vector3r} \&)
+\item 
+{\bf Vector3r} \& {\bf operator/=} (const {\bf Vector3r} \&)
+\item 
+{\bf Vector3r} \& {\bf operator $\ast$=} (real)
+\item 
+{\bf Vector3r} \& {\bf operator/=} (real)
+\item 
+real {\bf get\-X} () const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+real {\bf get\-Y} () const
+\item 
+real {\bf get\-Z} () const
+\item 
+real {\bf operator[$\,$]} (int) const
+\item 
+real {\bf length} () const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+{\bf Vector3r} {\bf operator+} (const {\bf Vector3r} \&) const
+\item 
+{\bf Vector3r} {\bf operator-} (const {\bf Vector3r} \&) const
+\item 
+{\bf Vector3r} {\bf operator $\ast$} (const {\bf Vector3r} \&) const
+\item 
+{\bf Vector3r} {\bf operator/} (const {\bf Vector3r} \&) const
+\item 
+{\bf Vector3r} {\bf operator $\ast$} (real) const
+\item 
+{\bf Vector3r} {\bf operator/} (real) const
+\item 
+bool {\bf operator==} (const {\bf Vector3r} \&) const
+\item 
+bool {\bf operator!=} (const {\bf Vector3r} \&) const
+\item 
+bool {\bf is\-Zero} () const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static const {\bf Vector3r} \& {\bf ZERO} ()
+\begin{CompactList}\small\item\em constants ------------------------------------------------------------------ \item\end{CompactList}\item 
+static const {\bf Vector3r} \& {\bf HALF} ()
+\item 
+static const {\bf Vector3r} \& {\bf ONE} ()
+\end{CompactItemize}
+\subsection*{Friends}
+\begin{CompactItemize}
+\item 
+{\bf Vector3r} {\bf operator $\ast$} (real, const {\bf Vector3r} \&)
+\begin{CompactList}\small\item\em friends -------------------------------------------------------------------- \item\end{CompactList}\item 
+{\bf Vector3r} {\bf operator/} (real, const {\bf Vector3r} \&)
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Yes, its the 3D vector class!.\par
+\par
+
+
+If you write some 3D graphics software, then you MUST write your OWN vector class -- it is the law. So here is mine.\par
+\par
+
+
+(Unused stuff commented-out) 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!Vector3r@{Vector3r}}
+\index{Vector3r@{Vector3r}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Vector3r::Vector3r ()}\label{classhxa7241__graphics_1_1Vector3r_6cafbec0341bf75076ed59bf0d63acbb}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!Vector3r@{Vector3r}}
+\index{Vector3r@{Vector3r}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Vector3r::Vector3r (real {\em x}, real {\em y}, real {\em z})}\label{classhxa7241__graphics_1_1Vector3r_9cfb05cb51e81c00ff049ee6834f0403}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!~Vector3r@{$\sim$Vector3r}}
+\index{~Vector3r@{$\sim$Vector3r}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}hxa7241\_\-graphics::Vector3r::$\sim$Vector3r ()\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Vector3r_da27e60869e153abecd6be5d8b5976e5}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!Vector3r@{Vector3r}}
+\index{Vector3r@{Vector3r}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}hxa7241\_\-graphics::Vector3r::Vector3r (const {\bf Vector3r} \&)\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Vector3r_8fc672fc98a6a810dc9fd336f107f1c5}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::operator= (const {\bf Vector3r} \&)}\label{classhxa7241__graphics_1_1Vector3r_20579049bbbfd50d954a22ddd4391945}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!set@{set}}
+\index{set@{set}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::set (real {\em x}, real {\em y}, real {\em z})}\label{classhxa7241__graphics_1_1Vector3r_5d3ee37c8dd1c169bdffcbb164bdefac}
+
+
+commands ------------------------------------------------------------------- 
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::operator+= (const {\bf Vector3r} \&)}\label{classhxa7241__graphics_1_1Vector3r_3d77bab12071c383eceb8a2b16ef91a7}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator-=@{operator-=}}
+\index{operator-=@{operator-=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::operator-= (const {\bf Vector3r} \&)}\label{classhxa7241__graphics_1_1Vector3r_09a0df54d3669ca5c17902dcbe5094d0}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator *=@{operator $\ast$=}}
+\index{operator *=@{operator $\ast$=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::operator $\ast$= (const {\bf Vector3r} \&)}\label{classhxa7241__graphics_1_1Vector3r_f18978bb00e316fd23c88e1402c63984}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator/=@{operator/=}}
+\index{operator/=@{operator/=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::operator/= (const {\bf Vector3r} \&)}\label{classhxa7241__graphics_1_1Vector3r_d124fd080646ba1860a37eea1bc3eea0}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator *=@{operator $\ast$=}}
+\index{operator *=@{operator $\ast$=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::operator $\ast$= (real)}\label{classhxa7241__graphics_1_1Vector3r_4cf14e4e2953f2e5e68b1a924824f923}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator/=@{operator/=}}
+\index{operator/=@{operator/=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} \& Vector3r::operator/= (real)}\label{classhxa7241__graphics_1_1Vector3r_719ad9cd94a87a65aa3d83282ee88e0c}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!getX@{getX}}
+\index{getX@{getX}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Vector3r::get\-X () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Vector3r_4ce46da3e114ff6d9572df3cc432fb50}
+
+
+queries -------------------------------------------------------------------- 
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!getY@{getY}}
+\index{getY@{getY}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Vector3r::get\-Y () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Vector3r_2175ce8f7174e3b634b59f199b4746a8}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!getZ@{getZ}}
+\index{getZ@{getZ}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Vector3r::get\-Z () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Vector3r_5a8ca0bb9a63575efe53886967d0332b}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator[]@{operator[]}}
+\index{operator[]@{operator[]}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real hxa7241\_\-graphics::Vector3r::operator[$\,$] (int) const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1Vector3r_a1b4a2f66d02f7f4b546fd041f150a9a}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!length@{length}}
+\index{length@{length}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}real Vector3r::length () const}\label{classhxa7241__graphics_1_1Vector3r_77e3eb67cfe1401e2816aefe4b6c113c}
+
+
+queries -------------------------------------------------------------------- 
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator+@{operator+}}
+\index{operator+@{operator+}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} Vector3r::operator+ (const {\bf Vector3r} \&) const}\label{classhxa7241__graphics_1_1Vector3r_b8b64d276673fda88ebd60a7baa0b324}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator-@{operator-}}
+\index{operator-@{operator-}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} Vector3r::operator- (const {\bf Vector3r} \&) const}\label{classhxa7241__graphics_1_1Vector3r_e6506cc5ad885e86f5cce6576f05d2b2}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator *@{operator $\ast$}}
+\index{operator *@{operator $\ast$}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} Vector3r::operator $\ast$ (const {\bf Vector3r} \&) const}\label{classhxa7241__graphics_1_1Vector3r_928b594ea3eb7879da6c0d99f7f6fc02}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator/@{operator/}}
+\index{operator/@{operator/}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} Vector3r::operator/ (const {\bf Vector3r} \&) const}\label{classhxa7241__graphics_1_1Vector3r_c0dd36e6c73934a66b7f4003e6b5040d}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator *@{operator $\ast$}}
+\index{operator *@{operator $\ast$}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} Vector3r::operator $\ast$ (real) const}\label{classhxa7241__graphics_1_1Vector3r_d8a12132d734eacc018e8f40168f54c8}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator/@{operator/}}
+\index{operator/@{operator/}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} Vector3r::operator/ (real) const}\label{classhxa7241__graphics_1_1Vector3r_4628ccc00d308a3c887a795ab9c3e3e3}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator==@{operator==}}
+\index{operator==@{operator==}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Vector3r::operator== (const {\bf Vector3r} \&) const}\label{classhxa7241__graphics_1_1Vector3r_7e501771d4b0c3beace144a54b79ed7b}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Vector3r::operator!= (const {\bf Vector3r} \&) const}\label{classhxa7241__graphics_1_1Vector3r_79d4cdebbba7a719d1703adb4692317e}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!isZero@{isZero}}
+\index{isZero@{isZero}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Vector3r::is\-Zero () const}\label{classhxa7241__graphics_1_1Vector3r_3d446a1cb3223d2d8918687518b55594}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!ZERO@{ZERO}}
+\index{ZERO@{ZERO}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& Vector3r::ZERO ()\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1Vector3r_6c139f56fa9d3988a0a1792b2cec98a3}
+
+
+constants ------------------------------------------------------------------ 
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!HALF@{HALF}}
+\index{HALF@{HALF}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& Vector3r::HALF ()\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1Vector3r_d5474b798880377ac5c58b8665e7e752}
+
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!ONE@{ONE}}
+\index{ONE@{ONE}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Vector3r} \& Vector3r::ONE ()\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1Vector3r_53ec5b87686b39b864c06da5b970ed74}
+
+
+
+
+\subsection{Friends And Related Function Documentation}
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator *@{operator $\ast$}}
+\index{operator *@{operator $\ast$}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} operator $\ast$ (real {\em r}, const {\bf Vector3r} \& {\em v})\hspace{0.3cm}{\tt  [friend]}}\label{classhxa7241__graphics_1_1Vector3r_4100d997273ac9134374e5e4c24ba005}
+
+
+friends -------------------------------------------------------------------- 
+
+\index{hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}!operator/@{operator/}}
+\index{operator/@{operator/}!hxa7241_graphics::Vector3r@{hxa7241\_\-graphics::Vector3r}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vector3r} operator/ (real {\em r}, const {\bf Vector3r} \& {\em v})\hspace{0.3cm}{\tt  [friend]}}\label{classhxa7241__graphics_1_1Vector3r_cb81bd446d15afc679ed1d02526a4ec0}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf Vector3r.h}\item 
+{\bf Vector3r.cc}\end{CompactItemize}

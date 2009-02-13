@@ -1,0 +1,213 @@
+\section{Space Class Reference}
+\label{classSpace}\index{Space@{Space}}
+{\tt \#include $<$space.h$>$}
+
+Collaboration diagram for Space:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=78pt]{classSpace__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+int {\bf location2Index} (double const \&, char const $\ast$const) const
+\item 
+int {\bf indices2Index} (int const \&, int const \&, int const \&) const
+\item 
+int {\bf screen\-Index} (int, char const $\ast$const) const
+\item 
+void {\bf bound\-World} (void)
+\item 
+void {\bf partition\-Space} (void)
+\item 
+void {\bf clear\-Faces\-From\-Boxes} (void)
+\item 
+void {\bf add\-Face\-To\-Boxes} ({\bf vec\_\-bp} \&, {\bf Face} $\ast$const)
+\item 
+void {\bf calculate\-Boxes\-In\-Which\-Face\-Lies} ({\bf Face} const $\ast$const, {\bf vec\_\-bp} \&) const
+\item 
+void {\bf get\-Boxes\-For\-Face\-Bounding\-Box} ({\bf Face} const $\ast$const, {\bf vec\_\-bp} \&) const
+\item 
+void {\bf write\-Summary} (std::ostream \&)
+\item 
+void {\bf get\-Boxes\-From\-Position} ({\bf vector3} const \&, {\bf vector3} const \&, {\bf vec\_\-bp} \&) const
+\item 
+void {\bf get\-Boxes\-From\-Indices} (int const $\ast$const, int const $\ast$const, {\bf vec\_\-bp} \&) const
+\item 
+double {\bf get\-World} (int const \&) const 
+\item 
+{\bf Box} $\ast$ {\bf get\-Box} (int const \&)
+\item 
+{\bf b\_\-cit} {\bf begin} (void) const
+\item 
+{\bf b\_\-cit} {\bf end} (void) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Space} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Space@{Space}!instance@{instance}}
+\index{instance@{instance}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Space} \& Space::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classSpace_c0c2e1be07b8a675445b46f575d22a87}
+
+
+\index{Space@{Space}!location2Index@{location2Index}}
+\index{location2Index@{location2Index}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Space::location2Index (double const \& {\em position}, char const $\ast$ const {\em axis}) const}\label{classSpace_83cc8d92ecc69effb17d843fb4a84992}
+
+
+Convert a position along a principal axis into the box index along the same axis that contains the position. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em position}]Distance along input axis. \item[\mbox{$\leftarrow$} {\em axis}]Character code denoting axis of box index ('x','y','z'). \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Box}{p.}{classBox} index along input axis containing input position. \end{Desc}
+\index{Space@{Space}!indices2Index@{indices2Index}}
+\index{indices2Index@{indices2Index}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Space::indices2Index (int const \& {\em x}, int const \& {\em y}, int const \& {\em z}) const}\label{classSpace_1982b5353d46f50ada04d3c47e17d2d9}
+
+
+Convert trio of box indices into an index for box vector, b. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em x}]\doxyref{Box}{p.}{classBox} index for x axis. \item[\mbox{$\leftarrow$} {\em y}]\doxyref{Box}{p.}{classBox} index for y axis. \item[\mbox{$\leftarrow$} {\em z}]\doxyref{Box}{p.}{classBox} index for z axis. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Box}{p.}{classBox} vector, b, index. \end{Desc}
+\index{Space@{Space}!screenIndex@{screenIndex}}
+\index{screenIndex@{screenIndex}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Space::screen\-Index (int {\em box\_\-index}, char const $\ast$ const {\em axis}) const}\label{classSpace_6cd53c662259c1f7061168f5156acbc4}
+
+
+Restrict box index to be within legal range. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em box\_\-index}]Candidate box index. \item[\mbox{$\leftarrow$} {\em axis}]Character code denoting axis of box index ('x','y','z'). \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Box}{p.}{classBox} index guaranteed to be legal value. \end{Desc}
+\index{Space@{Space}!boundWorld@{boundWorld}}
+\index{boundWorld@{boundWorld}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::bound\-World (void)}\label{classSpace_fbff10a92bdcc3999505e69b37d1478c}
+
+
+Calculate and record limits of model along each prinicpal axis. \index{Space@{Space}!partitionSpace@{partitionSpace}}
+\index{partitionSpace@{partitionSpace}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::partition\-Space (void)}\label{classSpace_9beb4252a691bd20d6431d09a317b0cf}
+
+
+Partition region of space described by bounding box of model into boxes and store as \doxyref{Box}{p.}{classBox} class. \index{Space@{Space}!clearFacesFromBoxes@{clearFacesFromBoxes}}
+\index{clearFacesFromBoxes@{clearFacesFromBoxes}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::clear\-Faces\-From\-Boxes (void)}\label{classSpace_4396af04492c4f65cd42e6d0e67f5911}
+
+
+Clear all face pointers from all boxes. \index{Space@{Space}!addFaceToBoxes@{addFaceToBoxes}}
+\index{addFaceToBoxes@{addFaceToBoxes}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::add\-Face\-To\-Boxes ({\bf vec\_\-bp} \& {\em boxes}, {\bf Face} $\ast$ const {\em f})}\label{classSpace_c18e65c42df64fe7fbf505f72fa20d59}
+
+
+Record input face in each input box. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em boxes}]Boxes assigned to face. \item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} assigned to boxes. \end{description}
+\end{Desc}
+\index{Space@{Space}!calculateBoxesInWhichFaceLies@{calculateBoxesInWhichFaceLies}}
+\index{calculateBoxesInWhichFaceLies@{calculateBoxesInWhichFaceLies}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::calculate\-Boxes\-In\-Which\-Face\-Lies ({\bf Face} const $\ast$ const {\em f}, {\bf vec\_\-bp} \& {\em boxes}) const}\label{classSpace_abb25497029eb9a2c74b0f49928943d3}
+
+
+Calculate and return boxes in which input face lies. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} of interest. \item[\mbox{$\rightarrow$} {\em boxes}]Collection of boxes that fully contain face. \end{description}
+\end{Desc}
+\index{Space@{Space}!getBoxesForFaceBoundingBox@{getBoxesForFaceBoundingBox}}
+\index{getBoxesForFaceBoundingBox@{getBoxesForFaceBoundingBox}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::get\-Boxes\-For\-Face\-Bounding\-Box ({\bf Face} const $\ast$ const {\em f}, {\bf vec\_\-bp} \& {\em boxes}) const}\label{classSpace_37d9f472de8f59d56870a9e334d8f4c8}
+
+
+Assemble collection of boxes that when taken together fully contain the input face bounding box. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} of interest. \item[\mbox{$\rightarrow$} {\em boxes}]Collection of boxes that fully contain face bounding box. \end{description}
+\end{Desc}
+\index{Space@{Space}!writeSummary@{writeSummary}}
+\index{writeSummary@{writeSummary}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::write\-Summary (std::ostream \& {\em target})}\label{classSpace_0f7c40d7b9b2cf7cb928fd3673aa38a5}
+
+
+Write description and summary of this class to output stream. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Space@{Space}!getBoxesFromPosition@{getBoxesFromPosition}}
+\index{getBoxesFromPosition@{getBoxesFromPosition}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::get\-Boxes\-From\-Position ({\bf vector3} const \& {\em point1}, {\bf vector3} const \& {\em point2}, {\bf vec\_\-bp} \& {\em box\_\-pointers}) const}\label{classSpace_b3dc7b25a31247a32b4bdeb660ee7952}
+
+
+Get collection of box pointers that contains the rectangular region described by two input coordinates. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em point1}]One corner of rectangular region of interest. \item[\mbox{$\leftarrow$} {\em point2}]Other corner of rectangular region of interest. \item[\mbox{$\rightarrow$} {\em box\_\-pointers}]Collection of box pointers that contains region of interest. \end{description}
+\end{Desc}
+\index{Space@{Space}!getBoxesFromIndices@{getBoxesFromIndices}}
+\index{getBoxesFromIndices@{getBoxesFromIndices}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Space::get\-Boxes\-From\-Indices (int const $\ast$ const {\em old\_\-indices}, int const $\ast$ const {\em new\_\-indices}, {\bf vec\_\-bp} \& {\em box\_\-pointers}) const}\label{classSpace_2ad7dd2dd6563e1403982a52727c47ef}
+
+
+Collect and return box pointers contained in a new box index range and not already described by old index range. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em old\_\-indices}]Old box indices to be ignored; if NULL do nothing, \item[\mbox{$\leftarrow$} {\em new\_\-indices}]New box indices of itnerest. \item[\mbox{$\rightarrow$} {\em box\_\-pointers}]Collected boxes. \end{description}
+\end{Desc}
+\index{Space@{Space}!getWorld@{getWorld}}
+\index{getWorld@{getWorld}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Space::get\-World (int const \& {\em axis}) const}\label{classSpace_390b81e3dd81163716a1f4b163febe5c}
+
+
+Return the world limit along input axis. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em axis}]Requested direction 0,1,2,3,4,5 == -x,+x,-y,+y,-z,+z. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]World limit along ith axis. \end{Desc}
+\index{Space@{Space}!getBox@{getBox}}
+\index{getBox@{getBox}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Box} $\ast$ Space::get\-Box (int const \& {\em box\_\-index})}\label{classSpace_5119de4da26b7032057218ccd10e0deb}
+
+
+Return pointer to box at input index. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em box\_\-index}]Index of box of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Box}{p.}{classBox} with input index. \end{Desc}
+\index{Space@{Space}!begin@{begin}}
+\index{begin@{begin}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf b\_\-cit} Space::begin (void) const}\label{classSpace_234718ef19a840fa48daff5a5343f408}
+
+
+Get an iterator pointing to the first box in space. \begin{Desc}
+\item[Returns:]Iterator pointing to the first interecting face. \end{Desc}
+\index{Space@{Space}!end@{end}}
+\index{end@{end}!Space@{Space}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf b\_\-cit} Space::end (void) const}\label{classSpace_aad2c8e734a82c512bcc2b2f37dccc1c}
+
+
+Get an iterator pointing to one past the last box in space. \begin{Desc}
+\item[Returns:]Iterator pointing to one past the last box in space. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf space.h}\item 
+{\bf space.cc}\end{CompactItemize}

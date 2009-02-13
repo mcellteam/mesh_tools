@@ -1,0 +1,158 @@
+\section{hxa7241\_\-graphics::Octree\-Agent$<$ TYPE $>$ Class Template Reference}
+\label{classhxa7241__graphics_1_1OctreeAgent}\index{hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::OctreeAgent}}
+{\tt \#include $<$Octree.h$>$}
+
+Inheritance diagram for hxa7241\_\-graphics::Octree\-Agent$<$ TYPE $>$:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classhxa7241__graphics_1_1OctreeAgent__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Agent$<$ TYPE $>$:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classhxa7241__graphics_1_1OctreeAgent__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+virtual {\bf $\sim$Octree\-Agent} ()
+\item 
+virtual bool {\bf is\-Overlapping\-Cell\-V} (const void $\ast$p\-Item, const {\bf Vector3r} \&lower\-Corner, const {\bf Vector3r} \&upper\-Corner) const
+\begin{CompactList}\small\item\em void-to-type forwarders \item\end{CompactList}\item 
+virtual dword {\bf get\-Subcell\-Overlaps\-V} (const void $\ast$p\-Item, const {\bf Vector3r} \&lower, const {\bf Vector3r} \&middle, const {\bf Vector3r} \&upper) const
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Agent} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+virtual bool {\bf is\-Overlapping\-Cell} (const TYPE \&item, const {\bf Vector3r} \&lower\-Corner, const {\bf Vector3r} \&upper\-Corner) const =0
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual dword {\bf get\-Subcell\-Overlaps} (const TYPE \&item, const {\bf Vector3r} \&lower\-Corner, const {\bf Vector3r} \&middle\-Point, const {\bf Vector3r} \&upper\-Corner) const
+\begin{CompactList}\small\item\em default implementation \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class TYPE$>$ class hxa7241\_\-graphics::Octree\-Agent$<$ TYPE $>$}
+
+Agent abstract base, for client use with \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree}.\par
+\par
+
+
+Client of \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} must define a concrete derivative of Octree\-Agent$<$Item\-Type$>$.\par
+\par
+
+
+This is similar to a proxy: it is an intermediary for an \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} to query its typeless subject items, when inserting or removing.\par
+\par
+
+
+The overlap methods are to determine an item's relation to a cell or cells, for insertion or removal. The parameters supply the bounds of the cell. \par
+\par
+
+
+Return value of get\-Subcell\-Overlaps is 8 bits, each bit is a bool corresponding to a subcell, the high bit for subcell 7, the low bit for subcell 0.\par
+\par
+
+
+Subcell numbering: \small\begin{alltt}
+    y z       6 7
+    |/   2 3  4 5
+     -x  0 1
+ \end{alltt}
+\normalsize 
+ in binary: \small\begin{alltt}
+    y z           110 111
+    |/   010 011  100 101
+     -x  000 001
+ \end{alltt}
+\normalsize 
+
+
+The \_\-\_\-\_\-V methods simply apply a type-cast to void$\ast$s and forward to their abstract counterparts.\par
+\par
+
+
+An \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} requires its contained items to provide positional info. But requiring the item classes to implement an Octree\-Item interface would impose a direct interface change on every prospective item type, and enlarge their instances with a vptr.\par
+\par
+
+
+Instead, this agent transfers the Octree-related interface/implementation away from the item type into a separate class. The \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} can now hold void pointers to items and call the agent to query them indirectly.\par
+\par
+ 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}!OctreeAgent@{OctreeAgent}}
+\index{OctreeAgent@{OctreeAgent}!hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ {\bf hxa7241\_\-graphics::Octree\-Agent}$<$ TYPE $>$::{\bf Octree\-Agent} ()\hspace{0.3cm}{\tt  [inline, protected]}}\label{classhxa7241__graphics_1_1OctreeAgent_77f0b8bc444f3cc58d2487e657123545}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}!~OctreeAgent@{$\sim$OctreeAgent}}
+\index{~OctreeAgent@{$\sim$OctreeAgent}!hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ virtual {\bf hxa7241\_\-graphics::Octree\-Agent}$<$ TYPE $>$::$\sim${\bf Octree\-Agent} ()\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeAgent_60870fa6b28b3e263189809cb493cfc4}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}!isOverlappingCellV@{isOverlappingCellV}}
+\index{isOverlappingCellV@{isOverlappingCellV}!hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ bool {\bf hxa7241\_\-graphics::Octree\-Agent}$<$ TYPE $>$::is\-Overlapping\-Cell\-V (const void $\ast$ {\em p\-Item}, const {\bf Vector3r} \& {\em lower\-Corner}, const {\bf Vector3r} \& {\em upper\-Corner}) const\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeAgent_2640e4adca884dc4531a93215ef9f75c}
+
+
+void-to-type forwarders 
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Agent\-V} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeAgentV_25a8bdfe6e2bfcc9dc307c22915a32ef}.\index{hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}!getSubcellOverlapsV@{getSubcellOverlapsV}}
+\index{getSubcellOverlapsV@{getSubcellOverlapsV}!hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ dword {\bf hxa7241\_\-graphics::Octree\-Agent}$<$ TYPE $>$::get\-Subcell\-Overlaps\-V (const void $\ast$ {\em p\-Item}, const {\bf Vector3r} \& {\em lower}, const {\bf Vector3r} \& {\em middle}, const {\bf Vector3r} \& {\em upper}) const\hspace{0.3cm}{\tt  [inline, virtual]}}\label{classhxa7241__graphics_1_1OctreeAgent_1f3c0ce8e9f03e52de13262e095a2968}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Agent\-V} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeAgentV_219e72c02f6845a5802349ef6d8bf115}.\index{hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}!isOverlappingCell@{isOverlappingCell}}
+\index{isOverlappingCell@{isOverlappingCell}!hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ virtual bool {\bf hxa7241\_\-graphics::Octree\-Agent}$<$ TYPE $>$::is\-Overlapping\-Cell (const TYPE \& {\em item}, const {\bf Vector3r} \& {\em lower\-Corner}, const {\bf Vector3r} \& {\em upper\-Corner}) const\hspace{0.3cm}{\tt  [protected, pure virtual]}}\label{classhxa7241__graphics_1_1OctreeAgent_a2df3912d793763643522ffd2f451dbb}
+
+
+queries -------------------------------------------------------------------- 
+
+Called by \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} to get relation of item to cell. 
+
+Implemented in {\bf Octree\_\-Agent\_\-Face} \doxyref{}{p.}{classOctree__Agent__Face_1fc918ffe7dee3ca4f6a9ccd47f98000}.\index{hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}!getSubcellOverlaps@{getSubcellOverlaps}}
+\index{getSubcellOverlaps@{getSubcellOverlaps}!hxa7241_graphics::OctreeAgent@{hxa7241\_\-graphics::Octree\-Agent}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class TYPE$>$ dword {\bf hxa7241\_\-graphics::Octree\-Agent}$<$ TYPE $>$::get\-Subcell\-Overlaps (const TYPE \& {\em item}, const {\bf Vector3r} \& {\em lower\-Corner}, const {\bf Vector3r} \& {\em middle\-Point}, const {\bf Vector3r} \& {\em upper\-Corner}) const\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classhxa7241__graphics_1_1OctreeAgent_c9c3473ff6749775aa199998de0bdcf6}
+
+
+default implementation 
+
+Called by \doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} to get relation of item to subcell octants.\par
+\par
+ Override to make a more efficent calculation (boundary testing can be shared). \begin{Desc}
+\item[Returns:]8 bits, each a bool corresponding to a subcell, the high bit for subcell 7, the low bit for subcell 0.\par
+\par
+ Subcell numbering: \small\begin{alltt}
+    y z       6 7
+    |/   2 3  4 5
+     -x  0 1
+ \end{alltt}
+\normalsize 
+ in binary: \small\begin{alltt}
+    y z           110 111
+    |/   010 011  100 101
+     -x  000 001
+ \end{alltt}
+\normalsize 
+ \end{Desc}
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Octree.h}\end{CompactItemize}

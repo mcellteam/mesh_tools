@@ -1,0 +1,519 @@
+\section{Log Class Reference}
+\label{classLog}\index{Log@{Log}}
+{\tt \#include $<$log.h$>$}
+
+Collaboration diagram for Log:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=76pt]{classLog__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+int {\bf get\-N} (void)
+\item 
+void {\bf group\-Init} (void)
+\item 
+void {\bf write\-Vert\-Move\-Distribution} (int const \&)
+\item 
+void {\bf write\-Files} (int const \&group)
+\item 
+void {\bf write\-Sep\-Distances} (int const \&)
+\item 
+void {\bf update\-Hauss\_\-1} (std::string const \&, double const \&, {\bf map\_\-s\_\-d} \&)
+\item 
+void {\bf update\-Hauss\_\-2} (std::string const \&, {\bf o\_\-it} const \&, double const \&, {\bf map\_\-s\_\-d} \&)
+\item 
+void {\bf update\-Hauss\_\-1\_\-noself} (std::string const \&, double const \&, {\bf map\_\-s\_\-d} \&)
+\item 
+void {\bf update\-Hauss\_\-2\_\-noself} (std::string const \&, {\bf o\_\-it} const \&, double const \&, {\bf map\_\-s\_\-d} \&)
+\item 
+void {\bf write\-Command\-Settings} (void)
+\item 
+void {\bf close\-Files} (void)
+\item 
+void {\bf update\-File} (int const \&, bool, double const \&)
+\item 
+void {\bf status\-File\-Init} (void)
+\item 
+void {\bf write\-Object\-List} (void)
+\item 
+void {\bf write\-Object\-Data} (void)
+\item 
+void {\bf update\-Vert\-Displ\-Stats} ({\bf Vertex} $\ast$const, {\bf vector3} const \&)
+\item 
+void {\bf clear\-Vals} (void)
+\item 
+void {\bf write\-Move\-Summary} (int const \&, int const \&)
+\item 
+void {\bf write\-Refracted} (int const \&)
+\item 
+void {\bf write\-Refracted\-Now} (int const \&group, int code)
+\item 
+void {\bf write\-Intersected} (int const \&)
+\item 
+void {\bf write\-Nonnice} (int const \&)
+\item 
+void {\bf write\-VD} (int const \&)
+\item 
+void {\bf write\-AD} (int const \&group)
+\item 
+void {\bf print\-Num\-Nonnice} (std::ostream \&) const
+\item 
+void {\bf print\-Num\-Int} (std::ostream \&) const
+\item 
+void {\bf set\-Time} (time\_\-t)
+\item 
+void {\bf open\-Main\-File} (void)
+\item 
+void {\bf record\-Time} (std::string const \&)
+\item 
+void {\bf update\-Boxes\-Per\-Face\-Stats} (int const \&)
+\item 
+void {\bf calculate\-Faces\-Per\-Box\-Stats} (void)
+\item 
+void {\bf print\-Partitioning\-Stats} (std::ostream \&) const
+\item 
+void {\bf update\-Closest\-Pt\-Stats} (int const \&, int const \&, int const \&)
+\item 
+void {\bf print\-Closest\-Pt\-Stats} (std::ostream \&) const
+\item 
+void {\bf update\-Vertex\-Scheduling\-Stats} (int const \&)
+\item 
+void {\bf update\-Moved\-Verts\-From\-Set} (void)
+\item 
+void {\bf print\-Vertex\-Scheduling\-Stats} (std::ostream \&) const
+\item 
+void {\bf update\-Closest\-Pt\-Search\-Stats} (int const \&, int const \&, {\bf Search\_\-Stats} const \&)
+\item 
+void {\bf print\-Closest\-Pt\-Search\-Stats} (std::ostream \&) const
+\item 
+void {\bf open\-Or\-Die} (std::ofstream $\ast$const handle, std::string str, const int \&group)
+\item 
+bool {\bf is\-Good} ({\bf Vertex} const $\ast$const) const 
+\item 
+void {\bf write\-Detailed\-Move\-Info} (void)
+\item 
+void {\bf print\-Bad} ({\bf Vertex} const $\ast$const) const 
+\item 
+void {\bf set\-Detailed\-Info\-Pre\-Move} ({\bf Vertex} $\ast$const)
+\item 
+void {\bf set\-Detailed\-Info\-Post\-Move} ({\bf Vertex} $\ast$)
+\item 
+std::string {\bf formatv} (char const $\ast$fmt, va\_\-list args)
+\item 
+std::string {\bf format} (char const $\ast$fmt,...)
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static {\bf Log} \& {\bf instance} (void)
+\end{CompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{Log@{Log}!instance@{instance}}
+\index{instance@{instance}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Log} \& Log::instance (void)\hspace{0.3cm}{\tt  [static]}}\label{classLog_560f0bdc9894198be1466c9888acb6fe}
+
+
+\index{Log@{Log}!getN@{getN}}
+\index{getN@{getN}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Log::get\-N (void)\hspace{0.3cm}{\tt  [inline]}}\label{classLog_5984805af8f02565ce88ae6156e0dbaf}
+
+
+\index{Log@{Log}!groupInit@{groupInit}}
+\index{groupInit@{groupInit}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::group\-Init (void)}\label{classLog_5a5bf6231b9a3af27a535bfe60307b55}
+
+
+Initialize this class for start of group. \index{Log@{Log}!writeVertMoveDistribution@{writeVertMoveDistribution}}
+\index{writeVertMoveDistribution@{writeVertMoveDistribution}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Vert\-Move\-Distribution (int const \& {\em group})}\label{classLog_0c4b2a52477b8c929cb4c05d4d27793e}
+
+
+Write to file the distribution of number of moves per vertex since start of last initialization. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!writeFiles@{writeFiles}}
+\index{writeFiles@{writeFiles}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Files (int const \& {\em group})}\label{classLog_4ad9b818e3bc06dc1adfc9d79f29cb50}
+
+
+Write to file the current position of model and diagnostic data. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number. \end{description}
+\end{Desc}
+\index{Log@{Log}!writeSepDistances@{writeSepDistances}}
+\index{writeSepDistances@{writeSepDistances}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Sep\-Distances (int const \& {\em group})}\label{classLog_8bd4f014fe08393caf59f9f29ac75d36}
+
+
+Calculate and write to file the extracellular width (or some metric) of each vertex in model using the stored closest face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!updateHauss_1@{updateHauss\_\-1}}
+\index{updateHauss_1@{updateHauss\_\-1}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Hauss\_\-1 (std::string const \& {\em name}, double const \& {\em dd}, {\bf map\_\-s\_\-d} \& {\em hausdorff\_\-1})}\label{classLog_19fed1d607f1b2b3c2df3cdeec659eb7}
+
+
+Determine if extracellular distance to object is to be stored. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em name}]Identity of neighboring object. \item[\mbox{$\leftarrow$} {\em dd}]Extracellular distance to object. \item[\mbox{$\rightarrow$} {\em hausdorff\_\-1}]Map of neighboring objects and associated extracellular widths. \end{description}
+\end{Desc}
+\index{Log@{Log}!updateHauss_2@{updateHauss\_\-2}}
+\index{updateHauss_2@{updateHauss\_\-2}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Hauss\_\-2 (std::string const \& {\em name}, {\bf o\_\-it} const \& {\em i}, double const \& {\em dd}, {\bf map\_\-s\_\-d} \& {\em hausdorff\_\-2})}\label{classLog_132325fad016ba2a8d16af4fef52d32d}
+
+
+Determine if extracellular distance to object is to be stored. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em name}]Identity of neighboring object. \item[\mbox{$\leftarrow$} {\em i}]\doxyref{Object}{p.}{classObject} of interest. \item[\mbox{$\leftarrow$} {\em dd}]Extracellular distance to object. \item[\mbox{$\rightarrow$} {\em hausdorff\_\-2}]Map of neighboring objects and associated extracellular widths. \end{description}
+\end{Desc}
+\index{Log@{Log}!updateHauss_1_noself@{updateHauss\_\-1\_\-noself}}
+\index{updateHauss_1_noself@{updateHauss\_\-1\_\-noself}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Hauss\_\-1\_\-noself (std::string const \& {\em name}, double const \& {\em dd}, {\bf map\_\-s\_\-d} \& {\em hausdorff\_\-1\_\-noself})}\label{classLog_c86f0bab9e01d29b4e2f52cd7c3a82a6}
+
+
+Determine if extracellular distance to object is to be stored. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em name}]Identity of neighboring object. \item[\mbox{$\leftarrow$} {\em dd}]Extracellular distance to object. \item[\mbox{$\rightarrow$} {\em hausdorff\_\-1\_\-noself}]Map of neighboring objects and associated extracellular widths. \end{description}
+\end{Desc}
+\index{Log@{Log}!updateHauss_2_noself@{updateHauss\_\-2\_\-noself}}
+\index{updateHauss_2_noself@{updateHauss\_\-2\_\-noself}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Hauss\_\-2\_\-noself (std::string const \& {\em name}, {\bf o\_\-it} const \& {\em i}, double const \& {\em dd}, {\bf map\_\-s\_\-d} \& {\em hausdorff\_\-2\_\-noself})}\label{classLog_5084b574cf76ccd39801c09981539815}
+
+
+Determine if extracellular distance to object is to be stored. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em name}]Identity of neighboring object. \item[\mbox{$\leftarrow$} {\em i}]\doxyref{Object}{p.}{classObject} of interest. \item[\mbox{$\leftarrow$} {\em dd}]Extracellular distance to object. \item[\mbox{$\rightarrow$} {\em hausdorff\_\-2\_\-noself}]Map of neighboring objects and associated extracellular widths. \end{description}
+\end{Desc}
+\index{Log@{Log}!writeCommandSettings@{writeCommandSettings}}
+\index{writeCommandSettings@{writeCommandSettings}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Command\-Settings (void)}\label{classLog_aea40113d8b8f95f34b54e694bfc9b3f}
+
+
+Write command parameter settings to file. \index{Log@{Log}!closeFiles@{closeFiles}}
+\index{closeFiles@{closeFiles}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::close\-Files (void)}\label{classLog_ccaa869ade8e961337493d61eae74228}
+
+
+Close output streams of this class. \index{Log@{Log}!updateFile@{updateFile}}
+\index{updateFile@{updateFile}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-File (int const \& {\em group}, bool {\em verts\_\-moved}, double const \& {\em elapsed\_\-time})}\label{classLog_1ef9d68100fee4568c43e58660eac593}
+
+
+Write to file the progress of vertex move campaign. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number. \item[\mbox{$\leftarrow$} {\em not\_\-first\_\-group}]True if group is NOT the first group; false otherwise. \item[\mbox{$\leftarrow$} {\em elapsed\_\-time}]Elapsed time since last initialization. \end{description}
+\end{Desc}
+\index{Log@{Log}!statusFileInit@{statusFileInit}}
+\index{statusFileInit@{statusFileInit}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::status\-File\-Init (void)}\label{classLog_2b40ac1a684072ebe0ff13be2f6e638b}
+
+
+Initialize progress file for vertex move campaign. \index{Log@{Log}!writeObjectList@{writeObjectList}}
+\index{writeObjectList@{writeObjectList}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Object\-List (void)}\label{classLog_1886bc499dbcb83a87e29c31c6aad6b3}
+
+
+Write to file a list of objects in model. \index{Log@{Log}!writeObjectData@{writeObjectData}}
+\index{writeObjectData@{writeObjectData}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Object\-Data (void)}\label{classLog_6196328a2b244940b90e0931c975be0d}
+
+
+Write to file the object list and initialize the vertex move campaing progress file. \index{Log@{Log}!updateVertDisplStats@{updateVertDisplStats}}
+\index{updateVertDisplStats@{updateVertDisplStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Vert\-Displ\-Stats ({\bf Vertex} $\ast$ const {\em v}, {\bf vector3} const \& {\em old\_\-pos})}\label{classLog_7f1e317915f4f4f0c81e67760f54fb37}
+
+
+Update statistics on actual vertex displacements. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em vertex\_\-displ}]Most recent vertex displacement. \end{description}
+\end{Desc}
+\index{Log@{Log}!clearVals@{clearVals}}
+\index{clearVals@{clearVals}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::clear\-Vals (void)}\label{classLog_b9a9ee2553ef9a26e303b91b37bf26bf}
+
+
+Clear members of this class. \index{Log@{Log}!writeMoveSummary@{writeMoveSummary}}
+\index{writeMoveSummary@{writeMoveSummary}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Move\-Summary (int const \& {\em group}, int const \& {\em group\_\-size})}\label{classLog_5fe038c98dd24c85d2347bea8ca914a3}
+
+
+Write to STDOUT a brief summary information about the last vertex move. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!writeRefracted@{writeRefracted}}
+\index{writeRefracted@{writeRefracted}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Refracted (int const \& {\em group})}\label{classLog_7bcb3783a04992d550886708464f0dc7}
+
+
+Write to file all vertices refracted since last initialization. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!writeRefractedNow@{writeRefractedNow}}
+\index{writeRefractedNow@{writeRefractedNow}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Refracted\-Now (int const \& {\em group}, int {\em code})}\label{classLog_c3ba8bdae8fe2d2a9ff32400f5bb49c8}
+
+
+\index{Log@{Log}!writeIntersected@{writeIntersected}}
+\index{writeIntersected@{writeIntersected}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Intersected (int const \& {\em group})}\label{classLog_a715ed09d236057bf460116a8f838003}
+
+
+Write to file all intersected faces in model. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!writeNonnice@{writeNonnice}}
+\index{writeNonnice@{writeNonnice}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Nonnice (int const \& {\em group})}\label{classLog_199cfdb352f8e095386f8573f063cd6b}
+
+
+Write to file list of nonnice vertices in model. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!writeVD@{writeVD}}
+\index{writeVD@{writeVD}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-VD (int const \& {\em group})}\label{classLog_7ef40d818c36bf8a35ef66b198ba7a9f}
+
+
+Write to file list of seed vertex virtual displacements. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!writeAD@{writeAD}}
+\index{writeAD@{writeAD}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-AD (int const \& {\em group})}\label{classLog_a2dc9da596fea7429c00a150b59477f7}
+
+
+Write to file list of seed vertex virtual displacements. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em group}]Current group number (used as filename suffix). \end{description}
+\end{Desc}
+\index{Log@{Log}!printNumNonnice@{printNumNonnice}}
+\index{printNumNonnice@{printNumNonnice}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::print\-Num\-Nonnice (std::ostream \& {\em target}) const}\label{classLog_1e09afe77ce542420db47b5aeafc8cb2}
+
+
+Write to output stream the number of vertices recorded nonnice.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Log@{Log}!printNumInt@{printNumInt}}
+\index{printNumInt@{printNumInt}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::print\-Num\-Int (std::ostream \& {\em target}) const}\label{classLog_afffe6351bfe96546a9566ea180b5da2}
+
+
+Write to output stream the number of faces recorded as intersected.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Log@{Log}!setTime@{setTime}}
+\index{setTime@{setTime}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::set\-Time (time\_\-t {\em t})}\label{classLog_6b1c1f2e8eba5b16cc15b3ab925372ec}
+
+
+Initialize time to input value. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em t}]New time value. \end{description}
+\end{Desc}
+\index{Log@{Log}!openMainFile@{openMainFile}}
+\index{openMainFile@{openMainFile}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::open\-Main\-File (void)}\label{classLog_2bb3d9606ea67f1f576a620c921a101b}
+
+
+Initialize output stream to main log file. \index{Log@{Log}!recordTime@{recordTime}}
+\index{recordTime@{recordTime}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::record\-Time (std::string const \& {\em message})}\label{classLog_c4a10bd3cfa75164ed1a202f059b5e15}
+
+
+Write to file elapsed time since last call of this function. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em message}]Message to write to file. \end{description}
+\end{Desc}
+\index{Log@{Log}!updateBoxesPerFaceStats@{updateBoxesPerFaceStats}}
+\index{updateBoxesPerFaceStats@{updateBoxesPerFaceStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Boxes\-Per\-Face\-Stats (int const \& {\em box\_\-count})}\label{classLog_a41d65fb13feb0e44735882ed9248cab}
+
+
+Update statistics on the number of boxes assigned to each face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em box\_\-count}]Number of space partitions assigned to this face. \end{description}
+\end{Desc}
+\index{Log@{Log}!calculateFacesPerBoxStats@{calculateFacesPerBoxStats}}
+\index{calculateFacesPerBoxStats@{calculateFacesPerBoxStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::calculate\-Faces\-Per\-Box\-Stats (void)}\label{classLog_a652c5b694b6857cb36a1470c0634407}
+
+
+\index{Log@{Log}!printPartitioningStats@{printPartitioningStats}}
+\index{printPartitioningStats@{printPartitioningStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::print\-Partitioning\-Stats (std::ostream \& {\em target}) const}\label{classLog_5528e95549c8af74a0f1563de8b98a3e}
+
+
+Write to output stream recorded statistics of the number of faces assigned to each box and the number of boxes assigned to each face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Log@{Log}!updateClosestPtStats@{updateClosestPtStats}}
+\index{updateClosestPtStats@{updateClosestPtStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Closest\-Pt\-Stats (int const \& {\em face\_\-count}, int const \& {\em leaves\_\-count}, int const \& {\em f\_\-check\_\-count})}\label{classLog_a459ccc43f3789e41818528aa25c2dc5}
+
+
+Gather statistics on number of faces and boxes invloved in search for closest point to each vertex. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face\_\-count}]Number of faces returned from octree in last search for closest point to current vertex. \item[\mbox{$\leftarrow$} {\em leaves\_\-count}]Number of leaves checked in last search for closest point to current vertex. \item[\mbox{$\leftarrow$} {\em f\_\-check\_\-count}]Number of faces checked in last search for closest point to current vertex. \end{description}
+\end{Desc}
+\index{Log@{Log}!printClosestPtStats@{printClosestPtStats}}
+\index{printClosestPtStats@{printClosestPtStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::print\-Closest\-Pt\-Stats (std::ostream \& {\em target}) const}\label{classLog_5c3cd6d1108c12a47894bd7eac337236}
+
+
+Write to output stream summary statistics for closest point to vertex searches.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Log@{Log}!updateVertexSchedulingStats@{updateVertexSchedulingStats}}
+\index{updateVertexSchedulingStats@{updateVertexSchedulingStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Vertex\-Scheduling\-Stats (int const \& {\em vertex\_\-count})}\label{classLog_f78d560b9bbc18e24368eefb10d40427}
+
+
+Update statistics on number of vertices per moved set. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em vertex\_\-count}]Number of vertices in last moved set (noting that not all vertices in a moved set are allowed to move). \end{description}
+\end{Desc}
+\index{Log@{Log}!updateMovedVertsFromSet@{updateMovedVertsFromSet}}
+\index{updateMovedVertsFromSet@{updateMovedVertsFromSet}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Moved\-Verts\-From\-Set (void)}\label{classLog_2385a5c845a5ca0c887c332b11cdf5c0}
+
+
+Update statistics on number of vertices per moved set. (noting that not all vertices in a moved set are allowed to move). \index{Log@{Log}!printVertexSchedulingStats@{printVertexSchedulingStats}}
+\index{printVertexSchedulingStats@{printVertexSchedulingStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::print\-Vertex\-Scheduling\-Stats (std::ostream \& {\em target}) const}\label{classLog_445ff1de967f5ab8cb153b4a2aaa3909}
+
+
+Write to output streqam statistics on number of vertices per moved set. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Log@{Log}!updateClosestPtSearchStats@{updateClosestPtSearchStats}}
+\index{updateClosestPtSearchStats@{updateClosestPtSearchStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::update\-Closest\-Pt\-Search\-Stats (int const \& {\em full\_\-search}, int const \& {\em partial\_\-search}, {\bf Search\_\-Stats} const \& {\em ss})}\label{classLog_a4c94a78f7826121a2e41133198d6421}
+
+
+Gather statistics on number of vertices undergoing full and partial closest point searches. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em full\_\-search}]Number of vertices given a full closest point seach. \item[\mbox{$\leftarrow$} {\em partial\_\-search}]Number of vertices given a partial closest point seach. \item[\mbox{$\leftarrow$} {\em ss}]Collection of vertex counts quantifying how often the closest face to vertex changed. \end{description}
+\end{Desc}
+\index{Log@{Log}!printClosestPtSearchStats@{printClosestPtSearchStats}}
+\index{printClosestPtSearchStats@{printClosestPtSearchStats}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::print\-Closest\-Pt\-Search\-Stats (std::ostream \& {\em target}) const}\label{classLog_234e14eb8839970087544b86725a4b5e}
+
+
+Write to output stream summary statistics for closest point to vertex searches.
+
+\begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Pre-initialized output stream. \end{description}
+\end{Desc}
+\index{Log@{Log}!openOrDie@{openOrDie}}
+\index{openOrDie@{openOrDie}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::open\-Or\-Die (std::ofstream $\ast$const  {\em handle}, std::string {\em str}, const int \& {\em group})}\label{classLog_5c75edbcb518da9f8a22d4958e79d950}
+
+
+\index{Log@{Log}!isGood@{isGood}}
+\index{isGood@{isGood}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Log::is\-Good ({\bf Vertex} const $\ast$ const {\em current\_\-vertex}) const}\label{classLog_eff9b0e33dcc37e71c4b2bb6d9ce0ca1}
+
+
+Assert values are inside valid range for class elements carring detailed vertex move information. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em current\_\-vertex}]\doxyref{Vertex}{p.}{classVertex} of interest, likely, the last vertex moved. \end{description}
+\end{Desc}
+\index{Log@{Log}!writeDetailedMoveInfo@{writeDetailedMoveInfo}}
+\index{writeDetailedMoveInfo@{writeDetailedMoveInfo}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::write\-Detailed\-Move\-Info (void)}\label{classLog_88f866427eb6e6c0a3cdd2fc316b41e5}
+
+
+Write to STDOUT detailed information about last vertex move. \index{Log@{Log}!printBad@{printBad}}
+\index{printBad@{printBad}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::print\-Bad ({\bf Vertex} const $\ast$ const {\em current\_\-vertex}) const}\label{classLog_ea54bf1684e3b2a0b6a98ef8370bbf26}
+
+
+Write to STDOUT debug data for vertex move detailed information. \index{Log@{Log}!setDetailedInfoPreMove@{setDetailedInfoPreMove}}
+\index{setDetailedInfoPreMove@{setDetailedInfoPreMove}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::set\-Detailed\-Info\-Pre\-Move ({\bf Vertex} $\ast$ const {\em v})}\label{classLog_5f75777cf5cb63898440900547696cfa}
+
+
+Record detailed move information of current vertex before the move is attempted. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} to be moved. \end{description}
+\end{Desc}
+\index{Log@{Log}!setDetailedInfoPostMove@{setDetailedInfoPostMove}}
+\index{setDetailedInfoPostMove@{setDetailedInfoPostMove}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Log::set\-Detailed\-Info\-Post\-Move ({\bf Vertex} $\ast$ {\em v})}\label{classLog_ee0b4b55384422c4ae23ebdb03f94c6d}
+
+
+Record detailed move information of current vertex after a successfuly move is made. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]Last vertex moved. \end{description}
+\end{Desc}
+\index{Log@{Log}!formatv@{formatv}}
+\index{formatv@{formatv}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}std::string Log::formatv (char const $\ast$ {\em fmt}, va\_\-list {\em args})\hspace{0.3cm}{\tt  [inline]}}\label{classLog_75750275e5424749ae3a5e118e0635c1}
+
+
+\index{Log@{Log}!format@{format}}
+\index{format@{format}!Log@{Log}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}std::string Log::format (char const $\ast$ {\em fmt},  {\em ...})\hspace{0.3cm}{\tt  [inline]}}\label{classLog_6713dfaa81b6c577ba3d2de6925480f9}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf log.h}\item 
+{\bf log.cc}\end{CompactItemize}

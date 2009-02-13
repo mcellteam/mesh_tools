@@ -1,0 +1,152 @@
+\section{hxa7241\_\-graphics::Octree\-Branch Class Reference}
+\label{classhxa7241__graphics_1_1OctreeBranch}\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::OctreeBranch}}
+{\tt \#include $<$Octree\-Implementation.h$>$}
+
+Inheritance diagram for hxa7241\_\-graphics::Octree\-Branch:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=115pt]{classhxa7241__graphics_1_1OctreeBranch__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Branch:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=115pt]{classhxa7241__graphics_1_1OctreeBranch__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Branch} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf Octree\-Branch} (const {\bf Octree\-Data} \&this\-Data, const {\bf Array}$<$ const void $\ast$ $>$ \&items, const void $\ast$const p\-Item, const {\bf Octree\-Agent\-V} \&agent)
+\item 
+virtual {\bf $\sim$Octree\-Branch} ()
+\item 
+{\bf Octree\-Branch} (const {\bf Octree\-Branch} \&)
+\item 
+{\bf Octree\-Branch} \& {\bf operator=} (const {\bf Octree\-Branch} \&)
+\item 
+virtual void {\bf insert} (const {\bf Octree\-Data} \&this\-Data, {\bf Octree\-Cell} $\ast$\&p\-This, const void $\ast$p\-Item, const {\bf Octree\-Agent\-V} \&agent)
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual bool {\bf remove} ({\bf Octree\-Cell} $\ast$\&p\-This, const void $\ast$p\-Item, const dword max\-Items\-Per\-Cell, dword \&item\-Count)
+\item 
+virtual void {\bf visit} (const {\bf Octree\-Data} \&this\-Data, {\bf Octree\-Visitor\-V} \&visitor) const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual {\bf Octree\-Cell} $\ast$ {\bf clone} () const
+\item 
+virtual void {\bf get\-Info} (dword \&byte\-Size, dword \&leaf\-Count, dword \&item\-Count, dword \&max\-Depth) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static void {\bf continue\-Visit} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data, dword sub\-Cell\-Index, {\bf Octree\-Visitor\-V} \&visitor)
+\begin{CompactList}\small\item\em statics -------------------------------------------------------------------- \item\end{CompactList}\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+virtual void {\bf zero\-Sub\-Cells} ()
+\begin{CompactList}\small\item\em implementation ------------------------------------------------------------- \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Inner node implementation of an octree cell.\par
+\par
+
+
+Stores pointers to eight (at most) child cells.
+
+sub\-Cells\_\-m elements can be null, or point to an \doxyref{Octree\-Cell}{p.}{classhxa7241__graphics_1_1OctreeCell} instance. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!OctreeBranch@{OctreeBranch}}
+\index{OctreeBranch@{OctreeBranch}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Branch::Octree\-Branch ()}\label{classhxa7241__graphics_1_1OctreeBranch_42f7249c1578dfc66294655e783fe21e}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!OctreeBranch@{OctreeBranch}}
+\index{OctreeBranch@{OctreeBranch}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Branch::Octree\-Branch (const {\bf Octree\-Data} \& {\em this\-Data}, const {\bf Array}$<$ const void $\ast$ $>$ \& {\em items}, const void $\ast$const {\em p\-Item}, const {\bf Octree\-Agent\-V} \& {\em agent})}\label{classhxa7241__graphics_1_1OctreeBranch_77e0c99abc50b6d5fb1fb0687aa0608a}
+
+
+\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!~OctreeBranch@{$\sim$OctreeBranch}}
+\index{~OctreeBranch@{$\sim$OctreeBranch}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Branch::$\sim$Octree\-Branch ()\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeBranch_e2f09bec5e9597629c49f0290ead1e0e}
+
+
+\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!OctreeBranch@{OctreeBranch}}
+\index{OctreeBranch@{OctreeBranch}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Branch::Octree\-Branch (const {\bf Octree\-Branch} \&)}\label{classhxa7241__graphics_1_1OctreeBranch_46906fb5f7b7000105fc38782392b418}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Branch} \& Octree\-Branch::operator= (const {\bf Octree\-Branch} \&)}\label{classhxa7241__graphics_1_1OctreeBranch_1197934b2cd33dcb793a7f772f4355d7}
+
+
+\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!insert@{insert}}
+\index{insert@{insert}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Branch::insert (const {\bf Octree\-Data} \& {\em this\-Data}, {\bf Octree\-Cell} $\ast$\& {\em p\-This}, const void $\ast$ {\em p\-Item}, const {\bf Octree\-Agent\-V} \& {\em agent})\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeBranch_149057db8e68438f5639088abe618007}
+
+
+commands ------------------------------------------------------------------- 
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_0cf5936ffeaca906be184ac654cd8053}.\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!remove@{remove}}
+\index{remove@{remove}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Octree\-Branch::remove ({\bf Octree\-Cell} $\ast$\& {\em p\-This}, const void $\ast$ {\em p\-Item}, const dword {\em max\-Items\-Per\-Cell}, dword \& {\em item\-Count})\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeBranch_a9f402a456021e56b8c7e7e6e48c7863}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_74c11f0b4d5ef93959253206c3816417}.\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!visit@{visit}}
+\index{visit@{visit}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Branch::visit (const {\bf Octree\-Data} \& {\em this\-Data}, {\bf Octree\-Visitor\-V} \& {\em visitor}) const\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeBranch_54e5ca483f3e52f1ccbbcfcd3c384493}
+
+
+queries -------------------------------------------------------------------- 
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_e0998c3188914314451880d40ebd1c35}.\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!clone@{clone}}
+\index{clone@{clone}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Cell} $\ast$ Octree\-Branch::clone () const\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeBranch_ab0e9bbd1749dffd6a398f92086bc868}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_6f10b6cebce798d4a3e96b8822584774}.\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!getInfo@{getInfo}}
+\index{getInfo@{getInfo}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Branch::get\-Info (dword \& {\em byte\-Size}, dword \& {\em leaf\-Count}, dword \& {\em item\-Count}, dword \& {\em max\-Depth}) const\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeBranch_50cfc01d866acf532b900fbec17c99b2}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_d8b69169addb924c9ec3bb6ae70a932f}.\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!continueVisit@{continueVisit}}
+\index{continueVisit@{continueVisit}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Branch::continue\-Visit (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data}, dword {\em sub\-Cell\-Index}, {\bf Octree\-Visitor\-V} \& {\em visitor})\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1OctreeBranch_13c4d758a1c9b38f166e916c87ba1469}
+
+
+statics -------------------------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}!zeroSubCells@{zeroSubCells}}
+\index{zeroSubCells@{zeroSubCells}!hxa7241_graphics::OctreeBranch@{hxa7241\_\-graphics::Octree\-Branch}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Branch::zero\-Sub\-Cells ()\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classhxa7241__graphics_1_1OctreeBranch_68364176bd78a9ffda2545ffa174d24b}
+
+
+implementation ------------------------------------------------------------- 
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf Octree\-Implementation.h}\item 
+{\bf Octree\-Implementation.cc}\end{CompactItemize}

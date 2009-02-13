@@ -1,0 +1,138 @@
+\section{hxa7241\_\-graphics::Octree\-Leaf Class Reference}
+\label{classhxa7241__graphics_1_1OctreeLeaf}\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::OctreeLeaf}}
+{\tt \#include $<$Octree\-Implementation.h$>$}
+
+Inheritance diagram for hxa7241\_\-graphics::Octree\-Leaf:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=107pt]{classhxa7241__graphics_1_1OctreeLeaf__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Leaf:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{classhxa7241__graphics_1_1OctreeLeaf__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Leaf} ()
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf Octree\-Leaf} (const {\bf Octree\-Leaf} $\ast$const leafs[8])
+\item 
+virtual {\bf $\sim$Octree\-Leaf} ()
+\item 
+{\bf Octree\-Leaf} (const {\bf Octree\-Leaf} \&)
+\item 
+{\bf Octree\-Leaf} \& {\bf operator=} (const {\bf Octree\-Leaf} \&)
+\item 
+virtual void {\bf insert} (const {\bf Octree\-Data} \&this\-Data, {\bf Octree\-Cell} $\ast$\&p\-This, const void $\ast$p\-Item, const {\bf Octree\-Agent\-V} \&agent)
+\begin{CompactList}\small\item\em commands ------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual bool {\bf remove} ({\bf Octree\-Cell} $\ast$\&p\-This, const void $\ast$p\-Item, const dword max\-Items\-Per\-Cell, dword \&item\-Count)
+\item 
+virtual void {\bf visit} (const {\bf Octree\-Data} \&this\-Data, {\bf Octree\-Visitor\-V} \&visitor) const
+\begin{CompactList}\small\item\em queries -------------------------------------------------------------------- \item\end{CompactList}\item 
+virtual {\bf Octree\-Cell} $\ast$ {\bf clone} () const
+\item 
+virtual void {\bf get\-Info} (dword \&byte\-Size, dword \&leaf\-Count, dword \&item\-Count, dword \&max\-Depth) const
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static void {\bf insert\-Maybe\-Create} (const {\bf Octree\-Data} \&cell\-Data, {\bf Octree\-Cell} $\ast$\&p\-Cell, const void $\ast$p\-Item, const {\bf Octree\-Agent\-V} \&agent)
+\begin{CompactList}\small\item\em statics -------------------------------------------------------------------- \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Outer node implementation of an octree cell.\par
+\par
+
+
+Stores pointers to items. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!OctreeLeaf@{OctreeLeaf}}
+\index{OctreeLeaf@{OctreeLeaf}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Leaf::Octree\-Leaf ()}\label{classhxa7241__graphics_1_1OctreeLeaf_dd1abe428a1cc09406717695800fec85}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!OctreeLeaf@{OctreeLeaf}}
+\index{OctreeLeaf@{OctreeLeaf}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Leaf::Octree\-Leaf (const {\bf Octree\-Leaf} $\ast$const {\em leafs}[8])}\label{classhxa7241__graphics_1_1OctreeLeaf_0add1cd96cfc5e7c8c632ebf79589fa2}
+
+
+\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!~OctreeLeaf@{$\sim$OctreeLeaf}}
+\index{~OctreeLeaf@{$\sim$OctreeLeaf}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Leaf::$\sim$Octree\-Leaf ()\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeLeaf_f75ac490fc5cbc56132ed5c99533c13b}
+
+
+\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!OctreeLeaf@{OctreeLeaf}}
+\index{OctreeLeaf@{OctreeLeaf}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Leaf::Octree\-Leaf (const {\bf Octree\-Leaf} \&)}\label{classhxa7241__graphics_1_1OctreeLeaf_5784082a1e502115c9660d01781c5805}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Leaf} \& Octree\-Leaf::operator= (const {\bf Octree\-Leaf} \&)}\label{classhxa7241__graphics_1_1OctreeLeaf_793614a3e6316183ce641d90be1a5bc4}
+
+
+\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!insert@{insert}}
+\index{insert@{insert}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Leaf::insert (const {\bf Octree\-Data} \& {\em this\-Data}, {\bf Octree\-Cell} $\ast$\& {\em p\-This}, const void $\ast$ {\em p\-Item}, const {\bf Octree\-Agent\-V} \& {\em agent})\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeLeaf_7c6393f830a72b179948dd5bee97eeb4}
+
+
+commands ------------------------------------------------------------------- 
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_0cf5936ffeaca906be184ac654cd8053}.\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!remove@{remove}}
+\index{remove@{remove}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Octree\-Leaf::remove ({\bf Octree\-Cell} $\ast$\& {\em p\-This}, const void $\ast$ {\em p\-Item}, const dword {\em max\-Items\-Per\-Cell}, dword \& {\em item\-Count})\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeLeaf_64a170120344343a7f5309248aba2ab7}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_74c11f0b4d5ef93959253206c3816417}.\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!visit@{visit}}
+\index{visit@{visit}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Leaf::visit (const {\bf Octree\-Data} \& {\em this\-Data}, {\bf Octree\-Visitor\-V} \& {\em visitor}) const\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeLeaf_4dc0120fbd3d27f6628a507faf13d323}
+
+
+queries -------------------------------------------------------------------- 
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_e0998c3188914314451880d40ebd1c35}.\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!clone@{clone}}
+\index{clone@{clone}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Cell} $\ast$ Octree\-Leaf::clone () const\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeLeaf_0908765dbe95af75036abc65380a3aa8}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_6f10b6cebce798d4a3e96b8822584774}.\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!getInfo@{getInfo}}
+\index{getInfo@{getInfo}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Leaf::get\-Info (dword \& {\em byte\-Size}, dword \& {\em leaf\-Count}, dword \& {\em item\-Count}, dword \& {\em max\-Depth}) const\hspace{0.3cm}{\tt  [virtual]}}\label{classhxa7241__graphics_1_1OctreeLeaf_ff8e9556edcae39b2d4fbd2db1d37b4f}
+
+
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Cell} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeCell_d8b69169addb924c9ec3bb6ae70a932f}.\index{hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}!insertMaybeCreate@{insertMaybeCreate}}
+\index{insertMaybeCreate@{insertMaybeCreate}!hxa7241_graphics::OctreeLeaf@{hxa7241\_\-graphics::Octree\-Leaf}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Octree\-Leaf::insert\-Maybe\-Create (const {\bf Octree\-Data} \& {\em cell\-Data}, {\bf Octree\-Cell} $\ast$\& {\em p\-Cell}, const void $\ast$ {\em p\-Item}, const {\bf Octree\-Agent\-V} \& {\em agent})\hspace{0.3cm}{\tt  [static]}}\label{classhxa7241__graphics_1_1OctreeLeaf_64ce64675db0b34d5207497d42a39a5b}
+
+
+statics -------------------------------------------------------------------- 
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf Octree\-Implementation.h}\item 
+{\bf Octree\-Implementation.cc}\end{CompactItemize}

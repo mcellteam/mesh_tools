@@ -1,7 +1,7 @@
 meshalyzerxxl: meshalyzerxxl.o
-#	g++ meshalyzerxxl.o -o meshalyzerxxl $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib -lprofiler -ltcmalloc
+	g++ meshalyzerxxl.o -o meshalyzerxxl $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib -lprofiler -ltcmalloc
 #	g++ meshalyzerxxl.o -o meshalyzerxxl $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib
-	g++ meshalyzerxxl.o -o meshalyzerxxl64-node56 $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib
+#	g++ meshalyzerxxl.o -o meshalyzerxxl64-node56 $(STXXL_LINKER_OPTIONS) -L/home/jkinney/install/googleperf/lib
 
 meshalyzerxxl.o: meshalyzerxxl.cc makefile
 	g++ -c meshalyzerxxl.cc $(STXXL_COMPILER_OPTIONS)
@@ -50,12 +50,12 @@ LINKER		?= $(COMPILER)
 OPT		?= -O3 # compiler optimization level
 WARNINGS	?= -Wall
 #DEBUG		?= # put here -g option to include the debug information into the binaries
-DEBUG		?= -g -m64# put here -g option to include the debug information into the binaries
-#DEBUG		?= -g # put here -g option to include the debug information into the binaries
-STXXL_LINKER_OPTIONS = -m64
+#DEBUG		?= -g -m64# put here -g option to include the debug information into the binaries
+DEBUG		?= -g # put here -g option to include the debug information into the binaries
+#STXXL_LINKER_OPTIONS = -m64
 
-#LIBNAME		?= stxxl
-LIBNAME		?= stxxl64
+LIBNAME		?= stxxl
+#LIBNAME		?= stxxl64
 
 
 #### TROUBLESHOOTING

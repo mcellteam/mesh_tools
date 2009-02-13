@@ -1,0 +1,95 @@
+\section{Octree\_\-Visitor\_\-Measure Class Reference}
+\label{classOctree__Visitor__Measure}\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+{\tt \#include $<$octree\_\-visitor\_\-measure.h$>$}
+
+Inheritance diagram for Octree\_\-Visitor\_\-Measure:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classOctree__Visitor__Measure__inherit__graph}
+\end{center}
+\end{figure}
+Collaboration diagram for Octree\_\-Visitor\_\-Measure:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{classOctree__Visitor__Measure__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\_\-Visitor\_\-Measure} (void)
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+virtual {\bf $\sim$Octree\_\-Visitor\_\-Measure} ()
+\item 
+int {\bf get\_\-max\_\-depth} (void)
+\item 
+int {\bf get\_\-num\_\-leaves} (void)
+\end{CompactItemize}
+\subsection*{Protected Member Functions}
+\begin{CompactItemize}
+\item 
+virtual void {\bf visit\-Root} (const {\bf Octree\-Cell} $\ast$p\-Root\-Cell, const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Branch} (const {\bf Octree\-Cell} $\ast$sub\-Cells[8], const {\bf Octree\-Data} \&octree\-Data)
+\item 
+virtual void {\bf visit\-Leaf} (const Array$<$ const {\bf Face} $\ast$ $>$ \&items, const {\bf Octree\-Data} \&octree\-Data)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Measure::Octree\_\-Visitor\_\-Measure (void)}\label{classOctree__Visitor__Measure_e865de195f510ad3100b35306b77b6a0}
+
+
+standard object services --------------------------------------------------- 
+
+\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!~Octree_Visitor_Measure@{$\sim$Octree\_\-Visitor\_\-Measure}}
+\index{~Octree_Visitor_Measure@{$\sim$Octree\_\-Visitor\_\-Measure}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\_\-Visitor\_\-Measure::$\sim$Octree\_\-Visitor\_\-Measure ()\hspace{0.3cm}{\tt  [virtual]}}\label{classOctree__Visitor__Measure_7fc195fe3e79e8ce0606031852cee598}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!get_max_depth@{get\_\-max\_\-depth}}
+\index{get_max_depth@{get\_\-max\_\-depth}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Octree\_\-Visitor\_\-Measure::get\_\-max\_\-depth (void)\hspace{0.3cm}{\tt  [inline]}}\label{classOctree__Visitor__Measure_f2d9188918cf79ba8e3f8dbadbcfe805}
+
+
+\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!get_num_leaves@{get\_\-num\_\-leaves}}
+\index{get_num_leaves@{get\_\-num\_\-leaves}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Octree\_\-Visitor\_\-Measure::get\_\-num\_\-leaves (void)\hspace{0.3cm}{\tt  [inline]}}\label{classOctree__Visitor__Measure_1def6455654fcd318c697b2a0445fe7b}
+
+
+\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!visitRoot@{visitRoot}}
+\index{visitRoot@{visitRoot}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Measure::visit\-Root (const {\bf Octree\-Cell} $\ast$ {\em p\-Root\-Cell}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Measure_e12e73c31293ea5320acef16a49d14b6}
+
+
+commands ------------------------------------------------------------------- octree visitor overrides 
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_30b2c5b03acb6c75b40d79a86e015878}.\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!visitBranch@{visitBranch}}
+\index{visitBranch@{visitBranch}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Measure::visit\-Branch (const {\bf Octree\-Cell} $\ast$ {\em sub\-Cells}[8], const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Measure_ab709f718cb6f6bd3d3ad4411749be04}
+
+
+Called by Octree when visit traversal is at a branch.\par
+\par
+ To continue deeper, implementation calls Octree\-Branch::continue\-Visit( sub\-Cells, octree\-Data, sub\-Cell\-Index, $\ast$this ) for any/all sub\-Cell\-Index values. sub\-Cells elements can be null.\par
+\par
+ \begin{Desc}
+\item[See also:]Octree\-Data \end{Desc}
+
+
+Implements {\bf hxa7241\_\-graphics::Octree\-Visitor$<$ TYPE $>$} \doxyref{}{p.}{classhxa7241__graphics_1_1OctreeVisitor_e62544f5cde1e32e7fd1515e0b8d110d}.\index{Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}!visitLeaf@{visitLeaf}}
+\index{visitLeaf@{visitLeaf}!Octree_Visitor_Measure@{Octree\_\-Visitor\_\-Measure}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}virtual void Octree\_\-Visitor\_\-Measure::visit\-Leaf (const Array$<$ const {\bf Face} $\ast$ $>$ \& {\em items}, const {\bf Octree\-Data} \& {\em octree\-Data})\hspace{0.3cm}{\tt  [protected, virtual]}}\label{classOctree__Visitor__Measure_45a68e901c052bfc08b5e13157bf0c1b}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf octree\_\-visitor\_\-measure.h}\item 
+{\bf octree\_\-visitor\_\-measure.cc}\end{CompactItemize}

@@ -45,7 +45,7 @@ main(argc,argv)
         }
 
         main_sym_table=init_symtab(HASHSIZE);
-        radius=0.04;
+        radius=0.0008;
 
 	if (yyparse()) {
 	  fprintf(stderr,"mesh2ribwireframe: error parsing file: %s\n",curr_file);

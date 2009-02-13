@@ -1,0 +1,220 @@
+\section{Object Class Reference}
+\label{classObject}\index{Object@{Object}}
+{\tt \#include $<$object.h$>$}
+
+Collaboration diagram for Object:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=129pt]{classObject__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Object} (std::string)
+\item 
+{\bf Object} ({\bf Object} const \&)
+\item 
+{\bf Object} \& {\bf operator=} ({\bf Object} const \&)
+\item 
+void {\bf find\-Vert\-Adj} (void)
+\item 
+void {\bf bound\-Object} (double $\ast$const \&) const
+\item 
+void {\bf set\-FF} ({\bf Face} $\ast$)
+\item 
+void {\bf set\-FV} ({\bf Vertex} $\ast$)
+\item 
+{\bf Edge} $\ast$ {\bf get\-FE} (void) const
+\item 
+{\bf Face} $\ast$ {\bf get\-FF} (void) const
+\item 
+{\bf Vertex} $\ast$ {\bf get\-FV} (void) const
+\item 
+std::string const \& {\bf get\-Name} (void) const
+\item 
+int {\bf set\-Num\-Digits} (void) const
+\item 
+void {\bf create\-Edges} (void)
+\item 
+void {\bf process\-Edge} ({\bf Face} $\ast$const, {\bf Vertex} $\ast$const, {\bf Vertex} $\ast$const, {\bf Vertex} $\ast$const, {\bf map\_\-s\_\-ep} \&, int const \&)
+\item 
+void {\bf create\-Edge} ({\bf Face} $\ast$const, {\bf Vertex} $\ast$const, {\bf Vertex} $\ast$const, {\bf Vertex} $\ast$const, {\bf map\_\-s\_\-ep} \&, int const \&)
+\item 
+{\bf Edge} $\ast$ {\bf find\-Edge} ({\bf Vertex} const $\ast$const, {\bf Vertex} const $\ast$const, {\bf map\_\-s\_\-ep} const \&, int const \&) const
+\item 
+std::string {\bf key\-Pair} (int const \&a, int const \&b, int const \&num\_\-digits) const
+\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+{\bf vec\_\-v} {\bf v}
+\item 
+{\bf vec\_\-f} {\bf f}
+\item 
+{\bf vec\_\-e} {\bf e}
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Object@{Object}!Object@{Object}}
+\index{Object@{Object}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Object::Object (std::string)}\label{classObject_9726153b1164522a3244fcb885870a99}
+
+
+\index{Object@{Object}!Object@{Object}}
+\index{Object@{Object}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Object::Object ({\bf Object} const \&)}\label{classObject_6e166f85639b15a8b8f9b783a6de3b45}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Object@{Object}!operator=@{operator=}}
+\index{operator=@{operator=}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Object} \& Object::operator= ({\bf Object} const \&)}\label{classObject_d5a622757f2d91f0b3fc41b8af751d6f}
+
+
+\index{Object@{Object}!findVertAdj@{findVertAdj}}
+\index{findVertAdj@{findVertAdj}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Object::find\-Vert\-Adj (void)}\label{classObject_2489fb94c4141ad5cd692fdb9d9019e9}
+
+
+Record in vertex class adjacent faces to each vertex in this object. \index{Object@{Object}!boundObject@{boundObject}}
+\index{boundObject@{boundObject}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Object::bound\-Object (double $\ast$const \& {\em bounding\_\-box}) const}\label{classObject_40b6fe0262440f577e2c661dc118e9dc}
+
+
+Compute and return bounding box of this object along principal directions. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em bounding\_\-box}]Bounding box of object as (xmin,xmax,ymin,ymax,zmin,zmax). \end{description}
+\end{Desc}
+\index{Object@{Object}!setFF@{setFF}}
+\index{setFF@{setFF}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Object::set\-FF ({\bf Face} $\ast$ {\em fptr})}\label{classObject_b6f62e2bd7a446660a1c4edddbc54c43}
+
+
+Record pointer to first face in face vector. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em fptr}]Pointer to first face. \end{description}
+\end{Desc}
+\index{Object@{Object}!setFV@{setFV}}
+\index{setFV@{setFV}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Object::set\-FV ({\bf Vertex} $\ast$ {\em vv})}\label{classObject_f0c78579e86899e317de5c13ca376578}
+
+
+Record pointer to first vertex in vertex vector. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em vv}]Pointer to first vertex. \end{description}
+\end{Desc}
+\index{Object@{Object}!getFE@{getFE}}
+\index{getFE@{getFE}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Edge} $\ast$ Object::get\-FE (void) const}\label{classObject_f29ab111dc99b3bd5f3aa2909d95cbcb}
+
+
+Return pointer to recorded first edge in edge vector. \begin{Desc}
+\item[Returns:]Pointer to first edge. \end{Desc}
+\index{Object@{Object}!getFF@{getFF}}
+\index{getFF@{getFF}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Face} $\ast$ Object::get\-FF (void) const}\label{classObject_cf73cd78612c003fcd8898c3a6aadf3a}
+
+
+Return pointer to recorded first face in face vector. \begin{Desc}
+\item[Returns:]Pointer to first face. \end{Desc}
+\index{Object@{Object}!getFV@{getFV}}
+\index{getFV@{getFV}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex} $\ast$ Object::get\-FV (void) const}\label{classObject_01ba19ef93138092e00449c5a2afe662}
+
+
+Return pointer to recorded first vertex in vertex vector. \begin{Desc}
+\item[Returns:]Pointer to first vertex. \end{Desc}
+\index{Object@{Object}!getName@{getName}}
+\index{getName@{getName}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}std::string const \& Object::get\-Name (void) const}\label{classObject_13c8bbe670573a1af1c3c316a57b92a0}
+
+
+Get recorded name of this object. \begin{Desc}
+\item[Returns:]\doxyref{Object}{p.}{classObject} name. \end{Desc}
+\index{Object@{Object}!setNumDigits@{setNumDigits}}
+\index{setNumDigits@{setNumDigits}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int Object::set\-Num\-Digits (void) const}\label{classObject_380cd57bfc576a026727e9b110c13c3c}
+
+
+Determine the length in digits of largest vertex index. \begin{Desc}
+\item[Returns:]Number of digits required for larget vertex index. \end{Desc}
+\index{Object@{Object}!createEdges@{createEdges}}
+\index{createEdges@{createEdges}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Object::create\-Edges (void)}\label{classObject_f7b4257697cf8cb9bdc289b80596e996}
+
+
+\index{Object@{Object}!processEdge@{processEdge}}
+\index{processEdge@{processEdge}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Object::process\-Edge ({\bf Face} $\ast$ const {\em face}, {\bf Vertex} $\ast$ const {\em va}, {\bf Vertex} $\ast$ const {\em vb}, {\bf Vertex} $\ast$ const {\em vc}, {\bf map\_\-s\_\-ep} \& {\em hm}, int const \& {\em num\_\-digits})}\label{classObject_92a3557cc1df954d7bf78418f79f1a45}
+
+
+Record input face edge information as \doxyref{Edge}{p.}{classEdge} class instance. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]Parent face. \item[\mbox{$\leftarrow$} {\em va}]One vertex of edge from parent face. \item[\mbox{$\leftarrow$} {\em vb}]Other vertex of edge from parent face. \item[\mbox{$\leftarrow$} {\em vc}]\doxyref{Vertex}{p.}{classVertex} from parent face not on edge. \item[\mbox{$\leftarrow$} {\em hm}]Map for finding existing edges with vertex indices as key. \item[\mbox{$\leftarrow$} {\em num\_\-digits}]Number of digits used in maximum integer value. \end{description}
+\end{Desc}
+\index{Object@{Object}!createEdge@{createEdge}}
+\index{createEdge@{createEdge}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Object::create\-Edge ({\bf Face} $\ast$ const {\em face}, {\bf Vertex} $\ast$ const {\em va}, {\bf Vertex} $\ast$ const {\em vb}, {\bf Vertex} $\ast$ const {\em vc}, {\bf map\_\-s\_\-ep} \& {\em hm}, int const \& {\em num\_\-digits})}\label{classObject_4ba1e14d7e3a89f93808bd17b13c63ba}
+
+
+Create and record new instance of \doxyref{Edge}{p.}{classEdge} class. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em face}]Parent face. \item[\mbox{$\leftarrow$} {\em va}]One vertex of edge from parent face. \item[\mbox{$\leftarrow$} {\em vb}]Other vertex of edge from parent face. \item[\mbox{$\leftarrow$} {\em vc}]\doxyref{Vertex}{p.}{classVertex} from parent face not on edge. \item[\mbox{$\leftarrow$} {\em hm}]Map for finding existing edges with vertex indices as key. \item[\mbox{$\leftarrow$} {\em num\_\-digits}]Number of digits used in maximum integer value. \end{description}
+\end{Desc}
+\index{Object@{Object}!findEdge@{findEdge}}
+\index{findEdge@{findEdge}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Edge} $\ast$ Object::find\-Edge ({\bf Vertex} const $\ast$ const {\em va}, {\bf Vertex} const $\ast$ const {\em vb}, {\bf map\_\-s\_\-ep} const \& {\em hm}, int const \& {\em num\_\-digits}) const}\label{classObject_5bf479c6d31a29b8c9cf9a20eb0b923c}
+
+
+Look for matching recorded edge instance. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em va}]One vertex of edge from parent face. \item[\mbox{$\leftarrow$} {\em vb}]Other vertex of edge from parent face. \item[\mbox{$\leftarrow$} {\em hm}]Map for finding existing edges with vertex indices as key. \item[\mbox{$\leftarrow$} {\em num\_\-digits}]Number of digits used in maximum integer value. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\doxyref{Edge}{p.}{classEdge} pointer if match found; NULL otherwise; \end{Desc}
+\index{Object@{Object}!keyPair@{keyPair}}
+\index{keyPair@{keyPair}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}std::string Object::key\-Pair (int const \& {\em a}, int const \& {\em b}, int const \& {\em num\_\-digits}) const}\label{classObject_3babf3bd25fd46dfd69898c544c7babd}
+
+
+Create a unique string from two input integers. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First integer. \item[\mbox{$\leftarrow$} {\em b}]Second integer. \item[\mbox{$\leftarrow$} {\em num\_\-digits}]Number of digits used in maximum integer value. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Unique string including two input integers. \end{Desc}
+
+
+\subsection{Member Data Documentation}
+\index{Object@{Object}!v@{v}}
+\index{v@{v}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vec\_\-v} {\bf Object::v}}\label{classObject_f50cb9c150ab8493111dcf29170b23fc}
+
+
+\index{Object@{Object}!f@{f}}
+\index{f@{f}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vec\_\-f} {\bf Object::f}}\label{classObject_ec66102e74e431c089c6ce171e365002}
+
+
+\index{Object@{Object}!e@{e}}
+\index{e@{e}!Object@{Object}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf vec\_\-e} {\bf Object::e}}\label{classObject_8906949fbfe42985f4cd33154abe2835}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf object.h}\item 
+{\bf object.cc}\end{CompactItemize}

@@ -1,0 +1,134 @@
+\section{hxa7241\_\-graphics::Octree\-Data Class Reference}
+\label{classhxa7241__graphics_1_1OctreeData}\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::OctreeData}}
+{\tt \#include $<$Octree\-Auxiliary.h$>$}
+
+Collaboration diagram for hxa7241\_\-graphics::Octree\-Data:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=232pt]{classhxa7241__graphics_1_1OctreeData__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Octree\-Data} (const {\bf Octree\-Dimensions} \&dimensions)
+\begin{CompactList}\small\item\em standard object services --------------------------------------------------- \item\end{CompactList}\item 
+{\bf Octree\-Data} (const {\bf Octree\-Data} \&parent\-Cell\-Data, dword sub\-Cell\-Index)
+\item 
+{\bf Octree\-Data} (const {\bf Octree\-Data} \&, const {\bf Octree\-Dimensions} \&)
+\item 
+{\bf $\sim$Octree\-Data} ()
+\item 
+{\bf Octree\-Data} (const {\bf Octree\-Data} \&)
+\item 
+{\bf Octree\-Data} \& {\bf operator=} (const {\bf Octree\-Data} \&)
+\item 
+const {\bf Octree\-Bound} \& {\bf get\-Bound} () const
+\begin{CompactList}\small\item\em \doxyref{Octree\-Data}{p.}{classhxa7241__graphics_1_1OctreeData} -----------------------------------------------------------------. \item\end{CompactList}\item 
+dword {\bf get\-Level} () const
+\item 
+const {\bf Octree\-Dimensions} \& {\bf get\-Dimensions} () const
+\item 
+bool {\bf is\-Subdivide} (dword item\-Count) const
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+\doxyref{Octree}{p.}{classhxa7241__graphics_1_1Octree} cell data during traversal.\par
+\par
+
+
+Constant.\par
+\par
+
+
+To be made during each level of tree descent, so storage is avoided, except to hold one at the root.\par
+\par
+
+
+Subcell numbering: \small\begin{alltt}
+    y z       6 7
+    |/   2 3  4 5
+     -x  0 1
+ \end{alltt}
+\normalsize 
+ in binary: \small\begin{alltt}
+    y z           110 111
+    |/   010 011  100 101
+     -x  000 001
+ \end{alltt}
+\normalsize 
+
+
+\begin{Desc}
+\item[See also:]\doxyref{Octree\-Bound}{p.}{classhxa7241__graphics_1_1OctreeBound} 
+
+\doxyref{Octree\-Dimensions}{p.}{classhxa7241__graphics_1_1OctreeDimensions} \end{Desc}
+
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!OctreeData@{OctreeData}}
+\index{OctreeData@{OctreeData}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Data::Octree\-Data (const {\bf Octree\-Dimensions} \& {\em dimensions})\hspace{0.3cm}{\tt  [explicit]}}\label{classhxa7241__graphics_1_1OctreeData_54da8bd41940df4ff7a142b31478b430}
+
+
+standard object services --------------------------------------------------- 
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!OctreeData@{OctreeData}}
+\index{OctreeData@{OctreeData}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Data::Octree\-Data (const {\bf Octree\-Data} \& {\em parent\-Cell\-Data}, dword {\em sub\-Cell\-Index})}\label{classhxa7241__graphics_1_1OctreeData_0d603f5bdf89d8d3b20063bc4dafad76}
+
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!OctreeData@{OctreeData}}
+\index{OctreeData@{OctreeData}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Data::Octree\-Data (const {\bf Octree\-Data} \&, const {\bf Octree\-Dimensions} \&)}\label{classhxa7241__graphics_1_1OctreeData_20f196fe3a6b69c4dd9a548d496a1bb5}
+
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!~OctreeData@{$\sim$OctreeData}}
+\index{~OctreeData@{$\sim$OctreeData}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Data::$\sim$Octree\-Data ()}\label{classhxa7241__graphics_1_1OctreeData_ae27d150cbba477c768d0adcb238b407}
+
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!OctreeData@{OctreeData}}
+\index{OctreeData@{OctreeData}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Octree\-Data::Octree\-Data (const {\bf Octree\-Data} \&)}\label{classhxa7241__graphics_1_1OctreeData_9ccce80b11b4097e4df6f194deccacd2}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!operator=@{operator=}}
+\index{operator=@{operator=}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Octree\-Data} \& Octree\-Data::operator= (const {\bf Octree\-Data} \&)}\label{classhxa7241__graphics_1_1OctreeData_a5534836a9935194d9e835aac9819e70}
+
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!getBound@{getBound}}
+\index{getBound@{getBound}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Octree\-Bound} \& hxa7241\_\-graphics::Octree\-Data::get\-Bound () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeData_701d81e5a8998ec5ea612c7248380e73}
+
+
+\doxyref{Octree\-Data}{p.}{classhxa7241__graphics_1_1OctreeData} -----------------------------------------------------------------. 
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!getLevel@{getLevel}}
+\index{getLevel@{getLevel}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}dword hxa7241\_\-graphics::Octree\-Data::get\-Level () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeData_9217bee4b6c887e326b243f1fe851462}
+
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!getDimensions@{getDimensions}}
+\index{getDimensions@{getDimensions}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}const {\bf Octree\-Dimensions} \& hxa7241\_\-graphics::Octree\-Data::get\-Dimensions () const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeData_deeb7c14a69fc59bcea61cf1bd4bd99e}
+
+
+\index{hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}!isSubdivide@{isSubdivide}}
+\index{isSubdivide@{isSubdivide}!hxa7241_graphics::OctreeData@{hxa7241\_\-graphics::Octree\-Data}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool hxa7241\_\-graphics::Octree\-Data::is\-Subdivide (dword {\em item\-Count}) const\hspace{0.3cm}{\tt  [inline]}}\label{classhxa7241__graphics_1_1OctreeData_37d26c210294d5c56b30b6588d7822a9}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf Octree\-Auxiliary.h}\item 
+{\bf Octree\-Auxiliary.cc}\end{CompactItemize}

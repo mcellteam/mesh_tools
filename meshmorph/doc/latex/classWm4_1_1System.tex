@@ -1,0 +1,460 @@
+\section{Wm4::System Class Reference}
+\label{classWm4_1_1System}\index{Wm4::System@{Wm4::System}}
+{\tt \#include $<$Wm4System.h$>$}
+
+\subsection*{Public Types}
+\begin{CompactItemize}
+\item 
+enum \{ {\bf SM\_\-READ}, 
+{\bf SM\_\-WRITE}, 
+{\bf SM\_\-READ\_\-WRITE}
+ \}
+\end{CompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{CompactItemize}
+\item 
+static void {\bf Swap\-Bytes} (int i\-Size, void $\ast$pv\-Value)
+\item 
+static void {\bf Swap\-Bytes} (int i\-Size, int i\-Quantity, void $\ast$pv\-Value)
+\item 
+static bool {\bf Is\-Big\-Endian} ()
+\item 
+static void {\bf Endian\-Copy} (int i\-Size, const void $\ast$pv\-Src, void $\ast$pv\-Dst)
+\item 
+static void {\bf Endian\-Copy} (int i\-Size, int i\-Quantity, const void $\ast$pv\-Src, void $\ast$pv\-Dst)
+\item 
+static double {\bf Get\-Time} ()
+\item 
+static bool {\bf Load} (const char $\ast$ac\-Filename, char $\ast$\&rac\-Buffer, int \&ri\-Size)
+\item 
+static bool {\bf Save} (const char $\ast$ac\-Filename, const char $\ast$ac\-Buffer, int i\-Size)
+\item 
+static bool {\bf Append} (const char $\ast$ac\-Filename, char $\ast$ac\-Buffer, int i\-Size)
+\item 
+static int {\bf Read1} (const char $\ast$ac\-Buffer, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Write1} (char $\ast$ac\-Buffer, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Read1} (FILE $\ast$pk\-File, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Write1} (FILE $\ast$pk\-File, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Read2le} (const char $\ast$ac\-Buffer, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read4le} (const char $\ast$ac\-Buffer, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read8le} (const char $\ast$ac\-Buffer, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Write2le} (char $\ast$ac\-Buffer, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write4le} (char $\ast$ac\-Buffer, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write8le} (char $\ast$ac\-Buffer, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Read2le} (FILE $\ast$pk\-File, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read4le} (FILE $\ast$pk\-File, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read8le} (FILE $\ast$pk\-File, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Write2le} (FILE $\ast$pk\-File, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write4le} (FILE $\ast$pk\-File, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write8le} (FILE $\ast$pk\-File, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Read2be} (const char $\ast$ac\-Buffer, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read4be} (const char $\ast$ac\-Buffer, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read8be} (const char $\ast$ac\-Buffer, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Write2be} (char $\ast$ac\-Buffer, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write4be} (char $\ast$ac\-Buffer, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write8be} (char $\ast$ac\-Buffer, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Read2be} (FILE $\ast$pk\-File, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read4be} (FILE $\ast$pk\-File, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Read8be} (FILE $\ast$pk\-File, int i\-Quantity, void $\ast$pv\-Data)
+\item 
+static int {\bf Write2be} (FILE $\ast$pk\-File, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write4be} (FILE $\ast$pk\-File, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static int {\bf Write8be} (FILE $\ast$pk\-File, int i\-Quantity, const void $\ast$pv\-Data)
+\item 
+static const char $\ast$ {\bf Get\-Path} (const char $\ast$ac\-Directory, const char $\ast$ac\-Filename)
+\item 
+static void {\bf Initialize} ()
+\item 
+static void {\bf Terminate} ()
+\item 
+static int {\bf Get\-Directory\-Quantity} ()
+\item 
+static const char $\ast$ {\bf Get\-Directory} (int i)
+\item 
+static bool {\bf Insert\-Directory} (const char $\ast$ac\-Directory)
+\item 
+static bool {\bf Remove\-Directory} (const char $\ast$ac\-Directory)
+\item 
+static void {\bf Remove\-All\-Directories} ()
+\item 
+static const char $\ast$ {\bf Get\-Path} (const char $\ast$ac\-Filename, int e\-Mode)
+\item 
+static unsigned int {\bf Make\-RGB} (unsigned char uc\-R, unsigned char uc\-G, unsigned char uc\-B)
+\item 
+static unsigned int {\bf Make\-RGBA} (unsigned char uc\-R, unsigned char uc\-G, unsigned char uc\-B, unsigned char uc\-A)
+\item 
+static FILE $\ast$ {\bf Fopen} (const char $\ast$ac\-Filename, const char $\ast$ac\-Mode)
+\item 
+static int {\bf Fprintf} (FILE $\ast$pk\-File, const char $\ast$ac\-Format,...)
+\item 
+static int {\bf Fclose} (FILE $\ast$pk\-File)
+\item 
+static const char $\ast$ {\bf Get\-Env} (const char $\ast$ac\-Env\-Var\-Name)
+\item 
+static void $\ast$ {\bf Memcpy} (void $\ast$pv\-Dst, size\_\-t ui\-Dst\-Size, const void $\ast$pv\-Src, size\_\-t ui\-Src\-Size)
+\item 
+static int {\bf Sprintf} (char $\ast$ac\-Dst, size\_\-t ui\-Dst\-Size, const char $\ast$ac\-Format,...)
+\item 
+static char $\ast$ {\bf Strcpy} (char $\ast$ac\-Dst, size\_\-t ui\-Dst\-Size, const char $\ast$ac\-Src)
+\item 
+static char $\ast$ {\bf Strcat} (char $\ast$ac\-Dst, size\_\-t ui\-Dst\-Size, const char $\ast$ac\-Src)
+\item 
+static char $\ast$ {\bf Strncpy} (char $\ast$ac\-Dst, size\_\-t ui\-Dst\-Size, const char $\ast$ac\-Src, size\_\-t ui\-Src\-Size)
+\item 
+static char $\ast$ {\bf Strtok} (char $\ast$ac\-Token, const char $\ast$ac\-Delimiters, char $\ast$\&rac\-Next\-Token)
+\end{CompactItemize}
+\subsection*{Static Public Attributes}
+\begin{CompactItemize}
+\item 
+static char {\bf WM4\_\-PATH} [SYSTEM\_\-MAX\_\-ENVVAR]
+\end{CompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\label{classWm4_1_1System_7737a7e47a84d48b2227363f47e4fd48}
+
+
+\begin{Desc}
+\item[Enumerator: ]\par
+\begin{description}
+\index{SM_READ@{SM\_\-READ}!Wm4::System@{Wm4::System}}\index{Wm4::System@{Wm4::System}!SM_READ@{SM\_\-READ}}\item[{\em 
+SM\_\-READ\label{classWm4_1_1System_7737a7e47a84d48b2227363f47e4fd4886b04bdaa52a6e54405cb1cb26a3c346}
+}]\index{SM_WRITE@{SM\_\-WRITE}!Wm4::System@{Wm4::System}}\index{Wm4::System@{Wm4::System}!SM_WRITE@{SM\_\-WRITE}}\item[{\em 
+SM\_\-WRITE\label{classWm4_1_1System_7737a7e47a84d48b2227363f47e4fd4834a821d0dafc541253bfa7f690603c20}
+}]\index{SM_READ_WRITE@{SM\_\-READ\_\-WRITE}!Wm4::System@{Wm4::System}}\index{Wm4::System@{Wm4::System}!SM_READ_WRITE@{SM\_\-READ\_\-WRITE}}\item[{\em 
+SM\_\-READ\_\-WRITE\label{classWm4_1_1System_7737a7e47a84d48b2227363f47e4fd487280e99bb81b1391b371f31a9b0e1c3c}
+}]\end{description}
+\end{Desc}
+
+
+
+\subsection{Member Function Documentation}
+\index{Wm4::System@{Wm4::System}!SwapBytes@{SwapBytes}}
+\index{SwapBytes@{SwapBytes}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void Wm4::System::Swap\-Bytes (int {\em i\-Size}, void $\ast$ {\em pv\-Value})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_3e986994800c78c70f2a7f007084754a}
+
+
+\index{Wm4::System@{Wm4::System}!SwapBytes@{SwapBytes}}
+\index{SwapBytes@{SwapBytes}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void Wm4::System::Swap\-Bytes (int {\em i\-Size}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Value})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_4d72f4992514ce404cd4896f1fdc8aa4}
+
+
+\index{Wm4::System@{Wm4::System}!IsBigEndian@{IsBigEndian}}
+\index{IsBigEndian@{IsBigEndian}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static bool Wm4::System::Is\-Big\-Endian ()\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_8a732286323936a8d1b259dcbadbb840}
+
+
+\index{Wm4::System@{Wm4::System}!EndianCopy@{EndianCopy}}
+\index{EndianCopy@{EndianCopy}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void Wm4::System::Endian\-Copy (int {\em i\-Size}, const void $\ast$ {\em pv\-Src}, void $\ast$ {\em pv\-Dst})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_90f08ebd7dd7af09479e1277f7126523}
+
+
+\index{Wm4::System@{Wm4::System}!EndianCopy@{EndianCopy}}
+\index{EndianCopy@{EndianCopy}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void Wm4::System::Endian\-Copy (int {\em i\-Size}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Src}, void $\ast$ {\em pv\-Dst})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_8245e37e2d2f5a98788106e242e6277d}
+
+
+\index{Wm4::System@{Wm4::System}!GetTime@{GetTime}}
+\index{GetTime@{GetTime}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static double Wm4::System::Get\-Time ()\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_3ff19ffa86de311957c3b94fc4c86197}
+
+
+\index{Wm4::System@{Wm4::System}!Load@{Load}}
+\index{Load@{Load}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static bool Wm4::System::Load (const char $\ast$ {\em ac\-Filename}, char $\ast$\& {\em rac\-Buffer}, int \& {\em ri\-Size})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_af5d5efbf10c46fe611bfc7244594476}
+
+
+\index{Wm4::System@{Wm4::System}!Save@{Save}}
+\index{Save@{Save}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static bool Wm4::System::Save (const char $\ast$ {\em ac\-Filename}, const char $\ast$ {\em ac\-Buffer}, int {\em i\-Size})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_77e0c4429d584c7e2e3cc8dd6f56c96e}
+
+
+\index{Wm4::System@{Wm4::System}!Append@{Append}}
+\index{Append@{Append}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static bool Wm4::System::Append (const char $\ast$ {\em ac\-Filename}, char $\ast$ {\em ac\-Buffer}, int {\em i\-Size})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_45f7cb9f567a6bbb3aeab9d5318973f3}
+
+
+\index{Wm4::System@{Wm4::System}!Read1@{Read1}}
+\index{Read1@{Read1}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read1 (const char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_9f9e56476a8ba5713d2bb2decb4a4ff3}
+
+
+\index{Wm4::System@{Wm4::System}!Write1@{Write1}}
+\index{Write1@{Write1}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write1 (char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_bfaa3ba89083f2366e1ed9d8c69989da}
+
+
+\index{Wm4::System@{Wm4::System}!Read1@{Read1}}
+\index{Read1@{Read1}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read1 (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_da908e9cee1c5b0bf03226c0e6962903}
+
+
+\index{Wm4::System@{Wm4::System}!Write1@{Write1}}
+\index{Write1@{Write1}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write1 (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_7946715d85089968263403237a26a2d8}
+
+
+\index{Wm4::System@{Wm4::System}!Read2le@{Read2le}}
+\index{Read2le@{Read2le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read2le (const char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_f0cfb2eb4eb6ed377cfa931e1ee5e638}
+
+
+\index{Wm4::System@{Wm4::System}!Read4le@{Read4le}}
+\index{Read4le@{Read4le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read4le (const char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_f6479ef6fa649750609932f07306f94d}
+
+
+\index{Wm4::System@{Wm4::System}!Read8le@{Read8le}}
+\index{Read8le@{Read8le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read8le (const char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_8d67e3b6439180d7a224bca9f18b54e7}
+
+
+\index{Wm4::System@{Wm4::System}!Write2le@{Write2le}}
+\index{Write2le@{Write2le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write2le (char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_c570e6b935a363025d4868b03bc3add3}
+
+
+\index{Wm4::System@{Wm4::System}!Write4le@{Write4le}}
+\index{Write4le@{Write4le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write4le (char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_c988a64a8106c3576b6633210a3d14f8}
+
+
+\index{Wm4::System@{Wm4::System}!Write8le@{Write8le}}
+\index{Write8le@{Write8le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write8le (char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_b589c5bb09a8147b5dacb2b3eab0cd7e}
+
+
+\index{Wm4::System@{Wm4::System}!Read2le@{Read2le}}
+\index{Read2le@{Read2le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read2le (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_26bb4792ee2fd1dce6eda4971f0d6f1a}
+
+
+\index{Wm4::System@{Wm4::System}!Read4le@{Read4le}}
+\index{Read4le@{Read4le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read4le (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_dc76d8a490eb3834c5b9dfa48893aa0c}
+
+
+\index{Wm4::System@{Wm4::System}!Read8le@{Read8le}}
+\index{Read8le@{Read8le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read8le (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_66b7a25e5e0371fdd8b7fe9865178062}
+
+
+\index{Wm4::System@{Wm4::System}!Write2le@{Write2le}}
+\index{Write2le@{Write2le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write2le (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_275fc9aed7d3612cec1d478479276881}
+
+
+\index{Wm4::System@{Wm4::System}!Write4le@{Write4le}}
+\index{Write4le@{Write4le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write4le (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_6538bb9a6eb49b0c8943fccc5ddc6043}
+
+
+\index{Wm4::System@{Wm4::System}!Write8le@{Write8le}}
+\index{Write8le@{Write8le}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write8le (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_f2407893730726f21d896686b902fb4e}
+
+
+\index{Wm4::System@{Wm4::System}!Read2be@{Read2be}}
+\index{Read2be@{Read2be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read2be (const char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_54471c1acd0185a2169f39c1f04e2117}
+
+
+\index{Wm4::System@{Wm4::System}!Read4be@{Read4be}}
+\index{Read4be@{Read4be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read4be (const char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_cfd87f4e948a4acfb9c92d5cfe6bd0cb}
+
+
+\index{Wm4::System@{Wm4::System}!Read8be@{Read8be}}
+\index{Read8be@{Read8be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read8be (const char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_dbc9deaf9ab9d95a76c6d649e7c1ad12}
+
+
+\index{Wm4::System@{Wm4::System}!Write2be@{Write2be}}
+\index{Write2be@{Write2be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write2be (char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_21d3c0454ee85d06350276f15326f06f}
+
+
+\index{Wm4::System@{Wm4::System}!Write4be@{Write4be}}
+\index{Write4be@{Write4be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write4be (char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_3a6684f9f1ea57ed7707dd4d4803af75}
+
+
+\index{Wm4::System@{Wm4::System}!Write8be@{Write8be}}
+\index{Write8be@{Write8be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write8be (char $\ast$ {\em ac\-Buffer}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_dc67e1bcf6743863281c279fd1a990ad}
+
+
+\index{Wm4::System@{Wm4::System}!Read2be@{Read2be}}
+\index{Read2be@{Read2be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read2be (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_fea3a45fc47a19ae287c92799e1ae67c}
+
+
+\index{Wm4::System@{Wm4::System}!Read4be@{Read4be}}
+\index{Read4be@{Read4be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read4be (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_366ff49f9a2af7f14c99d65a0366215f}
+
+
+\index{Wm4::System@{Wm4::System}!Read8be@{Read8be}}
+\index{Read8be@{Read8be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Read8be (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_c140bcbc5b9cc63099dc09c5c86fde27}
+
+
+\index{Wm4::System@{Wm4::System}!Write2be@{Write2be}}
+\index{Write2be@{Write2be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write2be (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_6b0f65a93d1de6b622157ee753bb0d3b}
+
+
+\index{Wm4::System@{Wm4::System}!Write4be@{Write4be}}
+\index{Write4be@{Write4be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write4be (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_c0bd859fe6d7c7fed6011972f3a8f25d}
+
+
+\index{Wm4::System@{Wm4::System}!Write8be@{Write8be}}
+\index{Write8be@{Write8be}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Write8be (FILE $\ast$ {\em pk\-File}, int {\em i\-Quantity}, const void $\ast$ {\em pv\-Data})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_12e360c02ed2e8b5a4678e9c7863fdfc}
+
+
+\index{Wm4::System@{Wm4::System}!GetPath@{GetPath}}
+\index{GetPath@{GetPath}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static const char$\ast$ Wm4::System::Get\-Path (const char $\ast$ {\em ac\-Directory}, const char $\ast$ {\em ac\-Filename})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_ba1a3ad9c15046b09b96ebf9c417bb77}
+
+
+\index{Wm4::System@{Wm4::System}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void Wm4::System::Initialize ()\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_bea72076bb9d98b8c817476740d03718}
+
+
+\index{Wm4::System@{Wm4::System}!Terminate@{Terminate}}
+\index{Terminate@{Terminate}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void Wm4::System::Terminate ()\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_2af0be3481afbb3437c0c9beb6db374f}
+
+
+\index{Wm4::System@{Wm4::System}!GetDirectoryQuantity@{GetDirectoryQuantity}}
+\index{GetDirectoryQuantity@{GetDirectoryQuantity}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Get\-Directory\-Quantity ()\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_ffc2a18e5e7c4ea55b34f92e69af78e0}
+
+
+\index{Wm4::System@{Wm4::System}!GetDirectory@{GetDirectory}}
+\index{GetDirectory@{GetDirectory}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static const char$\ast$ Wm4::System::Get\-Directory (int {\em i})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_c1e6ab9941de99aae04751a9b610f97e}
+
+
+\index{Wm4::System@{Wm4::System}!InsertDirectory@{InsertDirectory}}
+\index{InsertDirectory@{InsertDirectory}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static bool Wm4::System::Insert\-Directory (const char $\ast$ {\em ac\-Directory})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_846d953512c67c10518063f303e75f58}
+
+
+\index{Wm4::System@{Wm4::System}!RemoveDirectory@{RemoveDirectory}}
+\index{RemoveDirectory@{RemoveDirectory}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static bool Wm4::System::Remove\-Directory (const char $\ast$ {\em ac\-Directory})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_40219b7af70b4e3e82c39142cfb7a43c}
+
+
+\index{Wm4::System@{Wm4::System}!RemoveAllDirectories@{RemoveAllDirectories}}
+\index{RemoveAllDirectories@{RemoveAllDirectories}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void Wm4::System::Remove\-All\-Directories ()\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_69c5a8fe084676959254ab8e8e553c69}
+
+
+\index{Wm4::System@{Wm4::System}!GetPath@{GetPath}}
+\index{GetPath@{GetPath}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static const char$\ast$ Wm4::System::Get\-Path (const char $\ast$ {\em ac\-Filename}, int {\em e\-Mode})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_6b85cc5e27250e080242e53a2d70f43e}
+
+
+\index{Wm4::System@{Wm4::System}!MakeRGB@{MakeRGB}}
+\index{MakeRGB@{MakeRGB}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static unsigned int Wm4::System::Make\-RGB (unsigned char {\em uc\-R}, unsigned char {\em uc\-G}, unsigned char {\em uc\-B})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_8fca5bb438de73f2f9e179257e874278}
+
+
+\index{Wm4::System@{Wm4::System}!MakeRGBA@{MakeRGBA}}
+\index{MakeRGBA@{MakeRGBA}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static unsigned int Wm4::System::Make\-RGBA (unsigned char {\em uc\-R}, unsigned char {\em uc\-G}, unsigned char {\em uc\-B}, unsigned char {\em uc\-A})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_eab6285f19bd417da080e5e0feca3632}
+
+
+\index{Wm4::System@{Wm4::System}!Fopen@{Fopen}}
+\index{Fopen@{Fopen}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static FILE$\ast$ Wm4::System::Fopen (const char $\ast$ {\em ac\-Filename}, const char $\ast$ {\em ac\-Mode})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_340806bcae5d85bb9eea6a38f3df84b8}
+
+
+\index{Wm4::System@{Wm4::System}!Fprintf@{Fprintf}}
+\index{Fprintf@{Fprintf}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Fprintf (FILE $\ast$ {\em pk\-File}, const char $\ast$ {\em ac\-Format},  {\em ...})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_7a8fee165f061ee53c229cb37643574c}
+
+
+\index{Wm4::System@{Wm4::System}!Fclose@{Fclose}}
+\index{Fclose@{Fclose}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Fclose (FILE $\ast$ {\em pk\-File})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_fe63864b7d95be12e38287758bc3cbb9}
+
+
+\index{Wm4::System@{Wm4::System}!GetEnv@{GetEnv}}
+\index{GetEnv@{GetEnv}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static const char$\ast$ Wm4::System::Get\-Env (const char $\ast$ {\em ac\-Env\-Var\-Name})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_49cd19097e976c709101789c3a7582c7}
+
+
+\index{Wm4::System@{Wm4::System}!Memcpy@{Memcpy}}
+\index{Memcpy@{Memcpy}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static void$\ast$ Wm4::System::Memcpy (void $\ast$ {\em pv\-Dst}, size\_\-t {\em ui\-Dst\-Size}, const void $\ast$ {\em pv\-Src}, size\_\-t {\em ui\-Src\-Size})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_eb8cad2018a4ca7c66012a41bea165ad}
+
+
+\index{Wm4::System@{Wm4::System}!Sprintf@{Sprintf}}
+\index{Sprintf@{Sprintf}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static int Wm4::System::Sprintf (char $\ast$ {\em ac\-Dst}, size\_\-t {\em ui\-Dst\-Size}, const char $\ast$ {\em ac\-Format},  {\em ...})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_8ea0b5ef972230ec66b1d0ad888060f4}
+
+
+\index{Wm4::System@{Wm4::System}!Strcpy@{Strcpy}}
+\index{Strcpy@{Strcpy}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static char$\ast$ Wm4::System::Strcpy (char $\ast$ {\em ac\-Dst}, size\_\-t {\em ui\-Dst\-Size}, const char $\ast$ {\em ac\-Src})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_76871a39455735cfb870f0bd2334655b}
+
+
+\index{Wm4::System@{Wm4::System}!Strcat@{Strcat}}
+\index{Strcat@{Strcat}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static char$\ast$ Wm4::System::Strcat (char $\ast$ {\em ac\-Dst}, size\_\-t {\em ui\-Dst\-Size}, const char $\ast$ {\em ac\-Src})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_f4448e643b507d29fa12a801f6e73486}
+
+
+\index{Wm4::System@{Wm4::System}!Strncpy@{Strncpy}}
+\index{Strncpy@{Strncpy}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static char$\ast$ Wm4::System::Strncpy (char $\ast$ {\em ac\-Dst}, size\_\-t {\em ui\-Dst\-Size}, const char $\ast$ {\em ac\-Src}, size\_\-t {\em ui\-Src\-Size})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_662413b41fda59780384142ed6cbb7a0}
+
+
+\index{Wm4::System@{Wm4::System}!Strtok@{Strtok}}
+\index{Strtok@{Strtok}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}static char$\ast$ Wm4::System::Strtok (char $\ast$ {\em ac\-Token}, const char $\ast$ {\em ac\-Delimiters}, char $\ast$\& {\em rac\-Next\-Token})\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_323f5f05e9ec0049dbbbb88563bb99c5}
+
+
+
+
+\subsection{Member Data Documentation}
+\index{Wm4::System@{Wm4::System}!WM4_PATH@{WM4\_\-PATH}}
+\index{WM4_PATH@{WM4\_\-PATH}!Wm4::System@{Wm4::System}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}char {\bf Wm4::System::WM4\_\-PATH}[SYSTEM\_\-MAX\_\-ENVVAR]\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1System_6e4be2e9fe8a82484d1090f5ef9d06cb}
+
+
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Wm4System.h}\end{CompactItemize}

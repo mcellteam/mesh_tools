@@ -1,0 +1,157 @@
+\section{misc.h File Reference}
+\label{misc_8h}\index{misc.h@{misc.h}}
+{\tt \#include \char`\"{}meshmorph.h\char`\"{}}\par
+{\tt \#include \char`\"{}vertex.h\char`\"{}}\par
+
+
+Include dependency graph for misc.h:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=307pt]{misc_8h__incl}
+\end{center}
+\end{figure}
+
+
+This graph shows which files directly or indirectly include this file:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=127pt]{misc_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+struct {\bf result}
+\end{CompactItemize}
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+double {\bf dot} ({\bf vec\_\-d} const \&, {\bf vec\_\-d} const \&)
+\item 
+double {\bf dot} (double const $\ast$const a, double const $\ast$const b)
+\item 
+double {\bf dot} ({\bf vector3} const \&, {\bf vector3} const \&)
+\item 
+double {\bf dot} ({\bf vector3} const $\ast$, {\bf vector3} const $\ast$)
+\item 
+double {\bf l2} (double $\ast$const t)
+\item 
+void {\bf cross} (double $\ast$const t1, double $\ast$const t2, double $\ast$const cr)
+\item 
+{\bf result} {\bf check\-Line\-Face\-Int} ({\bf Face} const $\ast$const f, {\bf vector3} const \&, {\bf vector3} const \&, bool ignore\_\-line\_\-flag)
+\item 
+int {\bf get\-Largest\-Projection} ({\bf vec\_\-d} const \&)
+\item 
+int {\bf distinguishable} (double a, double b)
+\item 
+int {\bf distinguishable} (double a, double b, double epsilon)
+\item 
+bool {\bf parse\-Command\-Line} (int argc, char $\ast$$\ast$argv, std::string const \&message)
+\item 
+bool {\bf check\-Int\-Size} (void)
+\end{CompactItemize}
+
+
+\subsection{Function Documentation}
+\index{misc.h@{misc.h}!checkIntSize@{checkIntSize}}
+\index{checkIntSize@{checkIntSize}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool check\-Int\-Size (void)}\label{misc_8h_1122d758f1b6eac91f763e9b10d306d2}
+
+
+Determine if integers are 32 bit. \begin{Desc}
+\item[Returns:]True if integers are 32 bit on this machine; false otherwise. \end{Desc}
+\index{misc.h@{misc.h}!checkLineFaceInt@{checkLineFaceInt}}
+\index{checkLineFaceInt@{checkLineFaceInt}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf result} check\-Line\-Face\-Int ({\bf Face} const $\ast$const {\em f}, {\bf vector3} const \& {\em origin}, {\bf vector3} const \& {\em end}, bool {\em ignore\_\-line})}\label{misc_8h_8d534b16e875d8be965f6aa404523073}
+
+
+Detect and report intersection of line segment and face. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} of interest. \item[\mbox{$\leftarrow$} {\em origin}]Vector position of one end of line segment. \item[\mbox{$\leftarrow$} {\em end}]Vector position of other end of line segment. \item[\mbox{$\leftarrow$} {\em ignore\_\-line}]If true then compute intersection of full line and face; otherwise use line segment for intersection. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]\end{Desc}
+\index{misc.h@{misc.h}!cross@{cross}}
+\index{cross@{cross}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void cross (double $\ast$const {\em a}, double $\ast$const {\em b}, double $\ast$const {\em cr})}\label{misc_8h_36df0f9dfccb53395f5a3c6e4f7f2eb8}
+
+
+Calculate cross product of two input vectors. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First vector. \item[\mbox{$\leftarrow$} {\em b}]Second vector. \item[\mbox{$\rightarrow$} {\em cr}]Vector cross product of a x b. \end{description}
+\end{Desc}
+\index{misc.h@{misc.h}!distinguishable@{distinguishable}}
+\index{distinguishable@{distinguishable}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int distinguishable (double {\em a}, double {\em b}, double {\em epsilon})}\label{misc_8h_7db6aafb6cea1e9db8da40c90de56269}
+
+
+Determine if two floating-point precision numbers are equivalent in value within epsilon. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First number. \item[\mbox{$\leftarrow$} {\em b}]Second number. \item[\mbox{$\leftarrow$} {\em epsilon}]The difference between the two input values must be greater than the fraction of the largest input value defined by epsilon. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]1 if Inputs are different; 0 otherwise. \end{Desc}
+\index{misc.h@{misc.h}!distinguishable@{distinguishable}}
+\index{distinguishable@{distinguishable}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int distinguishable (double {\em a}, double {\em b})}\label{misc_8h_544dd6b1861655152eb78344ee1f409f}
+
+
+Determine if two floating-point precision numbers are equivalent in value within DOUBLE\_\-EPSILON. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First number. \item[\mbox{$\leftarrow$} {\em b}]Second number. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]1 if Inputs are different; 0 otherwise. \end{Desc}
+\index{misc.h@{misc.h}!dot@{dot}}
+\index{dot@{dot}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double dot ({\bf vector3} const $\ast$, {\bf vector3} const $\ast$)}\label{misc_8h_d9bdaa1b3f64b891707e7a700b9e884a}
+
+
+\index{misc.h@{misc.h}!dot@{dot}}
+\index{dot@{dot}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double dot ({\bf vector3} const \&, {\bf vector3} const \&)}\label{misc_8h_a3dd5eddb64606651fda39dd4a614c00}
+
+
+\index{misc.h@{misc.h}!dot@{dot}}
+\index{dot@{dot}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double dot (double const $\ast$const  {\em a}, double const $\ast$const  {\em b})}\label{misc_8h_b1b5bd10df8cb22b12b4812f9d5b1c63}
+
+
+\index{misc.h@{misc.h}!dot@{dot}}
+\index{dot@{dot}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double dot ({\bf vec\_\-d} const \& {\em a}, {\bf vec\_\-d} const \& {\em b})}\label{misc_8h_168581de56d7b24958a12dac20af5d73}
+
+
+Calculate dot product of two input vectors. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First vector. \item[\mbox{$\leftarrow$} {\em b}]Second vector. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Vector dot product of a and b. \end{Desc}
+\index{misc.h@{misc.h}!getLargestProjection@{getLargestProjection}}
+\index{getLargestProjection@{getLargestProjection}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}int get\-Largest\-Projection ({\bf vec\_\-d} const \&)}\label{misc_8h_fa37b3643f0fd13ca07684efb9cb5b2f}
+
+
+\index{misc.h@{misc.h}!l2@{l2}}
+\index{l2@{l2}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double l2 (double $\ast$const {\em t})}\label{misc_8h_9b4f918d6f44c83848e2426df002ecc8}
+
+
+\index{misc.h@{misc.h}!parseCommandLine@{parseCommandLine}}
+\index{parseCommandLine@{parseCommandLine}!misc.h@{misc.h}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool parse\-Command\-Line (int {\em argc}, char $\ast$$\ast$ {\em argv}, std::string const \& {\em message})}\label{misc_8h_a56c395d2458fd9bc97867e66f6b9a2f}
+
+
+Parse meshmorph command line. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em argc}]Argc. \item[\mbox{$\leftarrow$} {\em argv}]Argv. \item[\mbox{$\leftarrow$} {\em message}]General error/help message explaining meshmorph. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if frozen vertex file name detected; false otherwise. \end{Desc}

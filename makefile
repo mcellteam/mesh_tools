@@ -20,7 +20,7 @@ all:
 	cd mesh2vtk; make
 	cd meshalyzer; make
 	cd meshalyzer_toms; make
-	cd meshalyzerxxl; make
+#	cd meshalyzerxxl; make
 	cd meshclip; make
 	cd meshfilter; make
 	cd meshflip; make
@@ -29,7 +29,7 @@ all:
 	cd meshmorph; make
 	cd meshoffset; make
 	cd meshrefine; make
-	cd meshrefinexxl; make
+#	cd meshrefinexxl; make
 	cd mesh_renumber; make
 	cd meshscale; make
 	cd mesh_separate; make

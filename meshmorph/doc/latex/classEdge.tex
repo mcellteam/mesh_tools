@@ -1,0 +1,187 @@
+\section{Edge Class Reference}
+\label{classEdge}\index{Edge@{Edge}}
+{\tt \#include $<$edge.h$>$}
+
+Collaboration diagram for Edge:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=139pt]{classEdge__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Edge} ({\bf Face} $\ast$const, {\bf Vertex} $\ast$const, {\bf Vertex} $\ast$const, {\bf Vertex} $\ast$const)
+\item 
+void {\bf print} (std::ostream \&) const
+\item 
+void {\bf update} ({\bf Face} $\ast$const, {\bf Vertex} $\ast$const)
+\item 
+double {\bf get\-Angle} (void) const
+\item 
+double {\bf get\-Curvature\-Length} ({\bf Vertex} const $\ast$const o, {\bf Vertex} const $\ast$const v1, {\bf Vertex} const $\ast$const v2, double const \&edge\_\-length) const
+\item 
+double {\bf get\-Angle\-Force\-Energy} (int const \&, {\bf vector3} \&, bool) const
+\item 
+void {\bf get\-Angle\-Re\-Force\-Energy} ({\bf vector3} \&, bool) const
+\item 
+double {\bf get\-Stretch\-Force\-Energy} ({\bf Vertex} const $\ast$const, {\bf vector3} \&, double const \&, bool) const
+\item 
+{\bf Face} $\ast$ {\bf get\-Face1} (void) const
+\item 
+{\bf Face} $\ast$ {\bf get\-Face2} (void) const
+\item 
+{\bf Vertex} $\ast$const {\bf get\-V1} (void)
+\item 
+{\bf Vertex} $\ast$const {\bf get\-V2} (void)
+\item 
+{\bf Vertex} $\ast$const {\bf get\-O1} (void)
+\item 
+{\bf Vertex} $\ast$const {\bf get\-O2} (void)
+\item 
+double {\bf get\-Original\-Length} (void) const
+\item 
+double {\bf get\-Sq\-Length} (void) const
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Edge@{Edge}!Edge@{Edge}}
+\index{Edge@{Edge}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Edge::Edge ({\bf Face} $\ast$ {\em const}, {\bf Vertex} $\ast$ {\em const}, {\bf Vertex} $\ast$ {\em const}, {\bf Vertex} $\ast$ {\em const})}\label{classEdge_a3ce51e560418d2cf41fc86e110c7098}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Edge@{Edge}!print@{print}}
+\index{print@{print}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Edge::print (std::ostream \& {\em target}) const}\label{classEdge_04f01bd7699b517bef50597951ffc39e}
+
+
+Write edge description to specified stream. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target}]Output stream; \end{description}
+\end{Desc}
+\index{Edge@{Edge}!update@{update}}
+\index{update@{update}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Edge::update ({\bf Face} $\ast$ const {\em f}, {\bf Vertex} $\ast$ const {\em vc})}\label{classEdge_4b04196965158f48b84ceb5f81b90d29}
+
+
+Add input \doxyref{Face}{p.}{classFace} pointer to this \doxyref{Edge}{p.}{classEdge}. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em f}]\doxyref{Face}{p.}{classFace} pointer. \item[\mbox{$\leftarrow$} {\em vc}]Pointer to vertex of second adjacent face to this edge that is not part of this edge. \end{description}
+\end{Desc}
+\index{Edge@{Edge}!getAngle@{getAngle}}
+\index{getAngle@{getAngle}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Edge::get\-Angle (void) const}\label{classEdge_b95226f59225e85233d7541ca5c922c3}
+
+
+Calculate and return edge angle. \begin{Desc}
+\item[Returns:]\doxyref{Edge}{p.}{classEdge} angle in radians. \end{Desc}
+\index{Edge@{Edge}!getCurvatureLength@{getCurvatureLength}}
+\index{getCurvatureLength@{getCurvatureLength}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Edge::get\-Curvature\-Length ({\bf Vertex} const $\ast$const  {\em o}, {\bf Vertex} const $\ast$const  {\em vv1}, {\bf Vertex} const $\ast$const  {\em vv2}, double const \& {\em edge\_\-length}) const}\label{classEdge_15abe9cba7f5ccb5a10c0df8aac0e21c}
+
+
+Get perpendicular length from outer vertex to edge. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em o}]Outer vertex of edge. \item[\mbox{$\leftarrow$} {\em vv1}]One edge vertex. \item[\mbox{$\leftarrow$} {\em vv2}]Other edge vertex. \item[\mbox{$\leftarrow$} {\em edge\_\-length}]\doxyref{Edge}{p.}{classEdge} Length. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Perpendicular distance from outer vertex to edge. \end{Desc}
+\index{Edge@{Edge}!getAngleForceEnergy@{getAngleForceEnergy}}
+\index{getAngleForceEnergy@{getAngleForceEnergy}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Edge::get\-Angle\-Force\-Energy (int const \& {\em o2Is\-Requesting}, {\bf vector3} \& {\em force}, bool {\em compute\_\-force}) const}\label{classEdge_b7123bb698409c2142ea0a3e944cd696}
+
+
+Calculate and return angle force vector and energy. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em o2Is\-Requesting}]If nonzero, calculate force and energy at o2 vertex; otherwise calculate for o1 vertex. \item[\mbox{$\rightarrow$} {\em force}]Cumulative force. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true then compute force vector; otherwise compute energy only. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Angle energy. \end{Desc}
+\index{Edge@{Edge}!getAngleReForceEnergy@{getAngleReForceEnergy}}
+\index{getAngleReForceEnergy@{getAngleReForceEnergy}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Edge::get\-Angle\-Re\-Force\-Energy ({\bf vector3} \& {\em force}, bool {\em compute\_\-force}) const}\label{classEdge_2f49596cfaef4ba7bc3a1d46373c0c54}
+
+
+Calculate and return angle reaction force vector and energy. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em force}]Input force plus reaction force. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true then compute reaction force vector; otherwise compute energy only. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Reaction energy. \end{Desc}
+\index{Edge@{Edge}!getStretchForceEnergy@{getStretchForceEnergy}}
+\index{getStretchForceEnergy@{getStretchForceEnergy}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Edge::get\-Stretch\-Force\-Energy ({\bf Vertex} const $\ast$ const {\em v}, {\bf vector3} \& {\em force}, double const \& {\em mean}, bool {\em compute\_\-force}) const}\label{classEdge_90ebd7292097fa1af3cdad015774b53e}
+
+
+Compute and return the force vector and energy due to the stretch of the edge. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em v}]\doxyref{Vertex}{p.}{classVertex} of interest. \item[\mbox{$\rightarrow$} {\em force}]Cumulative force. \item[\mbox{$\leftarrow$} {\em compute\_\-force}]If true then compute force vector; otherwise compute energy only. \end{description}
+\end{Desc}
+\index{Edge@{Edge}!getFace1@{getFace1}}
+\index{getFace1@{getFace1}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Face}$\ast$ Edge::get\-Face1 (void) const}\label{classEdge_e7bf4c264a6353a73bba53eb4d7ef389}
+
+
+\index{Edge@{Edge}!getFace2@{getFace2}}
+\index{getFace2@{getFace2}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Face}$\ast$ Edge::get\-Face2 (void) const}\label{classEdge_c6ad9fcb1a330c7bd8b189977692411b}
+
+
+\index{Edge@{Edge}!getV1@{getV1}}
+\index{getV1@{getV1}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex}$\ast$ const Edge::get\-V1 (void)\hspace{0.3cm}{\tt  [inline]}}\label{classEdge_dc5033f02e17f29772eb660405d71084}
+
+
+Get the first vertex of this edge. \begin{Desc}
+\item[Returns:]First vertex of this edge. \end{Desc}
+\index{Edge@{Edge}!getV2@{getV2}}
+\index{getV2@{getV2}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex}$\ast$ const Edge::get\-V2 (void)\hspace{0.3cm}{\tt  [inline]}}\label{classEdge_5b2c363204255d8d162ff08218abdaa8}
+
+
+Get the second vertex of this edge. \begin{Desc}
+\item[Returns:]Second vertex of this edge. \end{Desc}
+\index{Edge@{Edge}!getO1@{getO1}}
+\index{getO1@{getO1}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex}$\ast$ const Edge::get\-O1 (void)\hspace{0.3cm}{\tt  [inline]}}\label{classEdge_444b5c81a8e346316576598d16fa7ae5}
+
+
+Get the non-edge vertex of first adjacent face. \begin{Desc}
+\item[Returns:]Non-edge vertex of first adjacent face. \end{Desc}
+\index{Edge@{Edge}!getO2@{getO2}}
+\index{getO2@{getO2}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Vertex}$\ast$ const Edge::get\-O2 (void)\hspace{0.3cm}{\tt  [inline]}}\label{classEdge_b2939e74ece10eecab68fabb246e0236}
+
+
+Get the non-edge vertex of second adjacent face. \begin{Desc}
+\item[Returns:]Non-edge vertex of second adjacent face. \end{Desc}
+\index{Edge@{Edge}!getOriginalLength@{getOriginalLength}}
+\index{getOriginalLength@{getOriginalLength}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Edge::get\-Original\-Length (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classEdge_6b26a07738c9395583ba19e21ea53d10}
+
+
+Get edge original length. \begin{Desc}
+\item[Returns:]\doxyref{Edge}{p.}{classEdge} original length. \end{Desc}
+\index{Edge@{Edge}!getSqLength@{getSqLength}}
+\index{getSqLength@{getSqLength}!Edge@{Edge}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Edge::get\-Sq\-Length (void) const\hspace{0.3cm}{\tt  [inline]}}\label{classEdge_8e0c211b2012c3679aeb757575cebead}
+
+
+Get current squared length of this edge. \begin{Desc}
+\item[Returns:]Current squared length of this edge. \end{Desc}
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+{\bf edge.h}\item 
+{\bf edge.cc}\end{CompactItemize}

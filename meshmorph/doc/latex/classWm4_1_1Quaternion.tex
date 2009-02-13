@@ -1,0 +1,702 @@
+\section{Wm4::Quaternion$<$ Real $>$ Class Template Reference}
+\label{classWm4_1_1Quaternion}\index{Wm4::Quaternion@{Wm4::Quaternion}}
+{\tt \#include $<$Wm4Quaternion.h$>$}
+
+Collaboration diagram for Wm4::Quaternion$<$ Real $>$:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=129pt]{classWm4_1_1Quaternion__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Quaternion} ()
+\item 
+{\bf Quaternion} (Real f\-W, Real f\-X, Real f\-Y, Real f\-Z)
+\item 
+{\bf Quaternion} (const {\bf Quaternion} \&rk\-Q)
+\item 
+{\bf Quaternion} (const {\bf Matrix3}$<$ Real $>$ \&rk\-Rot)
+\item 
+{\bf Quaternion} (const {\bf Vector3}$<$ Real $>$ \&rk\-Axis, Real f\-Angle)
+\item 
+{\bf Quaternion} (const {\bf Vector3}$<$ Real $>$ ak\-Rot\-Column[3])
+\item 
+{\bf operator const Real $\ast$} () const
+\item 
+{\bf operator Real $\ast$} ()
+\item 
+Real {\bf operator[$\,$]} (int i) const
+\item 
+Real \& {\bf operator[$\,$]} (int i)
+\item 
+Real {\bf W} () const
+\item 
+Real \& {\bf W} ()
+\item 
+Real {\bf X} () const
+\item 
+Real \& {\bf X} ()
+\item 
+Real {\bf Y} () const
+\item 
+Real \& {\bf Y} ()
+\item 
+Real {\bf Z} () const
+\item 
+Real \& {\bf Z} ()
+\item 
+{\bf Quaternion} \& {\bf operator=} (const {\bf Quaternion} \&rk\-Q)
+\item 
+bool {\bf operator==} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+bool {\bf operator!=} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+bool {\bf operator$<$} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+bool {\bf operator$<$=} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+bool {\bf operator$>$} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+bool {\bf operator$>$=} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+{\bf Quaternion} {\bf operator+} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+{\bf Quaternion} {\bf operator-} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+{\bf Quaternion} {\bf operator $\ast$} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+{\bf Quaternion} {\bf operator $\ast$} (Real f\-Scalar) const 
+\item 
+{\bf Quaternion} {\bf operator/} (Real f\-Scalar) const 
+\item 
+{\bf Quaternion} {\bf operator-} () const
+\item 
+{\bf Quaternion} \& {\bf operator+=} (const {\bf Quaternion} \&rk\-Q)
+\item 
+{\bf Quaternion} \& {\bf operator-=} (const {\bf Quaternion} \&rk\-Q)
+\item 
+{\bf Quaternion} \& {\bf operator $\ast$=} (Real f\-Scalar)
+\item 
+{\bf Quaternion} \& {\bf operator/=} (Real f\-Scalar)
+\item 
+{\bf Quaternion} \& {\bf From\-Rotation\-Matrix} (const {\bf Matrix3}$<$ Real $>$ \&rk\-Rot)
+\item 
+void {\bf To\-Rotation\-Matrix} ({\bf Matrix3}$<$ Real $>$ \&rk\-Rot) const
+\item 
+{\bf Quaternion} \& {\bf From\-Rotation\-Matrix} (const {\bf Vector3}$<$ Real $>$ ak\-Rot\-Column[3])
+\item 
+void {\bf To\-Rotation\-Matrix} ({\bf Vector3}$<$ Real $>$ ak\-Rot\-Column[3]) const
+\item 
+{\bf Quaternion} \& {\bf From\-Axis\-Angle} (const {\bf Vector3}$<$ Real $>$ \&rk\-Axis, Real f\-Angle)
+\item 
+void {\bf To\-Axis\-Angle} ({\bf Vector3}$<$ Real $>$ \&rk\-Axis, Real \&rf\-Angle) const
+\item 
+Real {\bf Length} () const
+\item 
+Real {\bf Squared\-Length} () const
+\item 
+Real {\bf Dot} (const {\bf Quaternion} \&rk\-Q) const
+\item 
+Real {\bf Normalize} ()
+\item 
+{\bf Quaternion} {\bf Inverse} () const
+\item 
+{\bf Quaternion} {\bf Conjugate} () const
+\item 
+{\bf Quaternion} {\bf Exp} () const
+\item 
+{\bf Quaternion} {\bf Log} () const
+\item 
+{\bf Vector3}$<$ Real $>$ {\bf Rotate} (const {\bf Vector3}$<$ Real $>$ \&rk\-Vector) const
+\item 
+{\bf Quaternion} \& {\bf Slerp} (Real f\-T, const {\bf Quaternion} \&rk\-P, const {\bf Quaternion} \&rk\-Q)
+\item 
+{\bf Quaternion} \& {\bf Slerp\-Extra\-Spins} (Real f\-T, const {\bf Quaternion} \&rk\-P, const {\bf Quaternion} \&rk\-Q, int i\-Extra\-Spins)
+\item 
+{\bf Quaternion} \& {\bf Intermediate} (const {\bf Quaternion} \&rk\-Q0, const {\bf Quaternion} \&rk\-Q1, const {\bf Quaternion} \&rk\-Q2)
+\item 
+{\bf Quaternion} \& {\bf Squad} (Real f\-T, const {\bf Quaternion} \&rk\-Q0, const {\bf Quaternion} \&rk\-A0, const {\bf Quaternion} \&rk\-A1, const {\bf Quaternion} \&rk\-Q1)
+\item 
+{\bf Quaternion} \& {\bf Align} (const {\bf Vector3}$<$ Real $>$ \&rk\-V1, const {\bf Vector3}$<$ Real $>$ \&rk\-V2)
+\item 
+void {\bf Decompose\-Twist\-Times\-Swing} (const {\bf Vector3}$<$ Real $>$ \&rk\-V1, {\bf Quaternion} \&rk\-Twist, {\bf Quaternion} \&rk\-Swing)
+\item 
+void {\bf Decompose\-Swing\-Times\-Twist} (const {\bf Vector3}$<$ Real $>$ \&rk\-V1, {\bf Quaternion} \&rk\-Swing, {\bf Quaternion} \&rk\-Twist)
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-X} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-Y} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-Z} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-XY} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-YX} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-ZX} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-XZ} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-YZ} () const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-ZY} () const
+\item 
+void {\bf Factor\-XYZ} (Real \&rf\-Cx, Real \&rf\-Sx, Real \&rf\-Cy, Real \&rf\-Sy, Real \&rf\-Cz, Real \&rf\-Sz)
+\item 
+void {\bf Factor\-XZY} (Real \&rf\-Cx, Real \&rf\-Sx, Real \&rf\-Cz, Real \&rf\-Sz, Real \&rf\-Cy, Real \&rf\-Sy)
+\item 
+void {\bf Factor\-YZX} (Real \&rf\-Cy, Real \&rf\-Sy, Real \&rf\-Cz, Real \&rf\-Sz, Real \&rf\-Cx, Real \&rf\-Sx)
+\item 
+void {\bf Factor\-YXZ} (Real \&rf\-Cy, Real \&rf\-Sy, Real \&rf\-Cx, Real \&rf\-Sx, Real \&rf\-Cz, Real \&rf\-Sz)
+\item 
+void {\bf Factor\-ZXY} (Real \&rf\-Cz, Real \&rf\-Sz, Real \&rf\-Cx, Real \&rf\-Sx, Real \&rf\-Cy, Real \&rf\-Sy)
+\item 
+void {\bf Factor\-ZYX} (Real \&rf\-Cz, Real \&rf\-Sz, Real \&rf\-Cy, Real \&rf\-Sy, Real \&rf\-Cx, Real \&rf\-Sx)
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-X} (const {\bf Constraints} \&rk\-XCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-Y} (const {\bf Constraints} \&rk\-YCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-Z} (const {\bf Constraints} \&rk\-ZCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-XY} (const {\bf Constraints} \&rk\-XCon, const {\bf Constraints} \&rk\-YCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-YX} (const {\bf Constraints} \&rk\-YCon, const {\bf Constraints} \&rk\-XCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-ZX} (const {\bf Constraints} \&rk\-ZCon, const {\bf Constraints} \&rk\-XCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-XZ} (const {\bf Constraints} \&rk\-XCon, const {\bf Constraints} \&rk\-ZCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-ZY} (const {\bf Constraints} \&rk\-ZCon, const {\bf Constraints} \&rk\-YCon) const
+\item 
+{\bf Quaternion} {\bf Get\-Closest\-YZ} (const {\bf Constraints} \&rk\-YCon, const {\bf Constraints} \&rk\-ZCon) const
+\item 
+template$<$$>$ const {\bf Quaternion}$<$ float $>$ {\bf IDENTITY} (1.0f, 0.0f, 0.0f, 0.0f)
+\item 
+template$<$$>$ const {\bf Quaternion}$<$ float $>$ {\bf ZERO} (0.0f, 0.0f, 0.0f, 0.0f)
+\item 
+template$<$$>$ int {\bf ms\_\-i\-Next} [3]
+\item 
+template$<$$>$ float {\bf ms\_\-f\-Tolerance}
+\item 
+template$<$$>$ float {\bf ms\_\-f\-Root\-Two}
+\item 
+template$<$$>$ float {\bf ms\_\-f\-Root\-Half}
+\item 
+template$<$$>$ const {\bf Quaternion}$<$ double $>$ {\bf IDENTITY} (1.0, 0.0, 0.0, 0.0)
+\item 
+template$<$$>$ const {\bf Quaternion}$<$ double $>$ {\bf ZERO} (0.0, 0.0, 0.0, 0.0)
+\item 
+template$<$$>$ int {\bf ms\_\-i\-Next} [3]
+\item 
+template$<$$>$ double {\bf ms\_\-f\-Tolerance}
+\item 
+template$<$$>$ double {\bf ms\_\-f\-Root\-Two}
+\item 
+template$<$$>$ double {\bf ms\_\-f\-Root\-Half}
+\end{CompactItemize}
+\subsection*{Static Public Attributes}
+\begin{CompactItemize}
+\item 
+static WM4\_\-FOUNDATION\_\-ITEM const {\bf Quaternion} {\bf IDENTITY}
+\item 
+static WM4\_\-FOUNDATION\_\-ITEM const {\bf Quaternion} {\bf ZERO}
+\end{CompactItemize}
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+class {\bf Constraints}
+\end{CompactItemize}
+\subsubsection*{template$<$class Real$>$ class Wm4::Quaternion$<$ Real $>$}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Quaternion@{Quaternion}}
+\index{Quaternion@{Quaternion}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::{\bf Quaternion} ()}\label{classWm4_1_1Quaternion_32466e45ed91a1f6aee0ab4024ebbfdf}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Quaternion@{Quaternion}}
+\index{Quaternion@{Quaternion}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::{\bf Quaternion} (Real {\em f\-W}, Real {\em f\-X}, Real {\em f\-Y}, Real {\em f\-Z})}\label{classWm4_1_1Quaternion_4e41b6dc90db1e5bc27393944c1d419f}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Quaternion@{Quaternion}}
+\index{Quaternion@{Quaternion}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::{\bf Quaternion} (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q})}\label{classWm4_1_1Quaternion_1a275cc89e8159c2ee75f01ac4000f55}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Quaternion@{Quaternion}}
+\index{Quaternion@{Quaternion}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::{\bf Quaternion} (const {\bf Matrix3}$<$ Real $>$ \& {\em rk\-Rot})}\label{classWm4_1_1Quaternion_19dc773a1f4c008b2c9e090565bb6431}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Quaternion@{Quaternion}}
+\index{Quaternion@{Quaternion}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::{\bf Quaternion} (const {\bf Vector3}$<$ Real $>$ \& {\em rk\-Axis}, Real {\em f\-Angle})}\label{classWm4_1_1Quaternion_0713966f31140f5169a0c3063c0b7430}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Quaternion@{Quaternion}}
+\index{Quaternion@{Quaternion}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::{\bf Quaternion} (const {\bf Vector3}$<$ Real $>$ {\em ak\-Rot\-Column}[3])}\label{classWm4_1_1Quaternion_d3a3de3193121cf6adf22b7f3ba4428b}
+
+
+
+
+\subsection{Member Function Documentation}
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator const Real *@{operator const Real $\ast$}}
+\index{operator const Real *@{operator const Real $\ast$}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator const Real $\ast$ () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_2f86c976605cbaa01740720ce99a9342}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator Real *@{operator Real $\ast$}}
+\index{operator Real *@{operator Real $\ast$}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator Real $\ast$ ()\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_b4eaee550616a96095a0ab0a3ae1f028}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator[]@{operator[]}}
+\index{operator[]@{operator[]}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::operator[$\,$] (int {\em i}) const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_e7561135811553160681730ca0d98670}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator[]@{operator[]}}
+\index{operator[]@{operator[]}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real \& {\bf Wm4::Quaternion}$<$ Real $>$::operator[$\,$] (int {\em i})\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_50b4a53f03b7d8d84af62bcea70ed713}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!W@{W}}
+\index{W@{W}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::W () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_960f989a0ce9d6db3d9906c4d3ad5f1e}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!W@{W}}
+\index{W@{W}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real \& {\bf Wm4::Quaternion}$<$ Real $>$::W ()\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_db69eb9cabe94f02734988a2e01a3484}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!X@{X}}
+\index{X@{X}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::X () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_bf365342d7c0e96d23673021f8e1087a}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!X@{X}}
+\index{X@{X}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real \& {\bf Wm4::Quaternion}$<$ Real $>$::X ()\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_24b4aa16579caca3779d71ddcbd5e131}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Y@{Y}}
+\index{Y@{Y}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::Y () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_d9ff560670b20d0f52270e0252fd95f2}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Y@{Y}}
+\index{Y@{Y}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real \& {\bf Wm4::Quaternion}$<$ Real $>$::Y ()\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_ab23f136c17695b188d4768ae9447b8a}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Z@{Z}}
+\index{Z@{Z}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::Z () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_2438c994cabdd62a83b24753f0879f76}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Z@{Z}}
+\index{Z@{Z}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real \& {\bf Wm4::Quaternion}$<$ Real $>$::Z ()\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_7e47f1d93ceddf958af894a50213ac19}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator=@{operator=}}
+\index{operator=@{operator=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::operator= (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q})\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_9f9051f46cc3b6e7c70d9cd0cd7f12ff}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator==@{operator==}}
+\index{operator==@{operator==}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ bool {\bf Wm4::Quaternion}$<$ Real $>$::operator== (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const}\label{classWm4_1_1Quaternion_17374f4682b525fbfc77bff020c6fa1f}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ bool {\bf Wm4::Quaternion}$<$ Real $>$::operator!= (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const}\label{classWm4_1_1Quaternion_8cfb7695938a7e9bc4595d17d95aebfd}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator<@{operator$<$}}
+\index{operator<@{operator$<$}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ bool {\bf Wm4::Quaternion}$<$ Real $>$::operator$<$ (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const}\label{classWm4_1_1Quaternion_8fc9a3f7f299e2f905946101e66d2d0d}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator<=@{operator$<$=}}
+\index{operator<=@{operator$<$=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ bool {\bf Wm4::Quaternion}$<$ Real $>$::operator$<$= (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const}\label{classWm4_1_1Quaternion_9a96a03869dfd36baf811c0e44f67a34}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator>@{operator$>$}}
+\index{operator>@{operator$>$}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ bool {\bf Wm4::Quaternion}$<$ Real $>$::operator$>$ (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const}\label{classWm4_1_1Quaternion_d9e20bbdaca0df226c5eb293e28fb498}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator>=@{operator$>$=}}
+\index{operator>=@{operator$>$=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ bool {\bf Wm4::Quaternion}$<$ Real $>$::operator$>$= (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const}\label{classWm4_1_1Quaternion_700a1803d1b5fa31db5aea71a40fa365}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator+@{operator+}}
+\index{operator+@{operator+}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator+ (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_853a41beda248fc365c7e4f27afeee2f}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator-@{operator-}}
+\index{operator-@{operator-}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator- (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_cd3975cac0be4c4399a2a7c5eab71ad9}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator *@{operator $\ast$}}
+\index{operator *@{operator $\ast$}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator $\ast$ (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_6bfd0d1486904570e2d5f8ab9c609714}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator *@{operator $\ast$}}
+\index{operator *@{operator $\ast$}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator $\ast$ (Real {\em f\-Scalar}) const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_d42b7f0ebf0b164d3d6806078ffa5f6a}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator/@{operator/}}
+\index{operator/@{operator/}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator/ (Real {\em f\-Scalar}) const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_07c3d0f906d7eda40d277380ca50b97f}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator-@{operator-}}
+\index{operator-@{operator-}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::operator- () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_9e92b601f1942231971eb3a84bd9649b}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::operator+= (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q})\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_b0ecdf716949ee56fd6b6f6fcf9ad2ca}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator-=@{operator-=}}
+\index{operator-=@{operator-=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::operator-= (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q})\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_abc4c6eac448f8587a592b159485c872}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator *=@{operator $\ast$=}}
+\index{operator *=@{operator $\ast$=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::operator $\ast$= (Real {\em f\-Scalar})\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_ac3d752a996ee6060b9bb624dd721195}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!operator/=@{operator/=}}
+\index{operator/=@{operator/=}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::operator/= (Real {\em f\-Scalar})\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_20d4f721888094693919d281601bac84}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FromRotationMatrix@{FromRotationMatrix}}
+\index{FromRotationMatrix@{FromRotationMatrix}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::From\-Rotation\-Matrix (const {\bf Matrix3}$<$ Real $>$ \& {\em rk\-Rot})}\label{classWm4_1_1Quaternion_999ca8438ee2cc5d7bdb034a00054c8d}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ToRotationMatrix@{ToRotationMatrix}}
+\index{ToRotationMatrix@{ToRotationMatrix}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::To\-Rotation\-Matrix ({\bf Matrix3}$<$ Real $>$ \& {\em rk\-Rot}) const}\label{classWm4_1_1Quaternion_67ca867d76770511521bbc55eaeffb27}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FromRotationMatrix@{FromRotationMatrix}}
+\index{FromRotationMatrix@{FromRotationMatrix}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::From\-Rotation\-Matrix (const {\bf Vector3}$<$ Real $>$ {\em ak\-Rot\-Column}[3])}\label{classWm4_1_1Quaternion_e111838a5863db8d32b939c64589f833}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ToRotationMatrix@{ToRotationMatrix}}
+\index{ToRotationMatrix@{ToRotationMatrix}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::To\-Rotation\-Matrix ({\bf Vector3}$<$ Real $>$ {\em ak\-Rot\-Column}[3]) const}\label{classWm4_1_1Quaternion_6eb3b7589399327cf2719f5a29789220}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FromAxisAngle@{FromAxisAngle}}
+\index{FromAxisAngle@{FromAxisAngle}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::From\-Axis\-Angle (const {\bf Vector3}$<$ Real $>$ \& {\em rk\-Axis}, Real {\em f\-Angle})}\label{classWm4_1_1Quaternion_d097d07210266da3e52292151367f340}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ToAxisAngle@{ToAxisAngle}}
+\index{ToAxisAngle@{ToAxisAngle}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::To\-Axis\-Angle ({\bf Vector3}$<$ Real $>$ \& {\em rk\-Axis}, Real \& {\em rf\-Angle}) const}\label{classWm4_1_1Quaternion_25d66b10903a1f0a0c2cdcfcccc012dd}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Length@{Length}}
+\index{Length@{Length}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::Length () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_f805700ec8fc3cee1c8daff3ecdfe88c}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!SquaredLength@{SquaredLength}}
+\index{SquaredLength@{SquaredLength}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::Squared\-Length () const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_29e4ef607e51b0c034cdf0568c30f7cb}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Dot@{Dot}}
+\index{Dot@{Dot}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::Dot (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}) const\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_ea8c4800425d134db760bda44f5944bc}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Normalize@{Normalize}}
+\index{Normalize@{Normalize}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ Real {\bf Wm4::Quaternion}$<$ Real $>$::Normalize ()\hspace{0.3cm}{\tt  [inline]}}\label{classWm4_1_1Quaternion_b0df70264339a14241a2513883ece903}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Inverse@{Inverse}}
+\index{Inverse@{Inverse}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Inverse () const}\label{classWm4_1_1Quaternion_7adcfaa96c967518766a075832934f05}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Conjugate@{Conjugate}}
+\index{Conjugate@{Conjugate}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Conjugate () const}\label{classWm4_1_1Quaternion_ff8905d1a688dcbf07892de3be596b12}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Exp@{Exp}}
+\index{Exp@{Exp}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Exp () const}\label{classWm4_1_1Quaternion_fb4d38887cbd2c753ba7251c9447227a}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Log@{Log}}
+\index{Log@{Log}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::{\bf Log} () const}\label{classWm4_1_1Quaternion_21a7fd3f85059e35d5edc10d1e8430d4}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Rotate@{Rotate}}
+\index{Rotate@{Rotate}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Vector3}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Rotate (const {\bf Vector3}$<$ Real $>$ \& {\em rk\-Vector}) const}\label{classWm4_1_1Quaternion_f722d7183a96bea9115f77911c99bf70}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Slerp@{Slerp}}
+\index{Slerp@{Slerp}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::Slerp (Real {\em f\-T}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-P}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q})}\label{classWm4_1_1Quaternion_0ec8407f839304a7e440ab290cf94c6c}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!SlerpExtraSpins@{SlerpExtraSpins}}
+\index{SlerpExtraSpins@{SlerpExtraSpins}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::Slerp\-Extra\-Spins (Real {\em f\-T}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-P}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q}, int {\em i\-Extra\-Spins})}\label{classWm4_1_1Quaternion_9a3d88bae1a77179140b32b03bd75fe2}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Intermediate@{Intermediate}}
+\index{Intermediate@{Intermediate}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::Intermediate (const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q0}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q1}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q2})}\label{classWm4_1_1Quaternion_78406c8173e77435e8ce1b13ef7c1f9c}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Squad@{Squad}}
+\index{Squad@{Squad}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::Squad (Real {\em f\-T}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q0}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-A0}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-A1}, const {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Q1})}\label{classWm4_1_1Quaternion_b42ada6b188697a1d1bec34e78330ed0}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!Align@{Align}}
+\index{Align@{Align}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ \& {\bf Wm4::Quaternion}$<$ Real $>$::Align (const {\bf Vector3}$<$ Real $>$ \& {\em rk\-V1}, const {\bf Vector3}$<$ Real $>$ \& {\em rk\-V2})}\label{classWm4_1_1Quaternion_afed22a39ac03d0b74984e133f1d1bed}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!DecomposeTwistTimesSwing@{DecomposeTwistTimesSwing}}
+\index{DecomposeTwistTimesSwing@{DecomposeTwistTimesSwing}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Decompose\-Twist\-Times\-Swing (const {\bf Vector3}$<$ Real $>$ \& {\em rk\-V1}, {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Twist}, {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Swing})}\label{classWm4_1_1Quaternion_70782459e82bba89d1f558db35989ede}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!DecomposeSwingTimesTwist@{DecomposeSwingTimesTwist}}
+\index{DecomposeSwingTimesTwist@{DecomposeSwingTimesTwist}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Decompose\-Swing\-Times\-Twist (const {\bf Vector3}$<$ Real $>$ \& {\em rk\-V1}, {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Swing}, {\bf Quaternion}$<$ Real $>$ \& {\em rk\-Twist})}\label{classWm4_1_1Quaternion_9a117c3e9c8acbd6e7ae26a22bfdaf5c}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestX@{GetClosestX}}
+\index{GetClosestX@{GetClosestX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-X () const}\label{classWm4_1_1Quaternion_d3e96bd350970366fcb2b0a09d984d10}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestY@{GetClosestY}}
+\index{GetClosestY@{GetClosestY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-Y () const}\label{classWm4_1_1Quaternion_a2dd5d70dfd5f26a3024291474a6df66}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestZ@{GetClosestZ}}
+\index{GetClosestZ@{GetClosestZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-Z () const}\label{classWm4_1_1Quaternion_98ca51298f16fbb7223a9405b911970b}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestXY@{GetClosestXY}}
+\index{GetClosestXY@{GetClosestXY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-XY () const}\label{classWm4_1_1Quaternion_e4b6087226aa6fc3ce6c7458b7d3bbbf}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestYX@{GetClosestYX}}
+\index{GetClosestYX@{GetClosestYX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-YX () const}\label{classWm4_1_1Quaternion_910054a6b831f9965048e60b8706cf02}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestZX@{GetClosestZX}}
+\index{GetClosestZX@{GetClosestZX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-ZX () const}\label{classWm4_1_1Quaternion_42ed27b9035d068f0c3bf8e3bfe88ae0}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestXZ@{GetClosestXZ}}
+\index{GetClosestXZ@{GetClosestXZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-XZ () const}\label{classWm4_1_1Quaternion_16a1d48db7c70e1c360f4ccd626043c2}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestYZ@{GetClosestYZ}}
+\index{GetClosestYZ@{GetClosestYZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-YZ () const}\label{classWm4_1_1Quaternion_2069a9806bb9cfddee4665a50d4e7997}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestZY@{GetClosestZY}}
+\index{GetClosestZY@{GetClosestZY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-ZY () const}\label{classWm4_1_1Quaternion_ba055546010a994ca3556c74b6c22f27}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FactorXYZ@{FactorXYZ}}
+\index{FactorXYZ@{FactorXYZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Factor\-XYZ (Real \& {\em rf\-Cx}, Real \& {\em rf\-Sx}, Real \& {\em rf\-Cy}, Real \& {\em rf\-Sy}, Real \& {\em rf\-Cz}, Real \& {\em rf\-Sz})}\label{classWm4_1_1Quaternion_420d3321c0d496f3f4a3b31ebd68f0d8}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FactorXZY@{FactorXZY}}
+\index{FactorXZY@{FactorXZY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Factor\-XZY (Real \& {\em rf\-Cx}, Real \& {\em rf\-Sx}, Real \& {\em rf\-Cz}, Real \& {\em rf\-Sz}, Real \& {\em rf\-Cy}, Real \& {\em rf\-Sy})}\label{classWm4_1_1Quaternion_1da1524e67dfadadd3d73796e124a741}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FactorYZX@{FactorYZX}}
+\index{FactorYZX@{FactorYZX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Factor\-YZX (Real \& {\em rf\-Cy}, Real \& {\em rf\-Sy}, Real \& {\em rf\-Cz}, Real \& {\em rf\-Sz}, Real \& {\em rf\-Cx}, Real \& {\em rf\-Sx})}\label{classWm4_1_1Quaternion_91edb7b79dc41cec01bd8c7cf6ba147f}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FactorYXZ@{FactorYXZ}}
+\index{FactorYXZ@{FactorYXZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Factor\-YXZ (Real \& {\em rf\-Cy}, Real \& {\em rf\-Sy}, Real \& {\em rf\-Cx}, Real \& {\em rf\-Sx}, Real \& {\em rf\-Cz}, Real \& {\em rf\-Sz})}\label{classWm4_1_1Quaternion_4a3e790021f7eff98183820a6f573fc3}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FactorZXY@{FactorZXY}}
+\index{FactorZXY@{FactorZXY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Factor\-ZXY (Real \& {\em rf\-Cz}, Real \& {\em rf\-Sz}, Real \& {\em rf\-Cx}, Real \& {\em rf\-Sx}, Real \& {\em rf\-Cy}, Real \& {\em rf\-Sy})}\label{classWm4_1_1Quaternion_1624283bf14f6fab8c48e0d851de8d32}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!FactorZYX@{FactorZYX}}
+\index{FactorZYX@{FactorZYX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ void {\bf Wm4::Quaternion}$<$ Real $>$::Factor\-ZYX (Real \& {\em rf\-Cz}, Real \& {\em rf\-Sz}, Real \& {\em rf\-Cy}, Real \& {\em rf\-Sy}, Real \& {\em rf\-Cx}, Real \& {\em rf\-Sx})}\label{classWm4_1_1Quaternion_1b4c0d82c2f6873d5af2a98dcfa3064d}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestX@{GetClosestX}}
+\index{GetClosestX@{GetClosestX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-X (const {\bf Constraints} \& {\em rk\-XCon}) const}\label{classWm4_1_1Quaternion_ceb69a5d390639469e085fc5a422d914}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestY@{GetClosestY}}
+\index{GetClosestY@{GetClosestY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-Y (const {\bf Constraints} \& {\em rk\-YCon}) const}\label{classWm4_1_1Quaternion_834d0a6dd9494dd23e34cc6048257b4e}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestZ@{GetClosestZ}}
+\index{GetClosestZ@{GetClosestZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-Z (const {\bf Constraints} \& {\em rk\-ZCon}) const}\label{classWm4_1_1Quaternion_f5b0f63ffc089f0b62b4a5fe47e7f50e}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestXY@{GetClosestXY}}
+\index{GetClosestXY@{GetClosestXY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-XY (const {\bf Constraints} \& {\em rk\-XCon}, const {\bf Constraints} \& {\em rk\-YCon}) const}\label{classWm4_1_1Quaternion_2c370f8a10467f94f68e444611b161ad}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestYX@{GetClosestYX}}
+\index{GetClosestYX@{GetClosestYX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-YX (const {\bf Constraints} \& {\em rk\-YCon}, const {\bf Constraints} \& {\em rk\-XCon}) const}\label{classWm4_1_1Quaternion_abb2edebe0fd495fed9f2d8479cbf699}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestZX@{GetClosestZX}}
+\index{GetClosestZX@{GetClosestZX}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-ZX (const {\bf Constraints} \& {\em rk\-ZCon}, const {\bf Constraints} \& {\em rk\-XCon}) const}\label{classWm4_1_1Quaternion_a95edbc4adc16ef8879167e84fdfda7d}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestXZ@{GetClosestXZ}}
+\index{GetClosestXZ@{GetClosestXZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-XZ (const {\bf Constraints} \& {\em rk\-XCon}, const {\bf Constraints} \& {\em rk\-ZCon}) const}\label{classWm4_1_1Quaternion_b0424d935961db14096cec80ceb7c05d}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestZY@{GetClosestZY}}
+\index{GetClosestZY@{GetClosestZY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-ZY (const {\bf Constraints} \& {\em rk\-ZCon}, const {\bf Constraints} \& {\em rk\-YCon}) const}\label{classWm4_1_1Quaternion_5beef9c556c27d8d981b5fc3fa9fdc34}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!GetClosestYZ@{GetClosestYZ}}
+\index{GetClosestYZ@{GetClosestYZ}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ {\bf Quaternion}$<$ Real $>$ {\bf Wm4::Quaternion}$<$ Real $>$::Get\-Closest\-YZ (const {\bf Constraints} \& {\em rk\-YCon}, const {\bf Constraints} \& {\em rk\-ZCon}) const}\label{classWm4_1_1Quaternion_b9a245bad213a6ce5d8c35b2d4d48713}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!IDENTITY@{IDENTITY}}
+\index{IDENTITY@{IDENTITY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ const {\bf Quaternion}$<$ float $>$ {\bf Wm4::Quaternion}$<$ float $>$::{\bf IDENTITY} (1. {\em 0f}, 0. {\em 0f}, 0. {\em 0f}, 0. {\em 0f})}\label{classWm4_1_1Quaternion_59288027790584fccd5c54d57a5589a2}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ZERO@{ZERO}}
+\index{ZERO@{ZERO}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ const {\bf Quaternion}$<$ float $>$ {\bf Wm4::Quaternion}$<$ float $>$::{\bf ZERO} (0. {\em 0f}, 0. {\em 0f}, 0. {\em 0f}, 0. {\em 0f})}\label{classWm4_1_1Quaternion_ec90a2e0a977224b68532f33304de2f3}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_iNext@{ms\_\-iNext}}
+\index{ms_iNext@{ms\_\-iNext}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ int {\bf Wm4::Quaternion}$<$ float $>$::ms\_\-i\-Next ()}\label{classWm4_1_1Quaternion_05174ba9862ca907a5185a11a7e2e389}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_fTolerance@{ms\_\-fTolerance}}
+\index{ms_fTolerance@{ms\_\-fTolerance}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ float {\bf Wm4::Quaternion}$<$ float $>$::ms\_\-f\-Tolerance ()}\label{classWm4_1_1Quaternion_304f7d71a3b92582ce046bd540f0456a}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_fRootTwo@{ms\_\-fRootTwo}}
+\index{ms_fRootTwo@{ms\_\-fRootTwo}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ float {\bf Wm4::Quaternion}$<$ float $>$::ms\_\-f\-Root\-Two ()}\label{classWm4_1_1Quaternion_76fd0e480dae5ecbfc91469cf0180019}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_fRootHalf@{ms\_\-fRootHalf}}
+\index{ms_fRootHalf@{ms\_\-fRootHalf}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ float {\bf Wm4::Quaternion}$<$ float $>$::ms\_\-f\-Root\-Half ()}\label{classWm4_1_1Quaternion_a12eaa9511019cee51455f1fff46db9a}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!IDENTITY@{IDENTITY}}
+\index{IDENTITY@{IDENTITY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ const {\bf Quaternion}$<$ double $>$ {\bf Wm4::Quaternion}$<$ double $>$::{\bf IDENTITY} (1. {\em 0}, 0. {\em 0}, 0. {\em 0}, 0. {\em 0})}\label{classWm4_1_1Quaternion_1a238f807517d926827e5c1b0e5ff29b}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ZERO@{ZERO}}
+\index{ZERO@{ZERO}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ const {\bf Quaternion}$<$ double $>$ {\bf Wm4::Quaternion}$<$ double $>$::{\bf ZERO} (0. {\em 0}, 0. {\em 0}, 0. {\em 0}, 0. {\em 0})}\label{classWm4_1_1Quaternion_ab6454cbc8959189744465ed47ae90b0}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_iNext@{ms\_\-iNext}}
+\index{ms_iNext@{ms\_\-iNext}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ int {\bf Wm4::Quaternion}$<$ double $>$::ms\_\-i\-Next ()}\label{classWm4_1_1Quaternion_bf4f129244f2ca051aaa91c3465f1f9d}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_fTolerance@{ms\_\-fTolerance}}
+\index{ms_fTolerance@{ms\_\-fTolerance}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ double {\bf Wm4::Quaternion}$<$ double $>$::ms\_\-f\-Tolerance ()}\label{classWm4_1_1Quaternion_a9de22d187cdd57312c6f9d99a5f2f66}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_fRootTwo@{ms\_\-fRootTwo}}
+\index{ms_fRootTwo@{ms\_\-fRootTwo}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ double {\bf Wm4::Quaternion}$<$ double $>$::ms\_\-f\-Root\-Two ()}\label{classWm4_1_1Quaternion_3b773db0e10149d2ca726ad44b072ee9}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ms_fRootHalf@{ms\_\-fRootHalf}}
+\index{ms_fRootHalf@{ms\_\-fRootHalf}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ double {\bf Wm4::Quaternion}$<$ double $>$::ms\_\-f\-Root\-Half ()}\label{classWm4_1_1Quaternion_8699c62d3ca15c8bb09509a6efe87aaf}
+
+
+
+
+\subsection{Member Data Documentation}
+\index{Wm4::Quaternion@{Wm4::Quaternion}!IDENTITY@{IDENTITY}}
+\index{IDENTITY@{IDENTITY}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ WM4\_\-FOUNDATION\_\-ITEM const {\bf Quaternion} {\bf Wm4::Quaternion}$<$ Real $>$::{\bf IDENTITY}\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1Quaternion_0175525a86cac49cae5f80344d0e153e}
+
+
+\index{Wm4::Quaternion@{Wm4::Quaternion}!ZERO@{ZERO}}
+\index{ZERO@{ZERO}!Wm4::Quaternion@{Wm4::Quaternion}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}template$<$class Real$>$ WM4\_\-FOUNDATION\_\-ITEM const {\bf Quaternion} {\bf Wm4::Quaternion}$<$ Real $>$::{\bf ZERO}\hspace{0.3cm}{\tt  [static]}}\label{classWm4_1_1Quaternion_ffff94f50a9f393355542f5ce16563f4}
+
+
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf Wm4Quaternion.h}\end{CompactItemize}
