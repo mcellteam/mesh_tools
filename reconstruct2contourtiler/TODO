@@ -1,0 +1,11 @@
+
+nov 2008
+--------
+1) contour with single point seg faults contour_tiler
+2) add command line option to process contours matching user-defined pattern
+3) check for missing contours, e.g. object found on contours i, i+1, i+2, i+4, but object missing on section i+3
+4) remove '!' from convert.csh since '!' not allowed in zsh shell
+
+bool isDomain (char const * str)
+contains hardcoded exceptions
+

@@ -1,0 +1,45 @@
+#!/usr/bin/perl -w
+
+if ($#ARGV < 2) {
+  print STDOUT "\nUsage: subtract_mesh input_mesh_file1 input_mesh_file2 output_mesh_file\n\n";
+  exit(1);
+}
+
+$input_mesh_file1 = $ARGV[0];
+$input_mesh_file2 = $ARGV[1];
+$output_mesh_file = $ARGV[2];
+
+open(FILE,"> $output_mesh_file");
+close(FILE);
+
+$irit_script = "
+dummy = iritstate(\"EchoSource\",false);
+dummy = iritstate(\"FloatFrmt\",\"%.15g\");
+dummy = iritstate(\"Coplanar\",true);
+
+input_mesh_file1=\"$input_mesh_file1\";
+input_mesh_file2=\"$input_mesh_file2\";
+output_mesh_file=\"$output_mesh_file\";
+
+mesh_obj1=load(input_mesh_file1);
+mesh_obj2=load(input_mesh_file2);
+
+obj=nil();
+snoc(triangl(-((-mesh_obj1) - (-mesh_obj2)),1),obj);
+
+if (sizeof(obj) == 1,
+    save(output_mesh_file,nth(obj,1))
+);
+
+exit();
+";
+
+open(CMD,"echo '$irit_script' | irit -t -q |");
+
+while (defined($line=<CMD>)) {
+  print STDOUT "$line";
+}
+close(CMD);
+
+exit(0);
+

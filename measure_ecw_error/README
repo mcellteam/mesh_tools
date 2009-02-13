@@ -1,0 +1,19 @@
+in meshmorph
+for each object
+  open vertex_file as "objectname_verts.dat"
+  open color_file as "objectname_colors.dat"
+  for each vertex in order of increasing index
+    measure separation distance
+    map separation distance to color
+    write vertex location to vertex_file as "x y z\n"
+    write vertex color to color_file as "r g b\n" in range 0 to 1.0
+  end
+  close vertex_file and color_file
+  open connections_file as "objectname_triangles.dat"
+  for each face
+    write vertex indices to connections_files as "index1 index2 index3\n"
+  end
+  close connections_file
+end
+
+    

@@ -1,0 +1,17 @@
+
+Meshfuse creates degenerate faces for CA3 synapse.
+Also creates flipped faces and interesecting faces.
+
+
+1) instead of using squared 3D distance between free vertices as the
+metric for determining which vertices to merge, consider using
+max(abs(delta x),abs(delta y),abs(delta z))
+
+2) rather than compute the distance between all free vertices in
+an N^2 manner, map vertices onto random vector using dot product
+and compute distance between neighbors on random vector
+
+3) instead of 2, create connectivity graphs of free edges and
+compute distances between vertices within a connected group.
+Note that two nonconnected groups that lie close together should
+be merged into a larger group.

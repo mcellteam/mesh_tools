@@ -1,0 +1,14 @@
+Oct 2008
+For some reason this program delivers one less than the requested number of positions in the input sequence
+at least as visualized in dreamm. In other words, if the input is *_0.mesh, *_1.mesh, ..., *_5.mesh
+then dreamm will display a mesh for 1, 2, 3, 4, 5 states in sequence.
+
+This is especially problematic when all you want is a simple before and after. Must use at least three states in sequence.
+
+Actually, it might have been that the sequence numbers in dreamm are incremented by one compared to input mesh sequence numbers.
+
+Nov 2008
+One bit of confusion may be that meshmorph sequence numbering starts at 0, i.e. input meshes, with 1
+representing the meshes after one group of vertex moves. However, dreamm does not have a 0 sequence
+position; the sequence starts at 1.
+
