@@ -1,262 +1,281 @@
-#include <math.h>
-#include <iostream>
-#include <vector>
-#include <set>
-#include <list>
-#include <algorithm>
-#include <fstream>
-#include <string>
-#include <dirent.h>
-#include <errno.h>
-#include <time.h>
-#include <sys/timeb.h>
-#include <sys/time.h>
-#include <ext/hash_map>
-#include <ext/hash_set>
-#include <numeric>
-#include <map>
-#include <cassert>
+// Author: Justin Kinney
+// Date: Sep 2008
 
-using std::map;
-using std::vector;
+#include "meshmorph.h"
+
+#include <iostream>
+#include <cassert>
+#include <cmath>
+
+#include "log.h"
+#include "nice.h"
+#include "energy.h"
+#include "controls.h"
+#include "container.h"
+#include "refractory.h"
+#include "virtual_disp.h"
+#include "gain_schedule.h"
+#include "vertex_schedule.h"
+#include "octree_agent_face.h"
+#include "intersecting_faces.h"
+#include "octree_visitor_face.h"
+
 using std::cout;
 using std::endl;
-using std::left;
-using std::right;
-using std::set;
 
-std::string INPUT_DATA_DIR  = "./";
-std::string OUTPUT_DATA_DIR = "./";
+int main (int argc,char **argv)
+{
+  cout << "\nMeshmorph 4.0\n"
+//  << "  Running on azzuri at Wed Sep 24 12:11:51 2008\n\n"
+  << "    The Salk Institute for Biological Studies\n\n"
+  << "Meshmorph initializing data...\n";
 
-//####################################################
-//#################### includes ######################
-//####################################################
-
-#include "controls.cc"
-#include "classes.cc"
-#include "subroutines.cc"
-
-//####################################################
-//###################### main  #######################
-//####################################################
-
-int main(int argc,char **argv){
-
-  if (argc != 3 && argc!=6)
-  {
-    //printf("\nSyntax: meshmorph input_dir output_dir [frozen_vertices_filename]\n\n");
-    printf("\nSyntax: meshmorph input_dir output_dir [target_ecw sep_weight angle_weight]\n\n");
-    printf("Default values for optional arguments are 20, 10, and 80, respectively.\n\n");
-    //printf("Description: morphs without moving the frozen vertices.\n");
-    //printf("In the optional frozen vertex file, specifiy one frozen vertex per\n");
-    //printf("line with the syntax 'object_name vertex_index'.\n\n");
-    return 1;
-  }
+  // record start time
+  time_t begintime = time(NULL);
 
   // check that assumption of 32 bit int is correct
   assert(checkIntSize());
 
-  // declare time variable
-  time_t currtime = time(NULL);
- // time_t begintime = currtime;
+  // create Controls class
+  Controls & cs (Controls::instance()); 
 
-  // save input directory
-  char filename[FILENAME_SIZE];
-  strcpy(filename,argv[1]);
-  char *temp=strrchr(filename,'/');
-  if(!temp) {strcat(filename,"/");}
-  else if(*++temp) {strcat(filename,"/");}
-  INPUT_DATA_DIR = filename;
+  // parse command line
+  cs.parseCommandLine(argc,argv,cs.getUsageMessage());
 
-  // save output directory
-  strcpy(filename,argv[2]);
-  temp=strrchr(filename,'/');
-  if(!temp) {strcat(filename,"/");}
-  else if(*++temp) {strcat(filename,"/");}
-  OUTPUT_DATA_DIR = filename;
+  // add warning
+  if (cs.get_use_edge_reference_length()==true)
+  {
+    cout << "\n\nmain: WARNING. --ref_orig_edge_length option "
+         << "may create faces with high aspect\n"
+         << "ratios unless a compensatory "
+         << "force is added, i.e. force proportional "
+         << "to adjacent face aspect ratio.\n\n";
+  }
 
-  // open log file
-  char log_file[FILENAME_SIZE];
-  sprintf(log_file,"%s%s",OUTPUT_DATA_DIR.c_str(),MAIN_LOG_FILE);
-  std::ofstream myfile (log_file);
-  if(myfile.is_open()==false){cout << "\nFailed to open file " << log_file << ".\n"; }
+  // create Log class
+  Log & log(Log::instance());
 
   // create container, objects, vertices, faces, edges, and find adjacencies
-  Container c;
-  currtime = recordTime(myfile, currtime,"scanning file:");
+  Container & c(Container::instance());
+  log.recordTime("scanning file:");
 
-  // copy control.cc to OUTPUT_DATA_DIR
-  //copyControlFile();
+  // update number and size of group
+  cs.redefineGroup();
+
+  // write command parameter settings
+  log.writeCommandSettings();
 
   // read frozen vertices
-  //if(argc>3){ c.readFrozen(argv[3]); }
+  if (cs.get_frozen_vertices_file().empty()==false){ c.readFrozen(cs.get_frozen_vertices_file().c_str()); }
 
-  // read optional arguments
-  if(argc==6)
+  // build octree
+  cout << "Build octree...................................";
+  cout.flush();
+  /* calculate octree width as max of each axis width */
+  double delx = c.getWorld(1)-c.getWorld(0);
+  double dely = c.getWorld(3)-c.getWorld(2);
+  double delz = c.getWorld(5)-c.getWorld(4);
+  double max = 0.0;
+  if ((delz >= delx) && (delz >= dely))
   {
-    char *eptr;
-    TARGET_SEPARATION     = strtod(argv[3],&eptr);
-    SEPARATION_WEIGHT     = strtod(argv[4],&eptr);
-    ANGLE_STRETCH_WEIGHT  = strtod(argv[5],&eptr);
+    max = delz;
   }
+  else if ((dely >= delx) && (dely >= delz))
+  {
+    max = dely;
+  }
+  else
+  {
+    max = delx;
+  }
+//  cout << "\nmain: "
+//        << "world ["
+//        << c.getWorld(0) << " "
+//        << c.getWorld(1) << " "
+//        << c.getWorld(2) << " "
+//        << c.getWorld(3) << " "
+//        << c.getWorld(4) << " "
+//        << c.getWorld(5) << "]\n"
+//        << "main: delx = " << delx
+//        << ", dely = " << dely
+//        << ", delz = " << delz
+//        << ", max = " << max
+//        << ", octree size ["
+//        << c.getWorld(0) << " "
+//        << c.getWorld(0)+max << " "
+//        << c.getWorld(2) << " "
+//        << c.getWorld(2)+max << " "
+//        << c.getWorld(4) << " "
+//        << c.getWorld(4)+max << "]\n";
 
-  // initialize space data structure
-  Space s(c);
-  currtime = recordTime(myfile,currtime,"Initialize space data structure:");
-
-  // assign faces to boxes
-  c.assignFacesToBoxes(s);
-  currtime = recordTime(myfile,currtime,"Assign faces to boxes:");
-
-  // initialize and write data to log files
-  c.writeObjectData();
-  currtime = recordTime(myfile,currtime,"Writing data to log files:");
-
-  // instantiate statistics class
-  Monitor stats;
-
-  // identify vertices that lie inside of another object
-  c.findNice(s);
-  currtime = recordTime(myfile,currtime,"Iteration 0: Find nice vertices:");
-
-  // identify the closest point on a mesh to each vertex
-  c.getSeparationDistances(s,stats);
-  currtime = recordTime(myfile,currtime,"Iteration 0: Get separation distances:");
-
-  // compute the vertex forces due to face intersections
-  c.computeFaceIntersectionForce(s);
-  currtime = recordTime(myfile,currtime,"Iteration 0: Compute face intersection force:");
-
-  // compute the cumulative potential energy of all springs in the model	
-  c.computeGlobalEnergy();
-
-  // identify the smallest edge angle
-  c.checkEdgeAngles();
-
-  // update container class log file
-  c.updateFile(0,false,0);
-  currtime = recordTime(myfile,currtime,"Iteration 0: Update log files:");
-
-  // save separation distances to file
-  c.writeSeparationDistances();
-
-  // write intersected faces to file
-  stats.writeIntersected(0,&c);
-
-  // create instance of moved-vertex tracking structure
-  //VTrack pod;
-
-/*  // DEBUG
-  cout << "\n\n********** vertices with separation distance < 10 nm **********\n";
+//  Octree<Face> octree( Vector3r(cs.get_octree_min_x(),
+//                                cs.get_octree_min_y(),
+//                                cs.get_octree_min_z()),
+//                       cs.get_octree_width(),
+//                       cs.get_max_items_per_leaf(),
+//                       cs.get_max_octree_depth(),
+//                       cs.get_min_cell_size());
+  cs.recordOctreeSize(max);
+  Octree<Face> octree( Vector3r(c.getWorld(0),
+                                c.getWorld(2),
+                                c.getWorld(4)),
+                       max,
+                       cs.get_max_items_per_leaf(),
+                       cs.get_max_octree_depth(),
+                       cs.get_min_cell_size());
+  Octree_Agent_Face agent;
+  //cout << "Octree initialized.\n";cout.flush();
+  //int foo = 0;
+  //int boo = 1000;
+  //int yah = boo;
   // for each object in container
-  for(std::vector<Object*>::iterator i=c.o.begin();i!=c.o.end();i++){
-    // for each vertex in object
-    for(std::vector<Vertex*>::iterator j=(*i)->v.begin();j!=(*i)->v.end();j++){
-      if((*j)->cl!=NULL && (binary_search(c.frozen.begin(),c.frozen.end(),*j)==false)){
-        // get closest point
-        double pC[3];
-        c.computePC((*j)->cl,*j,pC);
-        // compute separation vector
-        double ss[3];
-        for(int ii=0;ii<3;ii++){ ss[ii]=pC[ii]-(*j)->pN[ii]; }
-        // compute separation distance //////////
-        double sd = sqrt(dot(ss,ss));
-        if(sd<1.1){
-          //cout << "main: sd = " << sd << endl;
-          (*j)->printVertexCP();
-          //cout << endl;
-          //cout << "main: cp = ["
-          //      << pC[0] << " "
-          //      << pC[1] << " "
-          //      << pC[2] << "]\n";
-          //(*j)->cl->printFace((*j)->cl->v[0]->o->name);
-          //cout << endl << endl;
-        }
-      }
+  for (o_it i=c.o.begin();i!=c.o.end();++i)
+  {
+    // for each face in object
+    for (f_it j=i->f.begin();j!=i->f.end();++j)
+    {
+      octree.insert( *j, agent );
+      //boo--;
+      //foo++;
+      //if (boo==0)
+      //{
+      //  boo=yah;
+      //  cout << "face " << foo << " inserted into octree.\n";cout.flush();
+      //}
     }
   }
-  cout << "********** vertices with separation distance < 10 nm **********\n\n";
-  exit(0);
-*/  // DEBUG
+  c.octree = &octree; 
+  cout << "complete.\n";
+  cout.flush();
 
+  // initialize space data structure
+  log.recordTime("Initialize space data structure:");
 
-  ////////// BEGIN LOOP //////////
-  cout << endl;
-  // for each group of iterations
-  for (int group=1;group<(NUM_GROUPS+1);group++)
+  // initialize and write data to log files
+  log.writeObjectData();
+  log.recordTime("Writing data to log files:");
+
+  // DEBUG
+  // identify vertices that lie inside of another object
+  Nice::instance().findNonniceVertices();
+  log.recordTime("Find nice vertices:");
+  log.printNumNonnice(cout);
+
+  // find all face intersections
+  Intersecting_Faces::instance().findAllFaceIntersections();
+  log.recordTime("Find all face intersections:");
+  log.printNumInt(cout);
+  // DEBUG
+
+  // identify the closest point on a mesh to each vertex
+  c.findClosestFaceToEachVertex();
+  log.recordTime("Get extracellular widths:");
+  log.printClosestPtStats(cout);
+
+  // measure and write to file important model attributes
+  if (cs.get_measure_ecw_and_exit()==true)
   {
+    log.writeSepDistances(1);
+    exit(1);
+  }
+  log.writeFiles(0);
+  log.recordTime("Update log files:");
+
+  // create instance of Gain_Schedule
+  Gain_Schedule & gs(Gain_Schedule::instance());
+
+  // read vertex move sequence
+  if (cs.get_vertex_sequence_file().empty()==false){ Vertex_Schedule::instance().readVertexSequence(cs.get_vertex_sequence_file().c_str()); }
+
+  // main loop
+  log.recordTime("Begin main loop:");
+  // for each group of iterations
+  for (int group=1;group<(cs.get_num_groups()+1);group++)
+  {
+    Vertex_Schedule & vs(Vertex_Schedule::instance());
     // enforce maximum runtime policy
-    //if( (time(NULL)-begintime) > MAX_RUNTIME){break;}
+    if (cs.get_max_runtime()>0.0)
+    {
+      if ((time(NULL)-begintime) > cs.get_max_runtime()) break;
+    }
+    //gs.initGain();
+    // initialize count of vertices moved in group
+    vs.setNumMovedVertsGroup(0);
     // initialize group variables
-    stats.groupInit(c);
+    Virtual_Disp::instance().resetForNewGroup(group);
+    Refractory::instance().resetForNewGroup();
+    log.groupInit();
     // until GROUP_SIZE vertex moves have been made
-    while (stats.count<GROUP_SIZE)
+    while (vs.getNumMovedVertsGroup()<cs.get_group_size())
     {
       // enforce maximum runtime policy
-      //if( (time(NULL)-begintime) > MAX_RUNTIME){break;}
-      stats.identifyMeshRegionToUpdate(s,c);
-      // for each vertex in vector
-      std::vector<Vertex*>::iterator v=stats.vset.begin();
-      while(v!=stats.vset.end())
+      if (cs.get_max_runtime()>0.0)
       {
-        if(stats.vertexIsMoveCandidate(*v,c))
+        if ((time(NULL)-begintime) > cs.get_max_runtime()) break;
+      }
+      vs.collectVerticesToMoveNext(group);
+      // for each vertex in collection to move 
+      vp_cit v=vs.beginVset();
+      while (v!=vs.endVset())
+      {
+        if (Refractory::instance().vertexIsMoveCandidate(*v))
         {
           // vertex is a move candidate
-          stats.computeVertex(*v,&c);
-          //pod.clear();
-          //pod.addVertex(stats.cv);
-          //pod.addOrigP(stats.cv->pN);
-          //pod.addOrigSepDis(sqrt(stats.sep_dis));
-          /*
-          if(true)
+          vs.calculateMoveLocation(*v);
+          if (cs.get_enable_vtrack()==true) log.setDetailedInfoPreMove(*v);
+          bool int_flag = false,angle_flag=false,outside_octree=false;
+          State & s(State::instance());
+          vector3 const * const destination = vs.getVertexDestination();
+          vector3 origin(*(*v)->getPos());
+          if (s.assignNewVertexCoords(*v,destination,origin,int_flag,angle_flag,outside_octree))
           {
-            int rrank;
-            tv_iterator ttt;
-            stats.findTopN(stats.cv,ttt,rrank);
-            // get closest point
-            double pC[3];
-            c.computePC(stats.cv->cl,stats.cv,pC);
-            // set
-            pod.addOrigCP(pC);
-            pod.addOrigVD(sqrt((*ttt).first));
-            pod.addOrigTopN(rrank);
-          }
-          */
-          bool int_flag = false,angle_flag=false;
-          if(c.assignNewVertexCoords(s,stats.cv,stats.pH,stats,int_flag,angle_flag))
-          {
-            /*
-            pod.addNewP(stats.cv->pN);
-            pod.addNewSepDis(sqrt(stats.cv->getSqSepDist(&c)));
-            if(true)
+            // record seed actual displacement for steady-state analysis
+            if (*v==vs.getSeedVertex())
             {
-              int rrank;
-              tv_iterator ttt;
-              stats.findTopN(stats.cv,ttt,rrank);
-              // get closest point
-              double pC[3];
-              c.computePC(stats.cv->cl,stats.cv,pC);
-              // set
-              pod.addNewCP(pC);
-              pod.addNewVD(sqrt((*ttt).first));
-              pod.addNewTopN(rrank);
+              int iter = vs.getNumMovedVertsGroup()+static_cast<int>(cs.get_group_size()*(group-1.0));
+              Virtual_Disp::instance().addAdToSeedAd(iter,sqrt((*destination-origin).dot((*destination-origin))));
             }
-            if(pod.isGood()==true){pod.print();}
-            else { pod.printBad();exit(0);}
-            */
             // vertex was successfully moved
-            stats.updateStatsAndPrint(c,group);
+            vs.incrementNumMovedVertsGroup();
+            Refractory::instance().updateSuccessfulMove(group,*v);
+            cs.updatePrintPeriod(vs.getNumMovedVertsGroup());
+            if (!(vs.getNumMovedVertsGroup()%cs.get_print_period()))
+            {
+              log.writeMoveSummary(group,cs.get_group_size());
+            }
+            if (cs.get_enable_vtrack()==true)
+            {
+              log.setDetailedInfoPostMove(*v);
+              log.writeDetailedMoveInfo();
+            }
+            log.updateVertDisplStats(*v,origin);
+            // automatically strict face intersection prevention
+            if (cs.get_strict_face_intersection_prevention()==false)
+            {
+              if (Intersecting_Faces::instance().getCountOfIntFaces(false)==0)
+              {
+                cs.set_strict_face_intersection_prevention();
+              }
+            }
+            //gs.updateGainPeriod();
+            gs.resetGain();
+            if (cs.get_write_mesh_now()>0)
+            {
+              if (vs.getNumMovedVertsGroup()==cs.get_write_mesh_now())
+              {
+                c.writeMeshData(group);
+              }
+            }
             // update iterator
             v++;
-            if(v==stats.vset.end()){break;}
+            if (v==vs.endVset()){break;}
           } 
           else
           {
             // vertex was NOT successfully moved
-            //std::vector<Vertex*>::iterator q = stats.detectPunishableVertex(v,int_flag,angle_flag,pod,c);
-            std::vector<Vertex*>::iterator q = stats.detectPunishableVertex(v,int_flag,angle_flag);
+            vp_cit q = Refractory::instance().getNextVertex(group,v,int_flag,angle_flag,outside_octree);
             v=q;
-            if(v==stats.vset.end()){break;}
+            if (v==vs.endVset()){break;}
           }
         }
         else
@@ -264,54 +283,103 @@ int main(int argc,char **argv){
           // vertex is NOT a move candidate
           // so move on to next vertex in set
           v++;
-          if(v==stats.vset.end()){break;}
+          if (v==vs.endVset()){break;}
         }
       } // end for each vertex in set
-      if(stats.noSetVerticesMoved())
+      log.updateMovedVertsFromSet();
+      if (vs.noSetVerticesMoved())
       {
         // NO vertices were moved from last set
         // build set from vertex with next largest virtual displacemnet
-        // (assuming it passes test in identifyMeshRegionToUpdate())
-        stats.tvi++;
+        // (assuming it passes test in collectVerticesToMoveNext())
+        Virtual_Disp::instance().advanceSeedToNextLargestVert();
       }
       else
       {
         // vertices were moved from last set, so reset iterator
-        stats.tvi = stats.topN.begin();
+        Virtual_Disp::instance().resetSeedToLargestVert();
       }
+      // break of executing vertex sequence and sequence has ended
+      if (cs.get_vertex_sequence_file().empty()==false) break;
     } //end while number of moved vertices less than GROUP_SIZE
+    // check lots of stuff
+    c.checkFaces("GROUP");
+    c.checkFacesInOctree();
+//    c.checkClosestFace(group,"GROUP");
+    Virtual_Disp::instance().validateVirtDispMap();
+    Virtual_Disp::instance().validateVirtDispMap2();
+    Virtual_Disp::instance().validateVirtDispMapComplement();
     // update log file
-    char str[128];
-    sprintf(str,"%s%2d%s","Iteration ",group,": Update log files:");
-    currtime = recordTime(myfile,currtime,str);
-
-    // write output files and update gain
-    stats.writeFilesAndUpdateMaxGain(c,group);
-  }
+    log.recordTime(log.format("Iteration %2d: Update log files:",group));
+    log.printVertexSchedulingStats(cout);
+    log.printClosestPtSearchStats(cout);
+    // write output files
+    if (cs.get_write_every_group()==true) log.writeFiles(group);
+    // update gain
+    gs.updateMaxGain();
+  } // end of group
 
   // write output files
-  if(WRITE_MESH_EVERY_ITERATION==false)
+  if (cs.get_write_every_group()==false)
   {
-    cout << "Build Mesh final..................";
-    cout.flush();
-    c.buildMeshAfter(1);
-    cout << "complete.\n";
-    cout.flush();
-  }
-  if(WRITE_DISTANCES_EVERY_ITERATION==false)
-  {
-    cout << "Write closest point distances final..";
-    cout.flush();
-    c.writeDistances(1);
-    cout << "complete.\n";
-    cout.flush();
+    log.writeFiles(1);
+    if (cs.get_write_ecw_to_file()==true)
+    {
+      log.writeSepDistances(1);
+    }
   }
 
-  // free allocated memory
-  stats.freeAvg();
-
-  ////////// close log files //////////
-  c.fileOutit();
-  myfile.close();
+  log.closeFiles();
   cout << "meshmorph complete\n\n";
 }
+
+
+/** Determine if integers are 32 bit.
+ * \return True if integers are 32 bit on this machine; false otherwise.
+ */
+
+bool checkIntSize (void)
+{
+  ///// check that assumption of 32 bit int is correct /////
+  if (32==sizeof(int)*8){ return true; }
+  else
+  {
+    std::cout << "Error. Int is not 32 bits, sizeof(int) "
+          << sizeof(int) << std::endl;
+    return false;
+  }
+}
+
+/** Determine if two floating-point precision numbers
+ * are equivalent in value within epsilon.
+ * \param[in] a First number.
+ * \param[in] b Second number.
+ * \param[in] epsilon The difference between the two input values must be
+ * greater than the fraction of the largest input value defined by epsilon.
+ * \return 1 if Inputs are different; 0 otherwise.
+ */
+
+bool distinguishable (double a,double b,double epsilon)
+{
+  double c;
+  c=a-b;
+  if (c<0) c=-c;
+  if (a<0) a=-a;
+  if (a<1) a=1;
+  if (b<0) b=-b;
+  if (b<a) return (c>a*epsilon);
+  else return (c>b*epsilon);
+}
+
+/** Determine if two floating-point precision numbers
+ * are equivalent in value within MY_DOUBLE_EPSILON. 
+ * \param[in] a First number.
+ * \param[in] b Second number.
+ * \return 1 if Inputs are different; 0 otherwise.
+ */
+
+bool distinguishable (double a,double b)
+{
+  return distinguishable(a, b, Controls::instance().get_my_double_epsilon());
+}
+

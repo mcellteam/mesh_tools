@@ -1,3 +1,12 @@
+
+Not sure if face aspect ratio threshold should
+suggest changing faces to decrease ratio.
+
+Apr2008
+Old observation - suspect countBoundaries is inaccurate.
+It is intended to count the number of separate boundary loops,
+i.e. collections of contiguous open edges (edges with only one adjacent face)
+
 Feb 2008
 not printing all adjacent faces of nonmanifold edge.
 For example just prints two adjacent faces but omits two others

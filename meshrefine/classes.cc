@@ -403,9 +403,12 @@ public:
 	std::vector<Vertex*> v;		// container of pointers to all vertices in object
 	std::vector<Face*> f;		// container of pointers to all faces in object
 	std::vector<Edge*> e;		// container of pointers to all edges in object
+        std::vector<std::string> storage; // store unamtched lines from frozen vert file
+        std::vector<int> frozen;        // indices of frozen vertices
+        std::string name;
 	int max_faces;
-	Object(char*);
-	void scanFile(char*);
+	Object(std::string const &);
+	void scanFile(const char*);
 	void clearEdges(void);
 	void createEdges(void);
 	void createEdge(Face*,Vertex*,Vertex*,hashtable_t&,int);
@@ -414,21 +417,42 @@ public:
 	bool thresholdEdges(double);
 	int createNewVertices(void);
 	int createNewSubdividedFaces(void);
+        void processFrozenFile(std::string filename);
+        void printFrozen(std::string filename);
+        std::string strip_tail(std::string const &,uint);
+        std::string getName(std::string const &);
 };
 
-Object::Object(char *file)
+std::string Object::strip_tail(std::string const &str, uint len)
 {
-	fprintf(stderr,"\n\nBuilding vertices and faces.....");
-	fflush(stderr);
-	scanFile(file);
-	fprintf(stderr,"complete.\n");
-	fflush(stderr);
-	max_faces = f.size();
-/*	fprintf(stderr,"Building edges..................");
-	fflush(stderr);
-	createEdges();
-	fprintf(stderr,"complete.\n");
-	fflush(stderr);
-*/
+  if (str.size() < len)
+    return str;
+
+  return str.substr(0, str.size() - len);
+}
+
+std::string Object::getName(std::string const &str)
+{
+  // extract name (== everything before last '_')
+  uint start = 0;
+  if (str.find_last_of('/') != std::string::npos)
+  {
+    start = str.find_last_of('/')+1;
+  }
+  uint end = str.size()-MESH_SUFFIX.size();
+  uint len = end-start;
+  return str.substr(start,len);
+}
+
+
+Object::Object(std::string const &file)
+{
+  name = getName(file);
+  fprintf(stderr,"\n\nBuilding vertices and faces.....");
+  fflush(stderr);
+  scanFile(file.c_str());
+  fprintf(stderr,"complete.\n");
+  fflush(stderr);
+  max_faces = f.size();
 }
 

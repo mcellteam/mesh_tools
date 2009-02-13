@@ -1,6 +1,7 @@
 CC = gcc
 DEFS =
-FLAGS = -O3 -march=pentiumpro
+#FLAGS = -O3 -march=pentiumpro
+FLAGS = -O3 -march=pentiumpro -L/home/jkinney/install/googleperf/lib -lprofiler -ltcmalloc
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 

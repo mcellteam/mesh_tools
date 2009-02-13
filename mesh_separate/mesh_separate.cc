@@ -468,8 +468,13 @@ int main(int argc,char *argv[]){
 	// for each group
 	for (j=0;j<num_groups;j++) {
 
-		// open file
-	    sprintf(outfile,"%s.%i",infile,j);
+	    // open file
+            char prefix[1024];
+            int L = strlen(infile)-5;
+            strncpy (prefix,infile,L);
+            prefix[L]='\0';
+	    //sprintf(outfile,"%s.%i",infile,j);
+	    sprintf(outfile,"%s_%i.mesh",prefix,j);
 	    printf("\n%s written (%i faces).\n\n",outfile,face_count[j][1]);
 	    F = fopen(outfile,"w");
 	    if (!F) {

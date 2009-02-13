@@ -1,20 +1,211 @@
-# JPK jan2008
-add option to meshmorph for detailed output, thus obviating the need
-for the separate detailed_output_version source code.
+Accomplished
+-------------
+
+Disabled checkClosestFace in meshmorph.cc.
+
+#Returned ecw output in log.cc to just 'ecw',
+#not 'ecw ptx pty ptz closestx closesty closestz'.
+Just reenabled detailed output.
+
+Conditioned last writeSepDistances after morphing complete on cs.get_write_every_group()==false.
+
+From Gain_Schedule class removed ref_gain and period. Now gain gain scheduling works
+and changes max_gain.
+
+Added user-modifiable coefficient to step size in max_gain.
+
+Changed default values for edge_stretch_gain and aspect_ratio_gain
+
+Added logic in vertex ecw force calculcation to use target ecw low and high and threshold.
+
+// High priority
+#######################
+
+Configure parser to exit if unrecognized command line option.
+
+Add unit test to verify fundamentally, e.g. cppunit or boost libraries.
+
+Likely a mismatch between search region (300) and update region (130?)
+explains why checkClosestFace had to be disabled.
+
+Just thought of case not handled by 
+bool Container::findClosestPtToVertexAmongFaces (Vertex const * const v,
+What of 7 calculated points on face are all outside of search cone,
+but the interior of face is within search cone. In other words, the closest
+face to vertex within vertex's search cone is on face, but not one of
+7 points calculated by Container::findClosestPtToVertexAmongFaces.
+
+Investigate why some vertices have no closest point. Visualization in
+DReAMM reveals no obvious cause.
+
+Have print period default be fixed fraction of group size
+
+I should remove EDGE_LENGTH_WEIGHT since I have no intention of changin it.
+Using EDGE_LENGTH_GAIN is sufficient.
+
+add warning message if vertices listed in vertex move schedule are not found in input data
+
+enable closest face check
+
+meshmorph is printing get_max_touches which should
+be subject to --disable_messages
+
+remove second argument from detectNewFaceInts
+and use findAndRecordNewFaceInt
+
+Any '.mesh' in filenames in input directory will be opened.
+Add check to not open binary files.
+From Jed
+"A quick and stupid heuristic method would be to read in the first, say,
+100 bytes and check if 'isprint' returns true for all of the characters
+read.  (See the man page for isprint for details.)  There are many
+variants on this.  Essentially, the file is binary if it contains
+non-text data.  Try 'xxd -g1 filename | less' to see the contents of the
+file; that will give you some idea whether such a strategy will be
+effective.  For instance, it will break on a binary file which starts
+with 100 bytes of ASCII data, but will probably succeed on a file
+containing just IEEE754 floating point values.  This should, generally,
+work for the DREAMM files produced by MCell, since they do not usuallly
+include text and binary in the same file, but is NOT a reliable strategy
+for DX files in general, which can freely intermix text and binary."
+
+Continue debugging morph of CA3 synapse using version 151.
+
+Meshmorph does not like coincident surfaces.
+
+Progress meters are inaccurate for CA3 synapse.
+
+Add option to set undetermined vertices to nonnice. Currently, they are set to nice.
+
+Add option to turnoff closestFaceCheck
+
+high separation weight (0.8) crushes thin processes
+
+remove CLOSEST_POINT_COSINE and CLOSEST_POINT_SINE keep CLOSEST_POINT_ANGLE
+Why is CLOSEST_POINT_ANGLE reported incorrectly in command....
+
+explicitely clear files that are being appended to.
+
+replace my vector3 with Wm4::Vector3.
+
+Rigorously tune MIN_SEARCH_CONE_RADIUS, by parameter sweep and recording elapsed time for
+1E6 ecw measurements.
+
+Improve void Log::writeSepDistances (int const & group)
+Needs acceleration and progress reports and improved coding style.
+  Each Octree visitor allocates and deallocates 10 doubles.
+  This may be the cause of the slowdown.
+  Need re-initialize member function for visitor,
+  so instantiate single visitor and reuse many times with new search region.
+  bool Container::findClosestPtToBarycenter (vector3 const & pt,Face * const f,
+  and elsewhere.
+
+Improve formatting in Log::statusFileInit (void).
+
+consider rebuilding octree after each group
+since my octree update scheme does not rebalance
+should only result in slowdown, not inaccuracy.
+gathering octree stats could inform whether this is necessary
+
+fix gain_scheduling
+
+// Low priority
+#######################
+add detailed comments from source code to doxygen.
+
+Here are a few other general comments, but I doubt that anything simple
+can or should be done, either because the fix would be complex, or
+because the potential problems are minor, or are mitigated by other
+factors.
+
+  - there are some fairly long functions; this is mainly a problem if
+    the function has complex control flow, if the code is not
+    particularly clean, or if you are developing in a group with other
+    people.  Since none of these seem to be the case here, there's
+    little point, I think.  The code looks clean enough and
+    straightforward enough that a handful of longer functions are not
+    really a problem.
+
+  - there are some fairly terse variable names; again, not so much of a
+    problem if the functions are short, the control flow clear, and the
+    developers few, as in this case.  but if you expect to turn it over
+    to someone for maintenance, or if you expected to develop with a
+    group of people, you'd want to make sure the variable names were a
+    little more verbose, probably.
+
+  - You've got the start of a beautiful man page.  You might make it a
+    full man page by modifying the mcell man page I've attached.
+
+
+Add following to meshmorph.
+  << "  Running on azzuri at Wed Sep 24 12:11:51 2008\n\n"
+
+Store octree max instead of width in controls.
+
+protect from buffer overruns
+
+record octree statistics to file, e.g. histogram of cell sizes,
+histogram of faces per box, or min,max,median instead
+
+fix doxygen documentation for octree files
+
+-----------
+separation springs (moved and region)
+stretch springs (adjacent to moved)
+angle springs (all edges of adjacent faces to moved)
+
+// NOTE the niceness of barycenters should be calculated.
+// For now, I assume no nonnice vertices or barycenters.
+// container.cc :1310
+
+consider making checkClosestFace period a global constant
+
+replace simple if-else with ternary conditional '?'
+
+3) use a single map to hold all constants (int, double, string)
+   map is string->instance of TypedValue
+   Note the singleton class will have two fields
+     1) string
+     2) union , which makes efficient use of memory to access same memory, interpreted in different ways
+   use enum to code different data types
+
+Consider not updating vertex and face normal,
+and position in tree after every move. Instead
+set face to 'dirty' and recompute only if needed.
+In State::assignNewVertexCoords
+    updateAdjacentFacesInTree(v);
+    updateAdjFaceBoundingBoxes(v);
+  v->updateAdjacentFaceNormals();
+Ideas for marking as dirty
+1) in face set normal vector to 0,0,0
+2) in vector set normal vector to 0,0,0
+3) best of all, use bool in face and vertex classes
+
+Consider switching from map (virtual displacement -> vertex)
+to array of bins with linked lists of vd-vertex pairs hanging off.
+Use next and previous are pointers to pointer
+To remove item in list,
+*p=n;
+if (n) n->p=p;
+
+Seems that less than one vertex on average changes its closest face per vertex move.
+What is the identity of this vertex?
+
+use flag instead of hashset or set or vector with sort and unique
+
+Perform code coverage analysis:
+  Include -fprofile-arcs -ftest-coverage in compile flags
+  Run gcov on output.
+
+In Refractory::determineTryAgainOrMoveOn , decreasing move size is NOT always the
+  best idea for each of the refraction violations. Sometimes taking a bigger step
+  would be better. Delineate these rules.
+
+In State::recordVertAdjFaceEdgeAngles // NOTE THIS ALGORITHM LIKELY TO CHECK EDGES TWICE.
+
+Consider using for_each STL pg 161 meyers book.
 
 Oct2007
-1. Replace use of char with string to avoid specifying a filename size.
-2. Energy increases after I imposed max move size of 3 nm.
-3. Add 'const' everywhere applicable
-4. uses relative path to copy controls.cc to outdir. fix this
-5. use std::string not char* OR check strlen before strcpy
-6. print to stdout 'Creating __ subvolumes (__,__,__ per axis)
-7. new stat to print to stdout and cont.log : max(vd^2) i.e. topN.front()
-	if mean(max(vd^2))==constant then likely osciallating or steady state
-8. new stat to print to stdout and cont.log : mean(vd^2) )
-	if mean(vd^2) is low, then boost overall gain even if max vd==MAX_MOVE_SIZE
-	since a single large move sets max, while population is represented in medial and max
-
 Ideas from Jed for improving speed of meshmorph (Oct2007)
 ----------------------------------------------
 1. use closest vertex as closest point
@@ -51,29 +242,24 @@ simple idea 1 : sort by x then y then z
 	Alternatively, leave it to user to check assumptions using meshalyzer.
 5. small processes are shrunk to infinitely thin fingers for large
 	ECS widths. Need to enforce a minimum process diameter.
+--------------------
+--------------------
+--------------------
 
-Ideas to decrease RAM usage
-------------------------------
-Vertex Class
-COMPLETE	1. Remove double pC[3]. Compute from Face *cl.
-COMPLETE	2. Remove pointers to adjacent edges. Use adjacent faces.
-	3. Remove integer index. Use index into vector as proxy.
+command:
+time ~/src/mesh_tools/meshmorph/diagnostic/meshmorph
+-i ecw_50_sep_45_angle_45 -o out_limited -t 20 -s 45 -a 45
+-f ecw_50_sep_45_angle_45/frozen_vertices_input1.dat
 
-Face Class
-COMPLETE	1. Remove Box*s. Compute box indices using face vertex locations.
-	2. Remove integer index. Use index into vector as proxy.
+*******************************
 
-Edge Class
-COMPLETE	1. Do not store v1,v2,o1,o2. Compute from f1 and f2.
+THOUGHTS
+---------
 
-FROM MATLAB
-remove closest point from vertex:  117.985 MB
-remove adjacent edges from vertex: 86.0305 MB
-remove integer index from vertex:  9.83205 MB
-remove box* from face:             93.3643 MB
-remove integer index from face:    19.6556 MB
-remove vertex pointers from edges: 117.934 MB
-
-total 444.801 MB
+Typical shape of neuropil is cylinder.
+Shrinking diameter of meshed cylinder without changing its length
+requires a change in aspect rati of faces.
+This potentially has implications for forces on faces as
+function of aspect ratio.
 
 

@@ -1,4 +1,4 @@
-COMPILE = g++ -O3 -o reconstruct2contourtiler
+COMPILE = g++ -Wall -Wshadow -O3 -g -o reconstruct2contourtiler
 LINK = g++
 
 reconstruct2contourtiler: classes.cc functions.cc reconstruct2contourtiler.cc  

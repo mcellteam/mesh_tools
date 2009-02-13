@@ -1,141 +1,105 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#include <string>
+#include <cmath>
 
 #include "classes.cc"
 #include "functions.cc"
 
-int main(int argc,char *argv[]){
+int main(int argc,char *argv[])
+{
 
-	if (argc != 10)
-	{
-		printf("\nSyntax: reconstruct2contourtiler input_directory ");
-		printf("filename_prefix min_section max_section section_thickess ");
-		printf("scale output_directory capping_flag deviation_threshold\n\n");
-		printf("Description: Converts reconstruct contour format to contour_tiler input format.\n");
-		printf("		All files in input directory are assumed to be ");
-		printf("of the form filename_prefix.section#.\n");
-		printf("		min_section to max_section is the section range to be converted.\n");
-		printf("		Section_thickness should be in same scale as x,y contour points.\n");
-		printf("		x,y and z coordinates of sampled splines will be multipled by scale in output.\n");
-		printf("		capping_flag=1 to attempt end capping.capping_flag=0 to leave ends open.\n");
-		printf("		deviation_threshold is the maximum allowed deviation of the spline from raw\n");
-		printf("		contour points in scaled units. Set ");
-		printf("deviation_threshold to 0 to disable thresholding.\n\n");
-		return 1;
-	}
-		fprintf(stderr,"\n\nMore sophisticated capping must be ");
-		fprintf(stderr,"performed as a postprocess on the pts output files.\n\n");
+  Parse p;
+  p.parseCommandLine(argc,argv,p.getUsageMessage());
 
+  ////////// declare variables /////////
+  char output_script[32] = "mesh_and_convert.csh";
+  // spline parameters
+  Parameters *pa = new Parameters;
+  pa->plot_rad_int=.1;// radius of curvature sampling interval for plotting sampling function
+  pa->num=100;		// num is the # samples of the splines between contour points
+                        // sequential triplets of sampled points are used to
+                        // compute the radius of curvature , e.g. num/2 between contour points
+  pa->diag=false;	// set true to print diagnostic files
+  pa->max_rad=1E10;	// calculated radius of curvature of spline will saturate at this value
+  pa->dmin=.001;	// dmin = minimum spline sampling distance
+  pa->dmax=.050;	// dmax = maximum spline sampling distance
+  pa->T=1.0;		// sample period (= time to traverse dmax)
+  pa->amax=1E-2;	// max radial acceleration
 
-	////////// declare variables /////////
-	char outdir[128],output_script[32] = "mesh_and_convert.csh",*eptr,*temp;
-	void_list *q,*ch,*objectsh;
-	Histogram *h;
-	Parameters *pa;
-	Object *o;	
-	Contour *c;
-	h = new Histogram();
-	pa = new Parameters;
-	int i,capping_flag,*contour_array,num_contours;
-	double thickness,scale,deviation_threshold;
+  printf("\nReading input files.\n");
+  // create contours
+  void_list *ch = getContours(p);
 
-	// spline parameters
-	pa->plot_rad_int=.1;// radius of curvature sampling interval for plotting sampling function
-	pa->num=100;		// num is the # samples of the splines between contour points
-						// sequential triplets of sampled points are used to
-						// compute the radius of curvature , e.g. num/2 between contour points
-	pa->diag=false;		// set true to print diagnostic files
-	pa->max_rad=1E10;	// calculated radius of curvature of spline will saturate at this value
-	pa->dmin=.001;		// dmin = minimum spline sampling distance
-	pa->dmax=.050;		// dmax = maximum spline sampling distance
-	pa->T=1.0;			// sample period (= time to traverse dmax)
-	pa->amax=1E-2;		// max radial acceleration
-//	pa->tau=2;			// decrease tau to increase steepness of sampling function
-//	pa->rI=-6;			// inflection point of sampling function = tau*rI
-						// decrease rI to sample finer
+  // remove contours with less than three points
+  ch=purgeBadContours(ch);
 
-	////////// get data /////////
-	thickness = strtod(argv[5],&eptr);
-	scale = strtod(argv[6],&eptr);
-	strcpy(outdir,argv[7]);
-	capping_flag = (int)strtod(argv[8],&eptr);
-	deviation_threshold = strtod(argv[9],&eptr);
+  // add previous pointers
+  for (void_list *q=ch;q!=NULL;q=q->next){((Contour*)q->data)->addPreviousRaw();}
 
-	// adjust outdir
-	temp=strrchr(argv[7],'/');
-	if(!temp) {strcat(outdir,"/");}
-	else if(*++temp) {strcat(outdir,"/");}
+  // check contours for duplicate points
+  for (void_list *q=ch;q!=NULL;q=q->next){((Contour*)q->data)->removeDuplicates();}
 
-	// create contours
-	ch = getContours(argc,argv,thickness);
+  // remove contours with less than three points
+  ch=purgeBadContours(ch);
 
-	////////// add previous data //////////
-	for (q=ch;q!=NULL;q=q->next){((Contour*)q->data)->addPreviousRaw();}
+  printf("Interpolating contours.\n");
+  ///// linearly interpolate raw contour points /////
+  if (p.deviation_threshold) {
+    for (void_list *q=ch;q!=NULL;q=q->next)
+    {
+      ((Contour*)q->data)->linearlyInterp(p.deviation_threshold,p.scale);
+    }
+  }
 
-	///// check contours for duplicate points /////
-	for (q=ch;q!=NULL;q=q->next){((Contour*)q->data)->removeDuplicates();}
+  ////////// add previous data //////////
+  for (void_list *q=ch;q!=NULL;q=q->next){
+    ((Contour*)q->data)->addPreviousRaw();
+  }
 
-	// count contours
-	num_contours=countContours(ch);
+  // NOTE: RAW POINTS IN CONTOURS ARE STORED IN REVERSE ORDER
+  // FIRST OFF THE LINKED LIST WAS LAST ADDED TO LIST.
 
-	///// linearly interpolate raw contour points /////
-	if (deviation_threshold) {
-		i=0;
-		for (q=ch;q!=NULL;q=q->next) {
-			c=(Contour*)q->data;
-			printf("Contour %s, section %d\n",c->name,c->section);
-			c->linearlyInterp(deviation_threshold,scale);
-		}
-	}
+  // create array of number of points in each contour
+  int *contour_array = NULL;
+  contour_array = createArray(contour_array,ch,countContours(ch));
 
-	////////// add previous data //////////
-	for (q=ch;q!=NULL;q=q->next){
-		((Contour*)q->data)->addPreviousRaw();
-	}
+  printf("Splining contours.\n");
+  ////////// fit splines //////////
+  Histogram *h = new Histogram();
+  fitSplines(ch,h,p.section_thickness,contour_array,p.deviation_threshold,p.scale,p.output_dir.c_str(),pa,countContours(ch));
 
-	// NOTE: RAW POINTS IN CONTOURS ARE STORED IN REVERSE ORDER
-	// FIRST OFF THE LINKED LIST WAS LAST ADDED TO LIST.
+  ///// compute histogram /////
+  computeHistogram(h,ch,contour_array);
 
+  ////////// create objects //////////
+  void_list *objectsh=createObjects(ch);
 
-	////////// create array of number of points in each contour //////////
-	contour_array = createArray(contour_array,ch,num_contours);
+  ////////// clear any existing pts and script files //////////
+  clearPtsFiles(p.output_dir.c_str(),objectsh);
 
-	////////// fit splines //////////
-	fitSplines(ch,h,thickness,contour_array,deviation_threshold,scale,outdir,pa,num_contours);
+  printf("Writing output contours.\n");
+  ////////// print each object //////////
+  // for each object
+  for (void_list *q=objectsh;q!=NULL;q=q->next) {
+    Object *o=(Object*)q->data;
+    if(!degenerateObject(o) && (p.capping_flag || o->min_section!=o->max_section)){
+      ///// print config file /////
+      printConfigFile(p.output_dir.c_str(),o,p.capping_flag);
+      /////  append to script files /////
+      appendScriptFile(p.output_dir.c_str(),o);
+      ///// print pts files of interpolated contour points /////
+      printPtsFiles(p.output_dir.c_str(),o,p.scale);
+      if(p.capping_flag){printCaps(p.output_dir.c_str(),o,p.section_thickness,p.scale);}
+    }
+  }
 
-	///// compute histogram /////
-	computeHistogram(h,ch,contour_array);
+  ////////// create calling script //////////
+  createCallingScript(p.output_dir.c_str(),output_script);
 
-	////////// create objects //////////
-	objectsh=createObjects(ch);
+  ////////// print deviation statistics //////////
+  printStatistics(h,p.scale);
 
-	////////// clear any existing pts and script files //////////
-	clearPtsFiles(outdir,objectsh);
+  cleanup(objectsh,h,ch,contour_array);
+  delete pa;
 
-	////////// print each object //////////
-	// for each object
-	for (q=objectsh;q!=NULL;q=q->next) {
-		o=(Object*)q->data;
-        if(!degenerateObject(o) && (capping_flag || o->min_section!=o->max_section)){
-			///// print config file /////
-			printConfigFile(outdir,o,capping_flag);
-			/////  append to script files /////
-			appendScriptFile(outdir,o);
-			///// print pts files of interpolated contour points /////
-			printPtsFiles(outdir,o,scale);
-			if(capping_flag){printCaps(outdir,o,thickness,scale);}
-		}
-	}
-
-	////////// create calling script //////////
-	createCallingScript(outdir,output_script);
-
-	////////// print deviation statistics //////////
-	printStatistics(h,scale);
-
-	cleanup(objectsh,h,ch,contour_array);
-
-	return 0;
+  return 0;
 }

@@ -365,7 +365,7 @@ int main(int argc,char *argv[])
   fflush(stdout);
 
 	// create array of pointers to vertex list
-	printf("# vertices %i\n",num_vert);
+	//printf("# vertices %i\n",num_vert);
 	void_list** vert_array;
 	vert_array = new void_list*[num_vert];
 	num_vert=0;

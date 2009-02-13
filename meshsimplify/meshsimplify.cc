@@ -50,18 +50,16 @@ int main(int argc,char *argv[]){
 	buildVertMap(vlh,hmv);
 	addPointersToFaces(flh,hmv);
 
-	int j=0;
 	while (flag) {
-		fprintf(stderr,"\nmain:iter %i\n",j);
 		///// build edge list ////
 		clearEdges(e,hme);
 		clearFaceEdges(flh);
 		fprintf(stderr,"main: getting edges...");
-		getEdges(flh,hme,e,j);
+		getEdges(flh,hme,e);
 		fprintf(stderr,"complete.\n");
 		// find adjacencies
 		clearVertexAdjacencies(vlh);
-		findVertexAdjacencies(flh,j,e);
+		findVertexAdjacencies(flh,e);
 		// find bad edge
 		fprintf(stderr,"main: find bad edge...");
 		ee=findBadEdge(e,threshold);
@@ -69,7 +67,6 @@ int main(int argc,char *argv[]){
 		if(ee!=NULL) {simplifyMesh(ee,flh,vlh,max_verts);flag=true;}
 		else {flag=false;}
 		fprintf(stderr,"main: max_verts %i\n",max_verts);
-		j++;
 
 //		fprintf(stderr,"main: postcheck vertices...");
 //		check(vlh);

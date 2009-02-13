@@ -296,8 +296,7 @@ void Edge::update(Face *f){
 		fprintf(stderr,"Existing Face %i %i ",f2->index,f2->v1->index); 
 		fprintf(stderr,"%i %i\n",f2->v2->index,f2->v3->index);
 		fprintf(stderr,"Edge vertices: v1 %i, v2 %i\n",v1->index,v2->index);
-		char s[32];
-		fprintf(stderr,"keyPair %u\n",keyPair(v1->index,v2->index)); 
+		fprintf(stderr,"keyPair %u\n",static_cast<uint>(keyPair(v1->index,v2->index))); 
 		exit(1);
 	}
 	// assign vb

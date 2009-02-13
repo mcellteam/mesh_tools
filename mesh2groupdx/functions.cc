@@ -28,11 +28,12 @@ void Cabinet::finalizeScript(void){
 	message = message +
 			"cd "+ outdir+ "\n"+
 			"echo \"running mcell\"\n"+
-			"mcell3 main.mdl\n"+
+//			"~/bin/mcell3.1-amd64 main.mdl\n"+
+//			"~/bin/mcell3 main.mdl\n"+
+			"/home/jkinney/bin/mcell3.1-opteron main.mdl\n"+
 			"echo \"cleaning up\"\n"+
-			"rm *.mdl "+
-			SCRIPT+
-//			" n_ME-n_SSV.dat\n";
+			"rm *.mdl\n"+
+			"rm "+ SCRIPT +
 			"\n";
 	F << message;
 }

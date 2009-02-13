@@ -1,6 +1,7 @@
 CC = gcc
 DEFS =
-FLAGS = -O2 -march=pentiumpro -fomit-frame-pointer
+#FLAGS = -O2 -march=pentiumpro -fomit-frame-pointer
+FLAGS = -g
 LIBS = -lfl -lm
 INSTALL_DIR = $(HOME)/bin
 

@@ -83,7 +83,7 @@ u4 computeHashValue(int key1, int key2) {
 
 void getData(char *infile,void_list *&flh,void_list *&vlh){
 
-	char line[2048],*str,*eptr;
+	char line[2048],*str;
 	FILE *F;
 	void_list *vl;
 	Vertex *v;
@@ -162,13 +162,12 @@ int maxFace(void_list *L){
 void addPointersToFaces(void_list *flh,hashtable_v &hmv){
 	void_list *q;
 	Face *f;
-	int i=0;
 	// for each face
 	for (q=flh;q!=NULL;q=q->next) {
 		f=(Face*)q->data;
-		f->v1=hmv[(int)f->v1];
-		f->v2=hmv[(int)f->v2];
-		f->v3=hmv[(int)f->v3];
+		f->v1=hmv[static_cast<int>(f->v1)];
+		f->v2=hmv[static_cast<int>(f->v2)];
+		f->v3=hmv[static_cast<int>(f->v3)];
 	}
 }
 
@@ -196,8 +195,7 @@ bool edgeMatch(Edge *e,int va,int vb) {
 	else {return false;}
 }
 
-void checkEdge(hashtable_t &hme,Face *f,Vertex *va,Vertex *vb,std::vector<Edge*> &e,int j) {
-	char s[32];
+void checkEdge(hashtable_t &hme,Face *f,Vertex *va,Vertex *vb,std::vector<Edge*> &e) {
 	Edge *ee=NULL,*et=NULL,*en=NULL;
 	void_list *p;
 	///// find edge /////
@@ -234,16 +232,15 @@ void checkEdge(hashtable_t &hme,Face *f,Vertex *va,Vertex *vb,std::vector<Edge*>
 	}
 }
 
-void getEdges(void_list *flh,hashtable_t &hme,std::vector<Edge*> &e,int j){
+void getEdges(void_list *flh,hashtable_t &hme,std::vector<Edge*> &e){
 	void_list *q;
 	Face *f;
-	int i=0;
 	// for each face
 	for (q=flh;q!=NULL;q=q->next) {
 		f=(Face*)q->data;
-		checkEdge(hme,f,f->v1,f->v2,e,j);
-		checkEdge(hme,f,f->v2,f->v3,e,j);
-		checkEdge(hme,f,f->v3,f->v1,e,j);
+		checkEdge(hme,f,f->v1,f->v2,e);
+		checkEdge(hme,f,f->v2,f->v3,e);
+		checkEdge(hme,f,f->v3,f->v1,e);
 	}
 }
 
@@ -261,7 +258,7 @@ void clearVertexAdjacencies(void_list *vlh){
 	}
 }
 
-void findVertexAdjacencies(void_list *flh,int j,std::vector<Edge*> &e){
+void findVertexAdjacencies(void_list *flh,std::vector<Edge*> &e){
 	Face *ff;
 	std::vector<Edge*>::iterator i;
 	// for each face, add face* to each face vertex
@@ -412,7 +409,6 @@ Vertex* addVertex(Edge *e,void_list *&vlh,int &max_verts){
 
 void check(void_list *vlh){
 	void_list *q;
-	Face *f;
 	Vertex *v;
 	// for each vertex
 	for (q=vlh;q!=NULL;q=q->next) {
@@ -462,7 +458,7 @@ void collectEdgePtrs(Vertex *t,Edge *e,std::vector<Edge*> &ep){
 			){ep.push_back(*i); }
 	}
 	// check
-	if (ep.size()!=2){fprintf(stderr,"collectEdgePtrs: ERROR. Wrong number of edges - %i\n",ep.size());exit(0);}
+	if (ep.size()!=2){fprintf(stderr,"collectEdgePtrs: ERROR. Wrong number of edges - %i\n",static_cast<int>(ep.size()));exit(0);}
 }
 
 void addFace(Edge *e,int v1,int v2,std::vector<Face*> &up,std::vector<Face*> &dn){
@@ -612,7 +608,7 @@ bool getInteriorVerts(std::vector<Vertex*> &iv,Edge *e,Vertex *t){
 	else {return true;}
 }
 
-void deleteVertsFaces(std::vector<Vertex*> &iv,void_list *&vlh,void_list *&flh,Edge *e){
+void deleteVertsFaces(std::vector<Vertex*> &iv,void_list *&flh,Edge *e){
 	std::vector<Vertex*>::iterator i;
 	std::vector<Face*>::iterator j;
 	std::vector<Face*> f;

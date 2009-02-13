@@ -87,4 +87,5 @@ int main(int argc,char **argv){
 	c.close();
 	std::string cmd = BASH + " " + c.outdir + SCRIPT;
 	system(cmd.c_str());
+	//system();
 }
