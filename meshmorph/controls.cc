@@ -216,7 +216,7 @@ std::string Controls::getUsageMessage (void)
   "       Meshmorph moves vertices one at a time to relax\n"+
   "       a spring model of the cell membranes.\n"+
   "\nEXAMPLES\n"+
-  "       meshmorph -i input -o output -t 20 -s 10 -a 80 -v frozen_vertices.dat\n"+
+  "       meshmorph -i input -o output -t 20 -s 0.1 -a 0.8 -v frozen_vertices.dat\n"+
   "              Read meshes from directory 'input' and write new morphed\n"+
   "              meshes to directory 'output'. The target extracellular width\n"+
   "              is 20 data units and the relative weights for extracellular\n"+
@@ -303,6 +303,12 @@ std::string Controls::getUsageMessage (void)
   "              Probably specifies a maximum number of divisions\n"+
   "              of a cell in tree.\n"+
   "              Default is '" + i2str(MAX_OCTREE_DEPTH) + "'.\n\n"+
+  "       -C NUM, --min_cell_size=NUM\n"+
+  "              Third and final argument to construction of octree.\n"+
+  "              Probably specifies the minimum dimensions of octreen\n"+
+  "              cell below which cells will not be further divided.\n"+
+  "              Units are same as meshes in input directory.\n"+
+  "              Default is '" + d2str(MIN_CELL_SIZE) + "'.\n\n"+
   "       -3 NUM, --max_filename_size=NUM\n"+
   "              Maximum number of characters allowed in input and\n"+
   "              output filenames.\n"+
@@ -361,11 +367,6 @@ std::string Controls::getUsageMessage (void)
   "              Initial size of vectors to avoid vector resizing\n"+
   "              and consequent data copying.\n"+
   "              Default is '" + i2str(VECTOR_RESERVE) + "'.\n\n"+
-  "       -C NUM, --min_cell_size=NUM\n"+
-  "              Third and final argument to construction of octree.\n"+
-  "              Probably specifies the minimum dimensions of octreen\n"+
-  "              cell below which cells will not be further divided.\n"+
-  "              Default is '" + d2str(MIN_CELL_SIZE) + "'.\n\n"+
   "       -e NUM, --edge_angle_threshold=NUM\n"+ 
   "              If moving a vertex creates an edge angle less than NUM,\n"+
   "              then vertex is not moved. Units radians.\n"+

@@ -1,0 +1,621 @@
+examples/bad1.mesh
+examples/bad1.mesh
+
+MESH FILE INTEGRITY
+
+    # orphan vertices: 1
+    # missing vertices: none
+    # degenerate faces: 1
+    # duplicate vertex indices: none
+    # duplicate face indices: none
+    contiguous vertex indexing from 1: yes
+    contiguous face indexing from 1: yes
+
+
+Warning: Attributes and characteristics were not evaluated,
+ since mesh file failed the integrity check.
+
+examples/bad_mesh.mesh
+
+MESH FILE INTEGRITY
+
+    # orphan vertices: none
+    # missing vertices: none
+    # degenerate faces: none
+    # duplicate vertex indices: none
+    # duplicate face indices: none
+    contiguous vertex indexing from 1: yes
+    contiguous face indexing from 1: yes
+
+MESH ATTRIBUTES
+
+    mesh is closed: no
+    mesh is manifold: undefined since mesh is open
+    mesh has consistently oriented face normals: undefined since not manifold
+    mesh has outward oriented face normals: uncomputable since not closed,not consistent,not manifold
+
+MESH CHARACTERISTICS
+
+    # vertices: 184060
+    # faces: 367822
+    # edges: 552026
+    # components: 80
+    # boundaries: Since object is nonmanifold,
+    # boundaries: the number of boundaries may be underestimated.
+    # boundaries: 592
+    # indistinguishable vertices: none
+    object volume: not computed, since not closed,not consistent,not manifold
+    object genus: not computed, since not closed,not consistent,not manifold,#components=80,
+    bounding box: [data units]
+    bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]
+    bounding box: [0.791624,0.797267,3.025][8.99577,8.75087,8.075]
+    # edges with indistinguishable vertices: none
+    # intersecting faces: 739
+    Vertex adjacent face statistics [faces]:
+       min      1
+       max      71
+       median   6
+       mean     5.99514
+       variance 4.99126
+
+    Vertex adjacent face histogram [faces]:
+          0 - 0            :         0  |         8 - 8           :      9978
+          1 - 1            :         1  |         9 - 9           :      4200
+          2 - 2            :        25  |        10 - 10          :      2189
+          3 - 3            :       531  |        11 - 11          :      1405
+          4 - 4            :     32386  |        12 - 12          :       915
+          5 - 5            :     50917  |        13 - 13          :       662
+          6 - 6            :     52556  |        14 - 14          :       513
+          7 - 7            :     25788  |        15 - 71          :      1994
+
+    Face area statistics [(data units)^2]:
+       total    174.235
+       min      4.78151e-22
+       max      0.295497
+       median   0.000429643
+       mean     0.000473693
+       variance 5.08775e-07
+
+    Face area histogram [(data units)^2]:
+          0 - 0            :         0  |  0.001161 - 0.001352    :      3603
+          0 - 2.004e-05    :      8567  |  0.001352 - 0.001542    :      2133
+  2.004e-05 - 0.0002102    :     71890  |  0.001542 - 0.001732    :      1207
+  0.0002102 - 0.0004005    :     90554  |  0.001732 - 0.001922    :       785
+  0.0004005 - 0.0005907    :     78624  |  0.001922 - 0.002112    :       563
+  0.0005907 - 0.0007809    :     82058  |  0.002112 - 0.002303    :       401
+  0.0007809 - 0.0009711    :     18469  |  0.002303 - 0.002493    :       283
+  0.0009711 - 0.001161     :      7417  |  0.002493 - 0.2955      :      1268
+
+    Face aspect ratio statistics [unitless]:
+       min      1.16595
+       max      7.19688e+09
+       median   4.24727
+       mean     37913.3
+       variance 1.44618e+14
+
+    Face aspect ratio histogram [unitless]:
+      1.155 - 1.5          :       556  |        15 - 25          :     16790
+        1.5 - 2            :      5348  |        25 - 50          :      7703
+          2 - 2.5          :     51910  |        50 - 100         :      2047
+        2.5 - 3            :     49967  |       100 - 300         :       669
+          3 - 4            :     64366  |       300 - 1000        :       196
+          4 - 6            :     68845  |      1000 - 10000       :       111
+          6 - 10           :     62432  |     10000 - 100000      :       483
+         10 - 15           :     30984  |    100000 -             :      5415
+      (Aspect ratio is longest edge divided by shortest altitude)
+
+    Edge length statistics [data units]:
+       min      1.08101e-08
+       max      1.20168
+       median   0.0513348
+       mean     0.0485436
+       variance 0.00147145
+
+    Edge length histogram [data units]:
+          0 - 0            :         0  |   0.06795 - 0.07818     :     29191
+          0 - 0.006576     :     30932  |   0.07818 - 0.08841     :     16710
+   0.006576 - 0.0168       :     70464  |   0.08841 - 0.09864     :     10340
+     0.0168 - 0.02703      :     88197  |   0.09864 - 0.1089      :      6990
+    0.02703 - 0.03726      :     21937  |    0.1089 - 0.1191      :      5312
+    0.03726 - 0.04749      :     13012  |    0.1191 - 0.1293      :      3874
+    0.04749 - 0.05772      :    174498  |    0.1293 - 0.1396      :      2946
+    0.05772 - 0.06795      :     64268  |    0.1396 - 1.202       :     13355
+
+    edge angles: not computed, since not consistent,not manifold
+examples/bad_mesh_too.mesh
+
+MESH FILE INTEGRITY
+
+    # orphan vertices: none
+    # missing vertices: 139
+    # degenerate faces: 138
+    # duplicate vertex indices: none
+    # duplicate face indices: none
+    contiguous vertex indexing from 1: no
+    contiguous vertex indexing from 1: bad index and +/- 2
+    contiguous vertex indexing from 1: 495 496 499 502 503
+    contiguous face indexing from 1: yes
+
+
+Warning: Attributes and characteristics were not evaluated,
+ since mesh file failed the integrity check.
+
+examples/example0.mesh
+
+MESH FILE INTEGRITY
+
+    # orphan vertices: none
+    # missing vertices: none
+    # degenerate faces: none
+    # duplicate vertex indices: none
+    # duplicate face indices: none
+    contiguous vertex indexing from 1: no
+    contiguous vertex indexing from 1: bad index and +/- 2
+    contiguous vertex indexing from 1: NA NA 2 3 4
+    contiguous face indexing from 1: yes
+
+MESH ATTRIBUTES
+
+    mesh is closed: yes
+    mesh is manifold: yes
+    mesh has consistently oriented face normals: yes
+    mesh has outward oriented face normals: yes
+
+MESH CHARACTERISTICS
+
+    # vertices: 5400
+    # faces: 10796
+    # edges: 16194
+    # components: 1
+    # boundaries: none
+    # indistinguishable vertices: none
+    object volume: [(data units)^3]
+    object volume: 3.23708e+08
+    object genus: 0
+    bounding box: [data units]
+    bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]
+    bounding box: [5177.54,1860.61,5282.46][6445.44,7514.34,6767.43]
+    # edges with indistinguishable vertices: none
+    # intersecting faces: none
+
+    Vertex adjacent face statistics [faces]:
+       min      4
+       max      10
+       median   6
+       mean     5.99778
+       variance 0.918684
+
+    Vertex adjacent face histogram [faces]:
+          0 - 0            :         0  |         8 - 8           :       273
+          1 - 1            :         0  |         9 - 9           :        35
+          2 - 2            :         0  |        10 - 10          :         6
+          3 - 3            :         0  |        11 - 11          :         0
+          4 - 4            :       174  |        12 - 12          :         0
+          5 - 5            :      1550  |        13 - 13          :         0
+          6 - 6            :      2151  |        14 - 14          :         0
+          7 - 7            :      1211  |        15 - 15          :         0
+
+    Face area statistics [(data units)^2]:
+       total    5.65393e+06
+       min      263.671
+       max      1514.96
+       median   498.289
+       mean     523.706
+       variance 19306.4
+
+    Face area histogram [(data units)^2]:
+          0 - 0            :         0  |     486.7 - 523.7       :      1200
+          0 - 264.3        :         1  |     523.7 - 560.8       :      1084
+      264.3 - 301.4        :        51  |     560.8 - 597.8       :       844
+      301.4 - 338.4        :       344  |     597.8 - 634.9       :       663
+      338.4 - 375.5        :       773  |     634.9 - 671.9       :       561
+      375.5 - 412.5        :      1171  |     671.9 - 709         :       382
+      412.5 - 449.6        :      1316  |       709 - 746         :       307
+      449.6 - 486.7        :      1332  |       746 - 1515        :       767
+
+    Face aspect ratio statistics [unitless]:
+       min      1.15902
+       max      9.02351
+       median   1.64641
+       mean     1.7489
+       variance 0.211206
+
+    Face aspect ratio histogram [unitless]:
+      1.155 - 1.5          :      3482  |        15 - 25          :         0
+        1.5 - 2            :      5075  |        25 - 50          :         0
+          2 - 2.5          :      1587  |        50 - 100         :         0
+        2.5 - 3            :       457  |       100 - 300         :         0
+          3 - 4            :       160  |       300 - 1000        :         0
+          4 - 6            :        27  |      1000 - 10000       :         0
+          6 - 10           :         8  |     10000 - 100000      :         0
+         10 - 15           :         0  |    100000 -             :         0
+      (Aspect ratio is longest edge divided by shortest altitude)
+
+    Edge length statistics [data units]:
+       min      21.4836
+       max      94.4644
+       median   35.1986
+       mean     36.0494
+       variance 59.3395
+
+    Edge length histogram [data units]:
+          0 - 0            :         0  |        34 - 36.05       :      1705
+          0 - 21.67        :         3  |     36.05 - 38.1        :      1636
+      21.67 - 23.72        :       181  |      38.1 - 40.16       :      1408
+      23.72 - 25.78        :       833  |     40.16 - 42.21       :      1148
+      25.78 - 27.83        :      1223  |     42.21 - 44.27       :       956
+      27.83 - 29.89        :      1504  |     44.27 - 46.32       :       692
+      29.89 - 31.94        :      1609  |     46.32 - 48.37       :       507
+      31.94 - 34           :      1749  |     48.37 - 94.46       :      1040
+
+    Edge angle statistics [degress]:
+       min      46.3862
+       max      283.181
+       median   180
+       mean     181.319
+       variance 139.037
+
+    Edge angle histogram [degress]:
+          0 - 0            :         0  |     178.2 - 181.3       :      7156
+          0 - 159.3        :       460  |     181.3 - 184.5       :      1338
+      159.3 - 162.5        :       166  |     184.5 - 187.6       :       982
+      162.5 - 165.6        :       275  |     187.6 - 190.8       :       743
+      165.6 - 168.7        :       362  |     190.8 - 193.9       :       561
+      168.7 - 171.9        :       527  |     193.9 - 197         :       389
+      171.9 - 175          :       843  |       197 - 200.2       :       303
+        175 - 178.2        :      1211  |     200.2 - 283.2       :       878
+
+examples/example1.mesh
+
+MESH FILE INTEGRITY
+
+    # orphan vertices: none
+    # missing vertices: none
+    # degenerate faces: none
+    # duplicate vertex indices: none
+    # duplicate face indices: none
+    contiguous vertex indexing from 1: yes
+    contiguous face indexing from 1: yes
+
+MESH ATTRIBUTES
+
+    mesh is closed: no
+    mesh is manifold: undefined since mesh is open
+    mesh has consistently oriented face normals: undefined since not manifold
+    mesh has outward oriented face normals: uncomputable since not closed,not consistent,not manifold
+
+MESH CHARACTERISTICS
+
+    # vertices: 14
+    # faces: 5
+    # edges: 15
+    # components: 4
+    # boundaries: Since object is nonmanifold,
+    # boundaries: the number of boundaries may be underestimated.
+    # boundaries: 15
+    # indistinguishable vertices: none
+    object volume: not computed, since not closed,not consistent,not manifold
+    object genus: not computed, since not closed,not consistent,not manifold,#components=4,
+    bounding box: [data units]
+    bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]
+    bounding box: [5183.03,1870.29,5348.86][6332.69,7038.76,6480.31]
+    # edges with indistinguishable vertices: none
+    # intersecting faces: none
+
+    Vertex adjacent face statistics [faces]:
+       min      1
+       max      2
+       median   1
+       mean     1.07143
+       variance 0.0714286
+
+    Vertex adjacent face histogram [faces]:
+          0 - 0            :         0  |         8 - 8           :         0
+          1 - 1            :        13  |         9 - 9           :         0
+          2 - 2            :         1  |        10 - 10          :         0
+          3 - 3            :         0  |        11 - 11          :         0
+          4 - 4            :         0  |        12 - 12          :         0
+          5 - 5            :         0  |        13 - 13          :         0
+          6 - 6            :         0  |        14 - 14          :         0
+          7 - 7            :         0  |        15 - 15          :         0
+
+    Face area statistics [(data units)^2]:
+       total    832121
+       min      479.079
+       max      312469
+       median   195253
+       mean     166424
+       variance 2.26953e+10
+
+    Face area histogram [(data units)^2]:
+          0 - 0            :         0  | 2.547e+05 - 2.948e+05   :         0
+          0 - 1.362e+04    :         1  | 2.948e+05 - 3.35e+05    :         2
+  1.362e+04 - 5.379e+04    :         1  |  3.35e+05 - 3.752e+05   :         0
+  5.379e+04 - 9.396e+04    :         0  | 3.752e+05 - 4.154e+05   :         0
+  9.396e+04 - 1.341e+05    :         0  | 4.154e+05 - 4.555e+05   :         0
+  1.341e+05 - 1.743e+05    :         0  | 4.555e+05 - 4.957e+05   :         0
+  1.743e+05 - 2.145e+05    :         1  | 4.957e+05 - 5.359e+05   :         0
+  2.145e+05 - 2.547e+05    :         0  | 5.359e+05 - 3.125e+05   :         0
+
+    Face aspect ratio statistics [unitless]:
+       min      4.05359
+       max      22.764
+       median   11.0783
+       mean     11.5755
+       variance 47.4167
+
+    Face aspect ratio histogram [unitless]:
+      1.155 - 1.5          :         0  |        15 - 25          :         1
+        1.5 - 2            :         0  |        25 - 50          :         0
+          2 - 2.5          :         0  |        50 - 100         :         0
+        2.5 - 3            :         0  |       100 - 300         :         0
+          3 - 4            :         0  |       300 - 1000        :         0
+          4 - 6            :         1  |      1000 - 10000       :         0
+          6 - 10           :         1  |     10000 - 100000      :         0
+         10 - 15           :         2  |    100000 -             :         0
+      (Aspect ratio is longest edge divided by shortest altitude)
+
+    Edge length statistics [data units]:
+       min      29.2744
+       max      3771.74
+       median   613.916
+       mean     1201.41
+       variance 1.63039e+06
+
+    Edge length histogram [data units]:
+          0 - 0            :         0  |      2235 - 2575        :         1
+          0 - 191.9        :         4  |      2575 - 2916        :         0
+      191.9 - 532.3        :         2  |      2916 - 3256        :         0
+      532.3 - 872.8        :         3  |      3256 - 3597        :         1
+      872.8 - 1213         :         0  |      3597 - 3937        :         1
+       1213 - 1554         :         0  |      3937 - 4278        :         0
+       1554 - 1894         :         2  |      4278 - 4618        :         0
+       1894 - 2235         :         1  |      4618 - 3772        :         0
+
+    edge angles: not computed, since not consistent,not manifold
+examples/example2.mesh
+
+MESH FILE INTEGRITY
+
+    # orphan vertices: none
+    # missing vertices: none
+    # degenerate faces: none
+    # duplicate vertex indices: none
+    # duplicate face indices: none
+    contiguous vertex indexing from 1: yes
+    contiguous face indexing from 1: yes
+
+MESH ATTRIBUTES
+
+    mesh is closed: yes
+    mesh is manifold: yes
+    mesh has consistently oriented face normals: yes
+    mesh has outward oriented face normals: yes
+
+MESH CHARACTERISTICS
+
+    # vertices: 5311
+    # faces: 10618
+    # edges: 15927
+    # components: 1
+    # boundaries: none
+    # indistinguishable vertices: none
+    object volume: [(data units)^3]
+    object volume: 4.53142e+08
+    object genus: 0
+    bounding box: [data units]
+    bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]
+    bounding box: [2062.64,2961.69,5163.55][7631.42,4193.3,6960.38]
+    # edges with indistinguishable vertices: none
+    # intersecting faces: none
+
+    Vertex adjacent face statistics [faces]:
+       min      4
+       max      11
+       median   6
+       mean     5.99774
+       variance 0.877208
+
+    Vertex adjacent face histogram [faces]:
+          0 - 0            :         0  |         8 - 8           :       275
+          1 - 1            :         0  |         9 - 9           :        19
+          2 - 2            :         0  |        10 - 10          :         4
+          3 - 3            :         0  |        11 - 11          :         2
+          4 - 4            :       161  |        12 - 12          :         0
+          5 - 5            :      1476  |        13 - 13          :         0
+          6 - 6            :      2221  |        14 - 14          :         0
+          7 - 7            :      1153  |        15 - 15          :         0
+
+    Face area statistics [(data units)^2]:
+       total    6.02393e+06
+       min      30.5816
+       max      2409.95
+       median   551.351
+       mean     567.332
+       variance 11371
+
+    Face area histogram [(data units)^2]:
+          0 - 0            :         0  |     538.9 - 567.3       :      1440
+          0 - 368.3        :        68  |     567.3 - 595.8       :      1181
+      368.3 - 396.7        :        73  |     595.8 - 624.2       :       913
+      396.7 - 425.2        :       202  |     624.2 - 652.6       :       670
+      425.2 - 453.6        :       541  |     652.6 - 681.1       :       537
+      453.6 - 482          :       984  |     681.1 - 709.5       :       328
+        482 - 510.5        :      1346  |     709.5 - 737.9       :       263
+      510.5 - 538.9        :      1454  |     737.9 - 2410        :       618
+
+    Face aspect ratio statistics [unitless]:
+       min      1.15667
+       max      28.1572
+       median   1.50525
+       mean     1.59629
+       variance 0.208445
+
+    Face aspect ratio histogram [unitless]:
+      1.155 - 1.5          :      5235  |        15 - 25          :         0
+        1.5 - 2            :      4329  |        25 - 50          :         1
+          2 - 2.5          :       788  |        50 - 100         :         0
+        2.5 - 3            :       174  |       100 - 300         :         0
+          3 - 4            :        70  |       300 - 1000        :         0
+          4 - 6            :        15  |      1000 - 10000       :         0
+          6 - 10           :         6  |     10000 - 100000      :         0
+         10 - 15           :         0  |    100000 -             :         0
+      (Aspect ratio is longest edge divided by shortest altitude)
+
+    Edge length statistics [data units]:
+       min      16.2226
+       max      98.5931
+       median   36.4178
+       mean     37.0625
+       variance 34.036
+
+    Edge length histogram [data units]:
+          0 - 0            :         0  |     35.51 - 37.06       :      1816
+          0 - 26.17        :       140  |     37.06 - 38.62       :      1635
+      26.17 - 27.73        :       266  |     38.62 - 40.17       :      1449
+      27.73 - 29.28        :       589  |     40.17 - 41.73       :      1119
+      29.28 - 30.84        :       962  |     41.73 - 43.29       :       896
+      30.84 - 32.4         :      1388  |     43.29 - 44.84       :       664
+       32.4 - 33.95        :      1676  |     44.84 - 46.4        :       472
+      33.95 - 35.51        :      1862  |      46.4 - 98.59       :       993
+
+    Edge angle statistics [degress]:
+       min      55.2953
+       max      328.43
+       median   180
+       mean     181.302
+       variance 222.639
+
+    Edge angle histogram [degress]:
+          0 - 0            :         0  |     177.3 - 181.3       :      7149
+          0 - 153.4        :       436  |     181.3 - 185.3       :      1314
+      153.4 - 157.4        :       156  |     185.3 - 189.3       :      1028
+      157.4 - 161.4        :       229  |     189.3 - 193.2       :       688
+      161.4 - 165.4        :       350  |     193.2 - 197.2       :       464
+      165.4 - 169.4        :       560  |     197.2 - 201.2       :       318
+      169.4 - 173.3        :       852  |     201.2 - 205.2       :       250
+      173.3 - 177.3        :      1284  |     205.2 - 328.4       :       849
+
+examples/example3.mesh
+
+MESH FILE INTEGRITY
+
+    # orphan vertices: none
+    # missing vertices: none
+    # degenerate faces: none
+    # duplicate vertex indices: none
+    # duplicate face indices: none
+    contiguous vertex indexing from 1: yes
+    contiguous face indexing from 1: yes
+
+MESH ATTRIBUTES
+
+    mesh is closed: yes
+    mesh is manifold: yes
+    mesh has consistently oriented face normals: yes
+    mesh has outward oriented face normals: yes
+
+MESH CHARACTERISTICS
+
+    # vertices: 3301
+    # faces: 6598
+    # edges: 9897
+    # components: 1
+    # boundaries: none
+    # indistinguishable vertices: none
+    object volume: [(data units)^3]
+    object volume: 1.65681e+08
+    object genus: 0
+    bounding box: [data units]
+    bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]
+    bounding box: [1692.95,4244.77,5572.74][4665.24,6414.77,6327.49]
+    # edges with indistinguishable vertices: none
+    # intersecting faces: none
+
+    Vertex adjacent face statistics [faces]:
+       min      3
+       max      11
+       median   6
+       mean     5.99636
+       variance 0.89635
+
+    Vertex adjacent face histogram [faces]:
+          0 - 0            :         0  |         8 - 8           :       176
+          1 - 1            :         0  |         9 - 9           :        12
+          2 - 2            :         0  |        10 - 10          :         3
+          3 - 3            :         2  |        11 - 11          :         1
+          4 - 4            :       103  |        12 - 12          :         0
+          5 - 5            :       924  |        13 - 13          :         0
+          6 - 6            :      1361  |        14 - 14          :         0
+          7 - 7            :       719  |        15 - 15          :         0
+
+    Face area statistics [(data units)^2]:
+       total    3.17478e+06
+       min      134.162
+       max      1028.31
+       median   473.236
+       mean     481.172
+       variance 6587.03
+
+    Face area histogram [(data units)^2]:
+          0 - 0            :         0  |     459.5 - 481.2       :       791
+          0 - 329.7        :       109  |     481.2 - 502.8       :       696
+      329.7 - 351.3        :       102  |     502.8 - 524.5       :       567
+      351.3 - 373          :       193  |     524.5 - 546.1       :       502
+        373 - 394.6        :       381  |     546.1 - 567.7       :       368
+      394.6 - 416.2        :       556  |     567.7 - 589.4       :       276
+      416.2 - 437.9        :       661  |     589.4 - 611         :       178
+      437.9 - 459.5        :       795  |       611 - 1028        :       423
+
+    Face aspect ratio statistics [unitless]:
+       min      1.15929
+       max      8.17509
+       median   1.50989
+       mean     1.6029
+       variance 0.155224
+
+    Face aspect ratio histogram [unitless]:
+      1.155 - 1.5          :      3219  |        15 - 25          :         0
+        1.5 - 2            :      2679  |        25 - 50          :         0
+          2 - 2.5          :       497  |        50 - 100         :         0
+        2.5 - 3            :       126  |       100 - 300         :         0
+          3 - 4            :        58  |       300 - 1000        :         0
+          4 - 6            :        17  |      1000 - 10000       :         0
+          6 - 10           :         2  |     10000 - 100000      :         0
+         10 - 15           :         0  |    100000 -             :         0
+      (Aspect ratio is longest edge divided by shortest altitude)
+
+    Edge length statistics [data units]:
+       min      13.5253
+       max      72.253
+       median   33.8115
+       mean     34.1758
+       variance 27.6336
+
+    Edge length histogram [data units]:
+          0 - 0            :         0  |     32.77 - 34.18       :      1060
+          0 - 24.36        :       140  |     34.18 - 35.58       :      1071
+      24.36 - 25.77        :       198  |     35.58 - 36.98       :       928
+      25.77 - 27.17        :       339  |     36.98 - 38.38       :       698
+      27.17 - 28.57        :       617  |     38.38 - 39.78       :       596
+      28.57 - 29.97        :       867  |     39.78 - 41.18       :       422
+      29.97 - 31.37        :       929  |     41.18 - 42.59       :       328
+      31.37 - 32.77        :      1086  |     42.59 - 72.25       :       618
+
+    Edge angle statistics [degress]:
+       min      66.3581
+       max      312.052
+       median   180
+       mean     181.498
+       variance 257.743
+
+    Edge angle histogram [degress]:
+          0 - 0            :         0  |     177.2 - 181.5       :      4626
+          0 - 151.5        :       242  |     181.5 - 185.8       :       903
+      151.5 - 155.8        :        73  |     185.8 - 190.1       :       645
+      155.8 - 160.1        :       127  |     190.1 - 194.3       :       369
+      160.1 - 164.4        :       168  |     194.3 - 198.6       :       232
+      164.4 - 168.7        :       301  |     198.6 - 202.9       :       157
+      168.7 - 172.9        :       557  |     202.9 - 207.2       :       114
+      172.9 - 177.2        :       860  |     207.2 - 312.1       :       523
+

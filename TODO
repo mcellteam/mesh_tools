@@ -1,0 +1,5 @@
+JPK add autoconf/automake functionality
+    for example automatically include googleperf tcmalloc library if available
+    or compile for 64 bit
+    or facilitate segregation of source code and *.o/binary files
+    CONSIDER starting here http://sources.redhat.com/autobook/autobook/autobook_23.html#SEC23
