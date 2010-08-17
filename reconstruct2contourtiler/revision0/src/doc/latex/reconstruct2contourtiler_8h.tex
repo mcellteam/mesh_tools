@@ -1,0 +1,65 @@
+\hypertarget{reconstruct2contourtiler_8h}{
+\section{reconstruct2contourtiler.h File Reference}
+\label{reconstruct2contourtiler_8h}\index{reconstruct2contourtiler.h@{reconstruct2contourtiler.h}}
+}
+{\tt \#include $<$vector$>$}\par
+{\tt \#include \char`\"{}container.h\char`\"{}}\par
+{\tt \#include \char`\"{}controls.h\char`\"{}}\par
+\subsection*{Defines}
+\begin{CompactItemize}
+\item 
+\#define \hyperlink{reconstruct2contourtiler_8h_06fa45c9a07cb93acfd7b53235ef9103}{RECONSTRUCT2CONTOURTILER\_\-H}~1
+\end{CompactItemize}
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+bool \hyperlink{reconstruct2contourtiler_8h_54baf86f92ae2f215fbf2fc9d9913868}{distinguishable} (double a, double b, double epsilon)
+\item 
+bool \hyperlink{reconstruct2contourtiler_8h_7e48ad73971e78bc20e3deb1e74546ad}{distinguishable} (double a, double b)
+\end{CompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{reconstruct2contourtiler_8h_06fa45c9a07cb93acfd7b53235ef9103}{
+\index{reconstruct2contourtiler.h@{reconstruct2contourtiler.h}!RECONSTRUCT2CONTOURTILER\_\-H@{RECONSTRUCT2CONTOURTILER\_\-H}}
+\index{RECONSTRUCT2CONTOURTILER\_\-H@{RECONSTRUCT2CONTOURTILER\_\-H}!reconstruct2contourtiler.h@{reconstruct2contourtiler.h}}
+\subsubsection[RECONSTRUCT2CONTOURTILER\_\-H]{\setlength{\rightskip}{0pt plus 5cm}\#define RECONSTRUCT2CONTOURTILER\_\-H~1}}
+\label{reconstruct2contourtiler_8h_06fa45c9a07cb93acfd7b53235ef9103}
+
+
+
+
+\subsection{Function Documentation}
+\hypertarget{reconstruct2contourtiler_8h_7e48ad73971e78bc20e3deb1e74546ad}{
+\index{reconstruct2contourtiler.h@{reconstruct2contourtiler.h}!distinguishable@{distinguishable}}
+\index{distinguishable@{distinguishable}!reconstruct2contourtiler.h@{reconstruct2contourtiler.h}}
+\subsubsection[distinguishable]{\setlength{\rightskip}{0pt plus 5cm}bool distinguishable (double {\em a}, \/  double {\em b})}}
+\label{reconstruct2contourtiler_8h_7e48ad73971e78bc20e3deb1e74546ad}
+
+
+Determine if two floating-point precision numbers are equivalent in value within MY\_\-DOUBLE\_\-EPSILON. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First number. \item[\mbox{$\leftarrow$} {\em b}]Second number. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]1 if Inputs are different; 0 otherwise. \end{Desc}
+
+
+References distinguishable(), and Controls::instance().\hypertarget{reconstruct2contourtiler_8h_54baf86f92ae2f215fbf2fc9d9913868}{
+\index{reconstruct2contourtiler.h@{reconstruct2contourtiler.h}!distinguishable@{distinguishable}}
+\index{distinguishable@{distinguishable}!reconstruct2contourtiler.h@{reconstruct2contourtiler.h}}
+\subsubsection[distinguishable]{\setlength{\rightskip}{0pt plus 5cm}bool distinguishable (double {\em a}, \/  double {\em b}, \/  double {\em epsilon})}}
+\label{reconstruct2contourtiler_8h_54baf86f92ae2f215fbf2fc9d9913868}
+
+
+Determine if two floating-point precision numbers are equivalent in value within epsilon. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First number. \item[\mbox{$\leftarrow$} {\em b}]Second number. \item[\mbox{$\leftarrow$} {\em epsilon}]The difference between the two input values must be greater than the fraction of the largest input value defined by epsilon. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]1 if Inputs are different; 0 otherwise. \end{Desc}
+
+
+Referenced by distinguishable().

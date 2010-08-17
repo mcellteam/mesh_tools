@@ -1,0 +1,62 @@
+\hypertarget{reconstruct2contourtiler_8cc}{
+\section{reconstruct2contourtiler.cc File Reference}
+\label{reconstruct2contourtiler_8cc}\index{reconstruct2contourtiler.cc@{reconstruct2contourtiler.cc}}
+}
+{\tt \#include $<$stdlib.h$>$}\par
+{\tt \#include $<$string$>$}\par
+{\tt \#include $<$cmath$>$}\par
+{\tt \#include \char`\"{}reconstruct2contourtiler.h\char`\"{}}\par
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+int \hyperlink{reconstruct2contourtiler_8cc_0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\item 
+bool \hyperlink{reconstruct2contourtiler_8cc_54baf86f92ae2f215fbf2fc9d9913868}{distinguishable} (double \hyperlink{proximity__energy_8m_4124bc0a9335c27f086f24ba207a4912}{a}, double b, double epsilon)
+\item 
+bool \hyperlink{reconstruct2contourtiler_8cc_7e48ad73971e78bc20e3deb1e74546ad}{distinguishable} (double \hyperlink{proximity__energy_8m_4124bc0a9335c27f086f24ba207a4912}{a}, double b)
+\end{CompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{reconstruct2contourtiler_8cc_7e48ad73971e78bc20e3deb1e74546ad}{
+\index{reconstruct2contourtiler.cc@{reconstruct2contourtiler.cc}!distinguishable@{distinguishable}}
+\index{distinguishable@{distinguishable}!reconstruct2contourtiler.cc@{reconstruct2contourtiler.cc}}
+\subsubsection[distinguishable]{\setlength{\rightskip}{0pt plus 5cm}bool distinguishable (double {\em a}, \/  double {\em b})}}
+\label{reconstruct2contourtiler_8cc_7e48ad73971e78bc20e3deb1e74546ad}
+
+
+Determine if two floating-point precision numbers are equivalent in value within MY\_\-DOUBLE\_\-EPSILON. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First number. \item[\mbox{$\leftarrow$} {\em b}]Second number. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]1 if Inputs are different; 0 otherwise. \end{Desc}
+
+
+References distinguishable(), and Controls::instance().\hypertarget{reconstruct2contourtiler_8cc_54baf86f92ae2f215fbf2fc9d9913868}{
+\index{reconstruct2contourtiler.cc@{reconstruct2contourtiler.cc}!distinguishable@{distinguishable}}
+\index{distinguishable@{distinguishable}!reconstruct2contourtiler.cc@{reconstruct2contourtiler.cc}}
+\subsubsection[distinguishable]{\setlength{\rightskip}{0pt plus 5cm}bool distinguishable (double {\em a}, \/  double {\em b}, \/  double {\em epsilon})}}
+\label{reconstruct2contourtiler_8cc_54baf86f92ae2f215fbf2fc9d9913868}
+
+
+Determine if two floating-point precision numbers are equivalent in value within epsilon. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em a}]First number. \item[\mbox{$\leftarrow$} {\em b}]Second number. \item[\mbox{$\leftarrow$} {\em epsilon}]The difference between the two input values must be greater than the fraction of the largest input value defined by epsilon. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]1 if Inputs are different; 0 otherwise. \end{Desc}
+
+
+Referenced by distinguishable().\hypertarget{reconstruct2contourtiler_8cc_0ddf1224851353fc92bfbff6f499fa97}{
+\index{reconstruct2contourtiler.cc@{reconstruct2contourtiler.cc}!main@{main}}
+\index{main@{main}!reconstruct2contourtiler.cc@{reconstruct2contourtiler.cc}}
+\subsubsection[main]{\setlength{\rightskip}{0pt plus 5cm}int main (int {\em argc}, \/  char $\ast$ {\em argv}\mbox{[}$\,$\mbox{]})}}
+\label{reconstruct2contourtiler_8cc_0ddf1224851353fc92bfbff6f499fa97}
+
+
+
+
+References Container::clearOutputScripts(), Container::getContours(), Container::getNumContours(), Container::getNumFiles(), Container::getNumObjects(), Container::getNumRawPoints(), Controls::getPrintDetailedInfo(), Controls::instance(), Controls::parseCommandLine(), Container::printRawPoints(), Histogram::printStatistics(), Container::processContour(), Container::removeDuplicates(), and Container::writeOutputContours().

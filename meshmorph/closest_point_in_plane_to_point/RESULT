@@ -1,0 +1,27 @@
+Transcript of mathematica notebook:
+-----------------------------------
+
+firsteq = 
+ Solve[{xp - xq - alpha*a == 0, yp - yq - alpha*b == 0, 
+   zp - zq - alpha*c == 0, a*xq + b*yq + c*zq + d == 0}, {xq, yq, zq, 
+   alpha}]
+
+{{xq -> -((a d - b^2 xp - c^2 xp + a b yp + a c zp)/(
+    a^2 + b^2 + c^2)), 
+  yq -> -((b d + a b xp - a^2 yp - c^2 yp + b c zp)/(
+    a^2 + b^2 + c^2)), 
+  zq -> -((c d + a c xp + b c yp - a^2 zp - b^2 zp)/(
+    a^2 + b^2 + c^2)), 
+  alpha -> -((-d - a xp - b yp - c zp)/(a^2 + b^2 + c^2))}}
+
+p = {xp, yp, zp}
+n = {a, b, c}
+eq = p - ((d + n.p)/(n.n))*n
+
+{xp, yp, zp}
+
+{a, b, c}
+
+{xp - (a (d + a xp + b yp + c zp))/(a^2 + b^2 + c^2), 
+ yp - (b (d + a xp + b yp + c zp))/(a^2 + b^2 + c^2), 
+ zp - (c (d + a xp + b yp + c zp))/(a^2 + b^2 + c^2)}

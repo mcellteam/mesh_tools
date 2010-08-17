@@ -1,0 +1,232 @@
+\hypertarget{classContainer}{
+\section{Container Class Reference}
+\label{classContainer}\index{Container@{Container}}
+}
+{\tt \#include $<$container.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{classContainer_295064be4c1946c8e46211c8f99d8571}{processContour} (\hyperlink{classHistogram}{Histogram} \&h, \hyperlink{classHistogram}{Histogram} \&si, \hyperlink{classHistogram}{Histogram} \&si\_\-before)
+\item 
+void \hyperlink{classContainer_644b795e93a137c9eef2c6c1fa53a72f}{clearOutputScripts} (void)
+\item 
+void \hyperlink{classContainer_7bf4bb6083f930f0896e4b0bb583344f}{getContours} (void)
+\item 
+void \hyperlink{classContainer_f9c135209162b0ea5e8395e982241f0d}{writeOutputContours} (void)
+\item 
+\hyperlink{classContainer_5231ead51bcdd1a9b1f497414e76b6f4}{Container} (void)
+\item 
+int \hyperlink{classContainer_1543921a3bdcf71968d6c78fa8adf67c}{getNumFiles} (void) const 
+\item 
+int \hyperlink{classContainer_c78719a0e41e087c64a6e3dee6bebdff}{getNumObjects} (void) const 
+\item 
+int \hyperlink{classContainer_0961f692ac0f51aa90643d2c4b7e01ff}{getNumContours} (void) const 
+\item 
+int \hyperlink{classContainer_5475d8d32538e480fc5e840a9f64f4ff}{getNumRawPoints} (void) const 
+\item 
+\hyperlink{object_8h_7f9b7c0270c54ab6a3a2cc02f9fb313a}{c\_\-l\_\-iterator} \hyperlink{classContainer_eeb8e3e0db9a84db46f9c7098f52f548}{getLastContourFromObject} (char const $\ast$const object\_\-name)
+\item 
+\hyperlink{container_8h_b1419b33b75b9fdefb8af198aca79708}{o\_\-iterator} \hyperlink{classContainer_ecb2781bea92151778ac3133c9d43f37}{firstObjectNonConst} (void)
+\item 
+\hyperlink{container_8h_b1419b33b75b9fdefb8af198aca79708}{o\_\-iterator} \hyperlink{classContainer_bf9778c6bfa5a23133ced6d5d8d66434}{onePastLastObjectNonConst} (void)
+\item 
+\hyperlink{container_8h_7f50282a208c7aa7c7af7b64b603ce61}{c\_\-o\_\-iterator} \hyperlink{classContainer_b71691d8131f9f8b55f6b1c3fc15f347}{firstObject} (void) const 
+\item 
+\hyperlink{container_8h_7f50282a208c7aa7c7af7b64b603ce61}{c\_\-o\_\-iterator} \hyperlink{classContainer_56d09e1048b91a98d1103b6e4aea276e}{onePastLastObject} (void) const 
+\item 
+void \hyperlink{classContainer_6358cb40bedaead66e3a9294f9ffab00}{purgeBadContours} (void)
+\item 
+void \hyperlink{classContainer_91af554e6c26c2a24183475c4f1e225d}{removeDuplicates} (void)
+\item 
+void \hyperlink{classContainer_6840fd00ce36c59241488608bbbd8bde}{computeHistogram} (\hyperlink{classHistogram}{Histogram} \&h, \hyperlink{classHistogram}{Histogram} \&si)
+\item 
+void \hyperlink{classContainer_2e0f53094301a9dead5fdfa393fa5da8}{printRawPoints} (void) const 
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classContainer_5231ead51bcdd1a9b1f497414e76b6f4}{
+\index{Container@{Container}!Container@{Container}}
+\index{Container@{Container}!Container@{Container}}
+\subsubsection[Container]{\setlength{\rightskip}{0pt plus 5cm}Container::Container (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_5231ead51bcdd1a9b1f497414e76b6f4}
+
+
+Create new instance of \hyperlink{classContainer}{Container} class. 
+
+References Controls::instance().
+
+\subsection{Member Function Documentation}
+\hypertarget{classContainer_295064be4c1946c8e46211c8f99d8571}{
+\index{Container@{Container}!processContour@{processContour}}
+\index{processContour@{processContour}!Container@{Container}}
+\subsubsection[processContour]{\setlength{\rightskip}{0pt plus 5cm}void Container::processContour ({\bf Histogram} \& {\em h}, \/  {\bf Histogram} \& {\em si}, \/  {\bf Histogram} \& {\em si\_\-before})}}
+\label{classContainer_295064be4c1946c8e46211c8f99d8571}
+
+
+Process contours in each object. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em h}]Instance of \hyperlink{classHistogram}{Histogram} class for sample point deviations. \item[\mbox{$\leftarrow$} {\em si}]Instance of \hyperlink{classHistogram}{Histogram} class for sample intervals after simulated annealing. \item[\mbox{$\leftarrow$} {\em si\_\-before}]Instance of \hyperlink{classHistogram}{Histogram} class for sample intervals before simulated annealing. \end{description}
+\end{Desc}
+
+
+Referenced by main().\hypertarget{classContainer_644b795e93a137c9eef2c6c1fa53a72f}{
+\index{Container@{Container}!clearOutputScripts@{clearOutputScripts}}
+\index{clearOutputScripts@{clearOutputScripts}!Container@{Container}}
+\subsubsection[clearOutputScripts]{\setlength{\rightskip}{0pt plus 5cm}void Container::clearOutputScripts (void)}}
+\label{classContainer_644b795e93a137c9eef2c6c1fa53a72f}
+
+
+Initialize output script to empty. 
+
+References Controls::getOutputDir(), Controls::getOutputScript(), and Controls::instance().
+
+Referenced by main().\hypertarget{classContainer_7bf4bb6083f930f0896e4b0bb583344f}{
+\index{Container@{Container}!getContours@{getContours}}
+\index{getContours@{getContours}!Container@{Container}}
+\subsubsection[getContours]{\setlength{\rightskip}{0pt plus 5cm}void Container::getContours (void)}}
+\label{classContainer_7bf4bb6083f930f0896e4b0bb583344f}
+
+
+Load contour data from file. 
+
+References Controls::getInputDir(), getLastContourFromObject(), Controls::getMaxSection(), Controls::getMinSection(), Controls::getPrefix(), and Controls::instance().
+
+Referenced by main().\hypertarget{classContainer_f9c135209162b0ea5e8395e982241f0d}{
+\index{Container@{Container}!writeOutputContours@{writeOutputContours}}
+\index{writeOutputContours@{writeOutputContours}!Container@{Container}}
+\subsubsection[writeOutputContours]{\setlength{\rightskip}{0pt plus 5cm}void Container::writeOutputContours (void)}}
+\label{classContainer_f9c135209162b0ea5e8395e982241f0d}
+
+
+Write output contour points to file. 
+
+Referenced by main().\hypertarget{classContainer_1543921a3bdcf71968d6c78fa8adf67c}{
+\index{Container@{Container}!getNumFiles@{getNumFiles}}
+\index{getNumFiles@{getNumFiles}!Container@{Container}}
+\subsubsection[getNumFiles]{\setlength{\rightskip}{0pt plus 5cm}int Container::getNumFiles (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_1543921a3bdcf71968d6c78fa8adf67c}
+
+
+Get number of input files read. \begin{Desc}
+\item[Returns:]Number of input files read. \end{Desc}
+
+
+Referenced by main().\hypertarget{classContainer_c78719a0e41e087c64a6e3dee6bebdff}{
+\index{Container@{Container}!getNumObjects@{getNumObjects}}
+\index{getNumObjects@{getNumObjects}!Container@{Container}}
+\subsubsection[getNumObjects]{\setlength{\rightskip}{0pt plus 5cm}int Container::getNumObjects (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_c78719a0e41e087c64a6e3dee6bebdff}
+
+
+Get number of different input objects found. \begin{Desc}
+\item[Returns:]Number of objects. \end{Desc}
+
+
+Referenced by main().\hypertarget{classContainer_0961f692ac0f51aa90643d2c4b7e01ff}{
+\index{Container@{Container}!getNumContours@{getNumContours}}
+\index{getNumContours@{getNumContours}!Container@{Container}}
+\subsubsection[getNumContours]{\setlength{\rightskip}{0pt plus 5cm}int Container::getNumContours (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_0961f692ac0f51aa90643d2c4b7e01ff}
+
+
+Get cumulative number of contours of all objects. 
+
+Referenced by main().\hypertarget{classContainer_5475d8d32538e480fc5e840a9f64f4ff}{
+\index{Container@{Container}!getNumRawPoints@{getNumRawPoints}}
+\index{getNumRawPoints@{getNumRawPoints}!Container@{Container}}
+\subsubsection[getNumRawPoints]{\setlength{\rightskip}{0pt plus 5cm}int Container::getNumRawPoints (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_5475d8d32538e480fc5e840a9f64f4ff}
+
+
+Get cumulative number of points in all contours of all objects. 
+
+Referenced by main().\hypertarget{classContainer_eeb8e3e0db9a84db46f9c7098f52f548}{
+\index{Container@{Container}!getLastContourFromObject@{getLastContourFromObject}}
+\index{getLastContourFromObject@{getLastContourFromObject}!Container@{Container}}
+\subsubsection[getLastContourFromObject]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-l\_\-iterator} Container::getLastContourFromObject (char const $\ast$const  {\em object\_\-name})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_eeb8e3e0db9a84db46f9c7098f52f548}
+
+
+Get iterator to last contour of object with specified name. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em object\_\-name}]\hyperlink{classObject}{Object} of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Iterator to last contour in object. \end{Desc}
+
+
+Referenced by getContours().\hypertarget{classContainer_ecb2781bea92151778ac3133c9d43f37}{
+\index{Container@{Container}!firstObjectNonConst@{firstObjectNonConst}}
+\index{firstObjectNonConst@{firstObjectNonConst}!Container@{Container}}
+\subsubsection[firstObjectNonConst]{\setlength{\rightskip}{0pt plus 5cm}{\bf o\_\-iterator} Container::firstObjectNonConst (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_ecb2781bea92151778ac3133c9d43f37}
+
+
+Get iterator to first object. \hypertarget{classContainer_bf9778c6bfa5a23133ced6d5d8d66434}{
+\index{Container@{Container}!onePastLastObjectNonConst@{onePastLastObjectNonConst}}
+\index{onePastLastObjectNonConst@{onePastLastObjectNonConst}!Container@{Container}}
+\subsubsection[onePastLastObjectNonConst]{\setlength{\rightskip}{0pt plus 5cm}{\bf o\_\-iterator} Container::onePastLastObjectNonConst (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_bf9778c6bfa5a23133ced6d5d8d66434}
+
+
+Get iterator to one past last object. \hypertarget{classContainer_b71691d8131f9f8b55f6b1c3fc15f347}{
+\index{Container@{Container}!firstObject@{firstObject}}
+\index{firstObject@{firstObject}!Container@{Container}}
+\subsubsection[firstObject]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-o\_\-iterator} Container::firstObject (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_b71691d8131f9f8b55f6b1c3fc15f347}
+
+
+Get iterator to first object. \hypertarget{classContainer_56d09e1048b91a98d1103b6e4aea276e}{
+\index{Container@{Container}!onePastLastObject@{onePastLastObject}}
+\index{onePastLastObject@{onePastLastObject}!Container@{Container}}
+\subsubsection[onePastLastObject]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-o\_\-iterator} Container::onePastLastObject (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_56d09e1048b91a98d1103b6e4aea276e}
+
+
+Get iterator to one past last object. \hypertarget{classContainer_6358cb40bedaead66e3a9294f9ffab00}{
+\index{Container@{Container}!purgeBadContours@{purgeBadContours}}
+\index{purgeBadContours@{purgeBadContours}!Container@{Container}}
+\subsubsection[purgeBadContours]{\setlength{\rightskip}{0pt plus 5cm}void Container::purgeBadContours (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_6358cb40bedaead66e3a9294f9ffab00}
+
+
+Remove contours with too few points in each object in container. \hypertarget{classContainer_91af554e6c26c2a24183475c4f1e225d}{
+\index{Container@{Container}!removeDuplicates@{removeDuplicates}}
+\index{removeDuplicates@{removeDuplicates}!Container@{Container}}
+\subsubsection[removeDuplicates]{\setlength{\rightskip}{0pt plus 5cm}void Container::removeDuplicates (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_91af554e6c26c2a24183475c4f1e225d}
+
+
+Remove duplicate points in each object in container. 
+
+Referenced by main().\hypertarget{classContainer_6840fd00ce36c59241488608bbbd8bde}{
+\index{Container@{Container}!computeHistogram@{computeHistogram}}
+\index{computeHistogram@{computeHistogram}!Container@{Container}}
+\subsubsection[computeHistogram]{\setlength{\rightskip}{0pt plus 5cm}void Container::computeHistogram ({\bf Histogram} \& {\em h}, \/  {\bf Histogram} \& {\em si})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_6840fd00ce36c59241488608bbbd8bde}
+
+
+For each object in container compute histogram of deviaton distance between spline samples and linearly interpolated input contour points. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em h}]Instance of \hyperlink{classHistogram}{Histogram} class for sample point deviations. \item[\mbox{$\leftarrow$} {\em si}]Instance of \hyperlink{classHistogram}{Histogram} class for sample intervals after simulated annealing. \end{description}
+\end{Desc}
+\hypertarget{classContainer_2e0f53094301a9dead5fdfa393fa5da8}{
+\index{Container@{Container}!printRawPoints@{printRawPoints}}
+\index{printRawPoints@{printRawPoints}!Container@{Container}}
+\subsubsection[printRawPoints]{\setlength{\rightskip}{0pt plus 5cm}void Container::printRawPoints (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContainer_2e0f53094301a9dead5fdfa393fa5da8}
+
+
+For each object in container write input contour points to file. 
+
+Referenced by main().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{container_8h}{container.h}\item 
+\hyperlink{container_8cc}{container.cc}\end{CompactItemize}

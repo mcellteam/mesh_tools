@@ -1,0 +1,237 @@
+\hypertarget{classSim__Anneal}{
+\section{Sim\_\-Anneal Class Reference}
+\label{classSim__Anneal}\index{Sim\_\-Anneal@{Sim\_\-Anneal}}
+}
+{\tt \#include $<$sim\_\-anneal.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classSim__Anneal_603424c51607fd3dc2fe99757106f472}{Sim\_\-Anneal} (void)
+\item 
+int \hyperlink{classSim__Anneal_7f4531410e05e85db08a3da83d484c49}{getRandomSample} (const int \&num\_\-samples)
+\item 
+bool \hyperlink{classSim__Anneal_14635d2687f67b208da7664f272c5a78}{moreMoves} (const int \&num\_\-raw\_\-points)
+\item 
+void \hyperlink{classSim__Anneal_f76b13e223ca4a6b5b544e14a945b805}{printEnergy} (char $\ast$const filename) const 
+\item 
+void \hyperlink{classSim__Anneal_d89aa35317c42d1e286f735d373329e5}{printTemperature} (char $\ast$const filename) const 
+\item 
+void \hyperlink{classSim__Anneal_465eb7c7301f09265dafa68d60266bb5}{printScript} (const char $\ast$const energy\_\-filename, const char $\ast$const temp\_\-filename, const std::string \&contour\_\-name, const int \&contour\_\-section) const 
+\item 
+void \hyperlink{classSim__Anneal_2141dd9baa6a1cba3d5d98f2a1d025b1}{debug} (const std::string \&name, const int \&section, const int \&num\_\-raw\_\-points)
+\item 
+double \hyperlink{classSim__Anneal_005408a3fedc95d5b8c5ba72d253998a}{getNormalRandom} (void)
+\item 
+double \hyperlink{classSim__Anneal_515e446dea914e0e8e3651738f88de36}{getRandomPathParameterDisplacement} (void)
+\item 
+void \hyperlink{classSim__Anneal_6f78eb5ed1ed6e6addf5ffb1b4c7c428}{decreaseTemp} (void)
+\item 
+bool \hyperlink{classSim__Anneal_75cbcb3507c613bfa0093886b216b7b4}{isFrozen} (void)
+\item 
+bool \hyperlink{classSim__Anneal_f2bb61f9a80a2e5227eb4002b8ccef09}{keepMove} (double delta\_\-energy)
+\item 
+void \hyperlink{classSim__Anneal_e099bb1d6024d20d12cac05597e5b02a}{setScale} (const int \&num\_\-samples)
+\item 
+void \hyperlink{classSim__Anneal_8fefd06ac45d893bbc9b8e01c0d0fdf3}{reserveDetailedInfo} (void)
+\item 
+void \hyperlink{classSim__Anneal_c0ed4758fe537d303240359100d7e881}{recordDetailedInfo} (const double \&current\_\-energy)
+\item 
+void \hyperlink{classSim__Anneal_e046126356e4cf9719159c66221cb66a}{recordSuccessfulMove} (void)
+\item 
+void \hyperlink{classSim__Anneal_8d31a68b6bf7b2fb8461806503cffbab}{recordUnsuccessfulMove} (void)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classSim__Anneal_603424c51607fd3dc2fe99757106f472}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!Sim\_\-Anneal@{Sim\_\-Anneal}}
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[Sim\_\-Anneal]{\setlength{\rightskip}{0pt plus 5cm}Sim\_\-Anneal::Sim\_\-Anneal (void)}}
+\label{classSim__Anneal_603424c51607fd3dc2fe99757106f472}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classSim__Anneal_7f4531410e05e85db08a3da83d484c49}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!getRandomSample@{getRandomSample}}
+\index{getRandomSample@{getRandomSample}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[getRandomSample]{\setlength{\rightskip}{0pt plus 5cm}int Sim\_\-Anneal::getRandomSample (const int \& {\em num\_\-samples})}}
+\label{classSim__Anneal_7f4531410e05e85db08a3da83d484c49}
+
+
+Pick random sample point from uniform distribution. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em num\_\-samples}]Number of sample points in contour. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Index of sample point. \end{Desc}
+\hypertarget{classSim__Anneal_14635d2687f67b208da7664f272c5a78}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!moreMoves@{moreMoves}}
+\index{moreMoves@{moreMoves}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[moreMoves]{\setlength{\rightskip}{0pt plus 5cm}bool Sim\_\-Anneal::moreMoves (const int \& {\em num\_\-raw\_\-points})}}
+\label{classSim__Anneal_14635d2687f67b208da7664f272c5a78}
+
+
+Determine if more sample moves should be made at current temperature. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em num\_\-raw\_\-points}]Number of raw points in contour. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if move more sampe points; false otherwise; \end{Desc}
+
+
+References Controls::getMaxNumMoveAttempts(), Controls::getNumMovesPerIteration(), and Controls::instance().\hypertarget{classSim__Anneal_f76b13e223ca4a6b5b544e14a945b805}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!printEnergy@{printEnergy}}
+\index{printEnergy@{printEnergy}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[printEnergy]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::printEnergy (char $\ast$const  {\em filename}) const}}
+\label{classSim__Anneal_f76b13e223ca4a6b5b544e14a945b805}
+
+
+Write energy history of simulated annealing to file. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Output file name. \end{description}
+\end{Desc}
+\hypertarget{classSim__Anneal_d89aa35317c42d1e286f735d373329e5}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!printTemperature@{printTemperature}}
+\index{printTemperature@{printTemperature}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[printTemperature]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::printTemperature (char $\ast$const  {\em filename}) const}}
+\label{classSim__Anneal_d89aa35317c42d1e286f735d373329e5}
+
+
+Write temperature history of simulated annealing to file. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Output file name. \end{description}
+\end{Desc}
+\hypertarget{classSim__Anneal_465eb7c7301f09265dafa68d60266bb5}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!printScript@{printScript}}
+\index{printScript@{printScript}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[printScript]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::printScript (const char $\ast$const  {\em energy\_\-filename}, \/  const char $\ast$const  {\em temp\_\-filename}, \/  const std::string \& {\em contour\_\-name}, \/  const int \& {\em contour\_\-section}) const}}
+\label{classSim__Anneal_465eb7c7301f09265dafa68d60266bb5}
+
+
+Write grace script for visualizing annealing energy and temperature. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em energy\_\-filename}]Output file name for energy history. \item[\mbox{$\leftarrow$} {\em temp\_\-filename}]Output file name for temperature history. \item[\mbox{$\leftarrow$} {\em contour\_\-name}]\hyperlink{classContour}{Contour} name. \item[\mbox{$\leftarrow$} {\em contour\_\-section}]\hyperlink{classContour}{Contour} section. \end{description}
+\end{Desc}
+
+
+References Controls::getOutputDir(), and Controls::instance().\hypertarget{classSim__Anneal_2141dd9baa6a1cba3d5d98f2a1d025b1}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!debug@{debug}}
+\index{debug@{debug}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[debug]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::debug (const std::string \& {\em name}, \/  const int \& {\em section}, \/  const int \& {\em num\_\-raw\_\-points})}}
+\label{classSim__Anneal_2141dd9baa6a1cba3d5d98f2a1d025b1}
+
+
+Print detailed information for debugging purposes. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em name}]\hyperlink{classContour}{Contour} name. \item[\mbox{$\leftarrow$} {\em section}]\hyperlink{classContour}{Contour} section. \item[\mbox{$\leftarrow$} {\em num\_\-raw\_\-points}]Number of raw points in contour. \end{description}
+\end{Desc}
+
+
+References Controls::getMaxNumMoveAttempts(), Controls::getNumMovesPerIteration(), and Controls::instance().\hypertarget{classSim__Anneal_005408a3fedc95d5b8c5ba72d253998a}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!getNormalRandom@{getNormalRandom}}
+\index{getNormalRandom@{getNormalRandom}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[getNormalRandom]{\setlength{\rightskip}{0pt plus 5cm}double Sim\_\-Anneal::getNormalRandom (void)}}
+\label{classSim__Anneal_005408a3fedc95d5b8c5ba72d253998a}
+
+
+Get normally distributed random number with equal mean and standard deviation. \begin{Desc}
+\item[Returns:]Random number. \end{Desc}
+
+
+References Controls::getMeanAmplitudeNoise(), and Controls::instance().
+
+Referenced by getRandomPathParameterDisplacement().\hypertarget{classSim__Anneal_515e446dea914e0e8e3651738f88de36}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!getRandomPathParameterDisplacement@{getRandomPathParameterDisplacement}}
+\index{getRandomPathParameterDisplacement@{getRandomPathParameterDisplacement}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[getRandomPathParameterDisplacement]{\setlength{\rightskip}{0pt plus 5cm}double Sim\_\-Anneal::getRandomPathParameterDisplacement (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_515e446dea914e0e8e3651738f88de36}
+
+
+Pick random path parameter displacement from normal distribution. \begin{Desc}
+\item[Returns:]Path parameter displacement. \end{Desc}
+
+
+References getNormalRandom().\hypertarget{classSim__Anneal_6f78eb5ed1ed6e6addf5ffb1b4c7c428}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!decreaseTemp@{decreaseTemp}}
+\index{decreaseTemp@{decreaseTemp}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[decreaseTemp]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::decreaseTemp (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_6f78eb5ed1ed6e6addf5ffb1b4c7c428}
+
+
+Lower temperature and prepare for another set of sample moves. 
+
+References Controls::getBoltzman(), Controls::getTempScale(), and Controls::instance().\hypertarget{classSim__Anneal_75cbcb3507c613bfa0093886b216b7b4}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!isFrozen@{isFrozen}}
+\index{isFrozen@{isFrozen}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[isFrozen]{\setlength{\rightskip}{0pt plus 5cm}bool Sim\_\-Anneal::isFrozen (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_75cbcb3507c613bfa0093886b216b7b4}
+
+
+Determine if contour is \char`\"{}frozen\char`\"{} and simulated annealing is complete. \begin{Desc}
+\item[Returns:]True if contour is frozen; false otherwise; \end{Desc}
+
+
+References Controls::instance().\hypertarget{classSim__Anneal_f2bb61f9a80a2e5227eb4002b8ccef09}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!keepMove@{keepMove}}
+\index{keepMove@{keepMove}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[keepMove]{\setlength{\rightskip}{0pt plus 5cm}bool Sim\_\-Anneal::keepMove (double {\em delta\_\-energy})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_f2bb61f9a80a2e5227eb4002b8ccef09}
+
+
+Determine if sample point move that raised energy shoudl be kept. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em delta\_\-energy}]Change in energy due to sample point move. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]True if keep sample point move; false otherwise; \end{Desc}
+\hypertarget{classSim__Anneal_e099bb1d6024d20d12cac05597e5b02a}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!setScale@{setScale}}
+\index{setScale@{setScale}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[setScale]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::setScale (const int \& {\em num\_\-samples})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_e099bb1d6024d20d12cac05597e5b02a}
+
+
+\hypertarget{classSim__Anneal_8fefd06ac45d893bbc9b8e01c0d0fdf3}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!reserveDetailedInfo@{reserveDetailedInfo}}
+\index{reserveDetailedInfo@{reserveDetailedInfo}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[reserveDetailedInfo]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::reserveDetailedInfo (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_8fefd06ac45d893bbc9b8e01c0d0fdf3}
+
+
+\hypertarget{classSim__Anneal_c0ed4758fe537d303240359100d7e881}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!recordDetailedInfo@{recordDetailedInfo}}
+\index{recordDetailedInfo@{recordDetailedInfo}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[recordDetailedInfo]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::recordDetailedInfo (const double \& {\em current\_\-energy})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_c0ed4758fe537d303240359100d7e881}
+
+
+\hypertarget{classSim__Anneal_e046126356e4cf9719159c66221cb66a}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!recordSuccessfulMove@{recordSuccessfulMove}}
+\index{recordSuccessfulMove@{recordSuccessfulMove}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[recordSuccessfulMove]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::recordSuccessfulMove (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_e046126356e4cf9719159c66221cb66a}
+
+
+\hypertarget{classSim__Anneal_8d31a68b6bf7b2fb8461806503cffbab}{
+\index{Sim\_\-Anneal@{Sim\_\-Anneal}!recordUnsuccessfulMove@{recordUnsuccessfulMove}}
+\index{recordUnsuccessfulMove@{recordUnsuccessfulMove}!Sim_Anneal@{Sim\_\-Anneal}}
+\subsubsection[recordUnsuccessfulMove]{\setlength{\rightskip}{0pt plus 5cm}void Sim\_\-Anneal::recordUnsuccessfulMove (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classSim__Anneal_8d31a68b6bf7b2fb8461806503cffbab}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{sim__anneal_8h}{sim\_\-anneal.h}\item 
+\hyperlink{sim__anneal_8cc}{sim\_\-anneal.cc}\end{CompactItemize}

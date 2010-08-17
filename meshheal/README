@@ -1,0 +1,37 @@
+# configure google profile with these shell variables
+export CPUPROFILE=./myprofile
+export PROFILEFREQ=200
+
+# examples of using pprof
+/home/jkinney/install/googleperf64/bin/pprof64 -h
+
+
+## IDENTIFIED PROBLEM
+# determining if edge exist between a pair of vertices
+
+## IDENTIFIED PROBLEM
+# N-squared algorithm (for each edge, for each edge) in computeDistances
+# current method:
+#   calculate distance between all possible pairs of vertices
+# new method:
+#   for each vertex
+#     find closest vertex by calculating distance
+#     for vertices in projection neighborhood
+#
+#   projection algorithm:
+#     projecte all vertices onto random vector
+#     for each vertex with a projected distance from target within a window
+#       measure 3D separation distance from target to vertex
+#       if 3D separation distance is less than halw window width
+#       then vertex is closer to target than any vertex
+#       lying outside window, hence vertex is candidate for closest.
+
+
+# medians for cubes of length 2
+# A = 3457.945 4161.271 6000.130
+# B = 3425.76 4142.81 5999.88
+# C = 3366.40 4100.58 5950.25
+# D = 3355.49 4115.71 5949.93
+# E = 3411.12 4164.71 6000.06
+# X = 3423.73 4146.66 6000.16
+

@@ -1,0 +1,547 @@
+\hypertarget{classContour}{
+\section{Contour Class Reference}
+\label{classContour}\index{Contour@{Contour}}
+}
+{\tt \#include $<$contour.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classContour_7b0cf79d396376bb151107ea681bcc8c}{Contour} (char $\ast$const str, int sec)
+\item 
+\hyperlink{classContour}{Contour} \& \hyperlink{classContour_43544e1600bf1ad9089280acf0d00f49}{operator=} (\hyperlink{classContour}{Contour} const \&)
+\item 
+\hyperlink{classContour_c932ba1508409956282d1c0edc33b423}{Contour} (\hyperlink{classContour}{Contour} const \&)
+\item 
+int \hyperlink{classContour_e6c12c88060f02914f324d3c446ea536}{processContour} (\hyperlink{histogram_8h_db0ab3db1ab685e2d2bff657e3e86861}{vec\_\-d} \&my\_\-path\_\-intervals)
+\item 
+bool \hyperlink{classContour_efb2ebf2825a536726a22810e814d493}{isDegenerate} (void) const 
+\item 
+void \hyperlink{classContour_bed58a39b4082fb527aaf9c50f7f31f0}{computeDeviationHistogram} (\hyperlink{classHistogram}{Histogram} \&h) const 
+\item 
+void \hyperlink{classContour_b6aef0a09131e1ed47a64378373a4571}{computeIntervalHistogram} (\hyperlink{classHistogram}{Histogram} \&h) const 
+\item 
+void \hyperlink{classContour_bfbd206df1ad7a511a0144ae866d2432}{updateDeviations} (\hyperlink{classHistogram}{Histogram} \&h) const 
+\item 
+void \hyperlink{classContour_331624a8a963efe4b50d58d94010fbd3}{calcSampleIntervals} (\hyperlink{histogram_8h_db0ab3db1ab685e2d2bff657e3e86861}{vec\_\-d} \&my\_\-path\_\-intervals)
+\item 
+void \hyperlink{classContour_08ac24e5771e503f0f79803e54439c75}{updateSampleIntervals} (\hyperlink{classHistogram}{Histogram} \&h)
+\item 
+void \hyperlink{classContour_f2218507768d03029d77e076ba793fd5}{setSamplesToRaw} (void)
+\item 
+void \hyperlink{classContour_0b7d66074d566108b50fd23e370e3503}{removeDuplicates} (void)
+\item 
+void \hyperlink{classContour_12541e0e0d4cc193cfba7e939f4b0ae4}{writeFilesAfter} (void) const 
+\item 
+void \hyperlink{classContour_f0e05e8412a7478801a879d8b18f2b54}{printPtsFiles} (char const $\ast$myname) const 
+\item 
+void \hyperlink{classContour_f0c59693fbb4d996a6211c46f6e6cf11}{printRawPtsFiles} (char const $\ast$myname) const 
+\item 
+void \hyperlink{classContour_d82d6b904ce3c2913cef47f197c30994}{printScripts} (void) const 
+\item 
+void \hyperlink{classContour_49b018412a5f71c9e53400b49a9be29d}{printSimpleScripts} (void) const 
+\item 
+void \hyperlink{classContour_54234b52ace49334cf33f55f4a990687}{printRawPoints} (char const $\ast$const filename) const 
+\item 
+void \hyperlink{classContour_99c3b3f32aeeabcf65dad7ba65e667cf}{printSplineSamplesHere} (char const $\ast$const filename, const int \&num\_\-splines, double path\_\-parameter\_\-value) const 
+\item 
+void \hyperlink{classContour_6d939fbc0872756248ff958d447b74af}{duplicateControlPoints} (\hyperlink{contour_8h_48cca362cb388dfdb3f8df5441d03717}{list\_\-i} \&control\_\-points) const 
+\item 
+void \hyperlink{classContour_4a50a35bbbcda623b7526ca38d81494c}{printIdentity} (void)
+\item 
+void \hyperlink{classContour_3feef63e061288c10d3d19788d44a2bc}{addRawPoint} (\hyperlink{classPoint}{Point} p)
+\item 
+int \hyperlink{classContour_7dca95e330dc1baf98ff5bc64279a0b4}{getNumSamplePoints} (void) const 
+\item 
+int \hyperlink{classContour_28922b2cf76490fd14ea7019aedd1235}{getNumRawPoints} (void) const 
+\item 
+bool \hyperlink{classContour_a29199e9ea18f0a4d58c94eca0cc62e3}{pointsAreIdentical} (\hyperlink{classPoint}{Point} const \&lhs, \hyperlink{classPoint}{Point} const \&rhs) const 
+\item 
+char const $\ast$ \hyperlink{classContour_0dbbcfa417bfde6a69069b2ac1376577}{getName} (void) const 
+\item 
+\hyperlink{parameter_8h_76617663fb8c2b14cf698a47a4d07926}{c\_\-d\_\-iterator} \hyperlink{classContour_dd1f35c151bb186952ca13ceba8d7e54}{firstDeviation} (void)
+\item 
+\hyperlink{parameter_8h_76617663fb8c2b14cf698a47a4d07926}{c\_\-d\_\-iterator} \hyperlink{classContour_62766dd4545b50f6698d9d858da50e04}{onePastLastDeviation} (void)
+\item 
+\hyperlink{parameter_8h_d367c52cb5a031e4bc21ba9af7d6ee47}{c\_\-p\_\-iterator} \hyperlink{classContour_10b4970b043435029e202fd31717f3dd}{getFirstRawPoint} (void)
+\item 
+\hyperlink{parameter_8h_d367c52cb5a031e4bc21ba9af7d6ee47}{c\_\-p\_\-iterator} \hyperlink{classContour_b624fa91f7317166c00148135c715705}{getOnePastLastRawPoint} (void)
+\item 
+int \hyperlink{classContour_5f40f2e08cc648c714aca5b3763ab03c}{getSection} (void) const 
+\item 
+void \hyperlink{classContour_b8f0605a0056419df472cc1cb207ac30}{initializeControlPointMatrix} (\hyperlink{contour_8h_48cca362cb388dfdb3f8df5441d03717}{list\_\-i} \&control\_\-points)
+\item 
+void \hyperlink{classContour_2edee74efc68a14664ba378010e59a80}{initializeControlPointVector} (std::list$<$ int $>$ \&control\_\-points)
+\item 
+bool \hyperlink{classContour_5ab12f5bbf33221b340fda2d3c244b27}{deviationsLarge} (void)
+\item 
+void \hyperlink{classContour_2b4e79e18f6468763669052d312235e8}{computeDeviations} (void)
+\item 
+bool \hyperlink{classContour_b8df5352cb0220e352a455ea21a8cd3c}{fewButKeep} (void)
+\item 
+bool \hyperlink{classContour_d548a8000efd6af7dcf3b80f32395499}{fewOmit} (void)
+\item 
+void \hyperlink{classContour_291821fec6939f1b6111cac28b89d369}{clearRadiusCurvatureLogFiles} (void)
+\item 
+void \hyperlink{classContour_63a12b810dd16fd79d733c07aaf574f4}{clearArcLengthsLogFiles} (void)
+\item 
+void \hyperlink{classContour_df18fdf2ea3bb8d78d2f305ab047d5a6}{clearUniformSampleLogFiles} (void)
+\item 
+void \hyperlink{classContour_c68248cf6e54b4baf426bf5a47f5b894}{clearSampleLogFiles} (void)
+\item 
+void \hyperlink{classContour_07f79c4a923c8589f8b201151bde2202}{clearSParamLogFiles} (void)
+\item 
+void \hyperlink{classContour_bc87646ea6d6df9b49001597f57af4e7}{clearControlLogFiles} (void)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classContour_7b0cf79d396376bb151107ea681bcc8c}{
+\index{Contour@{Contour}!Contour@{Contour}}
+\index{Contour@{Contour}!Contour@{Contour}}
+\subsubsection[Contour]{\setlength{\rightskip}{0pt plus 5cm}Contour::Contour (char $\ast$const  {\em str}, \/  int {\em sec})}}
+\label{classContour_7b0cf79d396376bb151107ea681bcc8c}
+
+
+\hypertarget{classContour_c932ba1508409956282d1c0edc33b423}{
+\index{Contour@{Contour}!Contour@{Contour}}
+\index{Contour@{Contour}!Contour@{Contour}}
+\subsubsection[Contour]{\setlength{\rightskip}{0pt plus 5cm}Contour::Contour ({\bf Contour} const \& {\em rhs})}}
+\label{classContour_c932ba1508409956282d1c0edc33b423}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classContour_43544e1600bf1ad9089280acf0d00f49}{
+\index{Contour@{Contour}!operator=@{operator=}}
+\index{operator=@{operator=}!Contour@{Contour}}
+\subsubsection[operator=]{\setlength{\rightskip}{0pt plus 5cm}{\bf Contour} \& Contour::operator= ({\bf Contour} const \& {\em rhs})}}
+\label{classContour_43544e1600bf1ad9089280acf0d00f49}
+
+
+
+
+References name.\hypertarget{classContour_e6c12c88060f02914f324d3c446ea536}{
+\index{Contour@{Contour}!processContour@{processContour}}
+\index{processContour@{processContour}!Contour@{Contour}}
+\subsubsection[processContour]{\setlength{\rightskip}{0pt plus 5cm}int Contour::processContour ({\bf vec\_\-d} \& {\em my\_\-path\_\-intervals})}}
+\label{classContour_e6c12c88060f02914f324d3c446ea536}
+
+
+Fit splines to contour points in this contour. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em my\_\-path\_\-intervals}]Straight-line distance between successive spline samples. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Expected number of spline samples based on contour spline lengths and minimum and maximum sample intervals. \end{Desc}
+
+
+References calcSampleIntervals(), getName(), Control\_\-Points::getNumSplines(), Controls::getOutputDir(), Controls::getPrintDetailedInfo(), getSection(), Controls::instance(), Parameter::print(), and Parameter::reserve().\hypertarget{classContour_efb2ebf2825a536726a22810e814d493}{
+\index{Contour@{Contour}!isDegenerate@{isDegenerate}}
+\index{isDegenerate@{isDegenerate}!Contour@{Contour}}
+\subsubsection[isDegenerate]{\setlength{\rightskip}{0pt plus 5cm}bool Contour::isDegenerate (void) const}}
+\label{classContour_efb2ebf2825a536726a22810e814d493}
+
+
+Determine if contour has too few samples to be a valid contour shape. Specifically, a contour with two or less points has zero circumscribing area and is an impossibly physiological shape. \begin{Desc}
+\item[Returns:]True if contour is degenerate; false otherwise. \end{Desc}
+
+
+References Parameter::getNumSamplePoints().\hypertarget{classContour_bed58a39b4082fb527aaf9c50f7f31f0}{
+\index{Contour@{Contour}!computeDeviationHistogram@{computeDeviationHistogram}}
+\index{computeDeviationHistogram@{computeDeviationHistogram}!Contour@{Contour}}
+\subsubsection[computeDeviationHistogram]{\setlength{\rightskip}{0pt plus 5cm}void Contour::computeDeviationHistogram ({\bf Histogram} \& {\em h}) const}}
+\label{classContour_bed58a39b4082fb527aaf9c50f7f31f0}
+
+
+\hypertarget{classContour_b6aef0a09131e1ed47a64378373a4571}{
+\index{Contour@{Contour}!computeIntervalHistogram@{computeIntervalHistogram}}
+\index{computeIntervalHistogram@{computeIntervalHistogram}!Contour@{Contour}}
+\subsubsection[computeIntervalHistogram]{\setlength{\rightskip}{0pt plus 5cm}void Contour::computeIntervalHistogram ({\bf Histogram} \& {\em h}) const}}
+\label{classContour_b6aef0a09131e1ed47a64378373a4571}
+
+
+\hypertarget{classContour_bfbd206df1ad7a511a0144ae866d2432}{
+\index{Contour@{Contour}!updateDeviations@{updateDeviations}}
+\index{updateDeviations@{updateDeviations}!Contour@{Contour}}
+\subsubsection[updateDeviations]{\setlength{\rightskip}{0pt plus 5cm}void Contour::updateDeviations ({\bf Histogram} \& {\em h}) const}}
+\label{classContour_bfbd206df1ad7a511a0144ae866d2432}
+
+
+Update statistics of deviation of spline samples to linearly-interpolated raw contour points. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em h}]Instance of \hyperlink{classHistogram}{Histogram} class for deviations. \end{description}
+\end{Desc}
+
+
+References Parameter::getFirstDeviationConst(), Parameter::getOnePastLastDeviationConst(), and Histogram::update().\hypertarget{classContour_331624a8a963efe4b50d58d94010fbd3}{
+\index{Contour@{Contour}!calcSampleIntervals@{calcSampleIntervals}}
+\index{calcSampleIntervals@{calcSampleIntervals}!Contour@{Contour}}
+\subsubsection[calcSampleIntervals]{\setlength{\rightskip}{0pt plus 5cm}void Contour::calcSampleIntervals ({\bf vec\_\-d} \& {\em my\_\-path\_\-intervals})}}
+\label{classContour_331624a8a963efe4b50d58d94010fbd3}
+
+
+Calculate straight-line distance between successive spline samples. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em my\_\-path\_\-intervals}]Inter-sample distances. \end{description}
+\end{Desc}
+
+
+References Parameter::getFirstSplineSampleConst(), and Parameter::getOnePastLastSplineSampleConst().
+
+Referenced by processContour().\hypertarget{classContour_08ac24e5771e503f0f79803e54439c75}{
+\index{Contour@{Contour}!updateSampleIntervals@{updateSampleIntervals}}
+\index{updateSampleIntervals@{updateSampleIntervals}!Contour@{Contour}}
+\subsubsection[updateSampleIntervals]{\setlength{\rightskip}{0pt plus 5cm}void Contour::updateSampleIntervals ({\bf Histogram} \& {\em h})}}
+\label{classContour_08ac24e5771e503f0f79803e54439c75}
+
+
+Calculate straight line distance between adjacent sample points, store, and update sample interval statistics. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em h}]Instance of \hyperlink{classHistogram}{Histogram} class for sample intervals. \end{description}
+\end{Desc}
+
+
+References Parameter::getFirstSplineSampleConst(), Parameter::getOnePastLastSplineSampleConst(), and Histogram::update().\hypertarget{classContour_f2218507768d03029d77e076ba793fd5}{
+\index{Contour@{Contour}!setSamplesToRaw@{setSamplesToRaw}}
+\index{setSamplesToRaw@{setSamplesToRaw}!Contour@{Contour}}
+\subsubsection[setSamplesToRaw]{\setlength{\rightskip}{0pt plus 5cm}void Contour::setSamplesToRaw (void)}}
+\label{classContour_f2218507768d03029d77e076ba793fd5}
+
+
+Use the raw contour points as samples. 
+
+References Parameter::addDeviation(), Parameter::addSplineSample(), getName(), getSection(), and Controls::instance().\hypertarget{classContour_0b7d66074d566108b50fd23e370e3503}{
+\index{Contour@{Contour}!removeDuplicates@{removeDuplicates}}
+\index{removeDuplicates@{removeDuplicates}!Contour@{Contour}}
+\subsubsection[removeDuplicates]{\setlength{\rightskip}{0pt plus 5cm}void Contour::removeDuplicates (void)}}
+\label{classContour_0b7d66074d566108b50fd23e370e3503}
+
+
+Compare sequential contour points and remove duplicate points. 
+
+References pointsAreIdentical().\hypertarget{classContour_12541e0e0d4cc193cfba7e939f4b0ae4}{
+\index{Contour@{Contour}!writeFilesAfter@{writeFilesAfter}}
+\index{writeFilesAfter@{writeFilesAfter}!Contour@{Contour}}
+\subsubsection[writeFilesAfter]{\setlength{\rightskip}{0pt plus 5cm}void Contour::writeFilesAfter (void) const}}
+\label{classContour_12541e0e0d4cc193cfba7e939f4b0ae4}
+
+
+Write diagnostic information to file. 
+
+References getName(), Control\_\-Points::getNumSplines(), Controls::getOutputDir(), getSection(), Controls::instance(), Control\_\-Points::print(), Parameter::print(), and printSplineSamplesHere().\hypertarget{classContour_f0e05e8412a7478801a879d8b18f2b54}{
+\index{Contour@{Contour}!printPtsFiles@{printPtsFiles}}
+\index{printPtsFiles@{printPtsFiles}!Contour@{Contour}}
+\subsubsection[printPtsFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::printPtsFiles (char const $\ast$ {\em myname}) const}}
+\label{classContour_f0e05e8412a7478801a879d8b18f2b54}
+
+
+Write x and y values of spline samples to file in pts format. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em myname}]\hyperlink{classContour}{Contour} name. \end{description}
+\end{Desc}
+
+
+References Parameter::getFirstSplineSampleConst(), Parameter::getNumSamplePoints(), Parameter::getOnePastLastSplineSampleConst(), Controls::getOutputDir(), Controls::getOutputScaleFactor(), getSection(), Controls::getSectionThickness(), and Controls::instance().\hypertarget{classContour_f0c59693fbb4d996a6211c46f6e6cf11}{
+\index{Contour@{Contour}!printRawPtsFiles@{printRawPtsFiles}}
+\index{printRawPtsFiles@{printRawPtsFiles}!Contour@{Contour}}
+\subsubsection[printRawPtsFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::printRawPtsFiles (char const $\ast$ {\em myname}) const}}
+\label{classContour_f0c59693fbb4d996a6211c46f6e6cf11}
+
+
+Write input contour points to file in pts format. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em myname}]\hyperlink{classContour}{Contour} name. \end{description}
+\end{Desc}
+
+
+References Controls::getOutputDir(), Controls::getOutputScaleFactor(), Controls::getSectionThickness(), and Controls::instance().\hypertarget{classContour_d82d6b904ce3c2913cef47f197c30994}{
+\index{Contour@{Contour}!printScripts@{printScripts}}
+\index{printScripts@{printScripts}!Contour@{Contour}}
+\subsubsection[printScripts]{\setlength{\rightskip}{0pt plus 5cm}void Contour::printScripts (void) const}}
+\label{classContour_d82d6b904ce3c2913cef47f197c30994}
+
+
+Write grace scripts for visualizing contours and spline samples. 
+
+References getName(), Controls::getOutputDir(), getSection(), and Controls::instance().\hypertarget{classContour_49b018412a5f71c9e53400b49a9be29d}{
+\index{Contour@{Contour}!printSimpleScripts@{printSimpleScripts}}
+\index{printSimpleScripts@{printSimpleScripts}!Contour@{Contour}}
+\subsubsection[printSimpleScripts]{\setlength{\rightskip}{0pt plus 5cm}void Contour::printSimpleScripts (void) const}}
+\label{classContour_49b018412a5f71c9e53400b49a9be29d}
+
+
+Write grace scripts for visualizing contours and spline samples. 
+
+References getName(), Controls::getOutputDir(), getSection(), and Controls::instance().\hypertarget{classContour_54234b52ace49334cf33f55f4a990687}{
+\index{Contour@{Contour}!printRawPoints@{printRawPoints}}
+\index{printRawPoints@{printRawPoints}!Contour@{Contour}}
+\subsubsection[printRawPoints]{\setlength{\rightskip}{0pt plus 5cm}void Contour::printRawPoints (char const $\ast$const  {\em filename}) const}}
+\label{classContour_54234b52ace49334cf33f55f4a990687}
+
+
+Write input contour points to file. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Output file name. \end{description}
+\end{Desc}
+\hypertarget{classContour_99c3b3f32aeeabcf65dad7ba65e667cf}{
+\index{Contour@{Contour}!printSplineSamplesHere@{printSplineSamplesHere}}
+\index{printSplineSamplesHere@{printSplineSamplesHere}!Contour@{Contour}}
+\subsubsection[printSplineSamplesHere]{\setlength{\rightskip}{0pt plus 5cm}void Contour::printSplineSamplesHere (char const $\ast$const  {\em filename}, \/  const int \& {\em num\_\-splines}, \/  double {\em path\_\-parameter\_\-value}) const}}
+\label{classContour_99c3b3f32aeeabcf65dad7ba65e667cf}
+
+
+Write spline sample point evaluated at given parameter value. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Output file name. \item[\mbox{$\leftarrow$} {\em num\_\-splines}]Number of splines in contour. \item[\mbox{$\leftarrow$} {\em path\_\-parameter\_\-value}]Path parameter value of interest. Value must be between 0.0 and 1.0, inclusive. \end{description}
+\end{Desc}
+
+
+References Parameter::getNumSamples(), Point::getX(), and Point::getY().
+
+Referenced by writeFilesAfter().\hypertarget{classContour_6d939fbc0872756248ff958d447b74af}{
+\index{Contour@{Contour}!duplicateControlPoints@{duplicateControlPoints}}
+\index{duplicateControlPoints@{duplicateControlPoints}!Contour@{Contour}}
+\subsubsection[duplicateControlPoints]{\setlength{\rightskip}{0pt plus 5cm}void Contour::duplicateControlPoints ({\bf list\_\-i} \& {\em control\_\-points}) const}}
+\label{classContour_6d939fbc0872756248ff958d447b74af}
+
+
+Duplicate control points of splines to reduce deviation between spline samples and linearly-interpolated raw contour points. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em control\_\-points}]Indices of raw contour points used as control points for splines. \end{description}
+\end{Desc}
+
+
+References Parameter::getRawPointsToDuplicate().\hypertarget{classContour_4a50a35bbbcda623b7526ca38d81494c}{
+\index{Contour@{Contour}!printIdentity@{printIdentity}}
+\index{printIdentity@{printIdentity}!Contour@{Contour}}
+\subsubsection[printIdentity]{\setlength{\rightskip}{0pt plus 5cm}void Contour::printIdentity (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_4a50a35bbbcda623b7526ca38d81494c}
+
+
+\hypertarget{classContour_3feef63e061288c10d3d19788d44a2bc}{
+\index{Contour@{Contour}!addRawPoint@{addRawPoint}}
+\index{addRawPoint@{addRawPoint}!Contour@{Contour}}
+\subsubsection[addRawPoint]{\setlength{\rightskip}{0pt plus 5cm}void Contour::addRawPoint ({\bf Point} {\em p})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_3feef63e061288c10d3d19788d44a2bc}
+
+
+\hypertarget{classContour_7dca95e330dc1baf98ff5bc64279a0b4}{
+\index{Contour@{Contour}!getNumSamplePoints@{getNumSamplePoints}}
+\index{getNumSamplePoints@{getNumSamplePoints}!Contour@{Contour}}
+\subsubsection[getNumSamplePoints]{\setlength{\rightskip}{0pt plus 5cm}int Contour::getNumSamplePoints (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_7dca95e330dc1baf98ff5bc64279a0b4}
+
+
+
+
+References Parameter::getNumSamplePoints().\hypertarget{classContour_28922b2cf76490fd14ea7019aedd1235}{
+\index{Contour@{Contour}!getNumRawPoints@{getNumRawPoints}}
+\index{getNumRawPoints@{getNumRawPoints}!Contour@{Contour}}
+\subsubsection[getNumRawPoints]{\setlength{\rightskip}{0pt plus 5cm}int Contour::getNumRawPoints (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_28922b2cf76490fd14ea7019aedd1235}
+
+
+
+
+Referenced by fewButKeep(), and fewOmit().\hypertarget{classContour_a29199e9ea18f0a4d58c94eca0cc62e3}{
+\index{Contour@{Contour}!pointsAreIdentical@{pointsAreIdentical}}
+\index{pointsAreIdentical@{pointsAreIdentical}!Contour@{Contour}}
+\subsubsection[pointsAreIdentical]{\setlength{\rightskip}{0pt plus 5cm}bool Contour::pointsAreIdentical ({\bf Point} const \& {\em lhs}, \/  {\bf Point} const \& {\em rhs}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_a29199e9ea18f0a4d58c94eca0cc62e3}
+
+
+
+
+References Point::getX(), and Point::getY().
+
+Referenced by removeDuplicates().\hypertarget{classContour_0dbbcfa417bfde6a69069b2ac1376577}{
+\index{Contour@{Contour}!getName@{getName}}
+\index{getName@{getName}!Contour@{Contour}}
+\subsubsection[getName]{\setlength{\rightskip}{0pt plus 5cm}char const$\ast$ Contour::getName (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_0dbbcfa417bfde6a69069b2ac1376577}
+
+
+
+
+Referenced by clearArcLengthsLogFiles(), clearControlLogFiles(), clearRadiusCurvatureLogFiles(), clearSampleLogFiles(), clearSParamLogFiles(), clearUniformSampleLogFiles(), fewButKeep(), fewOmit(), printScripts(), printSimpleScripts(), processContour(), setSamplesToRaw(), and writeFilesAfter().\hypertarget{classContour_dd1f35c151bb186952ca13ceba8d7e54}{
+\index{Contour@{Contour}!firstDeviation@{firstDeviation}}
+\index{firstDeviation@{firstDeviation}!Contour@{Contour}}
+\subsubsection[firstDeviation]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-d\_\-iterator} Contour::firstDeviation (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_dd1f35c151bb186952ca13ceba8d7e54}
+
+
+
+
+References Parameter::getFirstDeviationConst().\hypertarget{classContour_62766dd4545b50f6698d9d858da50e04}{
+\index{Contour@{Contour}!onePastLastDeviation@{onePastLastDeviation}}
+\index{onePastLastDeviation@{onePastLastDeviation}!Contour@{Contour}}
+\subsubsection[onePastLastDeviation]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-d\_\-iterator} Contour::onePastLastDeviation (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_62766dd4545b50f6698d9d858da50e04}
+
+
+
+
+References Parameter::getOnePastLastDeviationConst().\hypertarget{classContour_10b4970b043435029e202fd31717f3dd}{
+\index{Contour@{Contour}!getFirstRawPoint@{getFirstRawPoint}}
+\index{getFirstRawPoint@{getFirstRawPoint}!Contour@{Contour}}
+\subsubsection[getFirstRawPoint]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-p\_\-iterator} Contour::getFirstRawPoint (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_10b4970b043435029e202fd31717f3dd}
+
+
+\hypertarget{classContour_b624fa91f7317166c00148135c715705}{
+\index{Contour@{Contour}!getOnePastLastRawPoint@{getOnePastLastRawPoint}}
+\index{getOnePastLastRawPoint@{getOnePastLastRawPoint}!Contour@{Contour}}
+\subsubsection[getOnePastLastRawPoint]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-p\_\-iterator} Contour::getOnePastLastRawPoint (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_b624fa91f7317166c00148135c715705}
+
+
+\hypertarget{classContour_5f40f2e08cc648c714aca5b3763ab03c}{
+\index{Contour@{Contour}!getSection@{getSection}}
+\index{getSection@{getSection}!Contour@{Contour}}
+\subsubsection[getSection]{\setlength{\rightskip}{0pt plus 5cm}int Contour::getSection (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_5f40f2e08cc648c714aca5b3763ab03c}
+
+
+
+
+Referenced by clearArcLengthsLogFiles(), clearControlLogFiles(), clearRadiusCurvatureLogFiles(), clearSampleLogFiles(), clearSParamLogFiles(), clearUniformSampleLogFiles(), fewButKeep(), fewOmit(), printPtsFiles(), printScripts(), printSimpleScripts(), processContour(), setSamplesToRaw(), and writeFilesAfter().\hypertarget{classContour_b8f0605a0056419df472cc1cb207ac30}{
+\index{Contour@{Contour}!initializeControlPointMatrix@{initializeControlPointMatrix}}
+\index{initializeControlPointMatrix@{initializeControlPointMatrix}!Contour@{Contour}}
+\subsubsection[initializeControlPointMatrix]{\setlength{\rightskip}{0pt plus 5cm}void Contour::initializeControlPointMatrix ({\bf list\_\-i} \& {\em control\_\-points})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_b8f0605a0056419df472cc1cb207ac30}
+
+
+Create matrix of control points describing all splines in contour. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em control\_\-points}]Sequence of raw points to use as control\_\-points. \end{description}
+\end{Desc}
+
+
+References Control\_\-Points::initialize().\hypertarget{classContour_2edee74efc68a14664ba378010e59a80}{
+\index{Contour@{Contour}!initializeControlPointVector@{initializeControlPointVector}}
+\index{initializeControlPointVector@{initializeControlPointVector}!Contour@{Contour}}
+\subsubsection[initializeControlPointVector]{\setlength{\rightskip}{0pt plus 5cm}void Contour::initializeControlPointVector (std::list$<$ int $>$ \& {\em control\_\-points})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_2edee74efc68a14664ba378010e59a80}
+
+
+Create matrix of control points describing all splines in contour. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\rightarrow$} {\em control\_\-points}]Sequence of raw points to use as control\_\-points. \end{description}
+\end{Desc}
+
+
+References Controls::getReturnInterpolatedRawPoints(), and Controls::instance().\hypertarget{classContour_5ab12f5bbf33221b340fda2d3c244b27}{
+\index{Contour@{Contour}!deviationsLarge@{deviationsLarge}}
+\index{deviationsLarge@{deviationsLarge}!Contour@{Contour}}
+\subsubsection[deviationsLarge]{\setlength{\rightskip}{0pt plus 5cm}bool Contour::deviationsLarge (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_5ab12f5bbf33221b340fda2d3c244b27}
+
+
+Check if any measured deviation of spline samples from linearly-connected raw contour points exceeds threshold. \begin{Desc}
+\item[Returns:]True if deviation threshold is exceeded; false otherwise. \end{Desc}
+
+
+References Parameter::deviationsLarge().\hypertarget{classContour_2b4e79e18f6468763669052d312235e8}{
+\index{Contour@{Contour}!computeDeviations@{computeDeviations}}
+\index{computeDeviations@{computeDeviations}!Contour@{Contour}}
+\subsubsection[computeDeviations]{\setlength{\rightskip}{0pt plus 5cm}void Contour::computeDeviations (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_2b4e79e18f6468763669052d312235e8}
+
+
+Compute deviation distance between raw points and splines. 
+
+References Parameter::computeDeviations().\hypertarget{classContour_b8df5352cb0220e352a455ea21a8cd3c}{
+\index{Contour@{Contour}!fewButKeep@{fewButKeep}}
+\index{fewButKeep@{fewButKeep}!Contour@{Contour}}
+\subsubsection[fewButKeep]{\setlength{\rightskip}{0pt plus 5cm}bool Contour::fewButKeep (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_b8df5352cb0220e352a455ea21a8cd3c}
+
+
+Check if contour has too few raw points to spline but sufficent number to pass threshold criterion. \begin{Desc}
+\item[Returns:]True if keep contour; false otherwise. \end{Desc}
+
+
+References getName(), getNumRawPoints(), Controls::getPtPerContourThreshold(), getSection(), and Controls::instance().\hypertarget{classContour_d548a8000efd6af7dcf3b80f32395499}{
+\index{Contour@{Contour}!fewOmit@{fewOmit}}
+\index{fewOmit@{fewOmit}!Contour@{Contour}}
+\subsubsection[fewOmit]{\setlength{\rightskip}{0pt plus 5cm}bool Contour::fewOmit (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_d548a8000efd6af7dcf3b80f32395499}
+
+
+Check if contour has too few raw points to spline and an insufficent number to pass threshold criterion. \begin{Desc}
+\item[Returns:]True if omit contour; false otherwise. \end{Desc}
+
+
+References getName(), getNumRawPoints(), Controls::getPtPerContourThreshold(), getSection(), and Controls::instance().\hypertarget{classContour_291821fec6939f1b6111cac28b89d369}{
+\index{Contour@{Contour}!clearRadiusCurvatureLogFiles@{clearRadiusCurvatureLogFiles}}
+\index{clearRadiusCurvatureLogFiles@{clearRadiusCurvatureLogFiles}!Contour@{Contour}}
+\subsubsection[clearRadiusCurvatureLogFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::clearRadiusCurvatureLogFiles (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_291821fec6939f1b6111cac28b89d369}
+
+
+Initialize radius of curvature log file to empty. 
+
+References getName(), getSection(), and Controls::instance().\hypertarget{classContour_63a12b810dd16fd79d733c07aaf574f4}{
+\index{Contour@{Contour}!clearArcLengthsLogFiles@{clearArcLengthsLogFiles}}
+\index{clearArcLengthsLogFiles@{clearArcLengthsLogFiles}!Contour@{Contour}}
+\subsubsection[clearArcLengthsLogFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::clearArcLengthsLogFiles (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_63a12b810dd16fd79d733c07aaf574f4}
+
+
+Initialize arc lengths log file to empty. 
+
+References getName(), getSection(), and Controls::instance().\hypertarget{classContour_df18fdf2ea3bb8d78d2f305ab047d5a6}{
+\index{Contour@{Contour}!clearUniformSampleLogFiles@{clearUniformSampleLogFiles}}
+\index{clearUniformSampleLogFiles@{clearUniformSampleLogFiles}!Contour@{Contour}}
+\subsubsection[clearUniformSampleLogFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::clearUniformSampleLogFiles (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_df18fdf2ea3bb8d78d2f305ab047d5a6}
+
+
+Initialize log file to empty for spline samples at uniform path parameter. 
+
+References getName(), getSection(), and Controls::instance().\hypertarget{classContour_c68248cf6e54b4baf426bf5a47f5b894}{
+\index{Contour@{Contour}!clearSampleLogFiles@{clearSampleLogFiles}}
+\index{clearSampleLogFiles@{clearSampleLogFiles}!Contour@{Contour}}
+\subsubsection[clearSampleLogFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::clearSampleLogFiles (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_c68248cf6e54b4baf426bf5a47f5b894}
+
+
+Initialize log file to empty for spline samples. 
+
+References getName(), getSection(), and Controls::instance().\hypertarget{classContour_07f79c4a923c8589f8b201151bde2202}{
+\index{Contour@{Contour}!clearSParamLogFiles@{clearSParamLogFiles}}
+\index{clearSParamLogFiles@{clearSParamLogFiles}!Contour@{Contour}}
+\subsubsection[clearSParamLogFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::clearSParamLogFiles (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_07f79c4a923c8589f8b201151bde2202}
+
+
+Initialize path parameter log file to empty. 
+
+References getName(), getSection(), and Controls::instance().\hypertarget{classContour_bc87646ea6d6df9b49001597f57af4e7}{
+\index{Contour@{Contour}!clearControlLogFiles@{clearControlLogFiles}}
+\index{clearControlLogFiles@{clearControlLogFiles}!Contour@{Contour}}
+\subsubsection[clearControlLogFiles]{\setlength{\rightskip}{0pt plus 5cm}void Contour::clearControlLogFiles (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classContour_bc87646ea6d6df9b49001597f57af4e7}
+
+
+Initialize log file to empty for indeces of control points. 
+
+References getName(), getSection(), and Controls::instance().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{contour_8h}{contour.h}\item 
+\hyperlink{contour_8cc}{contour.cc}\end{CompactItemize}

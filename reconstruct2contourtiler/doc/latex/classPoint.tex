@@ -1,0 +1,154 @@
+\hypertarget{classPoint}{
+\section{Point Class Reference}
+\label{classPoint}\index{Point@{Point}}
+}
+{\tt \#include $<$point.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classPoint_94dc19d9beda0018169bd5ef8cd730c3}{Point} (void)
+\item 
+\hyperlink{classPoint_2a6d8ce5866c8d0e4e5c9d659ce6bfc2}{Point} (char const $\ast$str, double $\ast$const transform)
+\item 
+\hyperlink{classPoint_25ceb467297fed76765cde5c9ff20fa4}{Point} (double xval, double yval)
+\item 
+double \hyperlink{classPoint_b73ba91268c3d3b783fd2a0983066b38}{getX} (void) const 
+\item 
+double \hyperlink{classPoint_1b00b67b5e96ce7e02011c170f07bf11}{getY} (void) const 
+\item 
+void \hyperlink{classPoint_9290a4098a3331e34f158eeca694a26c}{setX} (double i)
+\item 
+void \hyperlink{classPoint_387c7e206f5ba0ea575020e53a66fb55}{setY} (double i)
+\item 
+void \hyperlink{classPoint_67517850a2ef6cfe8d6beb161be65e5c}{print} (char $\ast$const line) const 
+\item 
+\hyperlink{classPoint}{Point} \hyperlink{classPoint_6a869eababaaf863740e3196b9ca6780}{operator-} (const \hyperlink{classPoint}{Point} \&p) const 
+\item 
+double \hyperlink{classPoint_a51050f8b9868c12b1a9d063e8555d05}{dot} (const \hyperlink{classPoint}{Point} \&p) const 
+\item 
+double \hyperlink{classPoint_99717644bf38e3868c9ff7f32f4a9226}{distance\_\-squared} (const \hyperlink{classPoint}{Point} \&p) const 
+\item 
+double \hyperlink{classPoint_41052067de2f7e0be2bf0b60c1e7f60d}{length} (void) const 
+\item 
+\hyperlink{classPoint}{Point} \& \hyperlink{classPoint_aed1420449367308540f3459049ac2bd}{operator$\ast$=} (double \hyperlink{proximity__energy_8m_4124bc0a9335c27f086f24ba207a4912}{a})
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classPoint_94dc19d9beda0018169bd5ef8cd730c3}{
+\index{Point@{Point}!Point@{Point}}
+\index{Point@{Point}!Point@{Point}}
+\subsubsection[Point]{\setlength{\rightskip}{0pt plus 5cm}Point::Point (void)}}
+\label{classPoint_94dc19d9beda0018169bd5ef8cd730c3}
+
+
+
+
+Referenced by operator-().\hypertarget{classPoint_2a6d8ce5866c8d0e4e5c9d659ce6bfc2}{
+\index{Point@{Point}!Point@{Point}}
+\index{Point@{Point}!Point@{Point}}
+\subsubsection[Point]{\setlength{\rightskip}{0pt plus 5cm}Point::Point (char const $\ast$ {\em str}, \/  double $\ast$const  {\em transform})}}
+\label{classPoint_2a6d8ce5866c8d0e4e5c9d659ce6bfc2}
+
+
+\hypertarget{classPoint_25ceb467297fed76765cde5c9ff20fa4}{
+\index{Point@{Point}!Point@{Point}}
+\index{Point@{Point}!Point@{Point}}
+\subsubsection[Point]{\setlength{\rightskip}{0pt plus 5cm}Point::Point (double {\em xval}, \/  double {\em yval})}}
+\label{classPoint_25ceb467297fed76765cde5c9ff20fa4}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classPoint_b73ba91268c3d3b783fd2a0983066b38}{
+\index{Point@{Point}!getX@{getX}}
+\index{getX@{getX}!Point@{Point}}
+\subsubsection[getX]{\setlength{\rightskip}{0pt plus 5cm}double Point::getX (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_b73ba91268c3d3b783fd2a0983066b38}
+
+
+
+
+Referenced by Contour::pointsAreIdentical(), and Contour::printSplineSamplesHere().\hypertarget{classPoint_1b00b67b5e96ce7e02011c170f07bf11}{
+\index{Point@{Point}!getY@{getY}}
+\index{getY@{getY}!Point@{Point}}
+\subsubsection[getY]{\setlength{\rightskip}{0pt plus 5cm}double Point::getY (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_1b00b67b5e96ce7e02011c170f07bf11}
+
+
+
+
+Referenced by Contour::pointsAreIdentical(), and Contour::printSplineSamplesHere().\hypertarget{classPoint_9290a4098a3331e34f158eeca694a26c}{
+\index{Point@{Point}!setX@{setX}}
+\index{setX@{setX}!Point@{Point}}
+\subsubsection[setX]{\setlength{\rightskip}{0pt plus 5cm}void Point::setX (double {\em i})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_9290a4098a3331e34f158eeca694a26c}
+
+
+\hypertarget{classPoint_387c7e206f5ba0ea575020e53a66fb55}{
+\index{Point@{Point}!setY@{setY}}
+\index{setY@{setY}!Point@{Point}}
+\subsubsection[setY]{\setlength{\rightskip}{0pt plus 5cm}void Point::setY (double {\em i})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_387c7e206f5ba0ea575020e53a66fb55}
+
+
+\hypertarget{classPoint_67517850a2ef6cfe8d6beb161be65e5c}{
+\index{Point@{Point}!print@{print}}
+\index{print@{print}!Point@{Point}}
+\subsubsection[print]{\setlength{\rightskip}{0pt plus 5cm}void Point::print (char $\ast$const  {\em line}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_67517850a2ef6cfe8d6beb161be65e5c}
+
+
+\hypertarget{classPoint_6a869eababaaf863740e3196b9ca6780}{
+\index{Point@{Point}!operator-@{operator-}}
+\index{operator-@{operator-}!Point@{Point}}
+\subsubsection[operator-]{\setlength{\rightskip}{0pt plus 5cm}{\bf Point} Point::operator- (const {\bf Point} \& {\em p}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_6a869eababaaf863740e3196b9ca6780}
+
+
+
+
+References Point(), x, and y.\hypertarget{classPoint_a51050f8b9868c12b1a9d063e8555d05}{
+\index{Point@{Point}!dot@{dot}}
+\index{dot@{dot}!Point@{Point}}
+\subsubsection[dot]{\setlength{\rightskip}{0pt plus 5cm}double Point::dot (const {\bf Point} \& {\em p}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_a51050f8b9868c12b1a9d063e8555d05}
+
+
+
+
+References x, and y.
+
+Referenced by Parameter::calcMinDistPtLineSegment().\hypertarget{classPoint_99717644bf38e3868c9ff7f32f4a9226}{
+\index{Point@{Point}!distance\_\-squared@{distance\_\-squared}}
+\index{distance\_\-squared@{distance\_\-squared}!Point@{Point}}
+\subsubsection[distance\_\-squared]{\setlength{\rightskip}{0pt plus 5cm}double Point::distance\_\-squared (const {\bf Point} \& {\em p}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_99717644bf38e3868c9ff7f32f4a9226}
+
+
+
+
+References a, x, and y.\hypertarget{classPoint_41052067de2f7e0be2bf0b60c1e7f60d}{
+\index{Point@{Point}!length@{length}}
+\index{length@{length}!Point@{Point}}
+\subsubsection[length]{\setlength{\rightskip}{0pt plus 5cm}double Point::length (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_41052067de2f7e0be2bf0b60c1e7f60d}
+
+
+
+
+Referenced by Parameter::calcMinDistPtLineSegment().\hypertarget{classPoint_aed1420449367308540f3459049ac2bd}{
+\index{Point@{Point}!operator$\ast$=@{operator$\ast$=}}
+\index{operator$\ast$=@{operator$\ast$=}!Point@{Point}}
+\subsubsection[operator$\ast$=]{\setlength{\rightskip}{0pt plus 5cm}{\bf Point}\& Point::operator$\ast$= (double {\em a})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classPoint_aed1420449367308540f3459049ac2bd}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{point_8h}{point.h}\item 
+\hyperlink{point_8cc}{point.cc}\end{CompactItemize}

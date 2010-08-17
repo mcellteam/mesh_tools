@@ -1,0 +1,1624 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 1
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\leftmargin 0.5in
+\topmargin 0.5in
+\rightmargin 0.5in
+\bottommargin 0.5in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Verse
+
+Meshalyzer Documentation
+\layout Verse
+
+Justin Kinney
+\layout Verse
+
+15June 2007
+\layout Section
+
+Summary
+\begin_inset LatexCommand \label{sec:Postprocessing}
+
+\end_inset 
+
+
+\layout Standard
+
+By reverse-engineering the output mesh of the contour tiler and the source
+ code of Filtermesh, we discovered the set of four mesh attributes that
+ are necessary and sufficient to insure the highest degree of mesh integrity
+ and compatibility with mesh analysis/manipulation software.
+ (1) Is the mesh closed? Are there any holes in the mesh lattice or is it
+ water tight? (2) Is the mesh a 2D manifold in R3? Does the mesh neighborhood
+ around every vertex resemble a disk as a 2D manifold must? (3) If the mesh
+ is a manifold, then do the mesh faces have consistent orientation? Do all
+ the faces have normals oriented the same (inward or outward) or are they
+ of mixed orientation? (4) If the mesh has consistent orientation, then
+ do all the faces have normals pointing outward? In most cases, the correction
+ of meshes that violate these attributes is a manual process involving the
+ removal of nonmanifold mesh elements, the reorientation of flipped meshes,
+ and the addition of faces in mesh holes.
+\layout Standard
+
+The purpose of the program is to quickly analyze and report on both general
+ characteristics and four topological attributes of meshes.
+ Running meshalyzer on a mesh file will provide enough information in a
+ single report to determine if the mesh will fail as input to any of the
+ manipulation processes described in this project.
+\layout Section
+
+Assumptions
+\layout Itemize
+
+The surface mesh has triangular faces.
+\layout Itemize
+
+The mesh file format is used.
+ Vertices are specified by a vertex index, i, and three coordinate positions,
+ xyz: [
+\begin_inset Formula $Vertex\quad i\quad x\quad y\quad z$
+\end_inset 
+
+] e.g.
+ [Vertex 45 3.634 1.004 2.925].
+ Faces are specified by a face index, j, and three vertex indices, v1v2v3:
+ [
+\begin_inset Formula $Face\quad j\quad v1\quad v2\quad v3$
+\end_inset 
+
+] e.g.
+ [Face 1204 74 10 29].
+ All indices are positive integers larger than zero.
+\layout Itemize
+
+The face normal vector, 
+\begin_inset Formula $\overrightarrow{n}=\left(\overrightarrow{v_{2}}-\overrightarrow{v_{1}}\right)\times\left(\overrightarrow{v_{3}}-\overrightarrow{v_{1}}\right)$
+\end_inset 
+
+where 
+\begin_inset Formula $\overrightarrow{v_{i}}$
+\end_inset 
+
+ is the vector location of vertex index 
+\begin_inset Formula $vi$
+\end_inset 
+
+, points outward, away from the mesh object as illustrated by vector 
+\begin_inset Formula $\overrightarrow{m}$
+\end_inset 
+
+in Figure 
+\begin_inset LatexCommand \ref{cap:Computing-face-normal}
+
+\end_inset 
+
+.
+ This same convention is used by DReAMM, VTK, and Filtermesh.
+ Notably, IRIT uses the opposite convetion.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Standard
+
+
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+center
+\layout Standard
+
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename face_normal.png
+	keepAspectRatio
+
+\end_inset 
+
+
+\layout Caption
+
+
+\series bold 
+
+\begin_inset LatexCommand \label{cap:Computing-face-normal}
+
+\end_inset 
+
+Computing face normal vector.
+
+\series default 
+ Two faces are shown, one with vertices {a1,a2,a3} and normal vector 
+\begin_inset Formula $\overrightarrow{n}=\left(\overrightarrow{a_{2}}-\overrightarrow{a_{1}}\right)\times\left(\overrightarrow{a_{3}}-\overrightarrow{a_{1}}\right)$
+\end_inset 
+
+and another with vertices {b1,b2,b3}.
+ and normal vector 
+\begin_inset Formula $\overrightarrow{m}=\left(\overrightarrow{b_{2}}-\overrightarrow{b_{1}}\right)\times\left(\overrightarrow{b_{3}}-\overrightarrow{b_{1}}\right)$
+\end_inset 
+
+.
+ Note how normal vector n points inward, while normal vector m points outward.
+\end_inset 
+
+
+\layout Section
+
+Mesh Characteristics
+\layout Standard
+
+
+\emph on 
+The following mesh characteristics are always measurable.
+ 
+\layout Enumerate
+
+number of vertices, faces, edges
+\layout Enumerate
+
+face area, individual and cumulative 
+\layout Enumerate
+
+face aspect ratio
+\layout Enumerate
+
+edge length (distinguishability of vertices also checked) 
+\layout Enumerate
+
+bounding box of data set
+\layout Enumerate
+
+number of components in file (number of separate objects in file)
+\layout Enumerate
+
+number of boundaries
+\layout Enumerate
+
+number intersecting faces (within one separate object, between separate
+ objects in single file)
+\begin_inset Formula $\diamondsuit$
+\end_inset 
+
+
+\layout Enumerate
+
+number of orphan vertices (vertices not referenced by any face)
+\layout Enumerate
+
+missing vertices (face references vertex index that does not exist)
+\layout Enumerate
+
+degenerate face (face references same vertex more than once)
+\layout Enumerate
+
+contiguous numbering (vertex and face indices are sequentially numbered
+ starting with 1)
+\layout Standard
+
+
+\begin_inset Formula $\diamondsuit$
+\end_inset 
+
+Note that no differentiation is made between intersections of faces in a
+ single mesh component and intersections of faces from different components
+ in the same object as illustrated in Figure 
+\begin_inset LatexCommand \ref{cap:Self-intersections-arise-in}
+
+\end_inset 
+
+.
+ Both cases are considered self-intersections.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Standard
+
+
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+center
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename self-intersections.png
+	keepAspectRatio
+
+\end_inset 
+
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{cap:Self-intersections-arise-in}
+
+\end_inset 
+
+Self-intersecting meshes.
+ The faces of a single mesh object may intersect under two scenarios.
+ A single component may intersect with itself.
+ Also a mesh object may consist of more than one component, and these components
+ may intersect.
+ Distinguishing between these two scenarios in the event a self-intersection
+ is detected is left to the user.
+\end_inset 
+
+
+\layout Standard
+
+
+\emph on 
+The following mesh characteristics are only measurable for sets of mesh
+ files.
+\layout Enumerate
+
+(#13) number of intersecting faces between separate objects in different
+ files
+\layout Enumerate
+
+(#14) intermesh spacing (aka 'ECS width' and 'separation distance'.
+ Distance between each vertex and its closest point, as defined in Section
+ 
+\begin_inset LatexCommand \ref{sec:Morphing-=-relaxation}
+
+\end_inset 
+
+)
+\layout Standard
+
+
+\emph on 
+The following mesh characteristics are only measurable if the mesh has specific
+ attributes.
+ The table entry indicates whether the attribute is required for determining
+ mesh characteristic.
+\layout Standard
+
+
+\begin_inset Float table
+placement H
+wide false
+collapsed false
+
+\layout Standard
+
+
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+center
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="5" columns="5">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Attribute
+\end_inset 
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Characteristic
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Closed
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Manifold
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Consistent
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Outward
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+15.
+ Edge angle
+\begin_inset Formula $\spadesuit$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+no
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+no
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+16.
+ Volume
+\begin_inset Formula $\heartsuit$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+no
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+17.
+ Genus
+\begin_inset Formula $\clubsuit$
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+yes
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+no
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Formula $\spadesuit$
+\end_inset 
+
+Border edges are excluded from edge angle computation.
+ If normals point outward, then exterior edge angles are measured.
+ If normals point inward, then interior edge angles are measured.
+\layout Standard
+
+
+\begin_inset Formula $\heartsuit$
+\end_inset 
+
+If face normals point inwards, then the volume will be negative, but the
+ magnitude will be correct.
+\layout Standard
+
+
+\begin_inset Formula $\clubsuit$
+\end_inset 
+
+Compute genus using Euler-Poincare formula: verts-edges+faces=2-2*genus.
+ Actally, formula only assumes orientable mesh; future versions can check
+ for orientable, not oriented.
+ Formula also only applies to single components of mesh.
+ The genus of a mesh is not computed if orphaned vertices are found.
+\layout Caption
+
+
+\series bold 
+Characteristic-attribute dependency.
+
+\series default 
+ The measureability of three mesh characteristcs (edge angle, volume, genus)
+ is dependent on the mesh having four attributes (closed, 2D manifold in
+ R3, consistently oriented face normals, outward-pointing face normals).
+ For example, if a mesh is manifold and consistent, then its edge angles
+ can be measured, regardless of whether or not the mesh is closed or has
+ outwardly-oriented face normals.
+\end_inset 
+
+
+\layout Section
+
+Space Partitioning
+\layout Standard
+
+The mesh data set occupies a volume of space, and by paritioning this space
+ the search for intersecting faces (characteristics 8 and 13) and separation
+ distances (characteristic 14) is accelerated.
+\layout Section
+
+Mesh Attribute Tests
+\layout Standard
+
+
+\emph on 
+The following test
+\emph default 
+s w
+\emph on 
+ill be used to determine the state of the attribute for each mesh file.
+ 
+\layout Itemize
+
+Closed -each edge is shared by two or more faces; nonmanifold edges are
+ allowed.
+\layout Itemize
+
+Manifold - All adjacent faces of vertex are reachable by adjacent edge hops;
+ non-closed meshes are ok.
+\layout Itemize
+
+Consistent orientation - Assuming mesh is manifold, if no edge is crossed
+ twice in the same direction , then face normals are consistently oriented.
+ Mesh is allowed to be non-closed.
+\layout Itemize
+
+Outward normal - Assuming mesh is closed, manifold, and consistent, ray
+ trace from any face to world bound and count the number of intersected
+ faces.
+ If count is even, then normals faces outward.
+ If count is odd, then normals face inward.
+\layout Section
+
+Command line behavior options
+\layout Standard
+
+
+\emph on 
+Output will be written to stdout and will include min, max, mean, median,
+ variance and histogram.
+\layout Standard
+
+
+\series bold 
+-a
+\layout Standard
+
+evaluate just the attributes of the meshes, report the results, and exit.
+\layout Standard
+
+
+\series bold 
+-g=aspect_ratio_threshold,edge_angle_threshold,edge_length_threshold
+\layout Standard
+
+explicitly report whether or not mesh is good (i.e.
+ mesh is closed manifold with outward normals, no intersecting faces, no
+ orphaned or missing vertices, no degenerate faces, contiguous vertex and
+ face numbering, maximum face aspect ratio is less than user-defined threshold,
+ minimum edge angle is greater than user-defined threshold, and minimum
+ edge length is larger than user-defined threshold).
+ Returns 'mesh is good' or '1' and 'mesh is NOT good' or '0' if used with
+ -p option or not, respectively.
+ Mesh goodness is not affected by separation distances.
+\layout Standard
+
+
+\series bold 
+-p
+\layout Standard
+
+print offending mesh elements (i.e.
+ bad edges[nonmanifold,border,flipped], nonmanifold vertices, intersecting
+ faces)
+\layout Standard
+
+
+\series bold 
+-i
+\layout Standard
+
+If input folder is provided, check for intersections between faces of different
+ objects, i.e.
+ mesh characteristic 13.
+\layout Standard
+
+
+\series bold 
+-s
+\layout Standard
+
+If input folder is provided, compute separation distance for each vertex
+ in every object, i.e.
+ mesh characteristic 14.
+ Prerequisite: all meshes in set must be good.
+\layout Section
+
+Command line examples
+\layout Standard
+
+
+\emph on 
+Note options a and g are mutually incompatible.
+\layout Standard
+
+
+\series bold 
+meshalyzer mesh_file_name
+\layout Standard
+
+Evaluate mesh characteristics 1-12 and 15-17 and five mesh attributes for
+ the single mesh file.
+\layout Standard
+
+
+\series bold 
+meshalyzer folder_name
+\layout Standard
+
+Evaluate mesh characteristics 1-12 and 15-17 and five mesh attributes for
+ each single mesh file in folder.
+ Also evaluate mesh characteristics 13 and 14 for the set of mesh files
+ in folder.
+\layout Standard
+
+
+\series bold 
+meshalyzer mesh_file_name -a -p
+\layout Standard
+
+Just evaluate the five mesh attributes for the single mesh file, print the
+ state of each attribute, and print the mesh elements preventing the mesh
+ from being good with regards to the attributes, if any.
+\layout Standard
+
+
+\series bold 
+meshalyzer mesh_file_name -p
+\layout Standard
+
+Evaluate mesh characteristics 1-12 and 15-17 for the single mesh file, print
+ the results, and print the mesh elements preventing the mesh from being
+ good with regards to the mesh characteristics and the attributes, if any.
+\layout Section
+
+All possible meshalyzer commands
+\layout Standard
+
+
+\begin_inset Float table
+placement H
+wide false
+collapsed false
+
+\layout Standard
+
+
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+center
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="10" columns="8">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a -p -i -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+11
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p -g=t1,t2,t3 -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+21
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -i -s
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a -p -i
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+12
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p -g=t1,t2,t3
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+22
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -i
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+3
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a -p -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+13
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p -i -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+23
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -s
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a -p
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+14
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p -i
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+24
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+5
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a -i -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+15
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+25
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+file -a -p
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+6
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a -i
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+16
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+26
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+file -a
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+7
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a -s 
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+17
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -g=t1,t2,t3 -i -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+27
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+file -p -g=t1,t2,t3
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+8
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -a
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+18
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -g=t1,t2,t3 -i
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+28
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+file -p
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+9
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p -g=t1,t2,t3 -i -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+19
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -g=t1,t2,t3 -s
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+29
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+file -g=t1,t2,t3
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+10
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -p -g=t1,t2,t3 -i
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+20
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+folder -g=t1,t2,t3
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+30
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+file
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Caption
+
+
+\series bold 
+Summary of meshalyzer commands.
+
+\series default 
+ The command options determine which mesh characteristics are measured,
+ whether offending mesh elements are printed, and whether the goodness of
+ the mesh is printed.
+ Note the order of the options in the command is insignificant.
+ 'meshalyzer' precedes all commands and was ommited for brevity.
+\end_inset 
+
+
+\layout Section
+
+Edge Angles
+\layout Standard
+
+An edge is defined by two mesh vertices 
+\begin_inset Formula $\overrightarrow{v_{1}}$
+\end_inset 
+
+ and 
+\begin_inset Formula $\overrightarrow{v_{2}}$
+\end_inset 
+
+, and two adjacent faces 
+\begin_inset Formula $f_{1}$
+\end_inset 
+
+ and 
+\begin_inset Formula $f_{2}$
+\end_inset 
+
+ (Figure 
+\begin_inset LatexCommand \ref{cap:Edge-structure.}
+
+\end_inset 
+
+).
+ The faces 
+\begin_inset Formula $f_{1}$
+\end_inset 
+
+ and 
+\begin_inset Formula $f_{2}$
+\end_inset 
+
+ each have a third vertex in addition to 
+\begin_inset Formula $\overrightarrow{v_{1}}$
+\end_inset 
+
+ and 
+\begin_inset Formula $\overrightarrow{v_{2}}$
+\end_inset 
+
+, designated 
+\begin_inset Formula $\overrightarrow{o_{1}}$
+\end_inset 
+
+ and 
+\begin_inset Formula $\overrightarrow{o_{2}}$
+\end_inset 
+
+, respectively.
+ Each face also has an outward normal vector computed using the face vertices.
+ The edge angle, 
+\begin_inset Formula $\theta$
+\end_inset 
+
+, is defined as shown in Figure 
+\begin_inset LatexCommand \ref{cap:Disambiguating--gamma}
+
+\end_inset 
+
+ where 
+\begin_inset Formula $0\leq\theta\leq2\pi$
+\end_inset 
+
+.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Standard
+
+
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+center
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename edge_structure.png
+
+\end_inset 
+
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{cap:Edge-structure.}
+
+\end_inset 
+
+Edge structure.
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Standard
+
+
+\begin_inset ERT
+status Collapsed
+
+\layout Standard
+
+\backslash 
+center
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename vertex_forces6.png
+
+\end_inset 
+
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{cap:Disambiguating--gamma}
+
+\end_inset 
+
+
+\end_inset 
+
+
+\the_end

@@ -1,0 +1,21 @@
+
+Edge::addFace: ERROR.Attempted to add third face to edge.
+Edge::print: 0x7beda0
+Edge::print: v1: Vertex  <ind> 3785  [3708.25352662 4989.63268878 6000]
+Edge::print: v2: Vertex  <ind> 3784  [3708.24985437 4989.62912934 6000]
+Edge::print: f1:
+Face index 2314
+Vertex  <ind> 3785  [3708.25352662 4989.63268878 6000]
+Vertex  <ind> 3784  [3708.24985437 4989.62912934 6000]
+Vertex  <ind> 3782  [3708.1990698 4989.5969691 6000.054804]
+[e0 0x7beda0]
+[e1 0x7bee40]
+[e2 0x7beee0]
+Edge::print: f2:
+Face index 2316
+Vertex  <ind> 3785  [3708.25352662 4989.63268878 6000]
+Vertex  <ind> 3792  [3754.5319708 5018.9381111 5950.054804]
+Vertex  <ind> 3784  [3708.24985437 4989.62912934 6000]
+[e0 0x7bf0c0]
+[e1 0x7bf160]
+[e2 0x7beda0]

@@ -35,8 +35,16 @@
 ./contour_plotting/mesh2contours
 ./meshorphan/meshorphan
 ./meshorphan/makefile
-./meshorphan/meshorphan.cc
 ./meshheal/meshheal_paketa
 ./meshheal/meshheal_hooke
 ./mesh2contours/mesh2contours_paketa
 ./mesh2contours/mesh2contours_hooke
+./meshalyzer/.bzr
+./meshmorph/.bzr
+./meshmorph/.bzrignore
+./meshstitch/.bzr
+./reconstruct2contourtiler/.bzr
+./reconstruct2contourtiler/.bzrignore
+./meshheal/.bzr
+./meshheal/.bzrignore
+./mesh2contours/.bzr

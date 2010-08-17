@@ -1,0 +1,148 @@
+
+NAME
+       reconstruct2contourtiler - generate contour_tiler input files from contours
+
+SYNOPSIS
+       reconstruct2contourtiler [options]
+
+DESCRIPTION
+       Converts reconstruct contour format to contour_tiler input format.
+       All files in input directory are assumed to be
+       of the form filename_prefix.section#.
+       min_section to max_section is the section range to be converted.
+       Section_thickness should be in same scale as x,y contour points.
+       x,y and z coordinates of sampled splines will be multipled by scale in output.
+       CAPPING_FLAG=1 to attempt end capping.CAPPING_FLAG=0 to leave ends open.
+       DEVIATION_THRESHOLD is the maximum allowed deviation of the spline from raw
+       contour points in scaled units. Set
+       DEVIATION_THRESHOLD to 0 to disable thresholding.
+
+EXAMPLES
+       reconstruct2contourtiler -i ./contours -f myContours -n 10 -x 100 -t .07 -s 1000 -o ./contour_tiler_output -d 2
+              Read contours from directory './contours' and write contour_tiler output
+              files to directory 'contour_tiler_output'. The input contour files have the
+              name scheme 'myContours.#' where # is the section number which varies from
+              10 to 100. The distance between contours in the direction of sectioning
+              is .070 microns. The contour_tiler output data will be in nanometers as
+              dictated by the 1000 scaling. Capping directives will be included in the
+              output data. The interpolated contours will not deviate from the input contours
+              by more than 2 (nanometers since scaling is 1000).
+
+OPTIONS
+       --no_capping
+              Do not include directives in the output data to cap the meshes,
+              thus creating open surface meshes.
+              Default is to cap the meshes at the minimum and maximum sections
+              thereby creating closed surface meshes.
+
+       --print_detailed_info
+              Print raw contour points, control points, s parameter
+              values, etc as .log files in output directory.
+              Default is to do nothing.
+
+       --return_raw_contour_points
+              Return input contour points unadulterated.
+              Default is to fit splines to contour points and resample.
+
+       --return_interpolated_raw_points
+              Return input contour points linearly interpolated
+              to satisfy minimum and maximum sample interval constraints.
+              Default is to fit splines to contour points and resample.
+
+       -n NUM, --min_section=NUM
+              The starting section number in the section range.
+              Default is '60'.
+
+       -x NUM, --max_section=NUM
+              The ending section number in the section range.
+              Default is '160'.
+
+       -t NUM, --section_thickness=NUM
+              Thickness of the sections. Each section
+              is assumed to be of identical thickness.
+              Default is '0.05'.
+
+       -S NUM, --additional_points_factor=NUM
+              The number of sample points in contour will be
+              determined by the ratio of contour length and maximum sample interval plus
+              plus a fraction NUM of the samples described by the ratio of contour length
+              and minimum sample interval. 0<=NUM<=1.
+              Default is '0.5'.
+
+       -X NUM, --max_sample_interval=NUM
+              The linear distance between sampled contour points
+              will be less than NUM.
+              Default is '0.05'.
+
+       -Y NUM, --min_sample_interval=NUM
+              The linear distance between sampled contour points
+              will be greater than NUM.
+              Default is '0.01'.
+
+       -s NUM, --output_scale=NUM
+              The output data will be scaled by NUM.
+              Default is '1' which means
+              output data has same scale as input data.
+
+       -d NUM, --deviation_threshold=NUM
+              The input contours are filtered before output.
+              The deviation of the input and output contours
+              is constrained to be less than NUM where units
+              are input units scaled by --scale value.
+              Default is '0'.
+
+              no threshold is enforced.
+
+       -a NUM, --curvature_gain=NUM
+              A sample point contributes to energy in a manner
+              proportional to NUM and inversely proportional to curvature.
+              Default is '1000'.
+
+       -b NUM, --curvature_exponent=NUM
+              A sample point contributes to energy in a manner
+              inversely proportional to curvature to the NUM power.
+              Default is '1'.
+
+       -c NUM, --proximity_gain=NUM
+              A sample point contributes to energy in a manner
+              proportional to NUM and distance between samples.
+              Default is '1'.
+
+       -e NUM, --proximity_exponent=NUM
+              A sample point contributes to energy in a manner
+              proportional to distance between samples to the NUM power.
+              Default is '1'.
+
+       -T NUM, --high_temp=NUM
+              Starting high temperature of simulated annealing.
+              Default is '100'.
+
+       -i DIRECTORY, --input_data_dir=DIRECTORY
+              Directory containing input contours.
+              Default is current directory.
+
+       -o DIRECTORY, --output_data_dir=DIRECTORY
+              Directory where output data will be written.
+              Default is current directory.
+
+       -O STRING, --output_script=STRING
+              A bash script named STRING will be written 
+              to automate contour_tiling process.
+              Default script name is 'mesh_and_convert.sh'.
+
+       -f STRING, --input_filename_prefix=STRING
+              The input contours will be read from
+              'input_directory/STRING.min_section' to
+              'input_directory/STRING.max_section'.
+              Default is 'Volumejosef'.
+
+       -I STRING, --ignore_contour=STRING
+              Contours with name STRING will not be processed
+              and no output data will be written for these contours.
+              Default is no ignored contours.
+
+       -h, --help
+              Print reconstruct2contourtiler man page.
+
+Justin Kinney				Sep 10 2009
+

@@ -1,0 +1,62 @@
+
+RECIPE
+Remove all spaces at beginning of lines.
+Replace all ' + ' with '+' and all ' - ' with '-'
+Replace q^2 with (q*q) and q^3 with (q*q*q)
+Replace q^(7/2) with sqrt(q*q*q*q*q*q*q)
+Convert Sqrt and Log.
+
+
+t[s]
+
+
+1.0/(2.0*aN)
+*
+(
+  1.0/72.0
+  *
+  sqrt( bx2 + by2 + 6.0 ax*bx*s + 6.0*ay*by*s + 9.0*(ax2 + ay2)*s2)
+  *
+  (
+    (1.0/(q*q*q))
+    *
+    (
+      -ax*ay2*(17.0*bx3 - 28.0*bx*by2 + 24.0*ay*by*cx + 24.0*ay*bx*cy)
+      - ax3*(2*bx3 + 17.0*bx*by2 + 24.0*ay*by*cx + 24.0*ay*bx*cy)
+      + 8.0*ax4*(bx*cx + 4.0*by*cy)
+      + ay3*(-17.0*bx2*by - 2.0*by3 + 32.0*ay*bx*cx + 8.0*ay*by*cy)
+      + ax2*ay*(28.0*bx2*by - 17.0*by3 + 40.0*ay*bx*cx + 40.0*ay*by*cy)
+    )
+    +
+    (
+      s
+      *
+      (
+        24.0*ax3*cx
+        + 6.0*ax*ay*(-5.0*bx*by + 4.0*ay*cx)
+        + ay2*(13.0*bx2 - 2.0*by2 + 24.0*ay*cy)
+        + ax2*(-2.0*bx2 + 13.0*by2 + 24.0*ay*cy)
+      )
+      /
+      (q*q)
+    )
+    +
+    ( 18.0*(ax*bx + ay*by)*s2)/(ax2 + ay2)
+    +
+    18.0*s3
+  )
+  +
+  (1.0/( 216.0*sqrt(q*q*q*q*q*q*q)))
+  *
+  (
+    -24.0*ax5*(2.0*bx2*cx + by2*cx + 4.0*bx*by*cy)
+    - 12.0*ax3*ay (4.0*bx3*by - 11.0*bx*by3 + 14.0*ay*bx2*cx - 2.0*ay*by2*cx + 4.0*ay*bx*by*cy)
+    + 72.0*ax6*(cx2 + cy2)
+    - 12.0*ax*ay3*(-11.0*bx3*by + 10.0*ay*bx2*cx - 4.0*ay*by2*cx + 4.0*bx*(by3 - ay*by*cy))
+    + ax4*(8.0*bx4 - 13.0*by4 + 48.0*ay*bx*by*cx - 120.0*ay*by2*cy + 8.0*bx2*(5.0 by2 + 6.0*ay*cy) + 216.0*ay2*(cx2 + cy2))
+    + ay4*(-13.0*bx4 - 96.0*ay*bx*by*cx + 8.0*bx2*(5.0*by2 - 3.0*ay*cy) + 8.0*(by4 - 6.0*ay*by2*cy + 9.0*ay2*(cx2 + cy2)))
+    + 2.0*ax2*ay2*(20.0*bx4 - 24.0*ay*bx*by*cx + bx2*(-95.0*by2 + 12*ay*cy) + 4.0*(5.0*by4 - 21.0*ay*by2*cy + 27.0*ay2*(cx2 + cy2)))
+  )
+  *
+  log( ax*bx + ay*by + 3.0*ax2*s + 3.0*ay2*s + sqrt(ax2 + ay2)*sqrt( bx2 + by2 + 6.0*ax*bx*s + 6.0*ay*by*s + 9*(ax2 + ay2)*s2))
+)

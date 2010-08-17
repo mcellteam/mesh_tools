@@ -1,0 +1,25 @@
+#Obligatory descriptive comment
+arrange ( 1, 2, .11, .3,.5)
+FOCUS G0
+VIEW XMIN 0.15
+VIEW XMAX 1.15
+VIEW YMIN 0.15
+VIEW YMAX 0.85
+READ xy "a001_99_sim_anneal_energy.log"
+s0 line type 1
+s0 line color 1
+s0 errorbar color 1
+yaxis label "Energy"
+FOCUS G1
+VIEW XMIN 0.15
+VIEW XMAX 1.15
+VIEW YMIN 0.15
+VIEW YMAX 0.85
+READ xy "a001_99_sim_anneal_temp.log"
+s0 line type 1
+s0 line color 2
+s0 errorbar color 2
+yaxis label "Temperature"
+xaxis  off
+yaxis  label place opposite
+yaxis  ticklabel place opposite

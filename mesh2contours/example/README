@@ -1,0 +1,2 @@
+# in a007.mesh should find vertices at 4300
+../mesh2contours -z 4300 a007.mesh

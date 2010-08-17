@@ -1,0 +1,301 @@
+\hypertarget{classParameter}{
+\section{Parameter Class Reference}
+\label{classParameter}\index{Parameter@{Parameter}}
+}
+{\tt \#include $<$parameter.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{classParameter_54d870873dcf44d515ab5384a38de7af}{print} (char const $\ast$const filename) const 
+\item 
+void \hyperlink{classParameter_c3fd9360e62e3b9fe764a95e8f3e2b50}{computeDeviations} (const std::vector$<$ \hyperlink{classPoint}{Point} $>$ \&raw\_\-points)
+\item 
+void \hyperlink{classParameter_918287332cac92ccf75c78fb651efc97}{getRawPointsToDuplicate} (const std::vector$<$ \hyperlink{classPoint}{Point} $>$ \&raw\_\-points, std::vector$<$ int $>$ \&raw\_\-points\_\-to\_\-duplicate) const 
+\item 
+double \hyperlink{classParameter_db51977acf04748c2d4a82a619459c0d}{calcMinDistPtLineSegment} (const \hyperlink{classPoint}{Point} \&spline\_\-sample, const \hyperlink{classPoint}{Point} \&contour\_\-point\_\-1, const \hyperlink{classPoint}{Point} \&contour\_\-point\_\-3) const 
+\item 
+void \hyperlink{classParameter_ff6c2b408f89720293ec4db6ef186c3f}{addDeviation} (double d)
+\item 
+\hyperlink{classParameter_b1939f6d4bacbd505ead9dfafcd2647f}{Parameter} (void)
+\item 
+bool \hyperlink{classParameter_ec98b30f1dfebcb04e504adadb4a5787}{deviationsLarge} (void)
+\item 
+void \hyperlink{classParameter_8db6db4bd306208ccfbf94ef04d39955}{reserve} (const int \&target\_\-num\_\-samples)
+\item 
+\hyperlink{classPoint}{Point} const $\ast$ \hyperlink{classParameter_21bfc1fa9f7999cd18429493fef88485}{getPoint} (const int \&sample\_\-index) const 
+\item 
+void \hyperlink{classParameter_90c14f9388c291ebd0199b542ea3eaa2}{clearAndReserveSamples} (void)
+\item 
+void \hyperlink{classParameter_baa819bda68eaca98d6d78bde5c65f1b}{add} (const double \&path\_\-parameter\_\-value, const int \&index\_\-of\_\-spline, const double \&delta\_\-s\_\-to\_\-lhs)
+\item 
+void \hyperlink{classParameter_d0a92d44cf3746bfae006c5761b862d1}{set} (double new\_\-s, int new\_\-spline\_\-index, int sample\_\-index, double s\_\-disp, \hyperlink{classPoint}{Point} p)
+\item 
+int \hyperlink{classParameter_e6a494adb7a970b6d9a1d6c242f600e6}{getNumSamplePoints} (void) const 
+\item 
+int \hyperlink{classParameter_51f0d8dc2f9c7c113be49351118902e2}{getNumSamples} (void) const 
+\item 
+double \hyperlink{classParameter_2f0b21ed83fb3a11305ee733a34317b2}{getParameterValue} (int sample\_\-index) const 
+\item 
+int \hyperlink{classParameter_3f630390b0346479113e758df49ad21d}{getSplineIndex} (int sample\_\-index) const 
+\item 
+double \hyperlink{classParameter_b918e85afbde855a65c0b82cb3484308}{getLhsS} (int sample\_\-index) const 
+\item 
+void \hyperlink{classParameter_52053a1e39332eab88503c5328343d7f}{addSplineSample} (\hyperlink{classPoint}{Point} p)
+\item 
+\hyperlink{parameter_8h_76617663fb8c2b14cf698a47a4d07926}{c\_\-d\_\-iterator} \hyperlink{classParameter_69d4f2f72a57ac999196a1b7d3417286}{getFirstDeviationConst} (void) const 
+\item 
+\hyperlink{parameter_8h_76617663fb8c2b14cf698a47a4d07926}{c\_\-d\_\-iterator} \hyperlink{classParameter_fc243c9ebaef7c8711859696d8c5a1a4}{getOnePastLastDeviationConst} (void) const 
+\item 
+\hyperlink{parameter_8h_d367c52cb5a031e4bc21ba9af7d6ee47}{c\_\-p\_\-iterator} \hyperlink{classParameter_7006d1d623467ddf4c94724503ee77d5}{getFirstSplineSampleConst} (void) const 
+\item 
+\hyperlink{parameter_8h_d367c52cb5a031e4bc21ba9af7d6ee47}{c\_\-p\_\-iterator} \hyperlink{classParameter_bab72e16fa4732267560e6b0b661fb8b}{getOnePastLastSplineSampleConst} (void) const 
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classParameter_b1939f6d4bacbd505ead9dfafcd2647f}{
+\index{Parameter@{Parameter}!Parameter@{Parameter}}
+\index{Parameter@{Parameter}!Parameter@{Parameter}}
+\subsubsection[Parameter]{\setlength{\rightskip}{0pt plus 5cm}Parameter::Parameter (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_b1939f6d4bacbd505ead9dfafcd2647f}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classParameter_54d870873dcf44d515ab5384a38de7af}{
+\index{Parameter@{Parameter}!print@{print}}
+\index{print@{print}!Parameter@{Parameter}}
+\subsubsection[print]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::print (char const $\ast$const  {\em filename}) const}}
+\label{classParameter_54d870873dcf44d515ab5384a38de7af}
+
+
+Write path parameter values, spline indices, and path parameter distances to left-hand side sample point to file. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Output file name. \end{description}
+\end{Desc}
+
+
+Referenced by Contour::processContour(), and Contour::writeFilesAfter().\hypertarget{classParameter_c3fd9360e62e3b9fe764a95e8f3e2b50}{
+\index{Parameter@{Parameter}!computeDeviations@{computeDeviations}}
+\index{computeDeviations@{computeDeviations}!Parameter@{Parameter}}
+\subsubsection[computeDeviations]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::computeDeviations (const std::vector$<$ {\bf Point} $>$ \& {\em raw\_\-points})}}
+\label{classParameter_c3fd9360e62e3b9fe764a95e8f3e2b50}
+
+
+Calculate perpendicular distance between each spline samples and nearest linearly-interpolated raw contour points. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em raw\_\-points}]All original points in contour. \end{description}
+\end{Desc}
+
+
+References calcMinDistPtLineSegment().
+
+Referenced by Contour::computeDeviations().\hypertarget{classParameter_918287332cac92ccf75c78fb651efc97}{
+\index{Parameter@{Parameter}!getRawPointsToDuplicate@{getRawPointsToDuplicate}}
+\index{getRawPointsToDuplicate@{getRawPointsToDuplicate}!Parameter@{Parameter}}
+\subsubsection[getRawPointsToDuplicate]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::getRawPointsToDuplicate (const std::vector$<$ {\bf Point} $>$ \& {\em raw\_\-points}, \/  std::vector$<$ int $>$ \& {\em raw\_\-points\_\-to\_\-duplicate}) const}}
+\label{classParameter_918287332cac92ccf75c78fb651efc97}
+
+
+Determine which control points of splines to duplicate to reduce deviation between spline samples and linearly-interpolated raw contour points. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em raw\_\-points}]All original points in contour. \item[\mbox{$\rightarrow$} {\em raw\_\-points\_\-to\_\-duplicate}]Raw points that should be duplicated as control points. \end{description}
+\end{Desc}
+
+
+References Controls::getDeviationThreshold(), and Controls::instance().
+
+Referenced by Contour::duplicateControlPoints().\hypertarget{classParameter_db51977acf04748c2d4a82a619459c0d}{
+\index{Parameter@{Parameter}!calcMinDistPtLineSegment@{calcMinDistPtLineSegment}}
+\index{calcMinDistPtLineSegment@{calcMinDistPtLineSegment}!Parameter@{Parameter}}
+\subsubsection[calcMinDistPtLineSegment]{\setlength{\rightskip}{0pt plus 5cm}double Parameter::calcMinDistPtLineSegment (const {\bf Point} \& {\em spline\_\-sample}, \/  const {\bf Point} \& {\em contour\_\-point\_\-1}, \/  const {\bf Point} \& {\em contour\_\-point\_\-2}) const}}
+\label{classParameter_db51977acf04748c2d4a82a619459c0d}
+
+
+Calculate perpendicular distance from sample point to nearest raw contour point line segment. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em spline\_\-sample}]Spline sample point of interest. \item[\mbox{$\leftarrow$} {\em contour\_\-point\_\-1}]One end of line segment. \item[\mbox{$\leftarrow$} {\em contour\_\-point\_\-2}]Other end of line segment. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Perpendicular distance from sample\_\-point to line segment. \end{Desc}
+
+
+References Point::dot(), and Point::length().
+
+Referenced by computeDeviations().\hypertarget{classParameter_ff6c2b408f89720293ec4db6ef186c3f}{
+\index{Parameter@{Parameter}!addDeviation@{addDeviation}}
+\index{addDeviation@{addDeviation}!Parameter@{Parameter}}
+\subsubsection[addDeviation]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::addDeviation (double {\em d})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_ff6c2b408f89720293ec4db6ef186c3f}
+
+
+
+
+Referenced by Contour::setSamplesToRaw().\hypertarget{classParameter_ec98b30f1dfebcb04e504adadb4a5787}{
+\index{Parameter@{Parameter}!deviationsLarge@{deviationsLarge}}
+\index{deviationsLarge@{deviationsLarge}!Parameter@{Parameter}}
+\subsubsection[deviationsLarge]{\setlength{\rightskip}{0pt plus 5cm}bool Parameter::deviationsLarge (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_ec98b30f1dfebcb04e504adadb4a5787}
+
+
+Determine if any deviation of sample points exceeds threshold. 
+
+References Controls::getDeviationThreshold(), and Controls::instance().
+
+Referenced by Contour::deviationsLarge().\hypertarget{classParameter_8db6db4bd306208ccfbf94ef04d39955}{
+\index{Parameter@{Parameter}!reserve@{reserve}}
+\index{reserve@{reserve}!Parameter@{Parameter}}
+\subsubsection[reserve]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::reserve (const int \& {\em target\_\-num\_\-samples})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_8db6db4bd306208ccfbf94ef04d39955}
+
+
+Clear all class data and allocate memory. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em target\_\-num\_\-samples}]Amount of memory to reserve for future data. \end{description}
+\end{Desc}
+
+
+Referenced by Contour::processContour().\hypertarget{classParameter_21bfc1fa9f7999cd18429493fef88485}{
+\index{Parameter@{Parameter}!getPoint@{getPoint}}
+\index{getPoint@{getPoint}!Parameter@{Parameter}}
+\subsubsection[getPoint]{\setlength{\rightskip}{0pt plus 5cm}{\bf Point} const$\ast$ Parameter::getPoint (const int \& {\em sample\_\-index}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_21bfc1fa9f7999cd18429493fef88485}
+
+
+Get sample point. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em sample\_\-index}]Index of sample point of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Sample point. \end{Desc}
+\hypertarget{classParameter_90c14f9388c291ebd0199b542ea3eaa2}{
+\index{Parameter@{Parameter}!clearAndReserveSamples@{clearAndReserveSamples}}
+\index{clearAndReserveSamples@{clearAndReserveSamples}!Parameter@{Parameter}}
+\subsubsection[clearAndReserveSamples]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::clearAndReserveSamples (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_90c14f9388c291ebd0199b542ea3eaa2}
+
+
+Clear samples and reallocate memory. \hypertarget{classParameter_baa819bda68eaca98d6d78bde5c65f1b}{
+\index{Parameter@{Parameter}!add@{add}}
+\index{add@{add}!Parameter@{Parameter}}
+\subsubsection[add]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::add (const double \& {\em path\_\-parameter\_\-value}, \/  const int \& {\em index\_\-of\_\-spline}, \/  const double \& {\em delta\_\-s\_\-to\_\-lhs})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_baa819bda68eaca98d6d78bde5c65f1b}
+
+
+Add sample point. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em path\_\-parameter\_\-value}]Path parameter value of sample point for spline. \item[\mbox{$\leftarrow$} {\em index\_\-of\_\-spline}]Index of spline on which sample point lies. \item[\mbox{$\leftarrow$} {\em delta\_\-s\_\-to\_\-lhs}]Path parameter distance to nearest sample point to the left. \end{description}
+\end{Desc}
+\hypertarget{classParameter_d0a92d44cf3746bfae006c5761b862d1}{
+\index{Parameter@{Parameter}!set@{set}}
+\index{set@{set}!Parameter@{Parameter}}
+\subsubsection[set]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::set (double {\em new\_\-s}, \/  int {\em new\_\-spline\_\-index}, \/  int {\em sample\_\-index}, \/  double {\em s\_\-disp}, \/  {\bf Point} {\em p})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_d0a92d44cf3746bfae006c5761b862d1}
+
+
+Move spline sample point. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em new\_\-s}]New path parameter value. \item[\mbox{$\leftarrow$} {\em new\_\-spline\_\-index}]Index of new spline on which point sits. \item[\mbox{$\leftarrow$} {\em sample\_\-index}]Index of sample point being moved. \item[\mbox{$\leftarrow$} {\em s\_\-disp}]Change in path parameter value from old value. Signed value. \item[\mbox{$\leftarrow$} {\em p}]New location of sample point. \end{description}
+\end{Desc}
+
+
+References getNumSamples().\hypertarget{classParameter_e6a494adb7a970b6d9a1d6c242f600e6}{
+\index{Parameter@{Parameter}!getNumSamplePoints@{getNumSamplePoints}}
+\index{getNumSamplePoints@{getNumSamplePoints}!Parameter@{Parameter}}
+\subsubsection[getNumSamplePoints]{\setlength{\rightskip}{0pt plus 5cm}int Parameter::getNumSamplePoints (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_e6a494adb7a970b6d9a1d6c242f600e6}
+
+
+
+
+Referenced by Contour::getNumSamplePoints(), Contour::isDegenerate(), and Contour::printPtsFiles().\hypertarget{classParameter_51f0d8dc2f9c7c113be49351118902e2}{
+\index{Parameter@{Parameter}!getNumSamples@{getNumSamples}}
+\index{getNumSamples@{getNumSamples}!Parameter@{Parameter}}
+\subsubsection[getNumSamples]{\setlength{\rightskip}{0pt plus 5cm}int Parameter::getNumSamples (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_51f0d8dc2f9c7c113be49351118902e2}
+
+
+
+
+Referenced by Contour::printSplineSamplesHere(), and set().\hypertarget{classParameter_2f0b21ed83fb3a11305ee733a34317b2}{
+\index{Parameter@{Parameter}!getParameterValue@{getParameterValue}}
+\index{getParameterValue@{getParameterValue}!Parameter@{Parameter}}
+\subsubsection[getParameterValue]{\setlength{\rightskip}{0pt plus 5cm}double Parameter::getParameterValue (int {\em sample\_\-index}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_2f0b21ed83fb3a11305ee733a34317b2}
+
+
+\hypertarget{classParameter_3f630390b0346479113e758df49ad21d}{
+\index{Parameter@{Parameter}!getSplineIndex@{getSplineIndex}}
+\index{getSplineIndex@{getSplineIndex}!Parameter@{Parameter}}
+\subsubsection[getSplineIndex]{\setlength{\rightskip}{0pt plus 5cm}int Parameter::getSplineIndex (int {\em sample\_\-index}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_3f630390b0346479113e758df49ad21d}
+
+
+\hypertarget{classParameter_b918e85afbde855a65c0b82cb3484308}{
+\index{Parameter@{Parameter}!getLhsS@{getLhsS}}
+\index{getLhsS@{getLhsS}!Parameter@{Parameter}}
+\subsubsection[getLhsS]{\setlength{\rightskip}{0pt plus 5cm}double Parameter::getLhsS (int {\em sample\_\-index}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_b918e85afbde855a65c0b82cb3484308}
+
+
+\hypertarget{classParameter_52053a1e39332eab88503c5328343d7f}{
+\index{Parameter@{Parameter}!addSplineSample@{addSplineSample}}
+\index{addSplineSample@{addSplineSample}!Parameter@{Parameter}}
+\subsubsection[addSplineSample]{\setlength{\rightskip}{0pt plus 5cm}void Parameter::addSplineSample ({\bf Point} {\em p})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_52053a1e39332eab88503c5328343d7f}
+
+
+
+
+Referenced by Contour::setSamplesToRaw().\hypertarget{classParameter_69d4f2f72a57ac999196a1b7d3417286}{
+\index{Parameter@{Parameter}!getFirstDeviationConst@{getFirstDeviationConst}}
+\index{getFirstDeviationConst@{getFirstDeviationConst}!Parameter@{Parameter}}
+\subsubsection[getFirstDeviationConst]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-d\_\-iterator} Parameter::getFirstDeviationConst (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_69d4f2f72a57ac999196a1b7d3417286}
+
+
+
+
+Referenced by Contour::firstDeviation(), and Contour::updateDeviations().\hypertarget{classParameter_fc243c9ebaef7c8711859696d8c5a1a4}{
+\index{Parameter@{Parameter}!getOnePastLastDeviationConst@{getOnePastLastDeviationConst}}
+\index{getOnePastLastDeviationConst@{getOnePastLastDeviationConst}!Parameter@{Parameter}}
+\subsubsection[getOnePastLastDeviationConst]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-d\_\-iterator} Parameter::getOnePastLastDeviationConst (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_fc243c9ebaef7c8711859696d8c5a1a4}
+
+
+
+
+Referenced by Contour::onePastLastDeviation(), and Contour::updateDeviations().\hypertarget{classParameter_7006d1d623467ddf4c94724503ee77d5}{
+\index{Parameter@{Parameter}!getFirstSplineSampleConst@{getFirstSplineSampleConst}}
+\index{getFirstSplineSampleConst@{getFirstSplineSampleConst}!Parameter@{Parameter}}
+\subsubsection[getFirstSplineSampleConst]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-p\_\-iterator} Parameter::getFirstSplineSampleConst (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_7006d1d623467ddf4c94724503ee77d5}
+
+
+
+
+Referenced by Contour::calcSampleIntervals(), Contour::printPtsFiles(), and Contour::updateSampleIntervals().\hypertarget{classParameter_bab72e16fa4732267560e6b0b661fb8b}{
+\index{Parameter@{Parameter}!getOnePastLastSplineSampleConst@{getOnePastLastSplineSampleConst}}
+\index{getOnePastLastSplineSampleConst@{getOnePastLastSplineSampleConst}!Parameter@{Parameter}}
+\subsubsection[getOnePastLastSplineSampleConst]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-p\_\-iterator} Parameter::getOnePastLastSplineSampleConst (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classParameter_bab72e16fa4732267560e6b0b661fb8b}
+
+
+
+
+Referenced by Contour::calcSampleIntervals(), Contour::printPtsFiles(), and Contour::updateSampleIntervals().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{parameter_8h}{parameter.h}\item 
+\hyperlink{parameter_8cc}{parameter.cc}\end{CompactItemize}

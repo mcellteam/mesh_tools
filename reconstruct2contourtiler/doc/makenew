@@ -1,0 +1,29 @@
+#!/bin/bash
+rm reconstruc2contourtiler_documentation.pdf
+rm reconstruc2contourtiler_documentation.aux
+rm reconstruc2contourtiler_documentation.bbl
+rm reconstruc2contourtiler_documentation.blg
+rm reconstruc2contourtiler_documentation.log
+
+pdflatex -halt-on-error reconstruc2contourtiler_documentation
+bibtex reconstruc2contourtiler_documentation
+pdflatex -halt-on-error reconstruc2contourtiler_documentation
+pdflatex -halt-on-error reconstruc2contourtiler_documentation
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+
+rm reconstruc2contourtiler_documentation.aux
+rm reconstruc2contourtiler_documentation.bbl
+rm reconstruc2contourtiler_documentation.blg
+rm reconstruc2contourtiler_documentation.log
+
+

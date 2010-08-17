@@ -1,0 +1,7 @@
+matchZ and candidateBadVertices are identical?
+Add const
+convert list to vector where no erase needed.
+make member variables private
+shorten functions
+identifyBadVerticesAndFaces seems incorrect
+lateralVertices is passed faces, but treats them as vertices

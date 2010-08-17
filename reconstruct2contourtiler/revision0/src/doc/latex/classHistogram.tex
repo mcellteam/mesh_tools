@@ -1,0 +1,187 @@
+\hypertarget{classHistogram}{
+\section{Histogram Class Reference}
+\label{classHistogram}\index{Histogram@{Histogram}}
+}
+{\tt \#include $<$histogram.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{classHistogram_86dc8ad1a5ecf10e7e2cb3376534637a}{scan} (const \hyperlink{histogram_8h_db0ab3db1ab685e2d2bff657e3e86861}{vec\_\-d} \&my\_\-path\_\-intervals)
+\item 
+\hyperlink{classHistogram_6be99bbd12f2dfe12c38739166f37db2}{$\sim$Histogram} (void)
+\item 
+\hyperlink{classHistogram_f7f6bdea94a9e6a44ca389d2a0f2cae2}{Histogram} (void)
+\item 
+void \hyperlink{classHistogram_e0d8f995fb46dcfd7bbf39bd5aa0674d}{printHistogram} (void)
+\item 
+void \hyperlink{classHistogram_53093234bfd4877f2485e093dbbe65e5}{printStats} (void) const 
+\item 
+void \hyperlink{classHistogram_022e55f20128c0dc5c8108d6d10054e9}{createHistogram} (void)
+\item 
+void \hyperlink{classHistogram_56a9572fc514f021a4867887e8fff9de}{update} (double const \&)
+\item 
+void \hyperlink{classHistogram_7bb79b6a488124f1e4128390541ef126}{printStatistics} (std::string str)
+\item 
+double \hyperlink{classHistogram_2ac97cb3e642dee7fa5a9d7bb2d1e451}{mean} (void) const 
+\item 
+double \hyperlink{classHistogram_7e1d2c7680730e9536f5496e8c0bacaa}{variance} (void) const 
+\item 
+double \hyperlink{classHistogram_3ca1a2615022ea79e5416e9f0b0cf3ff}{getMax} (void) const 
+\item 
+double \hyperlink{classHistogram_751589c1e984897e7bacccbc86f04e13}{getSum} (void) const 
+\item 
+int \hyperlink{classHistogram_e9bdc4c640381ca1babc8005b1a4005b}{getN} (void) const 
+\item 
+void \hyperlink{classHistogram_b09f206e1a16868d2d689853d2bd1209}{incrementCount} (int i)
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classHistogram_6be99bbd12f2dfe12c38739166f37db2}{
+\index{Histogram@{Histogram}!$\sim$Histogram@{$\sim$Histogram}}
+\index{$\sim$Histogram@{$\sim$Histogram}!Histogram@{Histogram}}
+\subsubsection[$\sim$Histogram]{\setlength{\rightskip}{0pt plus 5cm}Histogram::$\sim$Histogram (void)}}
+\label{classHistogram_6be99bbd12f2dfe12c38739166f37db2}
+
+
+\hypertarget{classHistogram_f7f6bdea94a9e6a44ca389d2a0f2cae2}{
+\index{Histogram@{Histogram}!Histogram@{Histogram}}
+\index{Histogram@{Histogram}!Histogram@{Histogram}}
+\subsubsection[Histogram]{\setlength{\rightskip}{0pt plus 5cm}Histogram::Histogram (void)}}
+\label{classHistogram_f7f6bdea94a9e6a44ca389d2a0f2cae2}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classHistogram_86dc8ad1a5ecf10e7e2cb3376534637a}{
+\index{Histogram@{Histogram}!scan@{scan}}
+\index{scan@{scan}!Histogram@{Histogram}}
+\subsubsection[scan]{\setlength{\rightskip}{0pt plus 5cm}void Histogram::scan (const {\bf vec\_\-d} \& {\em my\_\-path\_\-intervals})}}
+\label{classHistogram_86dc8ad1a5ecf10e7e2cb3376534637a}
+
+
+Record statistics of straight-line distances between sample points. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em my\_\-path\_\-intervals}]Inter-sample distances. \end{description}
+\end{Desc}
+
+
+References update().
+
+Referenced by Object::processContour().\hypertarget{classHistogram_e0d8f995fb46dcfd7bbf39bd5aa0674d}{
+\index{Histogram@{Histogram}!printHistogram@{printHistogram}}
+\index{printHistogram@{printHistogram}!Histogram@{Histogram}}
+\subsubsection[printHistogram]{\setlength{\rightskip}{0pt plus 5cm}void Histogram::printHistogram (void)}}
+\label{classHistogram_e0d8f995fb46dcfd7bbf39bd5aa0674d}
+
+
+Print histogram. 
+
+Referenced by printStatistics().\hypertarget{classHistogram_53093234bfd4877f2485e093dbbe65e5}{
+\index{Histogram@{Histogram}!printStats@{printStats}}
+\index{printStats@{printStats}!Histogram@{Histogram}}
+\subsubsection[printStats]{\setlength{\rightskip}{0pt plus 5cm}void Histogram::printStats (void) const}}
+\label{classHistogram_53093234bfd4877f2485e093dbbe65e5}
+
+
+Print summary statistics. 
+
+References mean(), and variance().
+
+Referenced by printStatistics().\hypertarget{classHistogram_022e55f20128c0dc5c8108d6d10054e9}{
+\index{Histogram@{Histogram}!createHistogram@{createHistogram}}
+\index{createHistogram@{createHistogram}!Histogram@{Histogram}}
+\subsubsection[createHistogram]{\setlength{\rightskip}{0pt plus 5cm}void Histogram::createHistogram (void)}}
+\label{classHistogram_022e55f20128c0dc5c8108d6d10054e9}
+
+
+Calculate bin partitions and then bin data. 
+
+References mean(), and variance().
+
+Referenced by printStatistics().\hypertarget{classHistogram_56a9572fc514f021a4867887e8fff9de}{
+\index{Histogram@{Histogram}!update@{update}}
+\index{update@{update}!Histogram@{Histogram}}
+\subsubsection[update]{\setlength{\rightskip}{0pt plus 5cm}void Histogram::update (double const \& {\em d})}}
+\label{classHistogram_56a9572fc514f021a4867887e8fff9de}
+
+
+Update statistics of data. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em d}]New data point. \end{description}
+\end{Desc}
+
+
+Referenced by Object::processContour(), scan(), Contour::updateDeviations(), and Contour::updateSampleIntervals().\hypertarget{classHistogram_7bb79b6a488124f1e4128390541ef126}{
+\index{Histogram@{Histogram}!printStatistics@{printStatistics}}
+\index{printStatistics@{printStatistics}!Histogram@{Histogram}}
+\subsubsection[printStatistics]{\setlength{\rightskip}{0pt plus 5cm}void Histogram::printStatistics (std::string {\em str})}}
+\label{classHistogram_7bb79b6a488124f1e4128390541ef126}
+
+
+
+
+References createHistogram(), printHistogram(), and printStats().
+
+Referenced by main().\hypertarget{classHistogram_2ac97cb3e642dee7fa5a9d7bb2d1e451}{
+\index{Histogram@{Histogram}!mean@{mean}}
+\index{mean@{mean}!Histogram@{Histogram}}
+\subsubsection[mean]{\setlength{\rightskip}{0pt plus 5cm}double Histogram::mean (void) const}}
+\label{classHistogram_2ac97cb3e642dee7fa5a9d7bb2d1e451}
+
+
+Compute mean value. \begin{Desc}
+\item[Returns:]Mean. \end{Desc}
+
+
+Referenced by createHistogram(), and printStats().\hypertarget{classHistogram_7e1d2c7680730e9536f5496e8c0bacaa}{
+\index{Histogram@{Histogram}!variance@{variance}}
+\index{variance@{variance}!Histogram@{Histogram}}
+\subsubsection[variance]{\setlength{\rightskip}{0pt plus 5cm}double Histogram::variance (void) const}}
+\label{classHistogram_7e1d2c7680730e9536f5496e8c0bacaa}
+
+
+Compute variance value. \begin{Desc}
+\item[Returns:]Variance. \end{Desc}
+
+
+Referenced by createHistogram(), and printStats().\hypertarget{classHistogram_3ca1a2615022ea79e5416e9f0b0cf3ff}{
+\index{Histogram@{Histogram}!getMax@{getMax}}
+\index{getMax@{getMax}!Histogram@{Histogram}}
+\subsubsection[getMax]{\setlength{\rightskip}{0pt plus 5cm}double Histogram::getMax (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classHistogram_3ca1a2615022ea79e5416e9f0b0cf3ff}
+
+
+\hypertarget{classHistogram_751589c1e984897e7bacccbc86f04e13}{
+\index{Histogram@{Histogram}!getSum@{getSum}}
+\index{getSum@{getSum}!Histogram@{Histogram}}
+\subsubsection[getSum]{\setlength{\rightskip}{0pt plus 5cm}double Histogram::getSum (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classHistogram_751589c1e984897e7bacccbc86f04e13}
+
+
+\hypertarget{classHistogram_e9bdc4c640381ca1babc8005b1a4005b}{
+\index{Histogram@{Histogram}!getN@{getN}}
+\index{getN@{getN}!Histogram@{Histogram}}
+\subsubsection[getN]{\setlength{\rightskip}{0pt plus 5cm}int Histogram::getN (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classHistogram_e9bdc4c640381ca1babc8005b1a4005b}
+
+
+
+
+Referenced by Object::processContour().\hypertarget{classHistogram_b09f206e1a16868d2d689853d2bd1209}{
+\index{Histogram@{Histogram}!incrementCount@{incrementCount}}
+\index{incrementCount@{incrementCount}!Histogram@{Histogram}}
+\subsubsection[incrementCount]{\setlength{\rightskip}{0pt plus 5cm}void Histogram::incrementCount (int {\em i})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classHistogram_b09f206e1a16868d2d689853d2bd1209}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{histogram_8h}{histogram.h}\item 
+\hyperlink{histogram_8cc}{histogram.cc}\end{CompactItemize}

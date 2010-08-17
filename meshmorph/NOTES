@@ -1,0 +1,19 @@
+for each object
+  for each vertex in object
+    1. Define a set of points P as unique collection of vertices of adjacent faces
+    2. For each point p_i in P:
+      a. Let p_i be the inversion point (p, q, r) and points {x_i, y_i, z_i} be all other points in P.
+      b. Invert {x_i, y_i, z_i} to generate points t_i as follows.    
+          x_i := k*k*(x_i-p)/((x_i-p)^2+(y_i-q)^2+(z_i-r)^2)+p
+          y_i := k*k*(y_i-q)/((x_i-p)^2+(y_i-q)^2+(z_i-r)^2)+q
+          z_i := k*k*(z_i-r)/((x_i-p)^2+(y_i-q)^2+(z_i-r)^2)+r
+      c. Find the least sum of squares plane fit to the points t_i.                                   
+          [call getBestFitPlane() to get ax+by+cz+d=0 best fit plane]
+      d. Find the point on the plane closest to p_i. Call this point a.                               
+          let n = [a b c]
+          a = p_i - ((d+n.p_i)/(n.n))*n
+      e. Transform a using the inversion defined in the methods to generate a'.                        
+      f. Define the sphere center, c_i, as the average of p_i and a'.                                  
+      g. Define the radius for the sphere given center c_i.                                           
+      h. If the least sum of squares is lower than the previous best fit, keep c_i and the radius.    
+    3. Output the best found center and radius.

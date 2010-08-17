@@ -1,0 +1,4 @@
+#!/bin/bash
+# create contour tile input from contours
+prog='/home/jkinney/src/mesh_tools/reconstruct2contourtiler/reconstruct2contourtiler'
+$prog -i examples -o examples/contour_tiler_output -I cube -I cyl -I grid -I domain1 --min_section=98 --max_section=102

@@ -1,0 +1,91 @@
+\hypertarget{classControl__Points}{
+\section{Control\_\-Points Class Reference}
+\label{classControl__Points}\index{Control\_\-Points@{Control\_\-Points}}
+}
+{\tt \#include $<$control\_\-points.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classControl__Points_8363bdea513afaf8ad08a1da145b6375}{Control\_\-Points} (void)
+\item 
+int \hyperlink{classControl__Points_a151267c6a3d7749ca6091a0ed9a5210}{getNumSplines} (void) const 
+\item 
+void \hyperlink{classControl__Points_7d33201ade6e5fb8052a2aa481a640ba}{initialize} (std::list$<$ int $>$ \&control\_\-points)
+\item 
+int \hyperlink{classControl__Points_e5ba1b63a5096969cae1ad01c0ee5b38}{getControlPointIndex} (int i) const 
+\item 
+void \hyperlink{classControl__Points_7970a63575538777628a42a3847b7af3}{print} (char $\ast$filename) const 
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classControl__Points_8363bdea513afaf8ad08a1da145b6375}{
+\index{Control\_\-Points@{Control\_\-Points}!Control\_\-Points@{Control\_\-Points}}
+\index{Control\_\-Points@{Control\_\-Points}!Control_Points@{Control\_\-Points}}
+\subsubsection[Control\_\-Points]{\setlength{\rightskip}{0pt plus 5cm}Control\_\-Points::Control\_\-Points (void)}}
+\label{classControl__Points_8363bdea513afaf8ad08a1da145b6375}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classControl__Points_a151267c6a3d7749ca6091a0ed9a5210}{
+\index{Control\_\-Points@{Control\_\-Points}!getNumSplines@{getNumSplines}}
+\index{getNumSplines@{getNumSplines}!Control_Points@{Control\_\-Points}}
+\subsubsection[getNumSplines]{\setlength{\rightskip}{0pt plus 5cm}int Control\_\-Points::getNumSplines (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classControl__Points_a151267c6a3d7749ca6091a0ed9a5210}
+
+
+Calculate number of splines defined by control points. \begin{Desc}
+\item[Returns:]Number of splines. \end{Desc}
+
+
+Referenced by Contour::processContour(), and Contour::writeFilesAfter().\hypertarget{classControl__Points_7d33201ade6e5fb8052a2aa481a640ba}{
+\index{Control\_\-Points@{Control\_\-Points}!initialize@{initialize}}
+\index{initialize@{initialize}!Control_Points@{Control\_\-Points}}
+\subsubsection[initialize]{\setlength{\rightskip}{0pt plus 5cm}void Control\_\-Points::initialize (std::list$<$ int $>$ \& {\em control\_\-points})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classControl__Points_7d33201ade6e5fb8052a2aa481a640ba}
+
+
+Create matrix of control points describing all splines in contour. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em control\_\-points}]Sequence of raw points to use as control\_\-points. \end{description}
+\end{Desc}
+
+
+Referenced by Contour::initializeControlPointMatrix().\hypertarget{classControl__Points_e5ba1b63a5096969cae1ad01c0ee5b38}{
+\index{Control\_\-Points@{Control\_\-Points}!getControlPointIndex@{getControlPointIndex}}
+\index{getControlPointIndex@{getControlPointIndex}!Control_Points@{Control\_\-Points}}
+\subsubsection[getControlPointIndex]{\setlength{\rightskip}{0pt plus 5cm}int Control\_\-Points::getControlPointIndex (int {\em i}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classControl__Points_e5ba1b63a5096969cae1ad01c0ee5b38}
+
+
+Get control point. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em i}]Index of control point of interest. \end{description}
+\end{Desc}
+\begin{Desc}
+\item[Returns:]Index of raw contour point stored as control point. \end{Desc}
+\hypertarget{classControl__Points_7970a63575538777628a42a3847b7af3}{
+\index{Control\_\-Points@{Control\_\-Points}!print@{print}}
+\index{print@{print}!Control_Points@{Control\_\-Points}}
+\subsubsection[print]{\setlength{\rightskip}{0pt plus 5cm}void Control\_\-Points::print (char $\ast$ {\em filename}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classControl__Points_7970a63575538777628a42a3847b7af3}
+
+
+Write control points (e.g. raw contour point indices) to file. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em filename}]Output file name. \end{description}
+\end{Desc}
+
+
+Referenced by Contour::writeFilesAfter().
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{control__points_8h}{control\_\-points.h}\item 
+\hyperlink{control__points_8cc}{control\_\-points.cc}\end{CompactItemize}

@@ -1,0 +1,78 @@
+
+RECIPE
+Remove all spaces at beginning of lines.
+Replace all ' + ' with '+' and all ' - ' with '-'
+Replace q^2 with (q*q) and q^3 with (q*q*q)
+Replace q^(7/2) with sqrt(q*q*q*q*q*q*q)
+Convert Sqrt and Log.
+
+t[s] //. {ax^2 -> ax2, ax^3 -> ax3, ax^4 -> ax4, ax^5 -> ax5, 
+  ax^6 -> ax6, bx^2 -> bx2, bx^3 -> bx3, bx^4 -> bx4, ay^2 -> ay2, 
+  ay^3 -> ay3, ay^4 -> ay4, by^2 -> by2, by^3 -> by3, by^4 -> by4, 
+  s^2 -> s2, s^3 -> s3, cx^2 -> cx2, cy^2 -> cy2, ax2 + ay2 -> q}
+
+
+
+1/2*(1/72*sqrt(bx2+by2+6*ax*bx*s+6*ay*by*s+ 9*q*s2)*((1/(
+(q*q*q)))(-ax*ay2*(17*bx3-28*bx*by2+24*ay*by*cx+24*ay*bx*cy)*-
+ax3*(2*bx3+17*bx*by2+24*ay*by*cx+24*ay*bx*cy)+8*ax4*(bx*cx+4*by*cy)+
+ay3*(-17*bx2*by-2*by3+32*ay*bx*cx+8*ay*by*cy)+
+ax2*ay*(28*bx2*by-17*by3+40*ay*bx*cx+40*ay*by*cy))+((24*ax3*cx+
+6*ax*ay*(-5*bx*by+4*ay*cx)+ay2*(13*bx2-2*by2+24*ay*cy)+
+ax2*(-2*bx2+13*by2+24*ay*cy))*s)/(q*q)+(18*(ax*bx+ay*by)*s2)/q+18*s3)+(1/(
+216*(sqrt(q*q*q*q*q*q*q))))(-24*ax5*(2*bx2*cx+by2*cx+4*bx*by*cy)-
+12*ax3*ay*(4*bx3*by-11*bx*by3+14*ay*bx2*cx-2*ay*by2*cx+4*ay*bx*by*cy)-
+12*ax*ay3*(-11*bx3*by+10*ay*bx2*cx-4*ay*by2*cx+
+4*bx*(by3-ay*by*cy))+72*ax6*(cx2+cy2)+
+ax4*(8*bx4-13*by4+48*ay*bx*by*cx-120*ay*by2*cy+
+8*bx2*(5*by2+6*ay*cy)+216*ay2*(cx2+cy2))+
+ay4*(-13*bx4-96*ay*bx*by*cx+8*bx2*(5*by2-3*ay*cy)+
+8*(by4-6*ay*by2*cy+9*ay2*(cx2+cy2)))+
+2*ax2*ay2*(20*bx4-24*ay*bx*by*cx+bx2*(-95*by2+12*ay*cy)+
+4*(5*by4-21*ay*by2*cy+27*ay2*(cx2+cy2))))*log(
+ax*bx+ay*by+3*ax2*s+3*ay2*s+
+sqrt(q)*sqrt(bx2+by2+6*ax*bx*s+6*ay*by*s+9*q*s2)))
+
+
+
+t[s]
+
+
+1.0/(2.0*aN)*
+(
+  1.0/72.0 Sqrt[ bx^2 + by^2 + 6 ax bx s + 6 ay by s + 9 (ax^2 + ay^2) s^2]
+  (
+    (1/((ax^2 + ay^2)^3))
+    (
+      -ax ay^2 (17 bx^3 - 28 bx by^2 + 24 ay by cx + 24 ay bx cy)
+      - ax^3 (2 bx^3 + 17 bx by^2 + 24 ay by cx + 24 ay bx cy)
+      + 8 ax^4 (bx cx + 4 by cy)
+      + ay^3 (-17 bx^2 by - 2 by^3 + 32 ay bx cx + 8 ay by cy)
+      + ax^2 ay (28 bx^2 by - 17 by^3 + 40 ay bx cx + 40 ay by cy)
+    )
+    +
+    (
+      s *
+      (
+        24 ax^3 cx
+        + 6 ax ay (-5 bx by + 4 ay cx)
+        + ay^2 (13 bx^2 - 2 by^2 + 24 ay cy)
+        + ax^2 (-2 bx^2 + 13 by^2 + 24 ay cy)
+      )
+      /
+      (ax^2 + ay^2)^2
+    )
+    + ( 18 (ax bx + ay by) s^2)/(ax^2 + ay^2) + 18 s^3
+  )
+  + (1/( 216 (ax^2 + ay^2)^( 7/2)))
+  * (
+      -24 ax^5 (2 bx^2 cx + by^2 cx + 4 bx by cy)
+      - 12 ax^3 ay (4 bx^3 by - 11 bx by^3 + 14 ay bx^2 cx - 2 ay by^2 cx + 4 ay bx by cy)
+      + 72 ax^6 (cx^2 + cy^2)
+      - 12 ax ay^3 (-11 bx^3 by + 10 ay bx^2 cx - 4 ay by^2 cx + 4 bx (by^3 - ay by cy))
+      + ax^4 (8 bx^4 - 13 by^4 + 48 ay bx by cx - 120 ay by^2 cy + 8 bx^2 (5 by^2 + 6 ay cy) + 216 ay^2 (cx^2 + cy^2))
+      + ay^4 (-13 bx^4 - 96 ay bx by cx + 8 bx^2 (5 by^2 - 3 ay cy) + 8 (by^4 - 6 ay by^2 cy + 9 ay^2 (cx^2 + cy^2)))
+      + 2 ax^2 ay^2 (20 bx^4 - 24 ay bx by cx + bx^2 (-95 by^2 + 12 ay cy) + 4 (5 by^4 - 21 ay by^2 cy + 27 ay^2 (cx^2 + cy^2)))
+    )
+  * Log[ ax bx + ay by + 3 ax^2 s + 3 ay^2 s + Sqrt[ax^2 + ay^2] Sqrt[ bx^2 + by^2 + 6 ax bx s + 6 ay by s + 9 (ax^2 + ay^2) s^2]]
+)

@@ -1,0 +1,246 @@
+\hypertarget{classObject}{
+\section{Object Class Reference}
+\label{classObject}\index{Object@{Object}}
+}
+{\tt \#include $<$object.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\hyperlink{classObject_0cca670c8c001209999fe25b86db853e}{Object} (char const $\ast$const str, const int \&sec)
+\item 
+\hyperlink{classObject}{Object} \& \hyperlink{classObject_d5a622757f2d91f0b3fc41b8af751d6f}{operator=} (\hyperlink{classObject}{Object} const \&)
+\item 
+\hyperlink{classObject_6e166f85639b15a8b8f9b783a6de3b45}{Object} (\hyperlink{classObject}{Object} const \&)
+\item 
+int \hyperlink{classObject_6aaf101247a2ae13d5a1801e75184d7d}{getNumRawPoints} (void) const 
+\item 
+int \hyperlink{classObject_dcde331995062eec9ba70c6f88ef5086}{getRanges} (std::vector$<$ int $>$ \&ranges) const 
+\item 
+void \hyperlink{classObject_547991c3188f392ce00323b192142e98}{printRawPoints} (void) const 
+\item 
+void \hyperlink{classObject_2a840530103821a55da4c585c0aa1fb7}{purgeBadContours} (void)
+\item 
+void \hyperlink{classObject_3af0df50f0a3151df20fff62dcc1a891}{removeDuplicates} (void)
+\item 
+void \hyperlink{classObject_36ddffb901419facf6f32009a363405a}{processContour} (\hyperlink{classHistogram}{Histogram} \&h, \hyperlink{classHistogram}{Histogram} \&si, \hyperlink{classHistogram}{Histogram} \&si\_\-before)
+\item 
+void \hyperlink{classObject_0fbe7d79e1badad7bf63152cedb093bf}{addContour} (\hyperlink{classContour}{Contour} mycontour)
+\item 
+void \hyperlink{classObject_ec722906474791fe7ed7f738a5ae14b0}{computeHistogram} (\hyperlink{classHistogram}{Histogram} \&h, \hyperlink{classHistogram}{Histogram} \&si)
+\item 
+void \hyperlink{classObject_823588fd0be248ca9b7e1412d2d14931}{writeOutputContours} (const int \&num\_\-parts, const std::vector$<$ int $>$ \&ranges)
+\item 
+void \hyperlink{classObject_025155f5287bdcac93487ad439292e5d}{clearPtsFiles} (const int \&num\_\-parts, const std::vector$<$ int $>$ \&ranges) const 
+\item 
+int \hyperlink{classObject_73aa0b9e0687d54c6f7e28897c53c60d}{getNumContours} (void) const 
+\item 
+\hyperlink{object_8h_a9270ce1987060966a7d0fb340f69570}{c\_\-c\_\-l\_\-iterator} \hyperlink{classObject_0f77fffbc4778fab83b512d3461c9104}{firstContour} (void) const 
+\item 
+\hyperlink{object_8h_a9270ce1987060966a7d0fb340f69570}{c\_\-c\_\-l\_\-iterator} \hyperlink{classObject_25ce9e8478daa0808393fa562a370d0e}{onePastLastContour} (void) const 
+\item 
+\hyperlink{object_8h_7f9b7c0270c54ab6a3a2cc02f9fb313a}{c\_\-l\_\-iterator} \hyperlink{classObject_fffbea3a9790bde6e0821ace2fe30b49}{getLastContour} (void)
+\item 
+void \hyperlink{classObject_2d0c6724dcfc370c55eefe0cb7ea9ddf}{setMinSection} (int i)
+\item 
+void \hyperlink{classObject_394f310255028c4c4475e98ba58b8243}{setMaxSection} (int i)
+\item 
+int \hyperlink{classObject_f429250aa5672a356e20fa73d8e2612a}{getMaxSection} (void) const 
+\item 
+int \hyperlink{classObject_6b0181000881749e20b32ae92a2b027e}{getMinSection} (void) const 
+\item 
+char const $\ast$ \hyperlink{classObject_c251f5325509fb0e624455b68c29cd40}{getName} (void) const 
+\end{CompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classObject_0cca670c8c001209999fe25b86db853e}{
+\index{Object@{Object}!Object@{Object}}
+\index{Object@{Object}!Object@{Object}}
+\subsubsection[Object]{\setlength{\rightskip}{0pt plus 5cm}Object::Object (char const $\ast$const  {\em str}, \/  const int \& {\em sec})}}
+\label{classObject_0cca670c8c001209999fe25b86db853e}
+
+
+\hypertarget{classObject_6e166f85639b15a8b8f9b783a6de3b45}{
+\index{Object@{Object}!Object@{Object}}
+\index{Object@{Object}!Object@{Object}}
+\subsubsection[Object]{\setlength{\rightskip}{0pt plus 5cm}Object::Object ({\bf Object} const \& {\em rhs})}}
+\label{classObject_6e166f85639b15a8b8f9b783a6de3b45}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classObject_d5a622757f2d91f0b3fc41b8af751d6f}{
+\index{Object@{Object}!operator=@{operator=}}
+\index{operator=@{operator=}!Object@{Object}}
+\subsubsection[operator=]{\setlength{\rightskip}{0pt plus 5cm}{\bf Object} \& Object::operator= ({\bf Object} const \& {\em rhs})}}
+\label{classObject_d5a622757f2d91f0b3fc41b8af751d6f}
+
+
+
+
+References name.\hypertarget{classObject_6aaf101247a2ae13d5a1801e75184d7d}{
+\index{Object@{Object}!getNumRawPoints@{getNumRawPoints}}
+\index{getNumRawPoints@{getNumRawPoints}!Object@{Object}}
+\subsubsection[getNumRawPoints]{\setlength{\rightskip}{0pt plus 5cm}int Object::getNumRawPoints (void) const}}
+\label{classObject_6aaf101247a2ae13d5a1801e75184d7d}
+
+
+Get cumulative number of points in all contours in this object. \hypertarget{classObject_dcde331995062eec9ba70c6f88ef5086}{
+\index{Object@{Object}!getRanges@{getRanges}}
+\index{getRanges@{getRanges}!Object@{Object}}
+\subsubsection[getRanges]{\setlength{\rightskip}{0pt plus 5cm}int Object::getRanges (std::vector$<$ int $>$ \& {\em ranges}) const}}
+\label{classObject_dcde331995062eec9ba70c6f88ef5086}
+
+
+\hypertarget{classObject_547991c3188f392ce00323b192142e98}{
+\index{Object@{Object}!printRawPoints@{printRawPoints}}
+\index{printRawPoints@{printRawPoints}!Object@{Object}}
+\subsubsection[printRawPoints]{\setlength{\rightskip}{0pt plus 5cm}void Object::printRawPoints (void) const}}
+\label{classObject_547991c3188f392ce00323b192142e98}
+
+
+Print raw contour points to file 
+
+References Controls::instance().\hypertarget{classObject_2a840530103821a55da4c585c0aa1fb7}{
+\index{Object@{Object}!purgeBadContours@{purgeBadContours}}
+\index{purgeBadContours@{purgeBadContours}!Object@{Object}}
+\subsubsection[purgeBadContours]{\setlength{\rightskip}{0pt plus 5cm}void Object::purgeBadContours (void)}}
+\label{classObject_2a840530103821a55da4c585c0aa1fb7}
+
+
+Erase contours with fewer points than user-specified threshold. 
+
+References Controls::getPtPerContourThreshold(), and Controls::instance().\hypertarget{classObject_3af0df50f0a3151df20fff62dcc1a891}{
+\index{Object@{Object}!removeDuplicates@{removeDuplicates}}
+\index{removeDuplicates@{removeDuplicates}!Object@{Object}}
+\subsubsection[removeDuplicates]{\setlength{\rightskip}{0pt plus 5cm}void Object::removeDuplicates (void)}}
+\label{classObject_3af0df50f0a3151df20fff62dcc1a891}
+
+
+Remove duplicate points in each contour of object. \hypertarget{classObject_36ddffb901419facf6f32009a363405a}{
+\index{Object@{Object}!processContour@{processContour}}
+\index{processContour@{processContour}!Object@{Object}}
+\subsubsection[processContour]{\setlength{\rightskip}{0pt plus 5cm}void Object::processContour ({\bf Histogram} \& {\em h}, \/  {\bf Histogram} \& {\em si}, \/  {\bf Histogram} \& {\em si\_\-before})}}
+\label{classObject_36ddffb901419facf6f32009a363405a}
+
+
+Fit splines to contour points in each contour in this object. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em h}]Instance of \hyperlink{classHistogram}{Histogram} class for sample point deviations. \item[\mbox{$\leftarrow$} {\em si}]Instance of \hyperlink{classHistogram}{Histogram} class for sample intervals after simulated annealing. \item[\mbox{$\leftarrow$} {\em si\_\-before}]Instance of \hyperlink{classHistogram}{Histogram} class for sample intervals before simulated annealing. \end{description}
+\end{Desc}
+
+
+References Histogram::getN(), Controls::getPrintDetailedInfo(), Controls::getPtPerContourThreshold(), Controls::instance(), Histogram::scan(), and Histogram::update().\hypertarget{classObject_0fbe7d79e1badad7bf63152cedb093bf}{
+\index{Object@{Object}!addContour@{addContour}}
+\index{addContour@{addContour}!Object@{Object}}
+\subsubsection[addContour]{\setlength{\rightskip}{0pt plus 5cm}void Object::addContour ({\bf Contour} {\em mycontour})}}
+\label{classObject_0fbe7d79e1badad7bf63152cedb093bf}
+
+
+Add new contour to object. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em mycontour}]New contour. \end{description}
+\end{Desc}
+\hypertarget{classObject_ec722906474791fe7ed7f738a5ae14b0}{
+\index{Object@{Object}!computeHistogram@{computeHistogram}}
+\index{computeHistogram@{computeHistogram}!Object@{Object}}
+\subsubsection[computeHistogram]{\setlength{\rightskip}{0pt plus 5cm}void Object::computeHistogram ({\bf Histogram} \& {\em h}, \/  {\bf Histogram} \& {\em si})}}
+\label{classObject_ec722906474791fe7ed7f738a5ae14b0}
+
+
+\hypertarget{classObject_823588fd0be248ca9b7e1412d2d14931}{
+\index{Object@{Object}!writeOutputContours@{writeOutputContours}}
+\index{writeOutputContours@{writeOutputContours}!Object@{Object}}
+\subsubsection[writeOutputContours]{\setlength{\rightskip}{0pt plus 5cm}void Object::writeOutputContours (const int \& {\em num\_\-parts}, \/  const std::vector$<$ int $>$ \& {\em ranges})}}
+\label{classObject_823588fd0be248ca9b7e1412d2d14931}
+
+
+Write output contour points to file. \begin{Desc}
+\item[Parameters:]
+\begin{description}
+\item[\mbox{$\leftarrow$} {\em num\_\-parts}]Number of separate parts of object. \item[\mbox{$\leftarrow$} {\em ranges}]Section numbers of object parts. \end{description}
+\end{Desc}
+
+
+References Controls::getCappingFlag(), Controls::getMultiPartSuffix(), Controls::getPrintDetailedInfo(), and Controls::instance().\hypertarget{classObject_025155f5287bdcac93487ad439292e5d}{
+\index{Object@{Object}!clearPtsFiles@{clearPtsFiles}}
+\index{clearPtsFiles@{clearPtsFiles}!Object@{Object}}
+\subsubsection[clearPtsFiles]{\setlength{\rightskip}{0pt plus 5cm}void Object::clearPtsFiles (const int \& {\em num\_\-parts}, \/  const std::vector$<$ int $>$ \& {\em ranges}) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_025155f5287bdcac93487ad439292e5d}
+
+
+Initialize all output pts files to empty. 
+
+References Controls::getMultiPartSuffix(), Controls::getOutputDir(), and Controls::instance().\hypertarget{classObject_73aa0b9e0687d54c6f7e28897c53c60d}{
+\index{Object@{Object}!getNumContours@{getNumContours}}
+\index{getNumContours@{getNumContours}!Object@{Object}}
+\subsubsection[getNumContours]{\setlength{\rightskip}{0pt plus 5cm}int Object::getNumContours (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_73aa0b9e0687d54c6f7e28897c53c60d}
+
+
+\hypertarget{classObject_0f77fffbc4778fab83b512d3461c9104}{
+\index{Object@{Object}!firstContour@{firstContour}}
+\index{firstContour@{firstContour}!Object@{Object}}
+\subsubsection[firstContour]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-c\_\-l\_\-iterator} Object::firstContour (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_0f77fffbc4778fab83b512d3461c9104}
+
+
+\hypertarget{classObject_25ce9e8478daa0808393fa562a370d0e}{
+\index{Object@{Object}!onePastLastContour@{onePastLastContour}}
+\index{onePastLastContour@{onePastLastContour}!Object@{Object}}
+\subsubsection[onePastLastContour]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-c\_\-l\_\-iterator} Object::onePastLastContour (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_25ce9e8478daa0808393fa562a370d0e}
+
+
+\hypertarget{classObject_fffbea3a9790bde6e0821ace2fe30b49}{
+\index{Object@{Object}!getLastContour@{getLastContour}}
+\index{getLastContour@{getLastContour}!Object@{Object}}
+\subsubsection[getLastContour]{\setlength{\rightskip}{0pt plus 5cm}{\bf c\_\-l\_\-iterator} Object::getLastContour (void)\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_fffbea3a9790bde6e0821ace2fe30b49}
+
+
+\hypertarget{classObject_2d0c6724dcfc370c55eefe0cb7ea9ddf}{
+\index{Object@{Object}!setMinSection@{setMinSection}}
+\index{setMinSection@{setMinSection}!Object@{Object}}
+\subsubsection[setMinSection]{\setlength{\rightskip}{0pt plus 5cm}void Object::setMinSection (int {\em i})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_2d0c6724dcfc370c55eefe0cb7ea9ddf}
+
+
+\hypertarget{classObject_394f310255028c4c4475e98ba58b8243}{
+\index{Object@{Object}!setMaxSection@{setMaxSection}}
+\index{setMaxSection@{setMaxSection}!Object@{Object}}
+\subsubsection[setMaxSection]{\setlength{\rightskip}{0pt plus 5cm}void Object::setMaxSection (int {\em i})\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_394f310255028c4c4475e98ba58b8243}
+
+
+\hypertarget{classObject_f429250aa5672a356e20fa73d8e2612a}{
+\index{Object@{Object}!getMaxSection@{getMaxSection}}
+\index{getMaxSection@{getMaxSection}!Object@{Object}}
+\subsubsection[getMaxSection]{\setlength{\rightskip}{0pt plus 5cm}int Object::getMaxSection (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_f429250aa5672a356e20fa73d8e2612a}
+
+
+\hypertarget{classObject_6b0181000881749e20b32ae92a2b027e}{
+\index{Object@{Object}!getMinSection@{getMinSection}}
+\index{getMinSection@{getMinSection}!Object@{Object}}
+\subsubsection[getMinSection]{\setlength{\rightskip}{0pt plus 5cm}int Object::getMinSection (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_6b0181000881749e20b32ae92a2b027e}
+
+
+\hypertarget{classObject_c251f5325509fb0e624455b68c29cd40}{
+\index{Object@{Object}!getName@{getName}}
+\index{getName@{getName}!Object@{Object}}
+\subsubsection[getName]{\setlength{\rightskip}{0pt plus 5cm}char const$\ast$ Object::getName (void) const\hspace{0.3cm}{\tt  \mbox{[}inline\mbox{]}}}}
+\label{classObject_c251f5325509fb0e624455b68c29cd40}
+
+
+
+
+The documentation for this class was generated from the following files:\begin{CompactItemize}
+\item 
+\hyperlink{object_8h}{object.h}\item 
+\hyperlink{object_8cc}{object.cc}\end{CompactItemize}

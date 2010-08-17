@@ -1,0 +1,46 @@
+#Obligatory descriptive comment
+view 0.100000, 0.100000, 0.950000, 0.950000
+READ xy "d000_apical__99_raw.log"
+READ xy "d000_apical__99_uniform_sample.log"
+READ xy "d000_apical__99_sample.log"
+legend on
+s0 legend "Raw"
+s1 legend "Uniform Sample"
+s0 symbol 1
+s0 symbol color 1
+s0 symbol fill color 1
+s0 line type 0
+s0 line color 1
+s0 errorbar color 1
+s1 symbol 2
+s1 symbol color 2
+s1 symbol fill color 2
+s1 line type 0
+s1 line color 2
+s1 errorbar color 2
+s1 symbol size 0.330000
+s2 symbol 3
+s2 symbol color 3
+s2 symbol fill color 3
+s2 line type 0
+s2 line color 3
+s2 errorbar color 3
+s2 symbol size 0.330000
+s2 legend "Anneal Sample"
+s3 symbol 4
+s3 symbol color 4
+s3 symbol fill color 4
+s3 line type 0
+s3 line color 4
+s3 errorbar color 4
+s3 symbol size 0.330000
+s3 legend "Spline Start"
+s4 symbol 5
+s4 symbol color 5
+s4 symbol fill color 5
+s4 line type 0
+s4 line color 5
+s4 errorbar color 5
+s4 symbol size 0.330000
+s4 legend "Spline End"
+legend 0.85, 0.99

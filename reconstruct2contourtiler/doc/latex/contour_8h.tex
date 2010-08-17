@@ -1,0 +1,137 @@
+\hypertarget{contour_8h}{
+\section{contour.h File Reference}
+\label{contour_8h}\index{contour.h@{contour.h}}
+}
+{\tt \#include $<$iostream$>$}\par
+{\tt \#include $<$string$>$}\par
+{\tt \#include $<$vector$>$}\par
+{\tt \#include \char`\"{}control\_\-points.h\char`\"{}}\par
+{\tt \#include \char`\"{}histogram.h\char`\"{}}\par
+{\tt \#include \char`\"{}parameter.h\char`\"{}}\par
+{\tt \#include \char`\"{}point.h\char`\"{}}\par
+{\tt \#include \char`\"{}sim\_\-anneal.h\char`\"{}}\par
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+class \hyperlink{classContour}{Contour}
+\end{CompactItemize}
+\subsection*{Defines}
+\begin{CompactItemize}
+\item 
+\#define \hyperlink{contour_8h_1be3b74bacc91093c88d7dcef4ad7dae}{CONTOUR\_\-H}~1
+\end{CompactItemize}
+\subsection*{Typedefs}
+\begin{CompactItemize}
+\item 
+typedef std::vector$<$ int $>$ \hyperlink{contour_8h_e59925ac43f8978cf3501e93cf1c098d}{vec\_\-i}
+\item 
+typedef std::vector$<$ int $>$::iterator \hyperlink{contour_8h_103f3d784284986bd2e813ac3fcc2ebe}{v\_\-i\_\-iterator}
+\item 
+typedef std::vector$<$ int $>$::const\_\-iterator \hyperlink{contour_8h_2f1f68221585603e5d4569fb0cd2f94a}{c\_\-v\_\-i\_\-iterator}
+\item 
+typedef std::vector$<$ int $>$::const\_\-reverse\_\-iterator \hyperlink{contour_8h_399d38bd867f2eab3cc38ccd9cdde360}{c\_\-r\_\-v\_\-i\_\-iterator}
+\item 
+typedef std::vector$<$ double $>$ \hyperlink{contour_8h_db0ab3db1ab685e2d2bff657e3e86861}{vec\_\-d}
+\item 
+typedef std::vector$<$ double $>$::iterator \hyperlink{contour_8h_a66ef4117b0ef362e6fbadb237199f05}{d\_\-iterator}
+\item 
+typedef std::vector$<$ double $>$::const\_\-iterator \hyperlink{contour_8h_76617663fb8c2b14cf698a47a4d07926}{c\_\-d\_\-iterator}
+\item 
+typedef std::vector$<$ \hyperlink{classPoint}{Point} $>$::iterator \hyperlink{contour_8h_bdc29b2296c12c432b5185786799144e}{p\_\-iterator}
+\item 
+typedef std::vector$<$ \hyperlink{classPoint}{Point} $>$::const\_\-iterator \hyperlink{contour_8h_d367c52cb5a031e4bc21ba9af7d6ee47}{c\_\-p\_\-iterator}
+\item 
+typedef std::list$<$ int $>$ \hyperlink{contour_8h_48cca362cb388dfdb3f8df5441d03717}{list\_\-i}
+\item 
+typedef std::list$<$ int $>$::iterator \hyperlink{contour_8h_c7559b6954586e2a7e87f9d34c211f15}{i\_\-iterator}
+\end{CompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{contour_8h_1be3b74bacc91093c88d7dcef4ad7dae}{
+\index{contour.h@{contour.h}!CONTOUR\_\-H@{CONTOUR\_\-H}}
+\index{CONTOUR\_\-H@{CONTOUR\_\-H}!contour.h@{contour.h}}
+\subsubsection[CONTOUR\_\-H]{\setlength{\rightskip}{0pt plus 5cm}\#define CONTOUR\_\-H~1}}
+\label{contour_8h_1be3b74bacc91093c88d7dcef4ad7dae}
+
+
+
+
+\subsection{Typedef Documentation}
+\hypertarget{contour_8h_76617663fb8c2b14cf698a47a4d07926}{
+\index{contour.h@{contour.h}!c\_\-d\_\-iterator@{c\_\-d\_\-iterator}}
+\index{c\_\-d\_\-iterator@{c\_\-d\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[c\_\-d\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<$double$>$::const\_\-iterator {\bf c\_\-d\_\-iterator}}}
+\label{contour_8h_76617663fb8c2b14cf698a47a4d07926}
+
+
+\hypertarget{contour_8h_d367c52cb5a031e4bc21ba9af7d6ee47}{
+\index{contour.h@{contour.h}!c\_\-p\_\-iterator@{c\_\-p\_\-iterator}}
+\index{c\_\-p\_\-iterator@{c\_\-p\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[c\_\-p\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<${\bf Point}$>$::const\_\-iterator {\bf c\_\-p\_\-iterator}}}
+\label{contour_8h_d367c52cb5a031e4bc21ba9af7d6ee47}
+
+
+\hypertarget{contour_8h_399d38bd867f2eab3cc38ccd9cdde360}{
+\index{contour.h@{contour.h}!c\_\-r\_\-v\_\-i\_\-iterator@{c\_\-r\_\-v\_\-i\_\-iterator}}
+\index{c\_\-r\_\-v\_\-i\_\-iterator@{c\_\-r\_\-v\_\-i\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[c\_\-r\_\-v\_\-i\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<$int$>$::const\_\-reverse\_\-iterator {\bf c\_\-r\_\-v\_\-i\_\-iterator}}}
+\label{contour_8h_399d38bd867f2eab3cc38ccd9cdde360}
+
+
+\hypertarget{contour_8h_2f1f68221585603e5d4569fb0cd2f94a}{
+\index{contour.h@{contour.h}!c\_\-v\_\-i\_\-iterator@{c\_\-v\_\-i\_\-iterator}}
+\index{c\_\-v\_\-i\_\-iterator@{c\_\-v\_\-i\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[c\_\-v\_\-i\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<$int$>$::const\_\-iterator {\bf c\_\-v\_\-i\_\-iterator}}}
+\label{contour_8h_2f1f68221585603e5d4569fb0cd2f94a}
+
+
+\hypertarget{contour_8h_a66ef4117b0ef362e6fbadb237199f05}{
+\index{contour.h@{contour.h}!d\_\-iterator@{d\_\-iterator}}
+\index{d\_\-iterator@{d\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[d\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<$double$>$::iterator {\bf d\_\-iterator}}}
+\label{contour_8h_a66ef4117b0ef362e6fbadb237199f05}
+
+
+\hypertarget{contour_8h_c7559b6954586e2a7e87f9d34c211f15}{
+\index{contour.h@{contour.h}!i\_\-iterator@{i\_\-iterator}}
+\index{i\_\-iterator@{i\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[i\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::list$<$int$>$::iterator {\bf i\_\-iterator}}}
+\label{contour_8h_c7559b6954586e2a7e87f9d34c211f15}
+
+
+\hypertarget{contour_8h_48cca362cb388dfdb3f8df5441d03717}{
+\index{contour.h@{contour.h}!list\_\-i@{list\_\-i}}
+\index{list\_\-i@{list\_\-i}!contour.h@{contour.h}}
+\subsubsection[list\_\-i]{\setlength{\rightskip}{0pt plus 5cm}typedef std::list$<$int$>$ {\bf list\_\-i}}}
+\label{contour_8h_48cca362cb388dfdb3f8df5441d03717}
+
+
+\hypertarget{contour_8h_bdc29b2296c12c432b5185786799144e}{
+\index{contour.h@{contour.h}!p\_\-iterator@{p\_\-iterator}}
+\index{p\_\-iterator@{p\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[p\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<${\bf Point}$>$::iterator {\bf p\_\-iterator}}}
+\label{contour_8h_bdc29b2296c12c432b5185786799144e}
+
+
+\hypertarget{contour_8h_103f3d784284986bd2e813ac3fcc2ebe}{
+\index{contour.h@{contour.h}!v\_\-i\_\-iterator@{v\_\-i\_\-iterator}}
+\index{v\_\-i\_\-iterator@{v\_\-i\_\-iterator}!contour.h@{contour.h}}
+\subsubsection[v\_\-i\_\-iterator]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<$int$>$::iterator {\bf v\_\-i\_\-iterator}}}
+\label{contour_8h_103f3d784284986bd2e813ac3fcc2ebe}
+
+
+\hypertarget{contour_8h_db0ab3db1ab685e2d2bff657e3e86861}{
+\index{contour.h@{contour.h}!vec\_\-d@{vec\_\-d}}
+\index{vec\_\-d@{vec\_\-d}!contour.h@{contour.h}}
+\subsubsection[vec\_\-d]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<$double$>$ {\bf vec\_\-d}}}
+\label{contour_8h_db0ab3db1ab685e2d2bff657e3e86861}
+
+
+\hypertarget{contour_8h_e59925ac43f8978cf3501e93cf1c098d}{
+\index{contour.h@{contour.h}!vec\_\-i@{vec\_\-i}}
+\index{vec\_\-i@{vec\_\-i}!contour.h@{contour.h}}
+\subsubsection[vec\_\-i]{\setlength{\rightskip}{0pt plus 5cm}typedef std::vector$<$int$>$ {\bf vec\_\-i}}}
+\label{contour_8h_e59925ac43f8978cf3501e93cf1c098d}
+
+

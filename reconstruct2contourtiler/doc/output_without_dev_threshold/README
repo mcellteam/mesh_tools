@@ -1,0 +1,29 @@
+#!/bin/bash
+
+prog='/home/jkinney/src/mesh_tools/reconstruct2contourtiler/reconstruct2contourtiler'
+$prog -i examples3 \
+-o deleteme -I cube -I cyl -I grid -I domain1 \
+--min_section=99 --max_section=99 \
+--curvature_gain=1E2 --curvature_exponent=1 \
+--proximity_gain=3E0 --proximity_exponent=1 \
+--min_point_per_contour=0 \
+--deviation_threshold=0.000 \
+--print_detailed_info
+#--return_interpolated_raw_points
+#--deviation_threshold=.005 -S 0.5 \
+#--return_raw_contour_points
+#$prog -i examples -o deleteme -I cube -I cyl -I grid -I domain1 \
+#$prog -i /scratch/paper1_spillover/synapses_CA1/contours_from_kristen \
+
+# examples3
+#
+#
+# --curvature_gain=1E1 --curvature_exponent=1 \
+# --proximity_gain=1E0 --proximity_exponent=1 \
+#
+#  Smallest sample interval:  0.00021316   |  Largest sample interval:     0.10431
+
+# --curvature_gain=1E1 --curvature_exponent=1 \
+# --proximity_gain=1E2 --proximity_exponent=1 \
+#  Smallest sample interval:  0.00050634   |  Largest sample interval:     0.08722
+
