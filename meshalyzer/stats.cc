@@ -1,5 +1,6 @@
 #include "stats.h"
 
+#include <algorithm>
 #include <cfloat>
 #include <cmath>
 #include <iostream>

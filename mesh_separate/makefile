@@ -1,4 +1,4 @@
-COMPILE = g++ -O3 -o mesh_separate
+COMPILE = g++ -O3 -Wall -Wshadow -Wextra -Weffc++ -g -o mesh_separate
 LINK = g++
 
 mesh_separate: mesh_separate.cc  

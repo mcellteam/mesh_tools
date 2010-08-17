@@ -8,25 +8,30 @@
 
 class Controls
 {
-public:
-  static Controls & instance     (void);
-  std::string inpath,outpath;
-  // command line info
-  bool folder;			// true if folder, false otherwise
-  bool attr;				// true if '-a', false otherwise
+private:
+  std::string INPATH;
+  int FOLDER;			// true if folder of input mesh files, false if single input mesh file
+  int ATTR;				// true if '-a', false otherwise
   // true=eval attributes only
   // false=allow a full analysis, i.e. evaluate characteristics
-  bool print;				// true if '-p', false otherwise
+  int PRINT;				// true if '-p', false otherwise
   // true=print detailed information about offending mesh elements
   // false=print summary information only
-  char style[32];			// output style for offending mesh elements (-p option)
-  // cp=dreamm custom points format, i.e. x y z 1 0 0 1
-  // everything else=detailed face,vertex,edge information
-  bool interf;			// true if '-i', false otherwise
+  int DREAMM;			// output style for offending mesh elements (-p option)
+  // nonzero=dreamm custom points format, i.e. x y z 1 0 0 1
+  // zero=detailed face,vertex,edge information
+  int INTER;			// true if '-i', false otherwise
   // true=collect all objects,
   //	detect intersections between objects,
   //	in contrast to the intra-object search that is the default
   // false=do not perform inter-object face intersection check
+  int PRINT_SET_VOLUME_ONLY;				// true if '-v', false otherwise
+  // true=print set volume and nothing else
+  // false=do nothing special
+
+public:
+  static Controls & instance     (void);
+  // command line info
   bool signal[5];			// true if threshold value found on command line
   double thresholds[5];	// user-defined thresholds found on command line
   // [0]=aspect ratio threshold set
@@ -34,29 +39,29 @@ public:
   // [2]=max edge angle threshold set
   // [3]=min edge length threshold set
   // [4]=max edge length threshold set
-  bool vol;				// true if '-v', false otherwise
-  // true=print set volume and nothing else
-  // false=do nothing special
-  //
-  //
-  // cumulative statistics
-  double bb[6];		// bounding box [xmin,ymin,zmin,xmax,ymax,zmax]
-  double wbb[6];	// bounding box [xmin,ymin,zmin,xmax,ymax,zmax]
-  bool good_integrity;	// integrity of mesh
-  void parse(int,char**,std::string);
 
-  int get_filename_size                    () const throw() { return FILENAME_SIZE; }
-  int get_detect_polygon_edge_intersection () const throw() { return DETECT_POLYGON_EDGE_INTERSECTION;; }
+  void parse(int,char**,std::string);
+  std::string getUsageMessage (void);
+
+  int    get_print_set_volume_only            () const throw() { return PRINT_SET_VOLUME_ONLY; }
+  int    get_detect_interobject_intersections () const throw() { return INTER; }
+  int    get_use_dreamm_output_format         () const throw() { return DREAMM; }
+  int    get_print_detailed_info              () const throw() { return PRINT; }
+  int    get_compute_attributes_only          () const throw() { return ATTR; }
+  int    get_folder_passed                    () const throw() { return FOLDER; }
+  int    get_filename_size                    () const throw() { return FILENAME_SIZE; }
+  int    get_detect_polygon_edge_intersection () const throw() { return DETECT_POLYGON_EDGE_INTERSECTION;; }
+  int    get_num_adjacent_boxes            () const throw() { return NUM_ADJACENT_BOXES; }
+  int    get_num_bins                      () const throw() { return NUM_BINS; }
   double get_ray_epsilon                   () const throw() { return RAY_EPSILON; }
   double get_double_epsilon                () const throw() { return DOUBLE_EPSILON; }
   double get_space_length                  () const throw() { return SPACE_LENGTH; }
   double get_faces_per_box                 () const throw() { return FACES_PER_BOX; }
-  int    get_num_adjacent_boxes            () const throw() { return NUM_ADJACENT_BOXES; }
   double get_search_radius                 () const throw() { return SEARCH_RADIUS; }
   double get_neighborhood_radius           () const throw() { return NEIGHBORHOOD_RADIUS; }
   double get_closest_point_cosine          () const throw() { return CLOSEST_POINT_COSINE; }
   double get_pi                            () const throw() { return PI; }
-  int    get_num_bins                      () const throw() { return NUM_BINS; }
+  std::string get_inpath                   () const throw() { return INPATH; }
 
 private:
   static Controls * only_one;

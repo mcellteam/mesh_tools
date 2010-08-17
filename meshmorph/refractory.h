@@ -57,9 +57,11 @@ public:
   void    updateVertMoveDistr           (Vertex * const,ti_it &);
 //  void    updateLastNMovedVerts         (Vertex * const);
   void    enforceMaxdisplacement        (Vertex * const,vector3 &);
-  void    updateSuccessfulMove          (const int &,Vertex * const);
+//  void    updateSuccessfulMove          (const int &,Vertex * const);
+  void    updateSuccessfulMove          (Vertex * const);
   void    resetForNewGroup              (void);
-  vp_cit  getNextVertex                 (const int & group,vp_cit,bool const,bool const,bool const);
+//  vp_cit  getNextVertex                 (const int & group,vp_cit,bool const,bool const,bool const);
+  vp_cit  getNextVertex                 (vp_cit,bool const,bool const,bool const);
 //  vhm_cit beginN                        (void) const;
 //  vhm_cit endN                          (void) const;
 //  vhm_cit beginInt                      (void) const;

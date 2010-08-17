@@ -8,8 +8,10 @@
 
 #include <vector>
 #include <algorithm>
-#include <ext/hash_map>
-#include <ext/hash_set>
+//#include <ext/hash_map>
+#include <unordered_map>
+//#include <ext/hash_set>
+#include <unordered_set>
 #include <map>
 #include <float.h>
 

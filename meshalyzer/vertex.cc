@@ -1,7 +1,10 @@
 #include "vertex.h"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <stdlib.h>
+#include <string.h>
 
 #include "edge.h"
 #include "object.h"
@@ -22,24 +25,6 @@ int Vertex::getVertexNiceness (void)
 bool Vertex::vertexIsNice (void)
 {
   return o->vertexIsNice(this);	
-}
-
-void Vertex::printVertexCP (void)
-{
-  cout.precision(12);
-  cout << pN[0] << " "
-        << pN[1] << " "
-        << pN[2] << " 1 0 0 1\n";
-}
-
-void Vertex::printVertex (std::string s)
-{
-  cout.precision(12);
-  cout << "Vertex <obj>" << s << "<ind>" << index << " "
-        << "["
-        << pN[0] << " "
-        << pN[1] << " "
-        << pN[2] << "] ";
 }
 
 Vertex::Vertex (char* triplet,Object *q)
@@ -169,8 +154,8 @@ void Vertex:: getAdjacentFaces (hset_f &fset)
   for (i=e.begin();i!=e.end();i++) 
   {
     // add edge faces to set
-    fset.insert((*i)->f1);
-    fset.insert((*i)->f2);
+    fset.insert((*i)->ptr_f1());
+    fset.insert((*i)->ptr_f2());
   }
 }
 
@@ -227,7 +212,7 @@ bool Vertex::isManifold (bool flag)
     cout << "\n\nVertex::isManifold: Error."
           << " Vertex was not an 'orphan', but has no edges.\n";
     cout << "\n\nVertex::isManifold: Confused vertex:\n";
-    printVertex(o->name);
+    print(cout);
     cout << endl;
     exit(1);
   }
@@ -239,10 +224,10 @@ bool Vertex::isManifold (bool flag)
   if (se->isManifold()==true)
   {
     // grab starting face
-    if (se->f1!=NULL){ cw = se->f1; }
-    if (se->f2!=NULL) { 
-      if (cw==NULL) { cw = se->f2; }
-      else          { ccw = se->f2; }
+    if (se->ptr_f1()!=NULL){ cw = se->ptr_f1(); }
+    if (se->ptr_f2()!=NULL) { 
+      if (cw==NULL) { cw = se->ptr_f2(); }
+      else          { ccw = se->ptr_f2(); }
     }
     if (cw==NULL)
     {
@@ -277,7 +262,8 @@ bool Vertex::isManifold (bool flag)
       if (scanAdjFaces(se,sf,nonman)==false)
       {
         // record offending edge
-        o->nonman_v.push_back(this);
+        //o->nonman_v.push_back(this);
+        o->addNonmanVertices(this);
         return false;
       }
       else 
@@ -288,7 +274,8 @@ bool Vertex::isManifold (bool flag)
     else 
     {
       // record offending edge
-      o->nonman_v.push_back(this);
+      //o->nonman_v.push_back(this);
+      o->addNonmanVertices(this);
       return false;
     }
   }

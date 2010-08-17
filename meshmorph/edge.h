@@ -40,7 +40,7 @@ public:
    * \return First vertex of this edge.
    */
 
-  Vertex * const getV1 (void)
+  Vertex * getV1 (void)
   {
     return v1;
   }
@@ -49,7 +49,7 @@ public:
    * \return Second vertex of this edge.
    */
 
-  Vertex * const getV2 (void)
+  Vertex * getV2 (void)
   {
     return v2;
   }
@@ -58,7 +58,7 @@ public:
    * \return Non-edge vertex of first adjacent face.
    */
 
-  Vertex * const getO1 (void)
+  Vertex * getO1 (void)
   {
     return o1;
   }
@@ -67,7 +67,7 @@ public:
    * \return Non-edge vertex of second adjacent face.
    */
 
-  Vertex * const getO2 (void)
+  Vertex * getO2 (void)
   {
     return o2;
   }

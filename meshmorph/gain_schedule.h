@@ -22,6 +22,7 @@ private:
 public:
   static Gain_Schedule & instance (void);
   void   updateMaxGain            (void);
+  void   parseGainFile (const char * filename);
 //  void   updateGain               (void);
 
   /** Get max gain.

@@ -42,9 +42,12 @@ struct lts
   }
 };
 
-typedef __gnu_cxx::hash_map<int,Vertex*> hashtable_v;
-typedef __gnu_cxx::hash_set<Face*,f_hash,eqf> hashset_f;
-typedef __gnu_cxx::hash_set<Face*,f_hash,eqf>::iterator hf_iterator;
+//typedef __gnu_cxx::hash_map<int,Vertex*> hashtable_v;
+typedef std::unordered_map<int,Vertex*> hashtable_v;
+//typedef __gnu_cxx::hash_set<Face*,f_hash,eqf> hashset_f;
+typedef std::unordered_set<Face*,f_hash,eqf> hashset_f;
+//typedef __gnu_cxx::hash_set<Face*,f_hash,eqf>::iterator hf_iterator;
+typedef std::unordered_set<Face*,f_hash,eqf>::iterator hf_iterator;
 typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> > hashtable_t;
 typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> >::iterator ht_iterator;
 

@@ -337,7 +337,7 @@ void SHOWDF(const char* format, ...)
 	va_start(ap,format);
 	vsnprintf(buf,bufsiz,format,ap);
 	va_end(ap);
-	if (needcout) cout << "# " << buf;
+	//if (needcout) cout << "# " << buf;
 	if (needcerr) cerr << "# " << buf;
 }
 
@@ -351,7 +351,8 @@ void SHOWFF(const char* format, ...)
 	va_start(ap,format);
 	vsnprintf(buf,bufsiz,format,ap);
 	va_end(ap);
-	cout << "# " << buf;
+	//cout << "# " << buf;
+	cerr << "# " << buf;
 }
 
 char* newString(const char* s)

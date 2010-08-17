@@ -1,5 +1,6 @@
 #include "boundary.h"
 
+#include <algorithm>
 #include <iostream>
 
 #include "edge.h"
@@ -30,14 +31,14 @@ bool Boundary::closed (void)
 void Boundary::print (void)
 {
   cout << "\nBEGIN VERTEX:\n";
-  begin->printVertex(begin->o->name);
+  begin->print(cout);
   cout << endl;
   cout << "END VERTEX:\n";
-  end->printVertex(end->o->name);
+  end->print(cout);
   cout << endl;
   for (e_iterator i=e.begin();i!=e.end();i++)
   {
-    (*i)->printEdge((*i)->f1->v[0]->o->name);
+    (*i)->print(cout);
     cout << endl;
   }
 }

@@ -1,105 +1,72 @@
+#include <stdlib.h>
 #include <string>
 #include <cmath>
 
-#include "classes.cc"
-#include "functions.cc"
+#include "reconstruct2contourtiler.h"
 
-int main(int argc,char *argv[])
+int main (int argc,char *argv[])
 {
-
-  Parse p;
-  p.parseCommandLine(argc,argv,p.getUsageMessage());
-
-  ////////// declare variables /////////
-  char output_script[32] = "mesh_and_convert.csh";
-  // spline parameters
-  Parameters *pa = new Parameters;
-  pa->plot_rad_int=.1;// radius of curvature sampling interval for plotting sampling function
-  pa->num=100;		// num is the # samples of the splines between contour points
-                        // sequential triplets of sampled points are used to
-                        // compute the radius of curvature , e.g. num/2 between contour points
-  pa->diag=false;	// set true to print diagnostic files
-  pa->max_rad=1E10;	// calculated radius of curvature of spline will saturate at this value
-  pa->dmin=.001;	// dmin = minimum spline sampling distance
-  pa->dmax=.050;	// dmax = maximum spline sampling distance
-  pa->T=1.0;		// sample period (= time to traverse dmax)
-  pa->amax=1E-2;	// max radial acceleration
-
-  printf("\nReading input files.\n");
-  // create contours
-  void_list *ch = getContours(p);
-
-  // remove contours with less than three points
-  ch=purgeBadContours(ch);
-
-  // add previous pointers
-  for (void_list *q=ch;q!=NULL;q=q->next){((Contour*)q->data)->addPreviousRaw();}
-
-  // check contours for duplicate points
-  for (void_list *q=ch;q!=NULL;q=q->next){((Contour*)q->data)->removeDuplicates();}
-
-  // remove contours with less than three points
-  ch=purgeBadContours(ch);
-
-  printf("Interpolating contours.\n");
-  ///// linearly interpolate raw contour points /////
-  if (p.deviation_threshold) {
-    for (void_list *q=ch;q!=NULL;q=q->next)
-    {
-      ((Contour*)q->data)->linearlyInterp(p.deviation_threshold,p.scale);
-    }
-  }
-
-  ////////// add previous data //////////
-  for (void_list *q=ch;q!=NULL;q=q->next){
-    ((Contour*)q->data)->addPreviousRaw();
-  }
-
-  // NOTE: RAW POINTS IN CONTOURS ARE STORED IN REVERSE ORDER
-  // FIRST OFF THE LINKED LIST WAS LAST ADDED TO LIST.
-
-  // create array of number of points in each contour
-  int *contour_array = NULL;
-  contour_array = createArray(contour_array,ch,countContours(ch));
-
-  printf("Splining contours.\n");
-  ////////// fit splines //////////
-  Histogram *h = new Histogram();
-  fitSplines(ch,h,p.section_thickness,contour_array,p.deviation_threshold,p.scale,p.output_dir.c_str(),pa,countContours(ch));
-
-  ///// compute histogram /////
-  computeHistogram(h,ch,contour_array);
-
-  ////////// create objects //////////
-  void_list *objectsh=createObjects(ch);
-
-  ////////// clear any existing pts and script files //////////
-  clearPtsFiles(p.output_dir.c_str(),objectsh);
-
-  printf("Writing output contours.\n");
-  ////////// print each object //////////
-  // for each object
-  for (void_list *q=objectsh;q!=NULL;q=q->next) {
-    Object *o=(Object*)q->data;
-    if(!degenerateObject(o) && (p.capping_flag || o->min_section!=o->max_section)){
-      ///// print config file /////
-      printConfigFile(p.output_dir.c_str(),o,p.capping_flag);
-      /////  append to script files /////
-      appendScriptFile(p.output_dir.c_str(),o);
-      ///// print pts files of interpolated contour points /////
-      printPtsFiles(p.output_dir.c_str(),o,p.scale);
-      if(p.capping_flag){printCaps(p.output_dir.c_str(),o,p.section_thickness,p.scale);}
-    }
-  }
-
-  ////////// create calling script //////////
-  createCallingScript(p.output_dir.c_str(),output_script);
-
-  ////////// print deviation statistics //////////
-  printStatistics(h,p.scale);
-
-  cleanup(objectsh,h,ch,contour_array);
-  delete pa;
-
-  return 0;
+  Controls & cs (Controls::instance()); 
+  cs.parseCommandLine(argc,argv);
+  Container c;
+  printf("\nReading input files...\n");
+  c.getContours();
+  // compare sequential points in contours and remove ducplicate points
+  c.removeDuplicates();
+  printf("\nReading input files complete.\n");
+  // remove contours with less than 
+  // specified number of points
+  cout << endl;
+  cout << "Number of input files = " << c.getNumFiles()     << endl;
+  cout << "Number of objects     = " << c.getNumObjects()   << endl;
+  cout << "Number of contours    = " << c.getNumContours()  << endl;
+  cout << "Number of raw points  = " << c.getNumRawPoints() << endl;
+  cout << endl;
+  if (cs.getPrintDetailedInfo()) c.printRawPoints();
+  Histogram h; // sample deviations from linearly-interpolated raw points
+  Histogram si; // linear distance between spline samples AFTER annealing
+  Histogram si_before; // linear distance between spline samples BEFORE annealing
+  c.processContour (h,si,si_before);
+  c.clearOutputScripts ();
+  printf ("Writing output contours.\n");
+  c.writeOutputContours ();
+  h.printStatistics ("deviation");
+  si_before.printStatistics ("sample interval before filtering");
+  si.printStatistics ("sample interval after filtering");
+  cout << endl;
+  cout << endl;
 }
+
+/** Determine if two floating-point precision numbers
+ * are equivalent in value within epsilon.
+ * \param[in] a First number.
+ * \param[in] b Second number.
+ * \param[in] epsilon The difference between the two input values must be
+ * greater than the fraction of the largest input value defined by epsilon.
+ * \return 1 if Inputs are different; 0 otherwise.
+ */
+
+bool distinguishable (double a,double b,double epsilon)
+{
+  double c;
+  c=a-b;
+  if (c<0) c=-c;
+  if (a<0) a=-a;
+  if (a<1) a=1;
+  if (b<0) b=-b;
+  if (b<a) return (c>a*epsilon);
+  else return (c>b*epsilon);
+}
+
+/** Determine if two floating-point precision numbers
+ * are equivalent in value within MY_DOUBLE_EPSILON. 
+ * \param[in] a First number.
+ * \param[in] b Second number.
+ * \return 1 if Inputs are different; 0 otherwise.
+ */
+
+bool distinguishable (double a,double b)
+{
+  return distinguishable(a, b, Controls::instance().getEpsilon());
+}
+

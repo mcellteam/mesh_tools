@@ -40,6 +40,8 @@ public:
                                     vector3 & force,
                                     bool compute_force) const;
   void    updateNormal          (void);
+  Object const * getObject (void) const;
+
 
   /** Get flag of this face.
    * \return Flag value.

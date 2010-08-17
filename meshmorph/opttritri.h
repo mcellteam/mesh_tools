@@ -24,6 +24,8 @@
 
 #define FABS(x) (fabs(x))        /* implement as is fastest on your machine */
 
+//#define MYEPSILON 1E-5
+
 /* if USE_EPSILON_TEST is true then we do a check:
    if |dv|<EPSILON then dv=0.0;
    else no check is done (which is less robust)

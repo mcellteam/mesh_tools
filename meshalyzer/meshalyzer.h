@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <ext/hash_map>
+#include <unordered_map>
 #include <set>
-#include <ext/hash_set>
+#include <unordered_set>
 
 class Boundary;
 class Box;
@@ -133,16 +133,19 @@ typedef std::vector<Vertex*>			vec_v;
 typedef std::vector<Vertex*>::iterator	v_iterator;
 typedef std::vector<Face*>				vec_f;
 typedef std::vector<Face*>::iterator	f_iterator;
+typedef std::vector<Face*>::const_iterator	c_f_iterator;
 typedef std::vector<Edge*>				vec_e;
 typedef std::vector<Edge*>::iterator	e_iterator;
 typedef std::vector<Object*>			vec_o;
 typedef std::vector<Object*>::iterator	o_iterator;
 typedef std::vector<Box*>				vec_b;
 typedef std::vector<Box*>::iterator		b_iterator;
+typedef std::vector<Box*>::const_iterator		c_b_iterator;
 typedef std::vector<int>				vec_i;
 typedef std::vector<int>::iterator		i_iterator;
 typedef std::vector<double>				vec_d;
 typedef std::vector<double>::iterator	d_iterator;
+typedef std::vector<double>::const_iterator	c_d_iterator;
 
 typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> >					map_se;
 
@@ -155,26 +158,26 @@ typedef std::multimap<int,Face*,lti,std::allocator<Face*> >::iterator			if_itera
 typedef std::multimap<int,Vertex*,gti,std::allocator<Vertex*> >					mmap_iv;
 typedef std::multimap<int,Vertex*,gti,std::allocator<Vertex*> >::iterator		iv_iterator;
 
-typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv,std::allocator<int> >								hmap_vi;
-typedef __gnu_cxx::hash_map<Face*,double*,f_hash,eqf,std::allocator<double*> >							hmap_fdp;
-typedef __gnu_cxx::hash_map<Face*,double,f_hash,eqf,std::allocator<double*> >							hmap_fd;
-typedef __gnu_cxx::hash_map<Face*,double,f_hash,eqf,std::allocator<double*> >::iterator					fd_iterator;
-typedef __gnu_cxx::hash_map<Face*,int,f_hash,eqf,std::allocator<int> >									hmap_fi;
-typedef __gnu_cxx::hash_map<Face*,int,f_hash,eqf,std::allocator<int> >::iterator						fi_iterator;
-typedef __gnu_cxx::hash_map<Vertex*,double,v_hash,eqv,std::allocator<double> >							hmap_vd;
-typedef __gnu_cxx::hash_map<Vertex*,double,v_hash,eqv,std::allocator<double> >::iterator				vd_iterator;
-typedef __gnu_cxx::hash_map<Edge*,double,e_hash,eqe,std::allocator<double> >							hmap_ed;
-typedef __gnu_cxx::hash_map<Edge*,double,e_hash,eqe,std::allocator<double> >::iterator					ed_iterator;
-typedef __gnu_cxx::hash_map<Face*,vec_f*,f_hash,eqf,std::allocator<std::vector<Face*>* > >				hmap_ff;
-typedef __gnu_cxx::hash_map<Face*,vec_f*,f_hash,eqf,std::allocator<std::vector<Face*>* > >::iterator	ff_iterator;
-typedef __gnu_cxx::hash_map<Edge*,int,e_hash,eqe,std::allocator<int> >									hmap_e;
-typedef __gnu_cxx::hash_map<int,Vertex*,i_hash,eqi,std::allocator<Vertex*> >							hmap_iv;
+typedef std::unordered_map<Vertex*,int,v_hash,eqv,std::allocator<int> >								hmap_vi;
+typedef std::unordered_map<Face*,double*,f_hash,eqf,std::allocator<double*> >							hmap_fdp;
+typedef std::unordered_map<Face*,double,f_hash,eqf,std::allocator<double*> >							hmap_fd;
+typedef std::unordered_map<Face*,double,f_hash,eqf,std::allocator<double*> >::iterator					fd_iterator;
+typedef std::unordered_map<Face*,int,f_hash,eqf,std::allocator<int> >									hmap_fi;
+typedef std::unordered_map<Face*,int,f_hash,eqf,std::allocator<int> >::iterator						fi_iterator;
+typedef std::unordered_map<Vertex*,double,v_hash,eqv,std::allocator<double> >							hmap_vd;
+typedef std::unordered_map<Vertex*,double,v_hash,eqv,std::allocator<double> >::iterator				vd_iterator;
+typedef std::unordered_map<Edge*,double,e_hash,eqe,std::allocator<double> >							hmap_ed;
+typedef std::unordered_map<Edge*,double,e_hash,eqe,std::allocator<double> >::iterator					ed_iterator;
+typedef std::unordered_map<Face*,vec_f*,f_hash,eqf,std::allocator<std::vector<Face*>* > >				hmap_ff;
+typedef std::unordered_map<Face*,vec_f*,f_hash,eqf,std::allocator<std::vector<Face*>* > >::iterator	ff_iterator;
+typedef std::unordered_map<Edge*,int,e_hash,eqe,std::allocator<int> >									hmap_e;
+typedef std::unordered_map<int,Vertex*,i_hash,eqi,std::allocator<Vertex*> >							hmap_iv;
 
 typedef std::set<int,lti>									set_i;
 typedef std::set<Vertex*,ltv>								set_v;
 
-typedef __gnu_cxx::hash_set<Face*,f_hash,eqf>				hset_f;
-typedef __gnu_cxx::hash_set<Face*,f_hash,eqf>::iterator		hf_iterator;
+typedef std::unordered_set<Face*,f_hash,eqf>				hset_f;
+typedef std::unordered_set<Face*,f_hash,eqf>::iterator		hf_iterator;
 
 int distinguishable(double a,double b,double epsilon);
 int distinguishable(double a,double b);

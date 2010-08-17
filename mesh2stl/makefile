@@ -1,6 +1,6 @@
 CC = gcc
 DEFS =
-FLAGS = -O3 -march=pentiumpro
+FLAGS = -O3
 #FLAGS = -Wall -ggdb3 -O0 -fno-strict-aliasing -pg
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin

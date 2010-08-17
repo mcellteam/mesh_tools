@@ -151,40 +151,77 @@ public:
   void    openOrDie                   (std::ofstream * const handle,std::string str,const int & group);
   // originally vtrack
   bool    isGood                      (Vertex const * const) const;
-  void    writeDetailedMoveInfo       (void);
+  void    writeDetailedMoveInfo       (Vertex *,int,int);
   void    printBad                    (Vertex const * const) const;
   void    setDetailedInfoPreMove      (Vertex * const); 
   void    setDetailedInfoPostMove     (Vertex *); 
   //
-  std::string formatv(char const *fmt, va_list args)
-  {
-    char buffer[512];
-    uint needLen;
-    va_list argsCopy;
-    va_copy(argsCopy, args);
-  
-    needLen = vsnprintf(buffer, sizeof(buffer), fmt, args);
-    if (needLen <= sizeof(buffer))
-    {
-      va_end(argsCopy);
-      return std::string(buffer);
-    }
-    else
-    {
-      char *big_buffer = new char[needLen + 1];
-      vsnprintf(big_buffer, needLen + 1, fmt, argsCopy);
-      std::string ret(big_buffer);
-      delete[] big_buffer;
-      va_end(argsCopy);
-      return ret;
-    }
-  };
-  
+//  std::string formatv(char const *fmt, va_list args)
+//  {
+//    char buffer[512];
+//    uint needLen;
+//    //va_list argsCopy;
+//    //va_copy(argsCopy, args);
+//    va_list argsCopy = args;
+//  
+//    needLen = vsnprintf(buffer, sizeof(buffer), fmt, args);
+//    if (needLen <= sizeof(buffer))
+//    {
+//      va_end(argsCopy);
+//      return std::string(buffer);
+//    }
+//    else
+//    {
+//      char *big_buffer = new char[needLen + 1];
+//      vsnprintf(big_buffer, needLen + 1, fmt, argsCopy);
+//      std::string ret(big_buffer);
+//      delete[] big_buffer;
+//      va_end(argsCopy);
+//      return ret;
+//    }
+//  };
+//  
+//  std::string format(char const *fmt, ...)
+//  {
+//    va_list args;
+//    va_start(args, fmt);
+//    std::string ret(formatv(fmt, args));
+//    va_end(args);
+//    return ret;
+//  };
+
   std::string format(char const *fmt, ...)
   {
     va_list args;
     va_start(args, fmt);
-    std::string ret(formatv(fmt, args));
+    std::string ret;
+    //std::string formatv(char const *fmt, va_list args)
+    //{
+    //uint needLen;
+    //va_list argsCopy;
+    //va_copy(argsCopy, args);
+    //va_list argsCopy = args;
+  
+    char buffer[512];
+    uint needLen = vsnprintf(buffer, sizeof(buffer), fmt, args);
+    if (needLen <= sizeof(buffer))
+    {
+      //va_end(argsCopy);
+      //return std::string(buffer);
+      ret = buffer;
+    }
+    else
+    {
+      char *big_buffer = new char[needLen + 1];
+      vsnprintf(big_buffer, needLen + 1, fmt, args);
+      //std::string ret(big_buffer);
+      ret = big_buffer;
+      delete[] big_buffer;
+      //va_end(argsCopy);
+      //return ret;
+    }
+    //};
+  
     va_end(args);
     return ret;
   };

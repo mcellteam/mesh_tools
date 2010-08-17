@@ -269,13 +269,13 @@ void Log::openOrDie (std::ofstream * const handle,std::string str,const int & gr
   std::string file;
   if (cs.get_append_group_number()==true)
   {
-    file = format("%s%s.%s.%i",
+    file = format("%s%s%s.%i",
                   cs.get_output_data_dir().c_str(),
                   cs.get_sep_log_file().c_str(),str.c_str(),group);
   }
   else
   {
-    file = format("%s%s.%s",
+    file = format("%s%s%s",
                   cs.get_output_data_dir().c_str(),
                   cs.get_sep_log_file().c_str(),str.c_str());
   }
@@ -308,11 +308,37 @@ void Log::writeSepDistances (int const & group)
   // open output files
   std::ofstream out, out_NOCP, out_haus1, out_haus2, out_haus1_noself, out_haus2_noself;
   openOrDie (&out,"",group);
-  openOrDie (&out_NOCP,"NOCP",group);
-  openOrDie (&out_haus1,"1_sided_hausdorff",group);
-  openOrDie (&out_haus2,"2_sided_hausdorff",group);
-  openOrDie (&out_haus1_noself,"1_sided_hausdorff_noself",group);
-  openOrDie (&out_haus2_noself,"2_sided_hausdorff_noself",group);
+  openOrDie (&out_NOCP,".NOCP",group);
+  openOrDie (&out_haus1,".1_sided_hausdorff",group);
+  openOrDie (&out_haus2,".2_sided_hausdorff",group);
+  openOrDie (&out_haus1_noself,".1_sided_hausdorff_noself",group);
+  openOrDie (&out_haus2_noself,".2_sided_hausdorff_noself",group);
+  //out << "#separation_distance";
+//  if (cs.get_measure_radius_of_curvature()) out << " radius_of_curvature";
+//  if (cs.get_write_closest_points())
+//  {
+//    //out << " origin_x" << " origin_y" << " origin_z"
+//    //    << " closest_point_x" << " closest_point_y" << " closest_point_z"
+//    //    << endl;
+//
+////out << "                                                                                                "
+////    << "# origin_x" << " origin_y" << " origin_z"
+////        << " closest_point_x" << " closest_point_y" << " closest_point_z"
+////        << endl;
+//    //out << "x_coordinate y_coordinate z_coordinate state_value "
+//    //    << "x_normal y_normal z_normal\n";
+//  }
+  
+  // add legend as comment
+  out << "#";
+  if (cs.get_report_vertex_identity()) out << " object_name index";
+  out << " ecw";
+  if (cs.get_report_vertex_area()) out << " area";
+  if (cs.get_curvature_neighborhood_size()) out << " roc";
+  if (cs.get_write_closest_points()) out << " origin_x origin_y origin_z closest_x closest_y closest_z";
+  if (cs.get_count_neighbors()) out << " num_neighbors";
+  if (cs.get_cleft_vertices_file()!="") out << " cleft? peri?";
+  out << endl;
 
   out_NOCP << "x_coordinate y_coordinate z_coordinate state_value "
         << "x_normal y_normal z_normal\n";
@@ -341,6 +367,9 @@ void Log::writeSepDistances (int const & group)
       // if vertex has a closest face
       if (j->getClosestFace()!=NULL)
       {
+        // DEBUG
+        //j->getClosestFace()->print(cout);
+        // DEBUG
         vertices_used++;
         std::string name = j->getClosestFace()->getVertex(0)->getObject()->getName();
         // get closest point
@@ -350,27 +379,57 @@ void Log::writeSepDistances (int const & group)
         double dd = sqrt(sqd);
         // compute extracellular width
         if (Nice::instance().vertexIsNice(&(*j))==false){ dd=-dd;}
+        // prep for radius of curvature output
+        //if (cs.get_curvature_neighborhood_size())
+        //{
+        //  //out << " " << j->getRadiusOfCurvature();
+        //  //out << "ecw ";
+        //}
+        // report vertex identity
+        if (cs.get_report_vertex_identity())
+        {
+          out << j->getObjectName() << " " << j->getIndex() << " ";
+        }
         // print extracellular width
-        // DEBUG
-        //out << dd << endl;
-        out << dd
-              << " " << *j->getCoord(0)
+        out << dd;
+        // measure vertex area
+        if (cs.get_report_vertex_area())
+        {
+          out << " " << j->getArea();
+        }
+        // measure radius of curvature
+        if (cs.get_curvature_neighborhood_size())
+        {
+          //out << " " << j->getRadiusOfCurvature();
+          //out << ", " << j->getRadiusOfCurvatureDEBUG() << ",";
+          out << " " << j->getRadiusOfCurvatureDEBUG();
+        }
+        // print closest points
+        //if (cs.get_write_closest_points() && !cs.get_curvature_neighborhood_size())
+        if (cs.get_write_closest_points())
+        {
+          out << " " << *j->getCoord(0)
               << " " << *j->getCoord(1)
               << " " << *j->getCoord(2)
               << " " << closest_point.p[0]
               << " " << closest_point.p[1]
-              << " " << closest_point.p[2]
-              << endl;
-        //if (distinguishable(*j->getCoord(0),6106.74,1E-7)==false &&
-        //    distinguishable(*j->getCoord(1),5848.323,1E-7)==false &&
-        //    distinguishable(*j->getCoord(2),6381.625,1E-7)==false)
-        ////if (j->isMatch(TARGET_VERTEX_INDEX,TARGET_VERTEX_NAME)==true)
-        //{
-        //  cout << "\n\nLog::writeSepDistances: TARGET VERTEX:\n";
-        //  j->print(cout);
-        //  exit(1);
-        //}
-        // DEBUG
+              << " " << closest_point.p[2];
+        }
+        // print number of neighbor objects
+        if (cs.get_count_neighbors())
+        {
+          //out << " " << j->getNeighborCount();
+          //out << " " << c.calculateVertexNeighborCount(&(*j));
+          out << " " << c.calculateVertexNeighborCount(&(*j),j->getPos(),j->getNormal());
+        }
+        // report if synaptic cleft
+        if (cs.get_cleft_vertices_file()!="")
+        {
+          out << " " << c.vertexIsCleft(&(*j))
+              << " " << c.vertexIsPeri(&(*j));
+        }
+        // print line termination
+        out << endl;
         updateHauss_1(name,dd,hausdorff_1);
         updateHauss_2(name,i,dd,hausdorff_1);
         // if object different from self
@@ -388,6 +447,8 @@ void Log::writeSepDistances (int const & group)
               << *j->getCoord(2) << " 1 0 0 1\n";
       }
     }
+    //if (cs.get_curvature_neighborhood_size() || cs.get_count_neighbors()) continue;
+    if (cs.get_curvature_neighborhood_size()) continue;
     // for each face in object
     for(f_it j=i->f.begin();j!=i->f.end();j++)
     {
@@ -421,14 +482,25 @@ void Log::writeSepDistances (int const & group)
             //write to out and process as hausdorffs
             // DEBUG
             //out << dd << endl;
-            out << dd
-              << " " << pt.p[0]
-              << " " << pt.p[1]
-              << " " << pt.p[2]
-              << " " << p.p[0]
-              << " " << p.p[1]
-              << " " << p.p[2]
-              << endl;
+            out << dd;
+            if (cs.get_write_closest_points())
+            {
+                 out << " " << pt.p[0]
+                    << " " << pt.p[1]
+                    << " " << pt.p[2]
+                    << " " << p.p[0]
+                    << " " << p.p[1]
+                    << " " << p.p[2];
+            }
+            // print number of neighbor objects
+            if (cs.get_count_neighbors())
+            {
+              //out << " " << j->getNeighborCount();
+              //out << " " << c.calculateVertexNeighborCount(&(*j));
+              out << " " << c.calculateVertexNeighborCount(NULL,&pt,*j->getNormal());
+            }
+            // print line termination
+            out << endl;
             // DEBUG
             updateHauss_1(name,dd,hausdorff_1);
             updateHauss_2(name,i,dd,hausdorff_1);
@@ -1243,10 +1315,18 @@ void Log::writeRefractedNow (int const & group,int code)
 /** Write to STDOUT detailed information about last vertex move.
 */
 
-void Log::writeDetailedMoveInfo (void)
+void Log::writeDetailedMoveInfo (Vertex * v,int group,int num_verts_moved)
 {
   cout.precision(12);
-  cout <<  "    position   ["
+  cout  <<  "       group   ["
+        << group << "]\n"
+        <<  " verts moved   ["
+        << num_verts_moved << "]\n"
+        <<  "      object   ["
+        << v->getObject()->getName() << "]\n"
+        << "        index  ["
+        << v->getIndex() << "]\n"
+        <<  "     position  ["
         << p_orig.p[0] << " "
         << p_orig.p[1] << " "
         << p_orig.p[2] << "]->["
@@ -1260,13 +1340,13 @@ void Log::writeDetailedMoveInfo (void)
         << cp_new.p[0] << " "
         << cp_new.p[1] << " "
         << cp_new.p[2] << "]\n"
-        << "         ecw   ["
+        << "          ecw  ["
         << sepdis[0] << "]->["
         << sepdis[1] << "]\n"
-        << "virtual disp   ["
+        << " virtual disp  ["
         << vd_val[0] << "]->["
         << vd_val[1] << "]\n"
-        << "   topN rank   ["
+        << "    topN rank  ["
         << topN_val[0] << "]->["
         << topN_val[1] << "]\n\n";
   if (vd_val[0]!=vd_val[0])

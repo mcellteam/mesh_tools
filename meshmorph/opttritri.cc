@@ -74,6 +74,7 @@ int coplanar_tri_tri(vector3 & N,vector3 const * V0,vector3 const * V1,vector3 c
 
 int NoDivTriTriIsect(vector3 const * V0,vector3 const * V1,vector3 const * V2,
                      vector3 const * U0,vector3 const * U1,vector3 const * U2)
+//                     bool myflag)
 {
   Controls & cs(Controls::instance());
   //vector3 E2;
@@ -103,6 +104,9 @@ int NoDivTriTriIsect(vector3 const * V0,vector3 const * V1,vector3 const * V2,
   if(FABS(du0)<cs.get_my_double_epsilon()) du0=0.0;
   if(FABS(du1)<cs.get_my_double_epsilon()) du1=0.0;
   if(FABS(du2)<cs.get_my_double_epsilon()) du2=0.0;
+  //if(FABS(du0)<MYEPSILON) du0=0.0;
+  //if(FABS(du1)<MYEPSILON) du1=0.0;
+  //if(FABS(du2)<MYEPSILON) du2=0.0;
 #endif
   du0du1=du0*du1;
   du0du2=du0*du2;
@@ -126,6 +130,9 @@ int NoDivTriTriIsect(vector3 const * V0,vector3 const * V1,vector3 const * V2,
   if(FABS(dv0)<cs.get_my_double_epsilon()) dv0=0.0;
   if(FABS(dv1)<cs.get_my_double_epsilon()) dv1=0.0;
   if(FABS(dv2)<cs.get_my_double_epsilon()) dv2=0.0;
+  //if(FABS(dv0)<MYEPSILON) dv0=0.0;
+  //if(FABS(dv1)<MYEPSILON) dv1=0.0;
+  //if(FABS(dv2)<MYEPSILON) dv2=0.0;
 #endif
 
   dv0dv1=dv0*dv1;
@@ -177,6 +184,13 @@ int NoDivTriTriIsect(vector3 const * V0,vector3 const * V1,vector3 const * V2,
 
   SORT(isect1[0],isect1[1]);
   SORT(isect2[0],isect2[1]);
+
+//  if (myflag)
+//  {
+//    // DEBUG
+//    printf("du0 = %g, du1 = %g, du2 = %g, dv0 = %g, dv1 = %g, dv2 = %g, isect1[0] = %g, isect1[1] = %g, isect2[0] = %g, isect2[1] = %g\n",du0,du1,du2,dv0,dv1,dv2,isect1[0],isect1[1],isect2[0],isect2[1]);
+//    // DEBUG
+//  }
 
   if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return 0;
   return 1;

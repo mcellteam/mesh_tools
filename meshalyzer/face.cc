@@ -3,6 +3,8 @@
 #include <cfloat>
 #include <cmath>
 #include <iostream>
+#include <stdlib.h>
+#include <string.h>
 #include <vector>
 
 using std::cout;
@@ -68,7 +70,8 @@ Face::Face (char *triplet,Object *obj)
   val[i]=0;
   int zz = (int)strtod(val,&eptr);
   // search for index in multimap
-  qq=obj->found.equal_range(zz);
+  //qq=obj->found.equal_range(zz);
+  qq = obj->findIndexInMap2(zz);
   if (qq.first!=qq.second)
   {
     // set all matching elements to true
@@ -78,7 +81,8 @@ Face::Face (char *triplet,Object *obj)
       (*k).second=true;
     }
   }
-  pp=obj->vp.equal_range(zz);
+  //pp=obj->vp.equal_range(zz);
+  pp = obj->findIndexInMap(zz);
   if (pp.first!=pp.second)
   {
     v[0] = (*(pp.first)).second;
@@ -87,9 +91,9 @@ Face::Face (char *triplet,Object *obj)
     v[0] = NULL;
     vi[0]=zz;
     // add index to cs.missing_v
-    obj->missing_v.push_back(zz);
+    obj->addMissingVertex(zz);
     // add face to cs.missing_f
-    obj->missing_f.push_back(this);
+    obj->addMissingFace(this);
   }
   if (val==eptr)
   {
@@ -108,7 +112,8 @@ Face::Face (char *triplet,Object *obj)
   val[i]=0;
   zz = (int)strtod(val,&eptr);
   // search for index in multimap
-  qq=obj->found.equal_range(zz);
+  //qq=obj->found.equal_range(zz);
+  qq = obj->findIndexInMap2(zz);
   if (qq.first!=qq.second)
   {
     // set all matching elements to true
@@ -118,7 +123,8 @@ Face::Face (char *triplet,Object *obj)
       (*k).second=true;
     }
   }
-  pp=obj->vp.equal_range(zz);
+  //pp=obj->vp.equal_range(zz);
+  pp = obj->findIndexInMap(zz);
   if (pp.first!=pp.second)
   {
     v[1] = (*(pp.first)).second;
@@ -127,9 +133,9 @@ Face::Face (char *triplet,Object *obj)
     v[1] = NULL;
     vi[1]=zz;
     // add index to cs.missing_v
-    obj->missing_v.push_back(zz);
+    obj->addMissingVertex(zz);
     // add face to cs.missing_f
-    obj->missing_f.push_back(this);
+    obj->addMissingFace(this);
   }
   if (val==eptr)
   {
@@ -148,7 +154,8 @@ Face::Face (char *triplet,Object *obj)
   val[i]=0;
   zz = (int)strtod(val,&eptr);
   // search for index in multimap
-  qq=obj->found.equal_range(zz);
+  //qq=obj->found.equal_range(zz);
+  qq = obj->findIndexInMap2(zz);
   if (qq.first!=qq.second)
   {
     // set all matching elements to true
@@ -158,7 +165,8 @@ Face::Face (char *triplet,Object *obj)
       (*k).second=true;
     }
   }
-  pp=obj->vp.equal_range(zz);
+  //pp=obj->vp.equal_range(zz);
+  pp = obj->findIndexInMap(zz);
   if (pp.first!=pp.second)
   {
     v[2] = (*(pp.first)).second;
@@ -167,9 +175,9 @@ Face::Face (char *triplet,Object *obj)
     v[2] = NULL;
     vi[2]=zz;
     // add index to cs.missing_v
-    obj->missing_v.push_back(zz);
+    obj->addMissingVertex(zz);
     // add face to cs.missing_f
-    obj->missing_f.push_back(this);
+    obj->addMissingFace(this);
   }
   if (val==eptr)
   {
@@ -183,22 +191,23 @@ void Face::addFaceToTable_intf (void)
 {
   // create new face vector in table
   vec_f *nfv = new std::vector<Face*>();
-  v[0]->o->intf[this]=nfv;
+  v[0]->getObject()->addIntFaceLHS(this,nfv);
 }
 
 bool Face::faceInTable_intf (void)
 {
-  return v[0]->o->faceInTable_intf(this);
+  return v[0]->getObject()->faceInTable_intf(this);
 }
 
 ff_iterator Face::findFaceInTable_intf (void)
 {
-  return v[0]->o->findFaceInTable_intf(this);
+  return v[0]->getObject()->findFaceInTable_intf(this);
 }
 
 void Face::addFaceToVector (Face* f)
 {
-  (*v[0]->o->intf[this]).push_back(f);
+  //(*v[0]->getObject()->intf[this]).push_back(f);
+  v[0]->getObject()->addIntFaceRHS(this,f);
 }
 
 void Face::clearFaceFromTable_intf (void)
@@ -207,96 +216,121 @@ void Face::clearFaceFromTable_intf (void)
   if (faceInTable_intf())
   {
     // delete vector<face*>*
-    delete v[0]->o->intf[this];
+    //delete v[0]->getObject()->intf[this];
+    v[0]->getObject()->removeIntFaceLHS(this);
     // remove element from table
-    v[0]->o->intf.erase(this);
+    //v[0]->getObject()->intf.erase(this);
   }
 }
 
-void Face::printFace (Object *o)
+void Face::print (std::ostream & target)
 {
-  cout.precision(12);
-  cout << "Face <obj>" << o->name << "<ind>" << index << endl;
+  target.precision(12);
+  target << "Face index " << index << endl;
   if (v[0]!=NULL)
   {
-    cout << "[v0 "
-          << v[0]->index << " "
-          << v[0]->pN[0] << " "
-          << v[0]->pN[1] << " "
-          << v[0]->pN[2] << "]\n";
+    v[0]->print(target);
+    target << "\n";
+    //cout << "[v0 "
+    //      << v[0]->index << " "
+    //      << v[0]->pN[0] << " "
+    //      << v[0]->pN[1] << " "
+    //      << v[0]->pN[2] << "]\n";
   }
   else
   {
-    cout << "[v0 "
+    target << "[v0 "
           << vi[0] << "]\n";
   }
 
   if (v[1]!=NULL)
   {
-    cout << "[v1 "
-          << v[1]->index << " "
-          << v[1]->pN[0] << " "
-          << v[1]->pN[1] << " "
-          << v[1]->pN[2] << "]\n";
+    v[1]->print(target);
+    target << "\n";
+    //cout << "[v1 "
+    //      << v[1]->index << " "
+    //      << v[1]->pN[0] << " "
+    //      << v[1]->pN[1] << " "
+    //      << v[1]->pN[2] << "]\n";
   }
   else
   {
-    cout << "[v1 "
+    target << "[v1 "
           << vi[1] << "]\n";
   }
 
   if (v[2]!=NULL)
   {
-    cout << "[v2 "
-          << v[2]->index << " "
-          << v[2]->pN[0] << " "
-          << v[2]->pN[1] << " "
-          << v[2]->pN[2] << "]\n";
+    v[2]->print(target);
+    target << "\n";
+    //cout << "[v2 "
+    //      << v[2]->index << " "
+    //      << v[2]->pN[0] << " "
+    //      << v[2]->pN[1] << " "
+    //      << v[2]->pN[2] << "]\n";
   }
   else
   {
-    cout << "[v2 "
+    target << "[v2 "
           << vi[2] << "]\n";
   }
 
-  if (e[0]!=NULL) { cout << "[e0 " << e[0] << "]\n";}
-  else            { cout << "[e0 NULL]\n"; }
-  if (e[1]!=NULL) { cout << "[e1 " << e[1] << "]\n";}
-  else            { cout << "[e1 NULL]\n"; }
-  if (e[2]!=NULL) { cout << "[e2 " << e[2] << "]\n";}
-  else            { cout << "[e2 NULL]\n"; }
+  if (e[0]!=NULL) { target << "[e0 " << e[0] << "]\n";}
+  else            { target << "[e0 NULL]\n"; }
+  if (e[1]!=NULL) { target << "[e1 " << e[1] << "]\n";}
+  else            { target << "[e1 NULL]\n"; }
+  if (e[2]!=NULL) { target << "[e2 " << e[2] << "]\n";}
+  else            { target << "[e2 NULL]\n"; }
 }
 
-void Face::printFaceCP (void)
+void Face::printCP (std::ostream & target)
 {
-  cout.precision(12);
+  target.precision(12);
   if (v[0]!=NULL)
   {
-    cout << v[0]->pN[0] << " "
-          << v[0]->pN[1] << " "
-          << v[0]->pN[2] << " 1 0 0 1\n";
+    v[0]->printCP(target);
+    //cout << v[0]->pN[0] << " "
+    //      << v[0]->pN[1] << " "
+    //      << v[0]->pN[2] << " 1 0 0 1\n";
+  }
+  else
+  {
+    target << "[v0 "
+          << v[0] << "]\n";
   }
 
   if (v[1]!=NULL)
   {
-    cout << v[1]->pN[0] << " "
-          << v[1]->pN[1] << " "
-          << v[1]->pN[2] << " 1 0 0 1\n";
+    v[1]->printCP(target);
+    //cout << v[1]->pN[0] << " "
+    //      << v[1]->pN[1] << " "
+    //      << v[1]->pN[2] << " 1 0 0 1\n";
+  }
+  else
+  {
+    target << "[v1 "
+          << v[1] << "]\n";
   }
 
   if (v[2]!=NULL)
   {
-    cout << v[2]->pN[0] << " "
-          << v[2]->pN[1] << " "
-          << v[2]->pN[2] << " 1 0 0 1\n";
+    v[2]->printCP(target);
+    //cout << v[2]->pN[0] << " "
+    //      << v[2]->pN[1] << " "
+    //      << v[2]->pN[2] << " 1 0 0 1\n";
+  }
+  else
+  {
+    target << "[v2 "
+          << v[2] << "]\n";
   }
 }
 
 void Face::getVertexCoordinates (double *cpvc[3])
 {
-  cpvc[0]=v[0]->pN;
-  cpvc[1]=v[1]->pN;
-  cpvc[2]=v[2]->pN;
+  cpvc[0]=v[0]->getpN_ptr();
+  cpvc[1]=v[1]->getpN_ptr();
+  cpvc[2]=v[2]->getpN_ptr();
 }
 
 double Face::getAngle (Vertex *vv)
@@ -311,12 +345,12 @@ double Face::getAngle (Vertex *vv)
   else if (v[1]!=vv && v[1]!=vB){vC=v[1];}
   else if (v[2]!=vv && v[2]!=vB){vC=v[2];}
   // AB,AC
-  AB[0]=vB->pN[0]-vA->pN[0];
-  AB[1]=vB->pN[1]-vA->pN[1];
-  AB[2]=vB->pN[2]-vA->pN[2];
-  AC[0]=vC->pN[0]-vA->pN[0];
-  AC[1]=vC->pN[1]-vA->pN[1];
-  AC[2]=vC->pN[2]-vA->pN[2];
+  AB[0]=vB->getpN(0)-vA->getpN(0);
+  AB[1]=vB->getpN(1)-vA->getpN(1);
+  AB[2]=vB->getpN(2)-vA->getpN(2);
+  AC[0]=vC->getpN(0)-vA->getpN(0);
+  AC[1]=vC->getpN(1)-vA->getpN(1);
+  AC[2]=vC->getpN(2)-vA->getpN(2);
   // lengths
   acL=sqrt( dot(AC,AC) );
   abL=sqrt( dot(AB,AB) );
@@ -334,9 +368,9 @@ void Face::addEdge (Edge* ptr)
   else if (e[2]==NULL){e[2]=ptr;}
   else { cout << "Error. Tried to add fourth edge to face.\n"
     << "Face " << index 
-          << " " << (int)v[0]->index
-          << " " << (int)v[1]->index
-          << " " << (int)v[2]->index
+          << " " << static_cast<int>(v[0]->getIndex())
+          << " " << static_cast<int>(v[1]->getIndex())
+          << " " << static_cast<int>(v[2]->getIndex())
           << endl;
     exit(1); 
   }
@@ -348,12 +382,12 @@ void Face::getNormal (double n[3])
   // compute vectors 01 and 12
   if (v[1]==NULL) { cout << "v[1]==NULL\n";cout.flush(); }
   if (v[2]==NULL) { cout << "v[2]==NULL\n";cout.flush(); }
-  uX = v[1]->pN[0]-v[0]->pN[0];
-  uY = v[1]->pN[1]-v[0]->pN[1];
-  uZ = v[1]->pN[2]-v[0]->pN[2];
-  vX = v[2]->pN[0]-v[0]->pN[0];
-  vY = v[2]->pN[1]-v[0]->pN[1];
-  vZ = v[2]->pN[2]-v[0]->pN[2];
+  uX = v[1]->getpN(0)-v[0]->getpN(0);
+  uY = v[1]->getpN(1)-v[0]->getpN(1);
+  uZ = v[1]->getpN(2)-v[0]->getpN(2);
+  vX = v[2]->getpN(0)-v[0]->getpN(0);
+  vY = v[2]->getpN(1)-v[0]->getpN(1);
+  vZ = v[2]->getpN(2)-v[0]->getpN(2);
   // compute cross product (u x v)
   n[0] = uY*vZ-uZ*vY;
   n[1] = uZ*vX-uX*vZ;
@@ -374,13 +408,13 @@ Edge* Face::getNewEdge (Edge *old,Vertex *vv)
   {
     cout << "\n\nOld edge does not match any on face.\n";
     cout << "Current face:\n";
-    printFace(v[0]->o);
+    print(cout);
     cout << endl;
     cout << "Old edge:\n";
-    old->printEdge(old->f1->v[0]->o->name);
+    old->print(cout);
     cout << endl;
     cout << "Current vertex:\n";
-    vv->printVertex(vv->o->name);
+    vv->print(cout);
     cout << endl << endl;
 
     exit(1);
@@ -395,13 +429,13 @@ Edge* Face::getNewEdge (Edge *old,Vertex *vv)
   cout << "\n\nFace::getNewEdge: Error. No edge on face contains current vertex \n"
         << "and is different from old vertex.\n\n";
   cout << "current vertex:\n";
-  vv->printVertex(vv->o->name);
+  vv->print(cout);
   cout << endl << endl;
   cout << "old edge:\n";
-  old->printEdge(old->vv1->o->name);
+  old->print(cout);
   cout << endl << endl;
   cout << "current face:\n";
-  printFace(v[0]->o);
+  print(cout);
   cout << endl << endl;
   exit(1);
 }
@@ -409,9 +443,9 @@ Edge* Face::getNewEdge (Edge *old,Vertex *vv)
 double Face::getAspectRatio (void)
 {
   /* Make triangle edge vectors */
-  double va[3]={v[1]->pN[0]-v[0]->pN[0],v[1]->pN[1]-v[0]->pN[1],v[1]->pN[2]-v[0]->pN[2]};
-  double vb[3]={v[2]->pN[0]-v[1]->pN[0],v[2]->pN[1]-v[1]->pN[1],v[2]->pN[2]-v[1]->pN[2]};
-  double vc[3]={v[0]->pN[0]-v[2]->pN[0],v[0]->pN[1]-v[2]->pN[1],v[0]->pN[2]-v[2]->pN[2]};
+  double va[3]={v[1]->getpN(0)-v[0]->getpN(0),v[1]->getpN(1)-v[0]->getpN(1),v[1]->getpN(2)-v[0]->getpN(2)};
+  double vb[3]={v[2]->getpN(0)-v[1]->getpN(0),v[2]->getpN(1)-v[1]->getpN(1),v[2]->getpN(2)-v[1]->getpN(2)};
+  double vc[3]={v[0]->getpN(0)-v[2]->getpN(0),v[0]->getpN(1)-v[2]->getpN(1),v[0]->getpN(2)-v[2]->getpN(2)};
   double vbase[3]={0,0,0};
   double vopp[3]={0,0,0};
 
@@ -426,9 +460,9 @@ double Face::getAspectRatio (void)
     vbase[0]=va[0];
     vbase[1]=va[1];
     vbase[2]=va[2];
-    vc[0]=v[2]->pN[0]-v[0]->pN[0];
-    vc[1]=v[2]->pN[1]-v[0]->pN[1];
-    vc[2]=v[2]->pN[2]-v[0]->pN[2];
+    vc[0]=v[2]->getpN(0)-v[0]->getpN(0);
+    vc[1]=v[2]->getpN(1)-v[0]->getpN(1);
+    vc[2]=v[2]->getpN(2)-v[0]->getpN(2);
     vopp[0]=vc[0];
     vopp[1]=vc[1];
     vopp[2]=vc[2];
@@ -439,9 +473,9 @@ double Face::getAspectRatio (void)
     vbase[0]=vb[0];
     vbase[1]=vb[1];
     vbase[2]=vb[2];
-    va[0]=v[0]->pN[0]-v[1]->pN[0];
-    va[1]=v[0]->pN[1]-v[1]->pN[1];
-    va[2]=v[0]->pN[2]-v[1]->pN[2];
+    va[0]=v[0]->getpN(0)-v[1]->getpN(0);
+    va[1]=v[0]->getpN(1)-v[1]->getpN(1);
+    va[2]=v[0]->getpN(2)-v[1]->getpN(2);
     vopp[0]=va[0];
     vopp[1]=va[1];
     vopp[2]=va[2];
@@ -452,9 +486,9 @@ double Face::getAspectRatio (void)
     vbase[0]=vc[0];
     vbase[1]=vc[1];
     vbase[2]=vc[2];
-    vb[0]=v[1]->pN[0]-v[2]->pN[0];
-    vb[1]=v[1]->pN[1]-v[2]->pN[1];
-    vb[2]=v[1]->pN[2]-v[2]->pN[2];
+    vb[0]=v[1]->getpN(0)-v[2]->getpN(0);
+    vb[1]=v[1]->getpN(1)-v[2]->getpN(1);
+    vb[2]=v[1]->getpN(2)-v[2]->getpN(2);
     vopp[0]=vb[0];
     vopp[1]=vb[1];
     vopp[2]=vb[2];

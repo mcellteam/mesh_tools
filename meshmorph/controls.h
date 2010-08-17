@@ -1,6 +1,7 @@
 // Author: Justin Kinney
 // Date: Sep 2008
 
+
 #ifndef CONTROLS_H
 #define CONTROLS_H 1
 
@@ -21,7 +22,16 @@ public:
 
   void        set_strict_face_intersection_prevention () throw() { STRICT_FACE_INTERSECTION_PREVENTION=true; }
 
+  int    get_freeze_sheets                        () const throw() { return FREEZE_SHEETS; }
+  int    get_freeze_tunnels                       () const throw() { return FREEZE_TUNNELS; }
+  int    get_dual_vertex_ecws                     () const throw() { return DUAL_TARGET_ECWS; }
+  int    get_vertex_neighbor_count_period         () const throw() { return VERTEX_NEIGHBOR_COUNT_PERIOD; }
+  int    get_report_vertex_identity               () const throw() { return REPORT_VERTEX_IDENTITY; }
+  int    get_report_vertex_area                   () const throw() { return REPORT_VERTEX_AREA; }
+  int    get_count_neighbors                      () const throw() { return COUNT_NEIGHBORS; }
+  int    get_assume_nice_vertices                 () const throw() { return ASSUME_NICE_VERTICES; }
   int    get_measure_ecw_and_exit                 () const throw() { return MEASURE_ECW_AND_EXIT; }
+  int    get_curvature_neighborhood_size          () const throw() { return CURVATURE_NEIGHBORHOOD_SIZE; }
   int    get_max_items_per_leaf                   () const throw() { return MAX_ITEMS_PER_LEAF; }
   int    get_max_octree_depth                     () const throw() { return MAX_OCTREE_DEPTH; }
   int    get_max_filename_size                    () const throw() { return MAX_FILENAME_SIZE; }
@@ -42,12 +52,16 @@ public:
   int    get_write_every_group                    () const throw() { return WRITE_EVERY_GROUP; }
   int    get_write_ecw_to_file                    () const throw() { return WRITE_ECW_TO_FILE; }
   int    get_write_vertex_move_histogram          () const throw() { return WRITE_VERTEX_MOVE_HISTOGRAM; }
+  int    get_write_closest_points                 () const throw() { return WRITE_CLOSEST_POINTS; }
+  int    get_assume_max_ecw_error                 () const throw() { return ASSUME_MAX_ECW_ERROR; }
   int    get_append_group_number                  () const throw() { return APPEND_GROUP_NUMBER; }
   int    get_strict_face_intersection_prevention  () const throw() { return STRICT_FACE_INTERSECTION_PREVENTION; }
   int    get_use_edge_reference_length            () const throw() { return USE_EDGE_REFERENCE_LENGTH; }
   int    get_enable_vtrack                        () const throw() { return ENABLE_VTRACK; }
   int    get_disable_gain_scheduling              () const throw() { return DISABLE_GAIN_SCHEDULING; }
   int    get_disable_messages                     () const throw() { return DISABLE_MESSAGES; }
+  double get_max_radius_of_curvature              () const throw() { return MAX_RADIUS_OF_CURVATURE; }
+  double get_region_orthogonality_threshold       () const throw() { return REGION_ORTHOGONALITY_THRESHOLD; }
   double get_octree_min_x                         () const throw() { return OCTREE_MIN_X; }
   double get_octree_min_y                         () const throw() { return OCTREE_MIN_Y; }
   double get_octree_min_z                         () const throw() { return OCTREE_MIN_Z; }
@@ -73,10 +87,11 @@ public:
   double get_aspect_ratio_gain                    () const throw() { return ASPECT_RATIO_GAIN; }
   double get_aspect_ratio_threshold               () const throw() { return ASPECT_RATIO_THRESHOLD; }
   double get_overall_gain                         () const throw() { return OVERALL_GAIN; }
+  double get_gain_step                            () const throw() { return GAIN_STEP; }
   double get_min_displacement_sq                  () const throw() { return MIN_DISPLACEMENT_SQ; }
   double get_pi                                   () const throw() { return PI; }
   double get_target_ecw                           () const throw() { return TARGET_ECW; }
-  double get_ecw_threshold                        () const throw() { return ECW_THRESHOLD; }
+//  double get_ecw_threshold                        () const throw() { return ECW_THRESHOLD; }
   double get_target_ecw_high                      () const throw() { return TARGET_ECW_HIGH; }
   double get_target_ecw_low                       () const throw() { return TARGET_ECW_LOW; }
   double get_max_actual_displ_fraction            () const throw() { return MAX_ACTUAL_DISPL_FRACTION; }
@@ -88,6 +103,7 @@ public:
   std::string get_input_data_dir                  () const throw() { return INPUT_DATA_DIR; }
   std::string get_output_data_dir                 () const throw() { return OUTPUT_DATA_DIR; }
   std::string get_frozen_vertices_file            () const throw() { return FROZEN_VERTICES_FILE; }
+  std::string get_cleft_vertices_file             () const throw() { return CLEFT_VERTICES_FILE; }
   std::string get_vertex_sequence_file            () const throw() { return VERTEX_SEQUENCE_FILE; }
   std::string get_mesh_output_suffix              () const throw() { return MESH_OUTPUT_SUFFIX; }
   std::string get_main_log_file                   () const throw() { return MAIN_LOG_FILE; }
@@ -99,6 +115,8 @@ public:
   std::string get_refracted_file                  () const throw() { return REFRACTED_FILE; }
   std::string get_intersected_file                () const throw() { return INTERSECTED_FILE; }
   std::string get_nonnice_file                    () const throw() { return NONNICE_FILE; }
+  std::string get_gain_scheduling_file            () const throw() { return GAIN_SCHEDULING_FILE; }
+  std::string get_recon_block_wrap                () const throw() { return RECON_BLOCK_WRAP; }
   void updatePrintPeriod (int count);
 
 private:
@@ -134,6 +152,11 @@ private:
   // set to false for concise initialization informatin, i.e. concise setting
   int WRITE_VERBOSE_INIT;
 
+  // set to true to write endpoints of extracellular width line segment
+  //		when writing extracellular width to file
+  // set to false to only write extracellular width to file
+  int WRITE_CLOSEST_POINTS;
+
   // set to true to write refracted vertices to
   //		file specified by REFRACTED_FILE
   int WRITE_REFRACTED_VERTICES_TO_FILE;
@@ -141,6 +164,12 @@ private:
   // set to true to write intersected faces to
   //		file specified by INTERSECTED_FILE
   int WRITE_INTERSECTED_FACES_TO_FILE;
+
+  // set to true to assume maximum separation width error
+  //            in the event no closest point is found for a vertex
+  // set to false to assume zero separation width error
+  //            in the event no closest point is found for a vertex
+  int ASSUME_MAX_ECW_ERROR;
 
   // choice of output format for intersected faces
   //	dreamm = dreamm custom points format
@@ -220,7 +249,7 @@ private:
   // a region defined by MIN_SEARCH_CONE_RADIUS. While no
   // closest point is found the search region is expanded up to
   // SEARCH_RADIUS_SQ in NUMBER_RADIUS_STEPS.
-  int NUMBER_RADIUS_STEPS;       // must be greater than zero
+  int NUMBER_RADIUS_STEPS;       // must be greater than or equal to zero
   double MIN_SEARCH_CONE_RADIUS; // nm
 
   //  maximum allowed angle between closest point and vertex normal
@@ -305,13 +334,15 @@ private:
   // desired distance between object surfaces
   double TARGET_ECW; // nm
 
-  // If ECW_THRESHOLD is specified, then vertices with an extracellular width
-  // greater than or equal to ECW_THREHSOLD will be morphed so as to have
-  // an extracellular width of size TARGET_ECW_HIGH.
-  // Vertices with an extracellular width less
-  // than ECW_THRESHOLD will be morphed so as to have
-  // an extracellular width of size TARGET_ECW_LOW.
-  double ECW_THRESHOLD; // nm
+  // If DUAL_TARGET_ECWS is specified, then vertices are classified
+  // as either tunnel or sheet. Tunnels are morphed so as to have
+  // an extracellular width of size TARGET_ECW_HIGH specified by -j
+  // option. Sheet vertices will be morphed so as to have an extracellular
+  // width of size TARGET_ECW_LOW specified by -k option.  Units are same
+  // as meshes in input directory.  Default is to morph all vertices to
+  // the same extracellular specified by -t option.
+  int DUAL_TARGET_ECWS;
+  // double ECW_THRESHOLD; // nm
   double TARGET_ECW_HIGH; // nm
   double TARGET_ECW_LOW; // nm
 
@@ -364,6 +395,12 @@ private:
   std::string INTERSECTED_FILE;
   std::string NONNICE_FILE;
   
+  // if defined by user, then update gain schedule
+  // according to directives specified by user
+  // if empty, allow gain scheduling to proceed
+  // according to initial gain scheduling values
+  std::string GAIN_SCHEDULING_FILE;
+  
   // Small extracellular width for which closest point
   // can be outside of search cone
   double SMALL_ECW_THRESHOLD;
@@ -376,6 +413,73 @@ private:
   // the extracellular width in the model
   // then exit
   int MEASURE_ECW_AND_EXIT;
+
+  // if > 0, then measure and write to file
+  // the radius of curvature at each vertex in the model.
+  // The mesh subsurface used for sphere fitting is the
+  // set of vertices found by a number CURVATURE_NEIGHBORHOOD_SIZE
+  // many neighbor-inclusion steps.
+  // Minimum valid number of steps is 1,
+  // so a value of 0 will do nothing.
+  int CURVATURE_NEIGHBORHOOD_SIZE;
+
+  // In case radius of curvature is calculated to be infinite
+  // set radius of curvature equal to MAX_RADIUS_OF_CURVATURE.
+  double MAX_RADIUS_OF_CURVATURE;
+
+  // if true, then assume all vertices are nice (not inside an object).
+  // else explicitely check niceness of each vertex by ray tracing.
+  int ASSUME_NICE_VERTICES;
+
+  // if set, then identify and report vertices
+  //   whose normal vector lies within threshold of plane of section then exit.
+  //   Enter threshold as fraction: 0 <= threshold <= 1.
+  //   To convert from degrees (between 0 and 90) to fraction: fraction = degrees/90
+  //   If vertex normal is less than or equal to threshold away from plane of section, then report.
+  // else do nothing
+  double REGION_ORTHOGONALITY_THRESHOLD;
+
+  // if true, then for each vertex count and report number of different neighbor objects
+  //   encountered during search for closest point to vertex
+  //   Output file is defined by SEP_LOG_FILE.
+  // else do nothing
+  int COUNT_NEIGHBORS;
+
+  // if true, then for each vertex calculate and report the surace area
+  //   vertex as one-third the area of each adjacent face of vertex.
+  //   Output file is defined by SEP_LOG_FILE.
+  // else do nothing
+  int REPORT_VERTEX_AREA;
+
+  // if true, then for each vertex report the index and parent object name.
+  //   Output file is defined by SEP_LOG_FILE.
+  // else do nothing
+  int REPORT_VERTEX_IDENTITY;
+
+  // if true, then prohibit vertices identified as facing tunnel-like
+  //   extracellular space from moving. Vertex identity (sheet or tunnel)
+  //   is determined by counting the number of neighbor objects. Mutually
+  //   exclusive with 'freeze_sheets' option.
+  // else, allow all vertex moves.
+  int FREEZE_TUNNELS;
+
+  // if true, then prohibit vertices identified as facing sheet-like
+  //   extracellular space from moving. Vertex identity (sheet or tunnel)
+  //   is determined by counting the number of neighbor objects. Mutually
+  //   exclusive with 'freeze_tunnels' option.
+  // else, allow all vertex moves.
+  int FREEZE_SHEETS;
+
+  // update vertex identity every VERTEX_NEIGHBOR_COUNT_PERIOD groups
+  // (that is, of course, if vertex identity is being used)
+  int VERTEX_NEIGHBOR_COUNT_PERIOD;
+
+  std::string CLEFT_VERTICES_FILE;
+
+  // if not empty string, interpret RECON_BLOCK_WRAP as name of object
+  // wrapping recon to be moved as close as possible to recon.
+  // if equal to empty string, then do nothing.
+  std::string RECON_BLOCK_WRAP;
 };
 
 #endif

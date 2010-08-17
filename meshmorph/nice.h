@@ -8,7 +8,8 @@
 
 typedef std::map<double,int,ltd>            map_di;
 typedef std::map<double,int,ltd>::iterator   di_it;
-typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv>::iterator        vhm_it;
+//typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv>::iterator        vhm_it;
+typedef std::unordered_map<Vertex*,int,v_hash,eqv>::iterator        vhm_it;
 
 struct face_grp
 {
@@ -63,7 +64,8 @@ public:
   void      findNonniceVertices           (void);
   face_grp  findIntFacesAlongRay          (Vertex const * const,
                                            vector3 const &,
-                                           vector3 const &) const;
+                                           vector3 const &,
+                                           bool) const;
   /** Get an iterator pointing to first nonnice vertex.
    * \return Iterator pointing to beginning of nonnice vertex container.
    */

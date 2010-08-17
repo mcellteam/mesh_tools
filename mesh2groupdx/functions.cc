@@ -1,6 +1,9 @@
 //####################################################
 //####################################################
 
+#include <stdlib.h>
+#include <string.h>
+
 class Cabinet{
 public:
 	std::string indir,outdir;
@@ -12,7 +15,7 @@ public:
 	void parse(int,char**,std::string);
 	void mesh2mcell(int);
 	bool endswith(std::string const &, std::string const &);
-	std::string strip_tail(std::string const &,uint);
+	std::string strip_tail(std::string const &,unsigned int);
 	void updateMain(int);
 	void updateInc(int);
 	void finalizeMain(void);
@@ -32,8 +35,8 @@ void Cabinet::finalizeScript(void){
 //			"~/bin/mcell3 main.mdl\n"+
 			"/home/jkinney/bin/mcell3.1-opteron main.mdl\n"+
 			"echo \"cleaning up\"\n"+
-			"rm *.mdl\n"+
-			"rm "+ SCRIPT +
+			"#rm *.mdl\n"+
+			"#rm "+ SCRIPT +
 			"\n";
 	F << message;
 }

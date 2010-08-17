@@ -1,6 +1,7 @@
 #include "face_pair.h"
 
 #include <iostream>
+#include <stdlib.h>
 
 #include "edge.h"
 #include "object.h"
@@ -11,11 +12,11 @@ using std::endl;
 bool Face_Pair::existingEdge (void)
 {
   // for each edge in object
-  for (e_iterator i=o->e.begin();i!=o->e.end();i++)
+  for (e_iterator i=o->getFirstEdge();i!=o->getOnePastLastEdge();i++)
   {
     // if edge vertices are b and d
-    if ( ((*i)->vv1==b && (*i)->vv2==d) || 
-        ((*i)->vv1==d && (*i)->vv2==b)){return true;}
+    if ( ((*i)->ptr_vv1()==b && (*i)->ptr_vv2()==d) || 
+        ((*i)->ptr_vv1()==d && (*i)->ptr_vv2()==b)){return true;}
   }
   return false;
 }
@@ -42,39 +43,39 @@ bool Face_Pair::aspectRatiosImprove (void)
 void Face_Pair::print(void)
 {
   cout << "Follow these instructions to improve face aspect ratio.\n"
-        << "open " << o->name << endl
+        << "open " << o->getName() << endl
         << "remove Face "
-        << f1->index << " "
-        << f1->v[0]->index << " "
-        << f1->v[1]->index << " "
-        << f1->v[2]->index << endl
+        << f1->getIndex() << " "
+        << f1->ptr_vertex(0)->getIndex() << " "
+        << f1->ptr_vertex(1)->getIndex() << " "
+        << f1->ptr_vertex(2)->getIndex() << endl
         << "remove Face "
-        << f2->index << " "
-        << f2->v[0]->index << " "
-        << f2->v[1]->index << " "
-        << f2->v[2]->index << endl
+        << f2->getIndex() << " "
+        << f2->ptr_vertex(0)->getIndex() << " "
+        << f2->ptr_vertex(1)->getIndex() << " "
+        << f2->ptr_vertex(2)->getIndex() << endl
         << "add Face "
         << next_i++ << " "
-        << a->index << " "
-        << b->index << " "
-        << d->index << endl
+        << a->getIndex() << " "
+        << b->getIndex() << " "
+        << d->getIndex() << endl
         << "add Face "
         << next_i++ << " "
-        << b->index << " "
-        << c->index << " "
-        << d->index << endl;
+        << b->getIndex() << " "
+        << c->getIndex() << " "
+        << d->getIndex() << endl;
 }
 
 void Face_Pair::findF2 (void)
 {
   // for each face in object
-  for (f_iterator i=o->f.begin();i!=o->f.end();i++)
+  for (f_iterator i=o->getFirstFace();i!=o->getOnePastLastFace();i++)
   {
     // if face not f1
     if (*i!=f1)
     {
       // if face contains edge e
-      if ((*i)->e[0]==e||(*i)->e[1]==e||(*i)->e[2]==e)
+      if ((*i)->ptr_edge(0)==e||(*i)->ptr_edge(1)==e||(*i)->ptr_edge(2)==e)
       {
         f2=*i;
         break;
@@ -88,9 +89,9 @@ void Face_Pair::findF2 (void)
     exit(1);
   }
   // identify d
-  if (f2->v[0]!=a && f2->v[0]!=c){d=f2->v[0];}
-  else if (f2->v[1]!=a && f2->v[1]!=c){d=f2->v[1];}
-  else if (f2->v[2]!=a && f2->v[2]!=c){d=f2->v[2];}
+  if      (f2->ptr_vertex(0)!=a && f2->ptr_vertex(0)!=c){d=f2->ptr_vertex(0);}
+  else if (f2->ptr_vertex(1)!=a && f2->ptr_vertex(1)!=c){d=f2->ptr_vertex(1);}
+  else if (f2->ptr_vertex(2)!=a && f2->ptr_vertex(2)!=c){d=f2->ptr_vertex(2);}
   else {cout << "Face_Pair::findF2: Error: Unable to identify d.\n";
     exit(1);
   }
@@ -102,48 +103,48 @@ void Face_Pair::analyzeF1 (void)
   // find longest edge
   for (int i=0;i<3;i++)
   {
-    if (f1->e[i]->l>ll)
+    if (f1->ptr_edge(i)->getOrigLength()>ll)
     {
-      e=f1->e[i];
-      ll=f1->e[i]->l;
+      e=f1->ptr_edge(i);
+      ll=f1->ptr_edge(i)->getOrigLength();
     }
   }
   // identify a,b,c
-  if	  (f1->v[0]==e->vv1 && f1->v[1]==e->vv2)
+  if	  (f1->ptr_vertex(0)==e->ptr_vv1() && f1->ptr_vertex(1)==e->ptr_vv2())
   {
-    a=e->vv2;
-    c=e->vv1;
-    b=f1->v[2];
+    a=e->ptr_vv2();
+    c=e->ptr_vv1();
+    b=f1->ptr_vertex(2);
   }
-  else if (f1->v[1]==e->vv1 && f1->v[2]==e->vv2)
+  else if (f1->ptr_vertex(1)==e->ptr_vv1() && f1->ptr_vertex(2)==e->ptr_vv2())
   {
-    a=e->vv2;
-    c=e->vv1;
-    b=f1->v[0];
+    a=e->ptr_vv2();
+    c=e->ptr_vv1();
+    b=f1->ptr_vertex(0);
   }
-  else if (f1->v[2]==e->vv1 && f1->v[0]==e->vv2)
+  else if (f1->ptr_vertex(2)==e->ptr_vv1() && f1->ptr_vertex(0)==e->ptr_vv2())
   {
-    a=e->vv2;
-    c=e->vv1;
-    b=f1->v[1];
+    a=e->ptr_vv2();
+    c=e->ptr_vv1();
+    b=f1->ptr_vertex(1);
   }
-  else if  (f1->v[0]==e->vv2 && f1->v[1]==e->vv1)
+  else if  (f1->ptr_vertex(0)==e->ptr_vv2() && f1->ptr_vertex(1)==e->ptr_vv1())
   {
-    a=e->vv1;
-    c=e->vv2;
-    b=f1->v[2];
+    a=e->ptr_vv1();
+    c=e->ptr_vv2();
+    b=f1->ptr_vertex(2);
   }
-  else if (f1->v[1]==e->vv2 && f1->v[2]==e->vv1)
+  else if (f1->ptr_vertex(1)==e->ptr_vv2() && f1->ptr_vertex(2)==e->ptr_vv1())
   {
-    a=e->vv1;
-    c=e->vv2;
-    b=f1->v[0];
+    a=e->ptr_vv1();
+    c=e->ptr_vv2();
+    b=f1->ptr_vertex(0);
   }
-  else if (f1->v[2]==e->vv2 && f1->v[0]==e->vv1)
+  else if (f1->ptr_vertex(2)==e->ptr_vv2() && f1->ptr_vertex(0)==e->ptr_vv1())
   {
-    a=e->vv1;
-    c=e->vv2;
-    b=f1->v[1];
+    a=e->ptr_vv1();
+    c=e->ptr_vv2();
+    b=f1->ptr_vertex(1);
   }
   else
   {
@@ -159,9 +160,9 @@ Face_Pair::Face_Pair (Object *oo)
   int max=-1;
   o=oo;
   // for each face in object
-  for (f_iterator i=o->f.begin();i!=o->f.end();i++)
+  for (f_iterator i=o->getFirstFace();i!=o->getOnePastLastFace();i++)
   {
-    if ((*i)->index > max){max=(*i)->index;}
+    if ((*i)->getIndex() > max){max=(*i)->getIndex();}
   }
   next_i=max+1;
   //

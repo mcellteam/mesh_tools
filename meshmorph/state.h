@@ -8,10 +8,10 @@
 
 #include "Vector3r.h"
 
-typedef __gnu_cxx::hash_map<Edge*,int,e_hash,eqe>                    hmap_e;
-typedef __gnu_cxx::hash_map<Edge*,float,e_hash,eqe>                 hmap_e_d;
-typedef __gnu_cxx::hash_map<Edge*,float,e_hash,eqe>::iterator       edhm_it;
-typedef __gnu_cxx::hash_map<Edge*,float,e_hash,eqe>::const_iterator edhm_cit;
+typedef std::unordered_map<Edge*,int,e_hash,eqe>                    hmap_e;
+typedef std::unordered_map<Edge*,float,e_hash,eqe>                 hmap_e_d;
+typedef std::unordered_map<Edge*,float,e_hash,eqe>::iterator       edhm_it;
+typedef std::unordered_map<Edge*,float,e_hash,eqe>::const_iterator edhm_cit;
 
 struct Search_Stats
 {

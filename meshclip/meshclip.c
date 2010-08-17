@@ -1993,8 +1993,8 @@ int clip_mesh(volp,php)
               // instead of renumbered indexing as above
               // vlp->vertex_index,vert->x,vert->y,vert->z);
     }
-    //    if (vlp->fully_inside_member || vlp->on_edge_member) {
-    if (vlp->fully_inside_member) {
+    if (vlp->fully_inside_member || vlp->on_edge_member) {
+    //if (vlp->fully_inside_member) {
       fully_inside_vertex_count++;
       vlp->fully_inside_index=fully_inside_vertex_count;
       fprintf(fully_inside_file,"Vertex %d %.15g %.15g %.15g\n",
@@ -2045,9 +2045,9 @@ int clip_mesh(volp,php)
               //fully_outside_polygon_count,vl0->vertex_index,
               //vl1->vertex_index,vl2->vertex_index);
     }
-    //    else if (pop->polygon_status==FULLY_INSIDE
-    //             || pop->polygon_status==ON_EDGE) {
-    else if (pop->polygon_status==FULLY_INSIDE) {
+        else if (pop->polygon_status==FULLY_INSIDE
+                 || pop->polygon_status==ON_EDGE) {
+    //else if (pop->polygon_status==FULLY_INSIDE) {
       fully_inside_polygon_count++;
       fprintf(fully_inside_file,"Face %d %d %d %d\n",
               fully_inside_polygon_count,vl0->fully_inside_index,

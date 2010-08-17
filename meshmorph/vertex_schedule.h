@@ -46,6 +46,15 @@ public:
     return vset.end();
   }
 
+  /** Get number of vertices in collection to move next.
+   * \return Number of vertices in collection.
+   */
+
+  int getVsetSize (void) const
+  {
+    return vset.size();
+  }
+
   /** Increment the number of moved vertices in group.
   */
 

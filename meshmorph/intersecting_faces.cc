@@ -44,8 +44,9 @@ vec_fp * Intersecting_Faces::getIntersectingFacesRHS (Face const * const face)
   // in the table of intersected faces
   if (i==intf.end())
   {
-    cout << "Intersecting_Faces::getIntersectingFacesRHS: Error"
+    cout << "Intersecting_Faces::getIntersectingFacesRHS: Error: "
           << "Face was not intersected LHS.\n";
+    face->print(cout);
     assert(i!=intf.end());
     exit(1);
   }
@@ -55,15 +56,12 @@ vec_fp * Intersecting_Faces::getIntersectingFacesRHS (Face const * const face)
 /** Calculate and return the number of intersecting face pairs in model
  * or only the number of intersecting pairs from faces of the same object.
  * \param[in] detect_self If true then only count intersections
- * between faces of the same object.
+ * between faces of the same object. If false, then count all intersecting face pairs.
  * \return Count of pairs of intersecting faces.
  */
 
 int Intersecting_Faces::getCountOfIntFaces (bool detect_self)
 {
-  // if detect_self == true, then only count intersections between
-  //                        faces of same object
-  // if detect_self == false, then count all intersecting face pairs
   int count = 0;
   // for each element of hash_map
   // NOTE sequence of elements in hash_map is not necessarily repeatable.
@@ -76,7 +74,12 @@ int Intersecting_Faces::getCountOfIntFaces (bool detect_self)
     {
       // assert that intersecting face pair (lhs,rhs) and (rhs,lhs) are in map
       assert(faceIsIntersectedLHS(*j)==true);
-      assert(faceIntersectsFace(*j,(*i).first)==true);
+      if (faceIntersectsFace(*j,(*i).first)==false)
+      {
+        (*j)->print(cout);
+        (*i).first->print(cout);
+        assert(faceIntersectsFace(*j,(*i).first)==true);
+      }
       if (detect_self==true)
       {
         if ((*i).first->getVertex(0)->getObject()->getName() ==
@@ -107,12 +110,40 @@ bool Intersecting_Faces::faceIntersectsFace (Face const * const lhs,
                                              Face const * const rhs)
 {
   // get this face's intersecting faces vector
+  //cout << "AAA";cout.flush();
   vec_fp const * ifv=getIntersectingFacesRHS(lhs);
   // look for face needle in face haystack's intersecting faces vector
   fp_cit i=find((*ifv).begin(),(*ifv).end(),rhs);
   // return true if found
   // return false if no found
   return (i!=(*ifv).end());
+}
+
+/** Verify symmetry of intersecting faces. In other words, for every
+ * LHS->RHS pair look for matching RHS->LHS pair.
+ * \return True if all intersecting face pairs are symmetric; otherwise false.
+ */
+
+bool Intersecting_Faces::intFacesAreSymmetric (void)
+{
+  bool symmetric = true;
+  for (htff_it i = intf.begin();i!=intf.end();i++)
+  {
+    Face * lhs = (*i).first;
+    for (fp_it j = (*i).second.begin();j!=(*i).second.end();j++)
+    {
+      Face * rhs = *j;
+      if (faceIntersectsFace(rhs,lhs)==false)
+      {
+        cout << "Intersecting_Faces::intFacesAreSymmetric: "
+              << "Error. Following faces not found as LHS->RHS pair.\n";
+        rhs->print(cout);
+        lhs->print(cout);
+        symmetric = false;
+      }
+    }
+  }
+  return symmetric;
 }
 
 /** Strongly determine if input face is recorded in class as being intersected.
@@ -140,10 +171,11 @@ bool Intersecting_Faces::faceIsIntersectedRHS (Face const * const face) const
 
 /** Search for new face intersections with input face.
  * \param[in] face Face of interest.
+ * \param[out] int_faces Collection of faces that intersect face.
  * \return True if new face intersections are detected; false otherwise.
  */
 
-bool Intersecting_Faces::detectNewFaceInts (Face * const face)
+bool Intersecting_Faces::detectNewFaceInts (Face * const face,vec_fp & int_faces)
 {
   bool int_found = false;
   // make a visitor
@@ -163,6 +195,7 @@ bool Intersecting_Faces::detectNewFaceInts (Face * const face)
       // if faces intersect
       if (checkFaceFaceInts(face,*i)==true)
       { 
+        int_faces.push_back(*i);
         if (Controls::instance().get_strict_face_intersection_prevention()==true)
         {
           // if this face previously had no intersections, then reject move
@@ -171,6 +204,7 @@ bool Intersecting_Faces::detectNewFaceInts (Face * const face)
           else
           {
             // grab previous intersecting faces of this face
+  //cout << "BBB";cout.flush();
             vec_fp *fv=getIntersectingFacesRHS(face);
             bool same=false;
             // for each previous intersecting face
@@ -236,6 +270,16 @@ bool Intersecting_Faces::findAndRecordNewFaceInt (Face * const face)
           (*i)->print(cout);
           cout << endl;
         }
+        // DEBUG
+        //if ( ( face->isMatch(31843,"Pre") && (*i)->isMatch(31851,"Pre") ) ||
+        //     ( face->isMatch(31851,"Pre") && (*i)->isMatch(31843,"Pre") ) )
+//        if ( ( face->isMatch(204423,"Pre") && (*i)->isMatch(204396,"Pre") ) ||
+//             ( face->isMatch(204396,"Pre") && (*i)->isMatch(204423,"Pre") ) )
+//        {
+//          cout << "\n\nTarget faces intersect.\n";
+//          exit(1);
+//        }
+        // DEBUG
         // save intersecting face* to this face's intersecting face vector
         addFaceToFace(face,*i);
         // return
@@ -258,8 +302,9 @@ bool Intersecting_Faces::vertAdjFacesHaveNewInt (Vertex const * const v)
   // for each adjacent face of current vertex
   for (fp_cit i=v->begin();i!=v->end();++i)
   {
+    vec_fp dummy;
     //  if face intersects any other face, then return true
-    if (detectNewFaceInts(*i)==true){return true;}
+    if (detectNewFaceInts(*i,dummy)==true){return true;}
   }
   // no adjacent faces of current vertex intersect any other face
   return false;
@@ -301,6 +346,7 @@ void Intersecting_Faces::setFaceNotIntersectedLHS (Face const * const face)
   if (faceIsIntersectedLHS(face)==true)
   {
     // get this face's intersecting faces vector
+  //cout << "CCC";cout.flush();
     vec_fp *ifv=getIntersectingFacesRHS(face);
     // if intersecting faces vector is not empty
     if ((*ifv).empty()==false)
@@ -331,6 +377,7 @@ void Intersecting_Faces::removeFaceFromFaceInt (Face * const lhs,
   if (faceIsIntersectedLHS(lhs)==true)
   {
     // get this face's intersecting faces vector
+  //cout << "DDD";cout.flush();
     vec_fp *ifv=getIntersectingFacesRHS(lhs);
     // look for face rhs in face lhs's intersecting faces vector
     fp_it i=find((*ifv).begin(),(*ifv).end(),rhs);
@@ -371,6 +418,7 @@ void Intersecting_Faces::removeOldIntersections (Vertex const * const v,
     if (faceIsIntersectedLHS(*k)==true)
     {
       // for each intersecting face of adjacent face
+  //cout << "EEE";cout.flush();
       vec_fp *fv=getIntersectingFacesRHS(*k);
       for (fp_it p=(*fv).begin();p!=(*fv).end();++p)
       {
@@ -398,15 +446,29 @@ void Intersecting_Faces::removeOldIntersections (Vertex const * const v,
 void Intersecting_Faces::updateNewIntersections (Vertex const * const v,
                                                  hashset_v & vertices)
 {
+  vec_fp int_faces;
   // for every adjacent face
   for (fp_cit k=v->begin();k!=v->end();++k)
   {
+    int_faces.clear();
     // if adjacent face is currently intersected
-    if (detectNewFaceInts(*k))
+    if (detectNewFaceInts(*k,int_faces))
     {
+      // if intersected face was previously not intersected
+      if (faceIsIntersectedLHS(*k)==false)
+      {
+        // create new face vector in table
+        vec_fp nv;
+        intf[*k]=nv;
+      }
       // for each intersecting face of adjacent face
-      vec_fp *fv=getIntersectingFacesRHS(*k);
-      for (fp_it p=(*fv).begin();p!=(*fv).end();++p)
+      //cout << "FFF";cout.flush();
+      // PROBLEM OCCURS HERE
+      // Suspect problem is intersecting faces were
+      // never added to hash table
+      //vec_fp *fv=getIntersectingFacesRHS(*k);
+      //for (fp_it p=(*fv).begin();p!=(*fv).end();++p)
+      for (fp_it p=int_faces.begin();p!=int_faces.end();++p)
       {
         // add intersecting face vertices to vset2
         vertices.insert((*p)->getVertex(0));
@@ -421,6 +483,7 @@ void Intersecting_Faces::updateNewIntersections (Vertex const * const v,
         }
         // add adjacent face* to intersected face
         addFaceToFace(*p,*k);
+        addFaceToFace(*k,*p);
       }
     }
   }
@@ -477,15 +540,21 @@ void Intersecting_Faces::findAllFaceIntersections (void)
 {
   cout << "Find all face intersections....................";
   cout.flush();
-  int k=1;
+  Container & c(Container::instance());
+  int k=0;
   double goal = 0.2;
+  double inc = 0.2;
+  double a = 1.0/c.o.size();
+  if (goal<a)
+  {
+    goal=a;
+    inc = a;
+  }
   cout << "0%..";
   cout.flush();
   // clear table
   intf.clear();
   // for each object
-  Container & c(Container::instance());
-  double a = 1.0/c.o.size();
   for (o_it i=c.o.begin();i!=c.o.end();++i)
   {
     // for each face in object
@@ -495,11 +564,11 @@ void Intersecting_Faces::findAllFaceIntersections (void)
     }
     // track progress
     double progress = static_cast<double>(k++)*a;
-    if (progress>goal)
+    if (progress>goal || !distinguishable(progress,goal))
     {
       cout << static_cast<int>(goal*100) << "%..";
       cout.flush();
-      goal+=0.2;
+      goal+=inc;
     }
   }
   //cout << "100%..complete.\n";
@@ -521,6 +590,7 @@ void Intersecting_Faces::getFaceIntersectionForce (Face * const face,
   // if this face has intersecting faces
   assert(faceIsIntersectedLHS(face)==true && faceIsIntersectedRHS(face)==true);
   // get intersecting faces
+  //cout << "GGG";cout.flush();
   vec_fp* ptr = getIntersectingFacesRHS(face);
   // for each intersecting face
   for (fp_it i=ptr->begin();i!=ptr->end();++i)
@@ -577,6 +647,20 @@ bool Intersecting_Faces::checkFaceFaceInts (Face const * const cf,
   // where index == 0,1,2
   int single_shared_vert[2]={-1,-1};
   int num_unique = getNumUniqueVerts(cf,of,single_shared_vert);
+  // DEBUG
+//  bool myflag = false;
+//  //if ( ( cf->isMatch(31843,"Pre") && of->isMatch(31851,"Pre") ) ||
+//  //     ( cf->isMatch(31851,"Pre") && of->isMatch(31843,"Pre") ) )
+//  //if ( ( cf->isMatch(201480,"Pre") && of->isMatch(231208,"Pre") ) ||
+//  //     ( cf->isMatch(231208,"Pre") && of->isMatch(201480,"Pre") ) )
+//  if ( ( cf->isMatch(204396,"Pre") && of->isMatch(204423,"Pre") ) ||
+//       ( cf->isMatch(204423,"Pre") && of->isMatch(204396,"Pre") ) )
+//  {
+//    myflag = true;
+//    cout << "\n\nIntersecting_Faces::checkFaceFaceInts: "
+//          << "num_unique = " << num_unique << endl;
+//  }
+//  // DEBUG
   // if polygons are identical
   if (num_unique==3) return true;
   // if shared edge
@@ -620,6 +704,13 @@ bool Intersecting_Faces::checkFaceFaceInts (Face const * const cf,
   // no shared vertices
   else
   {
+    // if coplanar
+    if (facesCoplanar(cf,of)==true)
+    {
+      // check polygon edges intersection
+      return checkEdgeEdgeIntersection(cf,of);
+    }
+    // faces are NOT parallel, i.e. NOT coplanar
     // get face vertex coordinates
     vector3 const * cv0, * cv1, * cv2;
     vector3 const * ov0, * ov1, * ov2;
@@ -681,8 +772,64 @@ bool Intersecting_Faces::facesParallel (Face const * const cf,
   // are current face and other face parallel
   // i.e. is angle between normals equal to zero?
   // i.e. is the square of the cosine of the angle equal to 1?
-  if (!distinguishable(cn->dot(*on)*cn->dot(*on),cn->dot(*cn)*on->dot(*on))) return true;
+  if (!distinguishable(cn->dot(*on)*cn->dot(*on),cn->dot(*cn)*on->dot(*on),1e-5)) return true;
   else return false;
+}
+
+/** Check if pair of faces are coplanar.
+ *
+ * \param[in] cf The current face.
+ * \param[in] of The other face.
+ * \return True if faces are coplanar, otherwise false.
+ */
+
+bool Intersecting_Faces::facesCoplanar (Face const * const cf,
+                                        Face const * const of) const
+{
+  if (facesParallel(cf,of)==true)
+  {
+    // get one face normal
+    vector3 const * cn = cf->getNormal();
+    // get vector between any two vertices of faces
+    Vertex const * va = cf->getVertex(0);
+    int i = 0;
+    while (of->getVertex(i)->isMatch(va->getIndex(),va->getObject()->getName())==true)
+    {
+      i++;
+      assert(i<3);
+    }
+    Vertex const * vb = of->getVertex(i);
+    vector3 const * pa = va->getPos();
+    vector3 const * pb = vb->getPos();
+    vector3 diff = *pa-*pb;
+    // DEBUG
+    //if (flag)
+    //{
+    //  cout << "Intersecting_Faces::facesCoplanar: "
+    //        << "pa = ";
+    //  pa->print(cout);
+    //  cout << "\nIntersecting_Faces::facesCoplanar: "
+    //        << "pb = ";
+    //  pb->print(cout);
+    //  cout << "\nIntersecting_Faces::facesCoplanar: "
+    //        << "diff = ";
+    //  diff.print(cout);
+    //  cout << "\n";
+    //  cout << "Intersecting_Faces::facesCoplanar: "
+    //        << "dot = " << fabs(cn->dot(diff)) << "\n";
+    //}
+    // DEBUG
+    // are current face and other face coplanar
+    // i.e. is angle between one face normal and
+    //      vector between any two vertices of faces equal to zero?
+    // i.e. is the square of the cosine of the angle equal to 1?
+    if (fabs(cn->dot(diff)) < Controls::instance().get_epsilon()) return true;
+    else return false;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 /** For a pair of faces, each edge of each face is checked

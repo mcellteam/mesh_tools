@@ -2,136 +2,138 @@
 
 #include <cmath>
 #include <iostream>
+#include <stdlib.h>
 
 #include "object.h"
 
 using std::cout;
 using std::endl;
 
-bool Edge::valid (void)
-{
-  // if edge has two adjacent faces
-  if (f1!=NULL && f2!=NULL)
-  {
-    // and the faces are of interest
-    if ((f1->index==91824 && f2->index==91825 ) || 
-        (f1->index==91825 && f2->index==91824 ) )
-    {
-      cout << "Edge::valid: <" << this << "> vv1=" << vv1->index 
-            << ", vv2=" << vv2->index << endl;
-      printEdge(vv1->o->name);
-      // if the edge vertex indices match the mesh
-      if ((vv1->index==9430 && vv2->index==9632)==false &&
-          (vv1->index==9632 && vv2->index==9430)==false 
-         ){return false;}
-    }
-  }
-  return true;
-}
+//bool Edge::valid (void)
+//{
+//  // if edge has two adjacent faces
+//  if (f1!=NULL && f2!=NULL)
+//  {
+//    // and the faces are of interest
+//    if ((f1->index==91824 && f2->index==91825 ) || 
+//        (f1->index==91825 && f2->index==91824 ) )
+//    {
+//      cout << "Edge::valid: <" << this << "> vv1=" << vv1->index 
+//            << ", vv2=" << vv2->index << endl;
+//      printEdge(vv1->o->name);
+//      // if the edge vertex indices match the mesh
+//      if ((vv1->index==9430 && vv2->index==9632)==false &&
+//          (vv1->index==9632 && vv2->index==9430)==false 
+//         ){return false;}
+//    }
+//  }
+//  return true;
+//}
 
-void Edge::printEdgeCP (void)
+
+void Edge::printCP (std::ostream & target)
 {
   Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
   getVertices(v1,v2,o1,o2);
-  if ((v1!=vv1) || (v2!=vv2))
+  target.precision(12);
+  target << "Edge::print: " << this << endl;
+  target << "Edge::print: v1:\n";
+  if (v1==NULL){target << "v1 is NULL\n";}
+  else { v1->printCP(target); }
+  target << "Edge::print: v2:\n";
+  if (v2==NULL){target << "v2 is NULL\n";}
+  else { v2->printCP(target); }
+  if (v1!=vv1)
   {
-    cout << "Edge::printEdge: "
-          << "vertices don't match:\n"
-          << "	v1:\n";
-    v1->printVertex(v1->o->name);
-    cout << endl << "	v2:\n";
-    v2->printVertex(v2->o->name);
-    cout << endl << "	o1:\n";
-    o1->printVertex(o1->o->name);
-    cout << endl << "	o2:\n";
-    o2->printVertex(o2->o->name);
-    cout << endl << "	vv1:\n";
-    vv1->printVertex(vv1->o->name);
-    cout << endl << "	vv2:\n";
-    vv2->printVertex(vv2->o->name);
-    cout << endl;
+    target << "Edge::print: "
+          << "Error vertices (v1,vv1) do not match:\n";
+    target << "Edge::print: v1:\n";
+    if (v1==NULL){target << "v1 is NULL\n";}
+    else { v1->print(target); }
+    target << "Edge::print: vv1:\n";
+    if (vv1==NULL){target << "vv1 is NULL\n";}
+    else { vv1->print(target); }
+  }
+  if (v2!=vv2)
+  {
+    target << "Edge::print: "
+          << "Error vertices (v2,vv2) do not match:\n";
+    target << "Edge::print: v2:\n";
+    if (v2==NULL){target << "v2 is NULL\n";}
+    else { v2->print(target); }
+    target << "Edge::print: vv2:\n";
+    if (vv2==NULL){target << "vv2 is NULL\n";}
+    else { vv2->print(target); }
+  }
+  if ((v1!=vv1)|| (v2!=vv2))
+  {
+    assert(v1==vv1 && v2==vv2);
     exit(1);
   }
-  cout.precision(12);
-  cout << "printEdge: " << this << endl;
-  cout << "printEdge: <obj>" << v1->o->name << endl;
-  cout << v1->pN[0] << " "
-        << v1->pN[1] << " "
-        << v1->pN[2] << " 1 0 0 1\n";
-  cout << v2->pN[0] << " "
-        << v2->pN[1] << " "
-        << v2->pN[2] << " 1 0 0 1\n";
 }
 
 Edge::Edge (Face *f,Vertex *va,Vertex *vb)
   :vv1(va),vv2(vb),f1(f),f2(NULL),fvec(),l(0)
 {
   // compute original edge length
-  l=sqrt((va->pN[0]-vb->pN[0])*(va->pN[0]-vb->pN[0])+
-         (va->pN[1]-vb->pN[1])*(va->pN[1]-vb->pN[1])+
-         (va->pN[2]-vb->pN[2])*(va->pN[2]-vb->pN[2]));
+  l=sqrt((va->getpN(0)-vb->getpN(0))*(va->getpN(0)-vb->getpN(0))+
+         (va->getpN(1)-vb->getpN(1))*(va->getpN(1)-vb->getpN(1))+
+         (va->getpN(2)-vb->getpN(2))*(va->getpN(2)-vb->getpN(2)));
 }
 
 double Edge::getSqLength (void)
 {
   Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
   getVertices(v1,v2,o1,o2);
-  return (v1->pN[0]-v2->pN[0])*(v1->pN[0]-v2->pN[0])
-        +(v1->pN[1]-v2->pN[1])*(v1->pN[1]-v2->pN[1])
-        +(v1->pN[2]-v2->pN[2])*(v1->pN[2]-v2->pN[2]);
+  return (v1->getpN(0)-v2->getpN(0))*(v1->getpN(0)-v2->getpN(0))
+        +(v1->getpN(1)-v2->getpN(1))*(v1->getpN(1)-v2->getpN(1))
+        +(v1->getpN(2)-v2->getpN(2))*(v1->getpN(2)-v2->getpN(2));
 }
 
-void Edge::printEdge (std::string s)
+void Edge::print (std::ostream & target)
 {
   Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
   getVertices(v1,v2,o1,o2);
-  if ((v1!=vv1) || (v2!=vv2))
+  target.precision(12);
+  target << "Edge::print: " << this << endl;
+  target << "Edge::print: v1: ";
+  if (v1==NULL){target << "v1 is NULL\n";}
+  else { v1->print(target); target << "\n";}
+  target << "Edge::print: v2: ";
+  if (v2==NULL){target << "v2 is NULL\n";}
+  else { v2->print(target); target << "\n";}
+  target << "Edge::print: f1:\n";
+  if (f1==NULL){target << "f1 is NULL\n";}
+  else { f1->print(target); }
+  target << "Edge::print: f2:\n";
+  if (f2==NULL){target << "f2 is NULL\n";}
+  else { f2->print(target); }
+  if (v1!=vv1)
   {
-    cout << "Edge::printEdge: "
-          << "vertices don't match:\n"
-          << "	v1:\n";
-    v1->printVertex(v1->o->name);
-    cout << endl << "	v2:\n";
-    v2->printVertex(v2->o->name);
-    cout << endl << "	o1:\n";
-    o1->printVertex(o1->o->name);
-    cout << endl << "	o2:\n";
-    o2->printVertex(o2->o->name);
-    cout << endl << "	vv1:\n";
-    vv1->printVertex(vv1->o->name);
-    cout << endl << "	vv2:\n";
-    vv2->printVertex(vv2->o->name);
-    cout << endl;
+    target << "Edge::print: "
+          << "Error vertices (v1,vv1) do not match:\n";
+    target << "Edge::print: v1:\n";
+    if (v1==NULL){target << "v1 is NULL\n";}
+    else { v1->print(target); }
+    target << "Edge::print: vv1:\n";
+    if (vv1==NULL){target << "vv1 is NULL\n";}
+    else { vv1->print(target); }
+  }
+  if (v2!=vv2)
+  {
+    target << "Edge::print: "
+          << "Error vertices (v2,vv2) do not match:\n";
+    target << "Edge::print: v2:\n";
+    if (v2==NULL){target << "v2 is NULL\n";}
+    else { v2->print(target); }
+    target << "Edge::print: vv2:\n";
+    if (vv2==NULL){target << "vv2 is NULL\n";}
+    else { vv2->print(target); }
+  }
+  if ((v1!=vv1)|| (v2!=vv2))
+  {
+    assert(v1==vv1 && v2==vv2);
     exit(1);
-  }
-  cout.precision(12);
-  cout << "printEdge: " << this << endl;
-  cout << "printEdge: <obj>" << s << endl;
-  cout << "printEdge:"
-        << " v1 "<< v1->index << " ["
-        << v1->pN[0] << " "
-        << v1->pN[1] << " "
-        << v1->pN[2] << "]\n";
-  cout << "printEdge:"
-        << " v2 "<< v2->index << " ["
-        << v2->pN[0] << " "
-        << v2->pN[1] << " "
-        << v2->pN[2] << "]\n"
-        << "printEdge:"
-        << " f1 "<< f1->index << " ["
-        << f1->v[0]->index << " "
-        << f1->v[1]->index << " "
-        << f1->v[2]->index << "],";
-  if (f2!=NULL)
-  {
-    cout << " f2 "<< f2->index << " ["
-          << f2->v[0]->index << " "
-          << f2->v[1]->index << " "
-          << f2->v[2]->index << "]\n";
-  }
-  else
-  {
-    cout << " f2 is NULL\n";
   }
 }
 
@@ -160,7 +162,7 @@ double Edge::getAngle (void)
   {
     // normal_angle = acos(normal_angle_cosine);
     // use the edge itself as a reference vector
-    double refvec[3] = {v2->pN[0]-o2->pN[0],v2->pN[1]-o2->pN[1],v2->pN[2]-o2->pN[2]};
+    double refvec[3] = {v2->getpN(0)-o2->getpN(0),v2->getpN(1)-o2->getpN(1),v2->getpN(2)-o2->getpN(2)};
     // dot product of refvec and n1
     double d = dot(refvec,n1);
     if (!d)
@@ -182,47 +184,47 @@ void Edge::getVertices (Vertex *&v1,Vertex *&v2,Vertex *&o1,Vertex *&o2)
     v1=vv1;
     v2=vv2;
     // find o1 on f1
-    if      (f1->v[0]!=vv1 && f1->v[0]!=vv2) { o1=f1->v[0]; }
-    else if (f1->v[1]!=vv1 && f1->v[1]!=vv2) { o1=f1->v[0]; }
-    else if (f1->v[2]!=vv1 && f1->v[2]!=vv2) { o1=f1->v[0]; }
+    if      (f1->ptr_vertex(0)!=vv1 && f1->ptr_vertex(0)!=vv2) { o1=f1->ptr_vertex(0); }
+    else if (f1->ptr_vertex(1)!=vv1 && f1->ptr_vertex(1)!=vv2) { o1=f1->ptr_vertex(0); }
+    else if (f1->ptr_vertex(2)!=vv1 && f1->ptr_vertex(2)!=vv2) { o1=f1->ptr_vertex(0); }
     else 
     {
       cout << "\n\nEdge::getVertices: o1 not identified!\n";
       cout << "	v1:\n";
-      v1->printVertex(v1->o->name);
+      v1->print(cout);
       cout << endl << "	v2:\n";
-      v2->printVertex(v2->o->name);
+      v2->print(cout);
       cout << endl << "	o1:\n";
-      o1->printVertex(o1->o->name);
+      o1->print(cout);
       cout << endl << "	o2:\n";
-      o2->printVertex(o2->o->name);
+      o2->print(cout);
       cout << endl << "	vv1:\n";
-      vv1->printVertex(vv1->o->name);
+      vv1->print(cout);
       cout << endl << "	vv2:\n";
-      vv2->printVertex(vv2->o->name);
+      vv2->print(cout);
       cout << endl;
       cout << endl;
       exit(1);
     }
     // find o2 on f2
-    if      (f2->v[0]!=vv1 && f2->v[0]!=vv2) { o2=f2->v[0]; }
-    else if (f2->v[1]!=vv1 && f2->v[1]!=vv2) { o2=f2->v[0]; }
-    else if (f2->v[2]!=vv1 && f2->v[2]!=vv2) { o2=f2->v[0]; }
+    if      (f2->ptr_vertex(0)!=vv1 && f2->ptr_vertex(0)!=vv2) { o2=f2->ptr_vertex(0); }
+    else if (f2->ptr_vertex(1)!=vv1 && f2->ptr_vertex(1)!=vv2) { o2=f2->ptr_vertex(0); }
+    else if (f2->ptr_vertex(2)!=vv1 && f2->ptr_vertex(2)!=vv2) { o2=f2->ptr_vertex(0); }
     else 
     {
       cout << "\n\nEdge::getVertices: o2 not identified!\n";
       cout << "	v1:\n";
-      v1->printVertex(v1->o->name);
+      v1->print(cout);
       cout << endl << "	v2:\n";
-      v2->printVertex(v2->o->name);
+      v2->print(cout);
       cout << endl << "	o1:\n";
-      o1->printVertex(o1->o->name);
+      o1->print(cout);
       cout << endl << "	o2:\n";
-      o2->printVertex(o2->o->name);
+      o2->print(cout);
       cout << endl << "	vv1:\n";
-      vv1->printVertex(vv1->o->name);
+      vv1->print(cout);
       cout << endl << "	vv2:\n";
-      vv2->printVertex(vv2->o->name);
+      vv2->print(cout);
       cout << endl;
       cout << endl;
       exit(1);
@@ -234,24 +236,24 @@ void Edge::getVertices (Vertex *&v1,Vertex *&v2,Vertex *&o1,Vertex *&o2)
     v1=vv1;
     v2=vv2;
     // find o1 on f1
-    if      (f1->v[0]!=vv1 && f1->v[0]!=vv2) { o1=f1->v[0]; }
-    else if (f1->v[1]!=vv1 && f1->v[1]!=vv2) { o1=f1->v[0]; }
-    else if (f1->v[2]!=vv1 && f1->v[2]!=vv2) { o1=f1->v[0]; }
+    if      (f1->ptr_vertex(0)!=vv1 && f1->ptr_vertex(0)!=vv2) { o1=f1->ptr_vertex(0); }
+    else if (f1->ptr_vertex(1)!=vv1 && f1->ptr_vertex(1)!=vv2) { o1=f1->ptr_vertex(0); }
+    else if (f1->ptr_vertex(2)!=vv1 && f1->ptr_vertex(2)!=vv2) { o1=f1->ptr_vertex(0); }
     else 
     {
       cout << "\n\nEdge::getVertices: o1 not identified!\n";
       cout << "	v1:\n";
-      v1->printVertex(v1->o->name);
+      v1->print(cout);
       cout << endl << "	v2:\n";
-      v2->printVertex(v2->o->name);
+      v2->print(cout);
       cout << endl << "	o1:\n";
-      o1->printVertex(o1->o->name);
+      o1->print(cout);
       cout << endl << "	o2:\n";
-      o2->printVertex(o2->o->name);
+      o2->print(cout);
       cout << endl << "	vv1:\n";
-      vv1->printVertex(vv1->o->name);
+      vv1->print(cout);
       cout << endl << "	vv2:\n";
-      vv2->printVertex(vv2->o->name);
+      vv2->print(cout);
       cout << endl;
       cout << endl;
       exit(1);
@@ -278,15 +280,15 @@ bool Edge::isConsistent (void)
     Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
     getVertices(v1,v2,o1,o2);
     // if match v1->v2
-    if ((f1->v[0]==v1 && f1->v[1]==v2 )||
-        (f1->v[2]==v1 && f1->v[0]==v2 )||
-        (f1->v[1]==v1 && f1->v[2]==v2 )
-      ){forward=true;}
+    if ((f1->ptr_vertex(0)==v1 && f1->ptr_vertex(1)==v2 )||
+        (f1->ptr_vertex(2)==v1 && f1->ptr_vertex(0)==v2 )||
+        (f1->ptr_vertex(1)==v1 && f1->ptr_vertex(2)==v2 )
+       ){forward=true;}
     // if match v1->v2
-    if ((f2->v[0]==v1 && f2->v[1]==v2 )||
-        (f2->v[2]==v1 && f2->v[0]==v2 )||
-        (f2->v[1]==v1 && f2->v[2]==v2 )
-      )
+    if ((f2->ptr_vertex(0)==v1 && f2->ptr_vertex(1)==v2 )||
+        (f2->ptr_vertex(2)==v1 && f2->ptr_vertex(0)==v2 )||
+        (f2->ptr_vertex(1)==v1 && f2->ptr_vertex(2)==v2 )
+       )
     {
       if (forward){ return false; }
     }

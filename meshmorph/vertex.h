@@ -4,6 +4,9 @@
 #ifndef VERTEX_H
 #define VERTEX_H 1
 
+#include <algorithm>
+#include <cassert>
+
 #include "meshmorph.h"
 
 #include "face.h"
@@ -19,6 +22,7 @@ private:
   vector3     n; // vertex normal
   vector3     p; // current position coordinates (x,y,z)
   int         r; // last refractory iteration
+  int         m; // num different objects encountered in closest point search
 public:
   Vertex                                (int const &,double const & x,double const & y,double const & z,Object * const);
 //  Vertex                                (int,double x,double y,double z,Object * const);
@@ -32,10 +36,16 @@ public:
   void    getBoundingBox                (vector3 &,vector3 &) const;
   void    updateAdjFaceBoundingBoxes    (void);
   void    defineLocalRegion             (vector3 &,vector3 &);
+  bool    surfaceIsConcave              (const vector3 & radial_vector) const;
   void    getAdjVertices                (vec_vp&) const;
+  void    getAdjVerticesMulti           (vec_vp & expanded_verts,
+                                         const int num_expansions) const;
   void    getAdjacentEdges              (vec_ep&) const;
+  double  getArea                       (void) const;
   double  getSqSepDist                  (void) const; 
   double  getSqVirtualDisp              (double);
+  double  getRadiusOfCurvature          (void) const;
+  std::string  getRadiusOfCurvatureDEBUG     (void) const;
   vector3 getNewPos                     (double);
   void    recordAdjFaceBoundingBoxes    (hxa7241_graphics::Vector3r * const adjacent_face_lower,
                                          hxa7241_graphics::Vector3r * const adjacent_face_upper);
@@ -49,6 +59,19 @@ public:
   Face *  getFaceNotAdjToVertex         (Vertex const * const) const;
   void    updateAdjacentFaceNormals     (void);
 
+  /** Determine if the extracellular space in front of this vertex
+   * is part of a sheet or tunnel based on the number of neighboring
+   * objects.
+   *
+   *  \return True if vertex is part of a sheet; otherwise, false
+   *    means vertex is part of a tunnel.
+   */
+
+  bool isSheet (void) const
+  {
+    assert (m>-1);
+    return m<2;
+  }
 
   int getLastRefractoryIter (void)
   {
@@ -68,6 +91,28 @@ public:
     sort(f.begin(),f.end());
   }
 
+  /** Set number of different objects encountered during search for
+   *  closest point to this vertex.
+   *
+   *  \param[in] i Number of different objects.
+   */
+
+  void setNeighborCount (int i)
+  {
+    m = i;
+  }
+
+  /** Get stored number of different objects encountered during search for
+   *  closest point to this vertex.
+   *
+   *  \return Number of different objects.
+   */
+
+  int getNeighborCount (void)
+  {
+    return m;
+  }
+
   /** Get stored vertex normal vector.
    *
    *  \return Vertex normal vector. Note vector length
@@ -77,6 +122,16 @@ public:
   vector3 getNormal (void) const
   {
     return n;
+  }
+
+  /** Get object name.
+   *
+   *  \return Name of parent object of this vertex. 
+   */
+
+  std::string const & getObjectName (void) const
+  {
+    return o->getName();
   }
 
   /** Return the index of vertex as recorded from input file. 

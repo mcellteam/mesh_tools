@@ -388,3 +388,12 @@ double Face::getAspectRatioForceEnergy (Vertex const * const vv,
   //return cs.EDGE_STRETCH_WEIGHT/cs.STRETCH_EXPONENT*force_magn*se;
 }
 
+/** Return pointer to parent object of this face.
+ * \return Pointer to parent object.
+ */
+
+Object const * Face::getObject (void) const
+{
+  return v[0]->getObject();
+}
+

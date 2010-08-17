@@ -1,6 +1,7 @@
 CC = gcc
 DEFS =
-FLAGS = -O3 -march=pentiumpro
+#FLAGS = -O3 -march=pentiumpro
+FLAGS = -O3
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 

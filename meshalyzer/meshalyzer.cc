@@ -14,86 +14,11 @@ using std::endl;
 
 int main(int argc,char **argv)
 {
-  std::string message = "\n";
-  message=message+
-        "NAME\n"+
-        "       meshalyzer - mesh quality analyzer\n"+
-        "\nSYNOPSIS\n"+
-        "       meshalyzer [options] FILE|DIR\n"+
-        "\nDESCRIPTION\n"+
-        "       Meshalyzer is a general purpose mesh analyzer useful for\n"+
-        "       generating a complete summary of the current state of a mesh.\n"+
-        "       Meshalyzer assesses mesh integrity (e.g. missing data),\n"+
-        "       mesh attributes (e.g. closed, manifold, oriented), and\n"+
-        "       mesh characteristics (e.g. number of vertices, faces, edges).\n"+
-        "       Batch processing is easy by passing a directory name\n"+
-        "       as input on the command line.\n"+
-        "\nEXAMPLES\n"+
-        "       meshalyzer filename\n"+
-        "              Evaluate mesh integrity, attributes,\n"+
-        "              and characteristics for the single mesh file.\n\n"+
-        "       meshalyzer directoryname\n"+
-        "              Evaluate mesh integrity, attributes,\n"+
-        "              and characteristics for each single mesh file in directory.\n\n"+
-        "       meshalyzer -p filename\n"+
-        "              Evaluate mesh integrity, attributes, and characteristics \n"+
-        "              for the single mesh file, print the results, and print \n"+
-        "              the mesh elements preventing the mesh from being good with\n"+
-        "              regards to the mesh characteristics and the attributes, if any.\n\n"+
-        "       meshalyzer -a -p filename\n"+
-        "              Evaluate the five mesh attributes for the single mesh file,\n"+
-        "              print the state of each attribute, and print the mesh elements\n"+
-        "              preventing the mesh from being good with regards to the attributes, if any.\n\n"+
-        "       meshalyzer -b 10.0 -c 1.0 -p filename\n"+
-        "              Evaluate mesh integrity, attributes, and characteristics \n"+
-        "              for the single mesh file, print the results, and print \n"+
-        "              the mesh elements preventing the mesh from being good with\n"+
-        "              regards to the mesh characteristics and the attributes, if any.\n"+
-        "              Additionally, screen faces with aspect ratios larger than 10.0 and\n"+
-        "              screen edges with lengths larger than 1.0, and print detailed\n"+
-        "              information about the offending mesh elements.\n"+
-        "\nOPTIONS\n"+
-        "       -a\n"+
-        "              Evaluate the attributes of the mesh and report the results.\n"+
-        "              Skip the evaluation of mesh characteristics.\n\n"+
-        "       -b NUM\n"+
-        "              Detect edges with length smaller than NUM.\n"+
-        "              Units are same as FILE.\n\n"+
-        "       -c NUM\n"+
-        "              Detect edges with length greater than NUM.\n"+
-        "              Units are same as FILE.\n\n"+
-        "       -d NUM\n"+
-        "              Detect edges with angle between two adjacent faces\n"+
-        "              smaller than NUM degrees.\n\n"+
-        "       -e NUM\n"+
-        "              Detect edges with angle between two adjacent faces\n"+
-        "              greater than NUM degrees.\n\n"+
-        "       -f NUM\n"+
-        "              Detect faces with aspect ratio greater than NUM.\n\n"+
-        "       -h\n"+
-        "              Print meshalyzer man page.\n\n"+
-        "       -i\n"+
-        "              Detect intersections between faces from different objects.\n"+
-        "              Faceintersection detection is performed once all objects\n"+
-        "              are loaded into memory. Single object intersection detection\n"+
-        "              is omitted.\n\n"+
-        "       -p\n"+
-        "              Print detailed information about offending mesh elements \n"+
-        "              (i.e. flipped faces, borders, nonmanifold edges,\n"+
-        "              nonmanifold vertices, intersecting faces).\n\n"+
-        "       -q\n"+
-        "              Same as '-p' option, but prints vertex information\n"+
-        "              in dreamm custom points format.\n"+
-        "       -v\n"+
-        "              If folder passed as argument, then only print total\n"+
-        "              set volume and nothing else.\n"+
-        "\nJustin Kinney				2007/10/01\n";
-
   // instantiate controls class
   Controls & cs(Controls::instance());
 
   // parse command line 
-  cs.parse(argc,argv,message);
+  cs.parse(argc,argv,cs.getUsageMessage());
 
   // create container, objects, vertices, faces, edges, and find adjacencies
   Container c;
@@ -102,14 +27,15 @@ int main(int argc,char **argv)
   Space s;
 
   // if single input file was found
-  if (cs.folder==false)
+  if (cs.get_folder_passed()==0)
   {
     // save filename
-    c.files.push_back(cs.inpath);
+    c.addFile(cs.get_inpath());
     // update index
-    c.num_files++;
+    //c.num_files++;
+    c.incrementNumFiles();
     // build data structure of mesh
-    Object *obj=c.processFile(c.files[0]);
+    Object *obj=c.processFile(c.getFile(0));
     // if either no vertices or no faces were found
     if (obj!=NULL)
     {
@@ -124,8 +50,8 @@ int main(int argc,char **argv)
         obj->createEdges();
         obj->findVertexAdjacencies();
         // partition space
-        c.boundWorld(s,cs);
-        s.initBoxes(obj->f.size());
+        c.boundWorld(s);
+        s.initBoxes(obj->getNumFaces());
         c.assignFacesToBoxes(s);
         // analyze and respond
         obj->analyze(&c,cs,s);
@@ -136,12 +62,12 @@ int main(int argc,char **argv)
   else
   { 
     // else scan folder
-    c.scanDir(cs.inpath.c_str());
+    c.scanDir(cs.get_inpath().c_str());
     // for each file in folder
-    for (int count=0;count<c.num_files;count++)
+    for (int count=0;count<c.getNumFiles();count++)
     {
       // build data structure of mesh
-      Object *obj=c.processFile(cs.inpath+c.files[count]);
+      Object *obj=c.processFile(cs.get_inpath()+c.getFile(count));
       // if neither zero vertices nor zero faces were found
       if (obj!=NULL)
       {
@@ -151,9 +77,9 @@ int main(int argc,char **argv)
           obj->createEdges();
           obj->findVertexAdjacencies();
           // partition space
-          c.boundWorld(s,cs);
+          c.boundWorld(s);
           s.deleteBoxes();
-          s.initBoxes(obj->f.size());
+          s.initBoxes(obj->getNumFaces());
           c.assignFacesToBoxes(s);
           // analyze and respond
           obj->analyze(&c,cs,s);
@@ -162,30 +88,30 @@ int main(int argc,char **argv)
         }
         else
         {
-          cs.good_integrity=false;
+          c.setIntegrity(false);
         }
         // print stats
-        if (cs.vol==false) { obj->print(cs); }
+        if (cs.get_print_set_volume_only()==0) { obj->print(cs); }
         // if no request for inter-object
         // face intersection detection
-        if (cs.interf==false)
+        if (cs.get_detect_interobject_intersections()==0)
         {
           // then save space, delete object
           delete obj;
-          c.o.clear();
+          c.clearObjects();
         }
       }
     }
-    c.boundWorld(s,cs);
+    c.boundWorld(s);
     // analyze data as set
     cerr << "\n" << "/* ********************** "
          << "SET OF OBJECTS ********************** */\n\n";
-    if (cs.attr==false) c.analyzeCumulative();
+    if (cs.get_compute_attributes_only()==0) c.analyzeCumulative();
     // print cumulative surface area, volume, 
-    if (cs.vol==false) { c.printCumulative(); }
+    if (cs.get_print_set_volume_only()==0) { c.printCumulative(); }
     else               { cout << c.countVol() << endl; }
     // detect intersecting faces between objects
-    if (cs.interf==true)
+    if (cs.get_detect_interobject_intersections()==1)
     {
       // partition space
       s.deleteBoxes();
@@ -232,12 +158,12 @@ bool getPointEdgeDistance (double p[3],Face *f)
   // for each face edge
   for (int i=0;i<3;i++) 
   {
-    double Ax = f->v[i]->pN[0];
-    double Ay = f->v[i]->pN[1];
-    double Az = f->v[i]->pN[2];
-    double Bx = f->v[(i+1)%3]->pN[0];
-    double By = f->v[(i+1)%3]->pN[1];
-    double Bz = f->v[(i+1)%3]->pN[2];
+    double Ax = f->ptr_vertex(i)->getpN(0);
+    double Ay = f->ptr_vertex(i)->getpN(1);
+    double Az = f->ptr_vertex(i)->getpN(2);
+    double Bx = f->ptr_vertex((i+1)%3)->getpN(0);
+    double By = f->ptr_vertex((i+1)%3)->getpN(1);
+    double Bz = f->ptr_vertex((i+1)%3)->getpN(2);
     double uDen = (Bx-Ax)*(Bx-Ax)+(By-Ay)*(By-Ay)+(Bz-Az)*(Bz-Az);
     if (uDen) 
     {
@@ -404,11 +330,11 @@ void checkLineFaceIntersection (Face *f,double lp[2][3],bool &line_flag,
   if (den) 
   {
     //pvc = polygon_vertex_coordinates
-    Vertex *v0=f->v[0]; 
+    Vertex *v0=f->ptr_vertex(0); 
     // point of intersection
-    double u = (pn[0]*(v0->pN[0]-lp[0][0]) 
-                + pn[1]*(v0->pN[1]-lp[0][1]) 
-                + pn[2]*(v0->pN[2]-lp[0][2]))/den;
+    double u = (pn[0]*(v0->getpN(0)-lp[0][0]) 
+                + pn[1]*(v0->getpN(1)-lp[0][1]) 
+                + pn[2]*(v0->getpN(2)-lp[0][2]))/den;
     // if polygon cuts through line
     if (u > Controls::instance().get_double_epsilon() && u < (1.0-Controls::instance().get_double_epsilon())) 
     {
@@ -433,7 +359,7 @@ void checkLineFaceIntersection (Face *f,double lp[2][3],bool &line_flag,
     I[(big+2)%3] = (1-u)*lp[0][(big+2)%3] + u*lp[1][(big+2)%3];
     ////////// is point of intersection on other polygon? //////////
     //pvc = polygon_vertex_coordinates
-    Vertex *v1=f->v[1],*v2=f->v[2]; 
+    Vertex *v1=f->ptr_vertex(1),*v2=f->ptr_vertex(2); 
     // does point of intersection lie on polygon edge?
     if (getPointEdgeDistance(I,f)){poly_edge_flag = true;}
     // if point of intersection is not on polygon edge
@@ -441,15 +367,15 @@ void checkLineFaceIntersection (Face *f,double lp[2][3],bool &line_flag,
     {
       // compute three determinants
       double det[3];
-      det[0] = (v0->pN[tv[0]]-pI[0])*(v1->pN[tv[1]]-pI[1])
-            -(v1->pN[tv[0]]-pI[0])*(v0->pN[tv[1]]-pI[1]);
-      det[1] = (v1->pN[tv[0]]-pI[0])*(v2->pN[tv[1]]-pI[1])
-            -(v2->pN[tv[0]]-pI[0])*(v1->pN[tv[1]]-pI[1]);
+      det[0] = (v0->getpN(tv[0])-pI[0])*(v1->getpN(tv[1])-pI[1])
+              -(v1->getpN(tv[0])-pI[0])*(v0->getpN(tv[1])-pI[1]);
+      det[1] = (v1->getpN(tv[0])-pI[0])*(v2->getpN(tv[1])-pI[1])
+              -(v2->getpN(tv[0])-pI[0])*(v1->getpN(tv[1])-pI[1]);
       // proceed if determinants are DOUBLE_EPSILON away from zero
       if ((det[0]*det[1])>0)
       {
-        det[2]=(v2->pN[tv[0]]-pI[0])*(v0->pN[tv[1]]-pI[1])
-              -(v0->pN[tv[0]]-pI[0])*(v2->pN[tv[1]]-pI[1]);
+        det[2]=(v2->getpN(tv[0])-pI[0])*(v0->getpN(tv[1])-pI[1])
+              -(v0->getpN(tv[0])-pI[0])*(v2->getpN(tv[1])-pI[1]);
         if ((det[0]*det[2])>0)
         {
           // line intersects polygon plane inside polygon
@@ -473,8 +399,8 @@ bool edgeMatch (Edge *e,int va,int vb)
 {
   Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
   e->getVertices(v1,v2,o1,o2);
-  if ( (v1->index==va && v2->index==vb) ||
-       (v1->index==vb && v2->index==va) ){return true;}
+  if ( (v1->getIndex()==va && v2->getIndex()==vb) ||
+       (v1->getIndex()==vb && v2->getIndex()==va) ){return true;}
   else {return false;}
 }
 
@@ -489,9 +415,9 @@ bool faceBBsOverlap (double bb[6],Face *f)
 {
   double bb2[6];
 
-  double *p1=f->v[0]->pN;
-  double *p2=f->v[1]->pN;
-  double *p3=f->v[2]->pN;
+  double *p1=f->ptr_vertex(0)->getpN_ptr();
+  double *p2=f->ptr_vertex(1)->getpN_ptr();
+  double *p3=f->ptr_vertex(2)->getpN_ptr();
 
   threeValueSort(*p1,*p2,*p3,bb2[1],bb2[0]);
   // if overlap in x

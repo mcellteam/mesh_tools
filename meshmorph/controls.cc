@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <getopt.h>
+#include <cassert>
 #include <cmath>
 
 #include "container.h"
@@ -36,8 +37,10 @@ Controls::Controls (void)
   MAX_FILENAME_SIZE                    (1024),
   WRITE_MESH_NOW                       (0),
   WRITE_VERBOSE_INIT                   (false),
+  WRITE_CLOSEST_POINTS                 (false),
   WRITE_REFRACTED_VERTICES_TO_FILE     (true),
   WRITE_INTERSECTED_FACES_TO_FILE      (true),
+  ASSUME_MAX_ECW_ERROR                 (false),
   FORMAT_INTERSECTED_FACES             ("detail"),
   WRITE_NONNICE_VERTICES_TO_FILE       (true),
   FORMAT_NONNICE_VERTICES              ("detail"),
@@ -79,10 +82,11 @@ Controls::Controls (void)
   ENERGY_SAMPLE_PERIOD                 (100000),
   MIN_DISPLACEMENT_SQ                  (1E-2),
   TARGET_ECW                           (20.0),
-  ECW_THRESHOLD                        (-1.0),
+  //ECW_THRESHOLD                        (-1.0),
+  DUAL_TARGET_ECWS                     (0),
   TARGET_ECW_HIGH                      (300.0),
   TARGET_ECW_LOW                       (15.0),
-  GAIN_STEP                            (-1.0),
+  GAIN_STEP                            (1.0),
   MAX_ACTUAL_DISPL_FRACTION            (1.0),
   MAX_RUNTIME                          (0),
   PRINT_PERIOD                         (1000),
@@ -104,9 +108,22 @@ Controls::Controls (void)
   REFRACTED_FILE                       ("refracted_vertices.dat"),
   INTERSECTED_FILE                     ("intersected_faces.dat"),
   NONNICE_FILE                         ("nonnice_vertices.dat"),
+  GAIN_SCHEDULING_FILE                 (""),
   SMALL_ECW_THRESHOLD                  (0.2),
   DISABLE_MESSAGES                     (0),
-  MEASURE_ECW_AND_EXIT                 (0)
+  MEASURE_ECW_AND_EXIT                 (0),
+  CURVATURE_NEIGHBORHOOD_SIZE          (0),
+  MAX_RADIUS_OF_CURVATURE              (1E10),
+  ASSUME_NICE_VERTICES                 (0),
+  REGION_ORTHOGONALITY_THRESHOLD       (-1.0),
+  COUNT_NEIGHBORS                      (0),
+  REPORT_VERTEX_AREA                   (0),
+  REPORT_VERTEX_IDENTITY               (0),
+  FREEZE_TUNNELS                       (0),
+  FREEZE_SHEETS                        (0),
+  VERTEX_NEIGHBOR_COUNT_PERIOD         (1),
+  CLEFT_VERTICES_FILE                  (""),
+  RECON_BLOCK_WRAP                     ("")
 {
 }
 
@@ -285,7 +302,15 @@ std::string Controls::getUsageMessage (void)
   "              Disable gain scheduling so that the proportionality factor between\n"+
   "              force on a vertex and vertex displacement is constant throughout\n"+
   "              execution of the program. The proportionality constant is overall\n"+
-  "              gain and is specified by -O. Default is to follow a decaying gain schedule.\n\n"+
+  "              gain and is specified by -O with a gain step specified by -m.\n"+
+  "              Default is to follow a decaying gain schedule.\n\n"+
+  "       --write_closest_points\n"+
+  "              When writing to file the extracellular width of the model\n"+
+  "              with sampling density controlled by --ecw_sampling_length\n"+
+  "              also record the 3D locations of both endpoints of the line\n"+
+  "              segment defining the extracellular width. The x,y,z values of\n"+
+  "              both endpoints are appended to the line containing the extracellular width.\n"+
+  "              Default is to only write the extracellular width to file.\n\n"+
   "       --disable_messages\n"+
   "              Disable Refractory and Virtual_Displacement messages for faster program execution.\n"+
   "              Default is to write all messages to STDOUT.\n\n"+
@@ -293,6 +318,60 @@ std::string Controls::getUsageMessage (void)
   "              Measure the extracellular width in the model at sampling density\n"+
   "              defined by --ecw_sampling_length and exit.\n"+
   "              Default is to do nothing.\n\n"+
+  "       --assume_max_ecw_error\n"+
+  "              If no closest point is found for a vertex, then assume maximum\n"+
+  "              error in separation width, thus generating maximum separation width\n"+
+  "              force. Default is to assume zero separation width error thus\n"+
+  "              zero separation width force.\n\n"+
+  "       --assume_nice_vertices\n"+
+  "              Assume all vertices are nice (not inside an object).\n"+
+  "              Default is to explicitely check niceness of each vertex by ray tracing.\n\n"+
+  "       --count_neighbors\n"+
+  "              For each vertex count and report number of different neighbor objects\n"+
+  "              encountered during search for closest point to vertex.\n"+
+  "              Default is to do nothing.\n\n"+
+  "       --report_vertex_area\n"+
+  "              For each vertex compute and report the surface area around vertex\n"+
+  "              as one-third the area of each adjacent face.\n"+
+  "              Default is to do nothing.\n\n"+
+  "       --report_vertex_identity\n"+
+  "              For each vertex report the index and parent object name.\n"+
+  "              Default is to do nothing.\n\n"+
+  "       --freeze_sheets\n"+
+  "              Prohibit vertices identified as facing sheet-like extracellular space\n"+
+  "              from moving. Vertex identity (sheet or tunnel) is determined by counting\n"+
+  "              the number of neighbor objects. Mutually exclusive with 'freeze_tunnels' option.\n"+
+  "              Default is to allow all vertex moves.\n\n"+
+  "       --freeze_tunnels\n"+
+  "              Prohibit vertices identified as facing tunnel-like extracellular space\n"+
+  "              from moving. Vertex identity (sheet or tunnel) is determined by counting\n"+
+  "              the number of neighbor objects. Mutually exclusive with 'freeze_sheets' option.\n"+
+  "              Default is to allow all vertex moves.\n\n"+
+  "       --dual_target_ecws\n"+ 
+  "              If specified, then vertices are classified as either tunnel\n"+
+  "              or sheet. Tunnels are morphed so as to have\n"+
+  "              an extracellular width of size TARGET_ECW_HIGH specified\n"+
+  "              by -j option. Sheet vertices will be morphed so as to have\n"+
+  "              an extracellular width of size TARGET_ECW_LOW specified by -k option.\n"+
+  "              Units are same as meshes in input directory.\n"+
+  "              Default is to morph all vertices to the same extracellular\n"+
+  "              specified by -t option.\n\n"+
+  "       -p NUM, --region_orthogonality_threshold=NUM\n"+
+  "              If set then identify and report vertices whose normal vector\n"+
+  "              lies within threshold of plane of section then exit. Enter threshold\n"+
+  "              as fraction: 0 <= threshold <= 1. To convert from degrees\n"+
+  "              (between 0 and 90) to fraction: fraction = degrees/90.\n"+
+  "              If vertex normal is less than or equal to threshold\n"+
+  "              away from plane of section, then write to file in Reconstruct3D format.\n"+
+  "              Default is to do nothing.\n\n"+
+  "       -r NUM, --curvature_neighborhood_size=NUM\n"+
+  "              Positive NUM for measure the radius of curvature in the model while measuring the extracellular width.\n"+
+  "              Note the radius of curvature is measured\n"+
+  "              by fitting a sphere to the set of adjacent vertices of each vertex\n"+
+  "              and will be written to file in association with the vertex.\n"+
+  "              No radius of curvature measurement is made for face barycenters.\n"+
+  "              A value of '0' is to do nothing.\n"+
+  "              Default is '" + i2str(CURVATURE_NEIGHBORHOOD_SIZE) + "'.\n\n"+
   "       -1 NUM, --max_items_per_leaf=NUM\n"+
   "              First argument to construction of octree.\n"+
   "              Probably specifies a criterion for deciding if a cell in tree.\n"+
@@ -416,7 +495,7 @@ std::string Controls::getUsageMessage (void)
   "              in the measured angle of nearby edges from 180 degrees\n"+
   "              is scaled by NUM.\n"+
   "              Default is '" + d2str(EDGE_ANGLE_GAIN) + "'.\n\n"+
-  "       -L NUM, --edge_stretch_gain=NUM\n"+ 
+  "       -L NUM, --edge_length_gain=NUM\n"+ 
   "              The force generated on each vertex by deviations\n"+
   "              in the measured edge length from the reference\n"+
   "              edge length is scaled by NUM.\n"+
@@ -445,16 +524,6 @@ std::string Controls::getUsageMessage (void)
   "              an extracellular width of size NUM.\n"+
   "              Units are same as meshes in input directory.\n"+
   "              Default is '" + d2str(TARGET_ECW) + "'.\n\n"+
-  "       -d NUM, --ecw_threshold=NUM\n"+ 
-  "              If specified, then vertices with an extracellular width\n"+
-  "              greater than or equal to NUM will be morphed so as to have\n"+
-  "              an extracellular width of size TARGET_ECW_HIGH specified\n"+
-  "              by -j option. Vertices with an extracellular width less\n"+
-  "              than NUM will be morphed so as to have\n"+
-  "              an extracellular width of size TARGET_ECW_LOW specified by -k option.\n"+
-  "              Units are same as meshes in input directory.\n"+
-  "              Default is to morph all vertices to the same extracellular\n"+
-  "              specified by -t option.\n\n"+
   "       -j NUM, --target_ecw_high=NUM\n"+ 
   "              If ECW_THRESHOLD is specified with -d option,\n"+
   "              then vertices with an extracellular width\n"+
@@ -469,6 +538,10 @@ std::string Controls::getUsageMessage (void)
   "              so as to have an extracellular width of size NUM.\n"+
   "              Units are same as meshes in input directory.\n"+
   "              Default is '" + d2str(TARGET_ECW_LOW) + "'.\n\n"+
+  "       -w NUM, --vertex_neighbor_count_period=NUM\n"+ 
+  "              Update vertex identity every NUM groups\n"+
+  "              (that is, of course, if vertex identity is being used).\n"+
+  "              Default is '" + i2str(VERTEX_NEIGHBOR_COUNT_PERIOD) + "'.\n\n"+
   "       -m NUM, --gain_step=NUM\n"+ 
   "              If gain scheduling is not disabled, then after\n"+
   "              each group the maximum allwed gain is decremented\n"+
@@ -575,12 +648,38 @@ std::string Controls::getUsageMessage (void)
   "              in which case the list of nonnice vertices\n"+
   "              is written once after completion of last group of vertex moves.\n"
   "              Default is '" + NONNICE_FILE + "'.\n\n"+
+  "       -u FILE, --gain_scheduling_file=FILE\n"+             
+  "              Directives to update gain scheduling \"on the fly\" (during gain\n"+
+  "              update after completion of each group. Directive motifs refer to the\n"+
+  "              gain scheduler and specify either the max gain and/or the amount to\n"+
+  "              decrement the gain after each group and include:\n"+
+  "              'max_gain NUM' which resets the maximum overall gain to NUM.\n"+
+  "              'step NUM' resets the gain change amount applied after the completion of each group.\n"+
+  "              Comment character is '#'.\n"+
+  "              Default is '" + GAIN_SCHEDULING_FILE + "' which allows gain scheduling\n"+
+  "              to proceed according to initial values.\n\n"+
   "       -x NUM, --ecw_sampling_length=NUM\n"+      
-  "              Unless --no_ecw is set, meshmorph will measure and write\n"+
-  "              to file the extracellular width of the model with surface\n"+
-  "              sampling density NUM and to write data to file\n"+
+  "              Unless --no_ecw is set, meshmorph will measure\n"+
+  "              the extracellular width of the model with surface\n"+
+  "              sampling density defined by NUM and write data to file\n"+
   "              specified by --sep_log_file in output directory specified by -o.\n"+
+  "              The extracellular width is measured at each vertex. Additionally,\n"+
+  "              each face is divided into a perfect square number of subtriangles\n"+
+  "              so that no subtriangle has area larger than an equilateral triangle\n"+
+  "              with side length NUM. The extracellular width is measured\n"+
+  "              at the barycenter of each subtriangle.\n"+
   "              Default is '" + d2str(ECW_SAMPLING_LENGTH) + "'.\n\n"+
+  "       -d FILE, --cleft_vertices_file=FILE\n"+     
+  "              The vertices specified in FILE will be tagged as belonging\n"+
+  "              synaptic cleft and coded as such in extracellular_widths.dat.\n"+
+  "              The format of FILE must be 'object_name vertex_index'.\n"+
+  "              For example, 'd000 134' indicates that vertex number 134\n"+
+  "              in object d000 belongs to synaptic cleft.\n"+
+  "              In the absence of this option, no vertices are treated as cleft.\n\n"+
+  "       -q STRING, --recon_block_wrap=STRING\n"+     
+  "              The object name specified by STRING will be interpreted as a wrap,\n"+
+  "              meaning that only STRING object vertices will be moved. No other object\n"+
+  "              will be touched. Default is to do nothing.\n\n"+
   "       -h, --help\n"+                     
   "              Print meshmorph man page.\n"+
   "\nJustin Kinney				2008/05/01\n";
@@ -612,9 +711,20 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
       {"no_int_prevention"             , no_argument, & STRICT_FACE_INTERSECTION_PREVENTION , 0}, // default 1
       {"ref_orig_edge_length"          , no_argument, & USE_EDGE_REFERENCE_LENGTH           , 1}, // default 0
       {"verbose_vertex_move"           , no_argument, & ENABLE_VTRACK                       , 1}, // default 0
+      {"write_closest_points"          , no_argument, & WRITE_CLOSEST_POINTS                , 1}, // default 0
       {"disable_gain_scheduling"       , no_argument, & DISABLE_GAIN_SCHEDULING             , 1}, // default 0
       {"disable_messages"              , no_argument, & DISABLE_MESSAGES                    , 1}, // default 0
       {"measure_ecw_and_exit"          , no_argument, & MEASURE_ECW_AND_EXIT                , 1}, // default 0
+      {"assume_max_ecw_error"          , no_argument, & ASSUME_MAX_ECW_ERROR                , 1}, // default 0
+      {"assume_nice_vertices"          , no_argument, & ASSUME_NICE_VERTICES                , 1}, // default 0
+      {"count_neighbors"               , no_argument, & COUNT_NEIGHBORS                     , 1}, // default 0
+      {"report_vertex_area"            , no_argument, & REPORT_VERTEX_AREA                  , 1}, // default 0
+      {"report_vertex_identity"        , no_argument, & REPORT_VERTEX_IDENTITY              , 1}, // default 0
+      {"dual_target_ecws"              , no_argument, & DUAL_TARGET_ECWS                    , 1}, // default 0
+      {"freeze_sheets"                 , no_argument, & FREEZE_SHEETS                       , 1}, // default 0
+      {"freeze_tunnels"                , no_argument, & FREEZE_TUNNELS                      , 1}, // default 0
+      {"region_orthogonality_threshold", required_argument, 0, 'p'},
+      {"curvature_neighborhood_size"   , required_argument, 0, 'r'},
       {"max_items_per_leaf"            , required_argument, 0, '1'},
       {"max_octree_depth"              , required_argument, 0, '2'},
       {"max_filename_size"             , required_argument, 0, '3'},
@@ -641,7 +751,7 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
       {"edge_angle_weight"             , required_argument, 0, 'a'},
       {"ecw_gain"                      , required_argument, 0, 'S'},
       {"edge_angle_gain"               , required_argument, 0, 'A'},
-      {"edge_stretch_gain"             , required_argument, 0, 'L'},
+      {"edge_length_gain"              , required_argument, 0, 'L'},
       {"aspect_ratio_gain"             , required_argument, 0, 'E'},
       {"aspect_ratio_threshold"        , required_argument, 0, 'c'},
       {"overall_gain"                  , required_argument, 0, 'O'},
@@ -658,6 +768,8 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
       {"input_data_dir"                , required_argument, 0, 'i'},
       {"output_data_dir"               , required_argument, 0, 'o'},
       {"frozen_vertices_file"          , required_argument, 0, 'v'},
+      {"cleft_vertices_file"           , required_argument, 0, 'd'},
+      {"recon_block_wrap"              , required_argument, 0, 'q'},
       {"vertex_sequence_file"          , required_argument, 0, 'b'},
       {"mesh_output_suffix"            , required_argument, 0, 'N'},
       {"main_log_file"                 , required_argument, 0, 'P'},
@@ -669,14 +781,16 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
       {"refracted_file"                , required_argument, 0, 'Y'},
       {"intersected_file"              , required_argument, 0, 'Z'},
       {"nonnice_file"                  , required_argument, 0, 'z'},
+      {"gain_scheduling_file"          , required_argument, 0, 'u'},
       {"ecw_sampling_length"           , required_argument, 0, 'x'},
+      {"vertex_neighbor_count_period"  , required_argument, 0, 'w'},
       {"help"                          , no_argument      , 0, 'h'},
       {0, 0, 0, 0}
     };
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
-    int c = getopt_long (argc, argv, "1:2:3:4:5:6:7:8:9:A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z:a:b:c:d:e:f:g:hi:j:k:l:m:n:o:s:t:v:x:y:z:",
+    int c = getopt_long (argc, argv, "1:2:3:4:5:6:7:8:9:A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z:a:b:c:e:d:f:g:hi:j:k:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z:",
                      long_options, &option_index);
 
     /* Detect the end of the options. */
@@ -689,8 +803,13 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
     {
       case 0:
         /* If this option set a flag, do nothing else now. */
-        if (long_options[option_index].flag != 0)
-          break;
+        //if (long_options[option_index].flag != 0)
+        //  break;
+        printf ("option %s", long_options[option_index].name);
+        if (optarg)
+          printf (" with arg %s", optarg);
+        printf ("\n");
+        break;
 
       case '1':
         MAX_ITEMS_PER_LEAF = static_cast<int>(strtod(optarg,&eptr));
@@ -712,6 +831,12 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
         SEED_REGION_SIZE = strtod(optarg,&eptr);
         break;
 
+      case 'p':
+        REGION_ORTHOGONALITY_THRESHOLD = strtod(optarg,&eptr);
+        assert (REGION_ORTHOGONALITY_THRESHOLD <= 1.0);
+        assert (REGION_ORTHOGONALITY_THRESHOLD >= 0.0);
+        break;
+
       case '6':
         NUMBER_RADIUS_STEPS = static_cast<int>(strtod(optarg,&eptr));
         break;
@@ -724,6 +849,10 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
       case 'n':
         NUM_GROUPS = static_cast<int>(strtod(optarg,&eptr));
         REDEFINE_NUM_GROUPS = 0;
+        break;
+
+      case 'r':
+        CURVATURE_NEIGHBORHOOD_SIZE = static_cast<int>(strtod(optarg,&eptr));
         break;
 
       case '7':
@@ -748,6 +877,10 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
 
       case 'B':
         VECTOR_RESERVE = static_cast<int>(strtod(optarg,&eptr));
+        break;
+
+      case 'w':
+        VERTEX_NEIGHBOR_COUNT_PERIOD = static_cast<int>(strtod(optarg,&eptr));
         break;
 
       case 'C':
@@ -886,9 +1019,9 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
         TARGET_ECW = strtod(optarg,&eptr);
         break;
 
-      case 'd':
-        ECW_THRESHOLD = strtod(optarg,&eptr);
-        break;
+      //case 'd':
+      //  ECW_THRESHOLD = strtod(optarg,&eptr);
+      //  break;
 
       case 'j':
         TARGET_ECW_HIGH = strtod(optarg,&eptr);
@@ -914,8 +1047,20 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
         FROZEN_VERTICES_FILE = optarg;
         break;
 
+      case 'd':
+        CLEFT_VERTICES_FILE = optarg;
+        break;
+
+      case 'q':
+        RECON_BLOCK_WRAP = optarg;
+        break;
+
       case 'b':
         VERTEX_SEQUENCE_FILE = optarg;
+        break;
+
+      case 'u':
+        GAIN_SCHEDULING_FILE = optarg;
         break;
 
       case 'x':
@@ -943,6 +1088,11 @@ void Controls::parseCommandLine (int argc,char **argv,std::string const & messag
     std::cout << message << std::endl;
     exit(1);
   }
+
+  // enforce command line option constraints
+  assert (!get_freeze_sheets() || !get_freeze_tunnels());
+
+
 }
 
 /** Get summary of meshmorph command parameter settings.
@@ -961,6 +1111,8 @@ std::string Controls::getCommandSettings (void)
   "WRITE_EVERY_GROUP = "                   + i2str(WRITE_EVERY_GROUP)                   + "\n" + 
   "WRITE_VERTEX_MOVE_HISTOGRAM = "         + i2str(WRITE_VERTEX_MOVE_HISTOGRAM)         + "\n" + 
   "WRITE_MESH_NOW = "                      + i2str(WRITE_MESH_NOW)                      + "\n" + 
+  "WRITE_CLOSEST_POINTS = "                + i2str(WRITE_CLOSEST_POINTS)                + "\n" + 
+  "ASSUME_MAX_ECW_ERROR = "                + i2str(ASSUME_MAX_ECW_ERROR)                + "\n" + 
   "APPEND_GROUP_NUMBER = "                 + i2str(APPEND_GROUP_NUMBER)                 + "\n" + 
   "STRICT_FACE_INTERSECTION_PREVENTION = " + i2str(STRICT_FACE_INTERSECTION_PREVENTION) + "\n" + 
   "USE_EDGE_REFERENCE_LENGTH = "           + i2str(USE_EDGE_REFERENCE_LENGTH)           + "\n" + 
@@ -968,6 +1120,9 @@ std::string Controls::getCommandSettings (void)
   "DISABLE_GAIN_SCHEDULING = "             + i2str(DISABLE_GAIN_SCHEDULING)             + "\n" + 
   "DISABLE_MESSAGES = "                    + i2str(DISABLE_MESSAGES)                    + "\n" +
   "MEASURE_ECW_AND_EXIT = "                + i2str(MEASURE_ECW_AND_EXIT)                + "\n" +
+  "ASSUME_NICE_VERTICES = "                + i2str(ASSUME_NICE_VERTICES)                + "\n" +
+  "CURVATURE_NEIGHBORHOOD_SIZE = "         + i2str(CURVATURE_NEIGHBORHOOD_SIZE)         + "\n" +
+  "MAX_RADIUS_OF_CURVATURE = "             + d2str(MAX_RADIUS_OF_CURVATURE)             + "\n" +
   "MAX_ITEMS_PER_LEAF = "                  + i2str(MAX_ITEMS_PER_LEAF)                  + "\n" +
   "MAX_OCTREE_DEPTH = "                    + i2str(MAX_OCTREE_DEPTH)                    + "\n" +
   "MAX_FILENAME_SIZE = "                   + i2str(MAX_FILENAME_SIZE)                   + "\n" +
@@ -1006,7 +1161,7 @@ std::string Controls::getCommandSettings (void)
   "OVERALL_GAIN = "                        + d2str(OVERALL_GAIN)                        + "\n" +
   "MIN_DISPLACEMENT_SQ = "                 + d2str(MIN_DISPLACEMENT_SQ)                 + "\n" +
   "TARGET_ECW = "                          + d2str(TARGET_ECW)                          + "\n" +
-  "ECW_THRESHOLD = "                       + d2str(ECW_THRESHOLD)                       + "\n" +
+  //"ECW_THRESHOLD = "                       + d2str(ECW_THRESHOLD)                       + "\n" +
   "TARGET_ECW_HIGH = "                     + d2str(TARGET_ECW_HIGH)                     + "\n" +
   "TARGET_ECW_LOW = "                      + d2str(TARGET_ECW_LOW)                      + "\n" +
   "GAIN_STEP = "                           + d2str(GAIN_STEP)                           + "\n" +
@@ -1034,7 +1189,18 @@ std::string Controls::getCommandSettings (void)
   "REFRACTED_FILE = "                      + REFRACTED_FILE                             + "\n" + 
   "INTERSECTED_FILE = "                    + INTERSECTED_FILE                           + "\n" + 
   "NONNICE_FILE = "                        + NONNICE_FILE                               + "\n" +
-  "SMALL_ECW_THRESHOLD = "                 + d2str(SMALL_ECW_THRESHOLD)                 + "\n"; 
+  "GAIN_SHCEDULING_FILE = "                + GAIN_SCHEDULING_FILE                       + "\n" +
+  "SMALL_ECW_THRESHOLD = "                 + d2str(SMALL_ECW_THRESHOLD)                 + "\n" +
+  "REGION_ORTHOGONALITY_THRESHOLD = "      + d2str(REGION_ORTHOGONALITY_THRESHOLD)      + "\n" + 
+  "COUNT_NEIGHBORS = "                     + i2str(COUNT_NEIGHBORS)                     + "\n" +
+  "REPORT_VERTEX_AREA = "                  + i2str(REPORT_VERTEX_AREA)                  + "\n" +
+  "REPORT_VERTEX_IDENTITY = "              + i2str(REPORT_VERTEX_IDENTITY)              + "\n" +
+  "DUAL_TARGET_ECWS = "                    + i2str(DUAL_TARGET_ECWS)                    + "\n" +
+  "FREEZE_SHEETS = "                       + i2str(FREEZE_SHEETS)                       + "\n" +
+  "FREEZE_TUNNELS = "                      + i2str(FREEZE_TUNNELS)                      + "\n" +
+  "VERTEX_NEIGHBOR_COUNT_PERIOD = "        + i2str(VERTEX_NEIGHBOR_COUNT_PERIOD)        + "\n" +
+  "CLEFT_VERTICES_FILE = "                 + FROZEN_VERTICES_FILE                       + "\n" +
+  "RECON_BLOCK_WRAP = "                    + RECON_BLOCK_WRAP                           + "\n";
   return message;
 }
 

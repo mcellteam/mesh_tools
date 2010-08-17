@@ -201,9 +201,51 @@ void Refractory::refractVertForNumVio (Vertex * const v)
 //  set_last_N_moved_verts.insert(v);
 //}
 
-/** Determine if vertex is allowed to move.
- * \param[in] v Vertex of interest.
- * \return True if allowed to move; false otherwise.
+//bool isBetweenBoxes( Vertex * const v)
+//{
+//  if (
+//      (
+//       (*v->getCoord(0) < 60 && *v->getCoord(0) > 2700 ) &&
+//       (*v->getCoord(1) < 80 && *v->getCoord(1) > 2860 ) &&
+//       (*v->getCoord(2) < 0 && *v->getCoord(2) > 2900 )
+//      )  
+//      &&
+//      (
+//       (*v->getCoord(0) > -800 && *v->getCoord(0) < 3500 ) &&
+//       (*v->getCoord(1) > -500 && *v->getCoord(1) < 3500 ) &&
+//       (*v->getCoord(2) > -100 && *v->getCoord(2) < 3250 )
+//      )  
+//     )
+// {
+//    return true;
+//  }
+//  else
+//  {
+//    return false;
+//  }
+//}
+//
+///** Determine if vertex is allowed to move.
+// * \param[in] v Vertex of interest.
+// * \return True if allowed to move; false otherwise.
+// */
+//
+//bool Refractory::vertexIsMoveCandidate (Vertex * const v)
+//{
+//  // if vertex is candidate, i.e. closest point was found for vertex
+//  // and vertex not found in refractory
+//  // and vertex is not frozen
+//  return (v->getClosestFace()!=NULL) && (isRefracted(v)==false)
+//        && (Container::instance().vertexIsFrozen(v)==false)
+//        && (isBetweenBoxes(v)==true)
+//        ;
+//  //return (isRefracted(v)==false)
+//  //      && (Container::instance().vertexIsFrozen(v)==false);
+//}
+
+/** Enforce maximum vertex displacment policy.
+ * \param[in] v Vertex being moved.
+ * \param[out] new_pos New Position of input vertex.
  */
 
 bool Refractory::vertexIsMoveCandidate (Vertex * const v)
@@ -212,7 +254,11 @@ bool Refractory::vertexIsMoveCandidate (Vertex * const v)
   // and vertex not found in refractory
   // and vertex is not frozen
   return (v->getClosestFace()!=NULL) && (isRefracted(v)==false)
-        && (Container::instance().vertexIsFrozen(v)==false);
+        && (Container::instance().vertexIsFrozen(v)==false)
+        && (!Controls::instance().get_freeze_sheets()  || v->isSheet()==false)
+        && (!Controls::instance().get_freeze_tunnels() || v->isSheet()==true)
+        //&& (isBetweenBoxes(v)==true)
+        ;
   //return (isRefracted(v)==false)
   //      && (Container::instance().vertexIsFrozen(v)==false);
 }
@@ -268,8 +314,8 @@ void Refractory::enforceMaxdisplacement (Vertex * const v,
  * \return Iterator pointing to next vertex move candidate.
  */
 
-vp_cit Refractory::getNextVertex (const int & group,
-                                  vp_cit v,
+//vp_cit Refractory::getNextVertex (const int & group,
+vp_cit Refractory::getNextVertex (vp_cit v,
                                   bool const int_flag,
                                   bool const ang_flag,
                                   bool const outside_octree)
@@ -290,28 +336,28 @@ vp_cit Refractory::getNextVertex (const int & group,
   if (int_flag==true)
   {
     refractVertexForIntVio(*v);
-    Log::instance().writeRefractedNow(group,4);
+    //Log::instance().writeRefractedNow(group,4);
     detect = true;
   }
   // refract if octree boundary was breached
   if (outside_octree==true)
   {
     refractVertforOctreeVio(*v);
-    Log::instance().writeRefractedNow(group,5);
+    //Log::instance().writeRefractedNow(group,5);
     detect = true;
   }
   // refract if extreme angles were generated
   if (ang_flag==true)
   {
     refractVertforAngleVio(*v);
-    Log::instance().writeRefractedNow(group,2);
+    //Log::instance().writeRefractedNow(group,2);
     detect = true;
   }
   // refract for small virtual displacement
   if (detect==false)
   {
     refractVertexForSmallDispVio(*v);
-    Log::instance().writeRefractedNow(group,3);
+    //Log::instance().writeRefractedNow(group,3);
   }
   // reset gain
   Gain_Schedule::instance().resetGain();
@@ -323,7 +369,8 @@ vp_cit Refractory::getNextVertex (const int & group,
  * \param[in] v Last moved vertex.
  */
 
-void Refractory::updateSuccessfulMove (const int & group,Vertex * const v)
+//void Refractory::updateSuccessfulMove (const int & group,Vertex * const v)
+void Refractory::updateSuccessfulMove (Vertex * const v)
 {
   Controls & cs(Controls::instance());
   ti_it target = vert_move_distr.find(v);
@@ -345,7 +392,7 @@ void Refractory::updateSuccessfulMove (const int & group,Vertex * const v)
       // place vertex into long refraction
       refractVertForNumVio(v);
       // recrd refraction
-      Log::instance().writeRefractedNow(group,1);
+      //Log::instance().writeRefractedNow(group,1);
     }
     else
     {

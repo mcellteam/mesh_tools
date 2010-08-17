@@ -1,8 +1,11 @@
 #include "object.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <stdlib.h>
+#include <string.h>
 
 using std::cerr;
 using std::cout;
@@ -18,6 +21,36 @@ using std::endl;
 #include "meshalyzer.h"
 #include "space.h"
 #include "vertex.h"
+
+Object::Object (std::string s)
+  :name(s),v(),f(),e(),
+  //closed(false),consistent(false),
+  outward(false),//manifold(false),
+  iv(),intf(),nice(),flip(),num_sep(0),num_bou(0),vol(0),genus(0),vp(),found(),
+  contig_f(false),contig_v(false),area(),aspect_ratio(),edge_length(),edge_angle(),
+  adjacent_face(),border(),nonman_e(),flipped(),indistin_v(),indistin(),dupl_v_index(),
+  dupl_f_index(),nonman_v(),orphan(),missing_f(),missing_v(),degen(),bad_aspect(),
+  bad_angle(),bad_length(),zero_area()
+
+{
+  // cumulative statistics
+  bb[0]=bb[1]=bb[2]=bb[3]=bb[4]=bb[5]=0;
+  vec_cv[0]=vec_cv[1]=vec_cv[2]=vec_cv[3]=vec_cv[4]=0;
+  vec_cf[0]=vec_cf[1]=vec_cf[2]=vec_cf[3]=vec_cf[4]=0;
+}
+
+Object::~Object (void)
+{
+  v_iterator i;
+  f_iterator j;
+  e_iterator k;
+  for (i=v.begin();i!=v.end();i++) { delete *i; }
+  for (j=f.begin();j!=f.end();j++) { delete *j; }
+  for (k=e.begin();k!=e.end();k++) { delete *k; }
+  v.clear();
+  f.clear();
+  e.clear();
+}
 
 void Object::clearFlipTable (void)
 {
@@ -67,32 +100,6 @@ void Object::setVertexNiceness (Vertex *vv,int val)
   }
 }
 
-Object::~Object (void)
-{
-  v_iterator i;
-  f_iterator j;
-  e_iterator k;
-  for (i=v.begin();i!=v.end();i++) { delete *i; }
-  for (j=f.begin();j!=f.end();j++) { delete *j; }
-  for (k=e.begin();k!=e.end();k++) { delete *k; }
-  v.clear();
-  f.clear();
-  e.clear();
-}
-
-Object::Object (std::string s)
-  :name(s),v(),f(),e(),closed(false),consistent(false),outward(false),manifold(false),
-  iv(),intf(),nice(),flip(),num_sep(0),num_bou(0),vol(0),genus(0),vp(),found(),
-  contig_f(false),contig_v(false),area(),aspect_ratio(),edge_length(),edge_angle(),
-  adjacent_face(),border(),nonman_e(),flipped(),indistin_v(),indistin(),dupl_v_index(),
-  dupl_f_index(),nonman_v(),orphan(),missing_f(),missing_v(),degen(),bad_aspect(),
-  bad_angle(),bad_length(),zero_area()
-
-{
-  vec_cv[0]=vec_cv[1]=vec_cv[2]=vec_cv[3]=vec_cv[4]=0;
-  vec_cf[0]=vec_cf[1]=vec_cf[2]=vec_cf[3]=vec_cf[4]=0;
-}
-
 bool Object::faceInTable_intf (Face *ff)
 {
   return intf.find(ff)!=intf.end();
@@ -106,7 +113,7 @@ ff_iterator Object::findFaceInTable_intf (Face *ff)
 Edge* Object::findEdge (Vertex* va,Vertex* vb,map_se &hm,int num_digits)
 {
   Edge *ee=NULL;
-  std::string s = keyPair(va->index,vb->index,num_digits);
+  std::string s = keyPair(va->getIndex(),vb->getIndex(),num_digits);
   // if element exists given key, then get Edge pointer
   if (hm.count(s)>0){ ee=hm[s]; }
   return ee;
@@ -117,7 +124,7 @@ void Object::createEdge (Face *ff,Vertex* va,Vertex* vb,map_se &hm,int num_digit
   // new edge
   Edge *en = new Edge (ff,va,vb);
   // store edge pointer in hash table
-  hm[keyPair(va->index,vb->index,num_digits)]=en;
+  hm[keyPair(va->getIndex(),vb->getIndex(),num_digits)]=en;
   // add edge pointer to face
   ff->addEdge(en);
   // add edge pointer to object
@@ -145,7 +152,7 @@ int Object::setNumDigits (void)
   // for each vertex in object
   for (v_iterator i=v.begin();i!=v.end();i++)
   {
-    if ((*i)->index>max) { max=(*i)->index; }
+    if ((*i)->getIndex()>max) { max=(*i)->getIndex(); }
   }
   char str[64];
   sprintf(str,"%d",max);
@@ -165,27 +172,27 @@ void Object::createEdges (void)
   // for each face
   for (i=f.begin();i!=f.end();i++) 
   {
-    buildEdge(*i,(*i)->v[0],(*i)->v[1],hm,num_digits);
-    buildEdge(*i,(*i)->v[1],(*i)->v[2],hm,num_digits);
-    buildEdge(*i,(*i)->v[2],(*i)->v[0],hm,num_digits);
+    buildEdge(*i,(*i)->ptr_vertex(0),(*i)->ptr_vertex(1),hm,num_digits);
+    buildEdge(*i,(*i)->ptr_vertex(1),(*i)->ptr_vertex(2),hm,num_digits);
+    buildEdge(*i,(*i)->ptr_vertex(2),(*i)->ptr_vertex(0),hm,num_digits);
   }
   cerr << "complete.\n";cerr.flush();
 }
 
-void Object::verifyEdges (void)
-{
-  for (e_iterator i=e.begin();i!=e.end();i++)
-  {
-    Edge *ee=*i;
-    if (ee->valid()==false)
-    {
-      cout << "Object::verifyEdges: Error! edge is invalid.\n";
-      ee->printEdge(ee->vv1->o->name);
-      cout << endl << endl;
-      exit(1);
-    }
-  }
-}
+//void Object::verifyEdges (void)
+//{
+//  for (e_iterator i=e.begin();i!=e.end();i++)
+//  {
+//    Edge *ee=*i;
+//    if (ee->valid()==false)
+//    {
+//      cout << "Object::verifyEdges: Error! edge is invalid.\n";
+//      ee->printEdge(ee->ptr_vv1()->o->name);
+//      cout << endl << endl;
+//      exit(1);
+//    }
+//  }
+//}
 
 double Object::getMeanEdgeLength (void)
 {
@@ -227,17 +234,17 @@ bool Object::processEdge (Edge *ee,hmap_vd &hood,vec_e &bucket,Vertex *vv)
     {
       // if v1 found and v2 not found in hashtable
       // then add v2 to hashtable
-      hood[vp2]=sqrt( (vp2->pN[0]-vv->pN[0])*(vp2->pN[0]-vv->pN[0])+
-                      (vp2->pN[1]-vv->pN[1])*(vp2->pN[1]-vv->pN[1])+
-                      (vp2->pN[2]-vv->pN[2])*(vp2->pN[2]-vv->pN[2]));
+      hood[vp2]=sqrt( (vp2->getpN(0)-vv->getpN(0))*(vp2->getpN(0)-vv->getpN(0))+
+                      (vp2->getpN(1)-vv->getpN(1))*(vp2->getpN(1)-vv->getpN(1))+
+                      (vp2->getpN(2)-vv->getpN(2))*(vp2->getpN(2)-vv->getpN(2)));
     }
     if (f2)
     {
       // if v2 found and v1 not found in hashtable
       // then add v1 to hashtable
-      hood[vp1]=sqrt( (vp1->pN[0]-vv->pN[0])*(vp1->pN[0]-vv->pN[0])+
-                      (vp1->pN[1]-vv->pN[1])*(vp1->pN[1]-vv->pN[1])+
-                      (vp1->pN[2]-vv->pN[2])*(vp1->pN[2]-vv->pN[2]));
+      hood[vp1]=sqrt( (vp1->getpN(0)-vv->getpN(0))*(vp1->getpN(0)-vv->getpN(0))+
+                      (vp1->getpN(1)-vv->getpN(1))*(vp1->getpN(1)-vv->getpN(1))+
+                      (vp1->getpN(2)-vv->getpN(2))*(vp1->getpN(2)-vv->getpN(2)));
     }
   }
   return empty;
@@ -256,9 +263,9 @@ void Object::collectFaces (hmap_vd &hood,set_v &disabled,vec_f &new_faces)
       for (f_iterator j=(*i).first->f.begin();j!=(*i).first->f.end();j++)
       {
         // if any face vertex is thawed, then add face to collection
-        if ( !ifFrozen(hood,(*j)->v[0]) ||
-            !ifFrozen(hood,(*j)->v[1]) ||
-            !ifFrozen(hood,(*j)->v[2])){new_faces.push_back(*j);}
+        if (!ifFrozen(hood,(*j)->ptr_vertex(0)) ||
+            !ifFrozen(hood,(*j)->ptr_vertex(1)) ||
+            !ifFrozen(hood,(*j)->ptr_vertex(2))){new_faces.push_back(*j);}
       }
       // add vertex to disabled list
       disabled.insert((*i).first);
@@ -326,7 +333,7 @@ void Object::newFindNeighborhoods (void)
       // for each edge in face
       for (int j=0;j<3;j++)
       {
-        if (!processEdge((*k)->e[j],hood,bucket,*i))
+        if (!processEdge((*k)->ptr_edge(j),hood,bucket,*i))
         {
           bucket_empty = false;
         }
@@ -374,7 +381,7 @@ void Object::newFindNeighborhoods (void)
         // for each edge in face
         for (int j=0;j<3;j++)
         {
-          if (!processEdge((*k)->e[j],hood,bucket,*i))
+          if (!processEdge((*k)->ptr_edge(j),hood,bucket,*i))
           {
             bucket_empty = false;
           }
@@ -428,9 +435,9 @@ void Object::findVertexAdjacencies (void)
   // for each face, add face* to each face vertex
   for (j=f.begin();j!=f.end();j++)
   {
-    ((*j)->v[0])->f.push_back(*j);
-    ((*j)->v[1])->f.push_back(*j);
-    ((*j)->v[2])->f.push_back(*j);
+    ((*j)->ptr_vertex(0))->f.push_back(*j);
+    ((*j)->ptr_vertex(1))->f.push_back(*j);
+    ((*j)->ptr_vertex(2))->f.push_back(*j);
   }
   cerr << "complete.\n";cerr.flush();
 }
@@ -440,19 +447,19 @@ void Object::boundObject (double r[6])
   v_iterator i;
   double xmin,xmax,ymin,ymax,zmin,zmax,x,y,z;
   //initialize mins and maxes
-  xmin = v[0]->pN[0];
-  xmax = v[0]->pN[0];
-  ymin = v[0]->pN[1];
-  ymax = v[0]->pN[1];
-  zmin = v[0]->pN[2];
-  zmax = v[0]->pN[2];
+  xmin = v[0]->getpN(0);
+  xmax = v[0]->getpN(0);
+  ymin = v[0]->getpN(1);
+  ymax = v[0]->getpN(1);
+  zmin = v[0]->getpN(2);
+  zmax = v[0]->getpN(2);
   // for each vertex in object
   for (i=v.begin();i!=v.end();i++) 
   {
     ///////// extract coordinates //////////
-    x = (*i)->pN[0];
-    y = (*i)->pN[1];
-    z = (*i)->pN[2];
+    x = (*i)->getpN(0);
+    y = (*i)->getpN(1);
+    z = (*i)->getpN(2);
     if (x>xmax) {xmax = x;}
     else if (x<xmin) {xmin = x;}
     if (y>ymax) {ymax = y;}
@@ -470,20 +477,20 @@ void Object::evalAttributes (Space &s)
 {
   cerr << "Checking if object [" << name << "] is closed..........................";
   cerr.flush();
-  closed=isClosed();
+  //closed=isClosed();
   cerr << "complete.\n";
   cerr.flush();
   cerr << "Checking if object [" << name << "] is manifold........................";
   cerr.flush();
-  manifold=isManifold();
+  //manifold=isManifold();
   cerr << "complete.\n";cerr.flush();
-  if (manifold)
+  if (isManifold())
   {
     cerr << "Checking if object [" << name << "] faces are consistently oriented....";
     cerr.flush();
-    consistent=isConsistent();
+    //consistent=isConsistent();
     cerr << "complete.\n";cerr.flush();
-    if (consistent && closed)
+    if (isConsistent() && isClosed())
     {
       cerr << "Checking if object [" << name << "] faces are oriented outward.........";
       cerr.flush();
@@ -493,56 +500,56 @@ void Object::evalAttributes (Space &s)
   }
 }
 
-bool Object::rayIntersectsSide (char *str,double lp[2][3],double bb[6],double n[3])
+bool Object::rayIntersectsSide (const char *str,double lp[2][3],double mybb[6],double n[3])
 {
   double x1,y1,z1,a;
   if (!strcmp(str,"-x"))
   {
-    x1=bb[0];
+    x1=mybb[0];
     a=(x1-lp[0][0])/n[0];
     y1=a*n[1]+lp[0][1];
     z1=a*n[2]+lp[0][2];
-    if (a>0 && y1>bb[2] && y1<bb[3] && z1>bb[4] && z1<bb[5] ){return true;}
+    if (a>0 && y1>mybb[2] && y1<mybb[3] && z1>mybb[4] && z1<mybb[5] ){return true;}
   }
   else if (!strcmp(str,"+x"))
   {
-    x1=bb[1];
+    x1=mybb[1];
     a=(x1-lp[0][0])/n[0];
     y1=a*n[1]+lp[0][1];
     z1=a*n[2]+lp[0][2];
-    if (a>0 && y1>bb[2] && y1<bb[3] && z1>bb[4] && z1<bb[5] ){return true;}
+    if (a>0 && y1>mybb[2] && y1<mybb[3] && z1>mybb[4] && z1<mybb[5] ){return true;}
   }
   else if (!strcmp(str,"-y"))
   {
-    y1=bb[2];
+    y1=mybb[2];
     a=(y1-lp[0][1])/n[1];
     x1=a*n[0]+lp[0][0];
     z1=a*n[2]+lp[0][2];
-    if (a>0 && x1>bb[0] && x1<bb[1] && z1>bb[4] && z1<bb[5] ){return true;}
+    if (a>0 && x1>mybb[0] && x1<mybb[1] && z1>mybb[4] && z1<mybb[5] ){return true;}
   }
   else if (!strcmp(str,"+y"))
   {
-    y1=bb[3];
+    y1=mybb[3];
     a=(y1-lp[0][1])/n[1];
     x1=a*n[0]+lp[0][0];
     z1=a*n[2]+lp[0][2];
-    if (a>0 && x1>bb[0] && x1<bb[1] && z1>bb[4] && z1<bb[5] ){return true;}
+    if (a>0 && x1>mybb[0] && x1<mybb[1] && z1>mybb[4] && z1<mybb[5] ){return true;}
   }
   else if (!strcmp(str,"-z"))
   {
-    z1=bb[4];
+    z1=mybb[4];
     a=(z1-lp[0][2])/n[2];
     x1=a*n[0]+lp[0][0];
     y1=a*n[1]+lp[0][1];
-    if (a>0 && x1>bb[0] && x1<bb[1] && y1>bb[2] && y1<bb[3] ){return true;}
+    if (a>0 && x1>mybb[0] && x1<mybb[1] && y1>mybb[2] && y1<mybb[3] ){return true;}
   }
   else if (!strcmp(str,"+z"))
   {
-    z1=bb[5];
+    z1=mybb[5];
     a=(z1-lp[0][2])/n[2];
     x1=a*n[0]+lp[0][0];
     y1=a*n[1]+lp[0][1];
-    if (a>0 && x1>bb[0] && x1<bb[1] && y1>bb[2] && y1<bb[3] ){return true;}
+    if (a>0 && x1>mybb[0] && x1<mybb[1] && y1>mybb[2] && y1<mybb[3] ){return true;}
   }
   return false;
 }
@@ -552,34 +559,34 @@ bool Object::rayIntersectsBB (double lp[2][3],Face *ff,double n[3])
   ///// compute face bounding box /////
   vec_d xv,yv,zv;
   // identify face bounding box limits
-  xv.push_back(ff->v[0]->pN[0]);
-  xv.push_back(ff->v[1]->pN[0]);
-  xv.push_back(ff->v[2]->pN[0]);
-  yv.push_back(ff->v[0]->pN[1]);
-  yv.push_back(ff->v[1]->pN[1]);
-  yv.push_back(ff->v[2]->pN[1]);
-  zv.push_back(ff->v[0]->pN[2]);
-  zv.push_back(ff->v[1]->pN[2]);
-  zv.push_back(ff->v[2]->pN[2]);
+  xv.push_back(ff->ptr_vertex(0)->getpN(0));
+  xv.push_back(ff->ptr_vertex(1)->getpN(0));
+  xv.push_back(ff->ptr_vertex(2)->getpN(0));
+  yv.push_back(ff->ptr_vertex(0)->getpN(1));
+  yv.push_back(ff->ptr_vertex(1)->getpN(1));
+  yv.push_back(ff->ptr_vertex(2)->getpN(1));
+  zv.push_back(ff->ptr_vertex(0)->getpN(2));
+  zv.push_back(ff->ptr_vertex(1)->getpN(2));
+  zv.push_back(ff->ptr_vertex(2)->getpN(2));
   sort(xv.begin(),xv.end());
   sort(yv.begin(),yv.end());
   sort(zv.begin(),zv.end());
   // grab face 3D location range
-  double bb[6];
-  bb[0] = xv[0];  // -x
-  bb[1] = xv[2];  //  +x
-  bb[2] = yv[0];  // -y
-  bb[3] = yv[2];  //  +y
-  bb[4] = zv[0];  // -z
-  bb[5] = zv[2];  //  +z
+  double mybb[6];
+  mybb[0] = xv[0];  // -x
+  mybb[1] = xv[2];  //  +x
+  mybb[2] = yv[0];  // -y
+  mybb[3] = yv[2];  //  +y
+  mybb[4] = zv[0];  // -z
+  mybb[5] = zv[2];  //  +z
 
   ///// for each side of bounding box /////
-  if ( rayIntersectsSide("-x",lp,bb,n) || 
-      rayIntersectsSide("+x",lp,bb,n) || 
-      rayIntersectsSide("-y",lp,bb,n) || 
-      rayIntersectsSide("+y",lp,bb,n) || 
-      rayIntersectsSide("-z",lp,bb,n) || 
-      rayIntersectsSide("+z",lp,bb,n)
+  if (rayIntersectsSide("-x",lp,mybb,n) || 
+      rayIntersectsSide("+x",lp,mybb,n) || 
+      rayIntersectsSide("-y",lp,mybb,n) || 
+      rayIntersectsSide("+y",lp,mybb,n) || 
+      rayIntersectsSide("-z",lp,mybb,n) || 
+      rayIntersectsSide("+z",lp,mybb,n)
     ){return true;}
   // if ray intersects side, then return true
   return false;
@@ -606,18 +613,18 @@ bool Object::isOutward (Space &s)
     n[2]=n[2]/L;
     // ray origin = centroid of origin face
     double lp[2][3];
-    lp[0][0] = (ff->v[0]->pN[0]+
-                ff->v[1]->pN[0]+
-                ff->v[2]->pN[0])/3.0;
-    lp[0][1] = (ff->v[0]->pN[1]+
-                ff->v[1]->pN[1]+
-                ff->v[2]->pN[1])/3.0;
-    lp[0][2] = (ff->v[0]->pN[2]+
-                ff->v[1]->pN[2]+
-                ff->v[2]->pN[2])/3.0;
+    lp[0][0] = (ff->ptr_vertex(0)->getpN(0)+
+                ff->ptr_vertex(1)->getpN(0)+
+                ff->ptr_vertex(2)->getpN(0))/3.0;
+    lp[0][1] = (ff->ptr_vertex(0)->getpN(1)+
+                ff->ptr_vertex(1)->getpN(1)+
+                ff->ptr_vertex(2)->getpN(1))/3.0;
+    lp[0][2] = (ff->ptr_vertex(0)->getpN(2)+
+                ff->ptr_vertex(1)->getpN(2)+
+                ff->ptr_vertex(2)->getpN(2))/3.0;
     // ray end = point on normal advanced from origin
     //			 a distance equal to 2*world width along each axis
-    double del[3]={fabs(s.world[1]-s.world[0]),fabs(s.world[3]-s.world[2]),fabs(s.world[5]-s.world[4])};
+    double del[3]={fabs(s.getWorld(1)-s.getWorld(0)),fabs(s.getWorld(3)-s.getWorld(2)),fabs(s.getWorld(5)-s.getWorld(4))};
     int big;
     biggest(del,big);
     lp[1][0] = lp[0][0]+n[0]*2*del[big];
@@ -692,7 +699,7 @@ bool Object::isClosed (void)
   // for each edge in object
   for (e_iterator i=e.begin();i!=e.end();i++)
   {
-    if ((*i)->f2==NULL)
+    if ((*i)->ptr_f2()==NULL)
     {
       flag=false;
       // record offending edge
@@ -921,13 +928,13 @@ void Object::vertexAdjacentFaces (void)
     int c=(*i)->f.size();
     //		af.insert(std::make_pair(c,*i));
     //		adjacent_face.n++;
-    adjacent_face.sum+=c;
-    adjacent_face.sum2+=c*c;
-    adjacent_face.total+=c;
-    if (c<adjacent_face.min) {adjacent_face.min=c;}
-    if (c>adjacent_face.max) {adjacent_face.max=c;}
+    adjacent_face.add2sum(c);
+    adjacent_face.add2sum2(c*c);
+    adjacent_face.add2total(c);
+    if (c<adjacent_face.getMin()) {adjacent_face.setMin(c);}
+    if (c>adjacent_face.getMax()) {adjacent_face.setMax(c);}
     // add to vector
-    adjacent_face.x.push_back(c);
+    adjacent_face.insertElement(c);
   }
   // build adjacent face histogram
   adjacent_face.createAdjacentFaceHistogram();
@@ -948,29 +955,29 @@ void Object::areaAspectRatio (Controls &cs)
     // compute face area = half normal vector length
     double aa=sqrt(dot(n,n))/2.0;
     //
-    area.sum+=aa;
-    area.sum2+=aa*aa;
-    area.total+=aa;
-    if (aa<area.min) {area.min=aa;}
-    if (aa>area.max) {area.max=aa;}
+    area.add2sum(aa);
+    area.add2sum2(aa*aa);
+    area.add2total(aa);
+    if (aa<area.getMin()) {area.setMin(aa);}
+    if (aa>area.getMax()) {area.setMax(aa);}
     // add to vector
-    area.x.push_back(aa);
+    area.insertElement(aa);
     ///// aspect ratio /////
     double ar = (*i)->getAspectRatio();
-    aspect_ratio.sum+=ar;
-    aspect_ratio.sum2+=ar*ar;
-    aspect_ratio.total+=ar;
-    if (ar<aspect_ratio.min) aspect_ratio.min=ar;
-    if (ar>aspect_ratio.max) aspect_ratio.max=ar;
+    aspect_ratio.add2sum(ar);
+    aspect_ratio.add2sum2(ar*ar);
+    aspect_ratio.add2total(ar);
+    if (ar<aspect_ratio.getMin()) aspect_ratio.setMin(ar);
+    if (ar>aspect_ratio.getMax()) aspect_ratio.setMax(ar);
     if (cs.signal[0]==true)
     {
       // compare face aspect ratio to user-defined threshold
       if (ar>cs.thresholds[0]) bad_aspect[*i]=ar;
     }
     // add to vector
-    aspect_ratio.x.push_back(ar);
+    aspect_ratio.insertElement(ar);
   }
-  assert (area.x.size() > 0);
+  assert (area.getSize() > 0);
   // update cumulative surface area
   //	a+=area.sum;
   // build face area histogram
@@ -986,7 +993,7 @@ void Object::degenContig (void)
   // for each face in object
   for (f_iterator i=f.begin();i!=f.end();i++)
   {
-    tt.insert(std::make_pair((*i)->index,*i));
+    tt.insert(std::make_pair((*i)->getIndex(),*i));
   }
   contig_f=true;
   int pace=1;
@@ -1002,7 +1009,7 @@ void Object::degenContig (void)
     }
     ///// degeneracy /////
     // if any two of the vertex indices are the same
-    if ( ff->v[0]==ff->v[1] || ff->v[0]==ff->v[2] || ff->v[1]==ff->v[2])
+    if ( ff->ptr_vertex(0)==ff->ptr_vertex(1) || ff->ptr_vertex(0)==ff->ptr_vertex(2) || ff->ptr_vertex(1)==ff->ptr_vertex(2))
     {
       // then face is degenerate
       degen.push_back(ff);
@@ -1113,19 +1120,19 @@ void Object::replaceGroups (Vertex *vv,hmap_fi &group,int z)
 
 void Object::setZero (Edge *ee,hmap_fi &group,int z)
 {
-  fi_iterator i=group.find(ee->f1);
-  if ((*i).second==0){group[ee->f1]=z;}
+  fi_iterator i=group.find(ee->ptr_f1());
+  if ((*i).second==0){group[ee->ptr_f1()]=z;}
   // if second adjacent face
-  if (ee->f2!=NULL)
+  if (ee->ptr_f2()!=NULL)
   {
-    i=group.find(ee->f2);
-    if ((*i).second==0){group[ee->f2]=z;}
+    i=group.find(ee->ptr_f2());
+    if ((*i).second==0){group[ee->ptr_f2()]=z;}
   }
   // if more adjacent faces
-  if (!ee->fvec.empty())
+  if (!ee->noExtraFaces())
   {
     // for each adjacent face
-    for (f_iterator j=ee->fvec.begin();j!=ee->fvec.end();j++)
+    for (c_f_iterator j=ee->first_extra_face();j!=ee->one_past_last_extra_face();j++)
     {
       // if adjacent face has no group
       i=group.find(*j);
@@ -1176,12 +1183,12 @@ void Object::getSelectedFaces (vec_f &sf,vec_f fv)
     for (f_iterator i=sf.begin();i!=sf.end();i++)
     {
       // grab adjacent faces of selected face
-      if ((*i)->e[0]->f1!=*i) { af.push_back((*i)->e[0]->f1); }
-      else                    { af.push_back((*i)->e[0]->f2); }
-      if ((*i)->e[1]->f1!=*i) { af.push_back((*i)->e[1]->f1); }
-      else                    { af.push_back((*i)->e[1]->f2); }
-      if ((*i)->e[2]->f1!=*i) { af.push_back((*i)->e[2]->f1); }
-      else                    { af.push_back((*i)->e[2]->f2); }
+      if ((*i)->ptr_edge(0)->ptr_f1()!=*i) { af.push_back((*i)->ptr_edge(0)->ptr_f1()); }
+      else                    { af.push_back((*i)->ptr_edge(0)->ptr_f2()); }
+      if ((*i)->ptr_edge(1)->ptr_f1()!=*i) { af.push_back((*i)->ptr_edge(1)->ptr_f1()); }
+      else                    { af.push_back((*i)->ptr_edge(1)->ptr_f2()); }
+      if ((*i)->ptr_edge(2)->ptr_f1()!=*i) { af.push_back((*i)->ptr_edge(2)->ptr_f1()); }
+      else                    { af.push_back((*i)->ptr_edge(2)->ptr_f2()); }
     }
     // keep unique faces
     sort(af.begin(),af.end());
@@ -1247,10 +1254,10 @@ void Object::findIntersectingFaces (Container *c,Space &s)
 {
   vec_f dummy;
   // for each box
-  for (b_iterator i=s.b.begin();i!=s.b.end();i++)
+  for (c_b_iterator i=s.first_box();i!=s.one_past_last_box();i++)
   {
     // if box is not empty
-    if ((*i)->f.empty()==false)
+    if ((*i)->noFaces()==false)
     {
       // check for intersections
       (*i)->getFaceIntersection(c);
@@ -1263,7 +1270,7 @@ void Object::findIntersectingFaces (Container *c,Space &s)
 void Object::countBoundaries (void)
 {
   num_bou=0;
-  Boundary bb;
+  Boundary boundary;
   // keep unique border edges
   sort(border.begin(),border.end());
   e_iterator new_end = unique(border.begin(),border.end());
@@ -1275,10 +1282,10 @@ void Object::countBoundaries (void)
   while (ws.empty()==false)
   {
     // if the boundary is closed
-    if (bb.open==false)
+    if (boundary.isOpen()==false)
     {
       // init boundary
-      bb.init(ws.back());
+      boundary.init(ws.back());
       // pop last edge from ws
       ws.pop_back();
     }
@@ -1288,13 +1295,13 @@ void Object::countBoundaries (void)
     while (i!=ws.end())
     {
       // if edge extends boundary
-      if (bb.edgeExtendsBoundary(*i))
+      if (boundary.edgeExtendsBoundary(*i))
       {
         myfound = true;
         // remove edge from ws
         ws.erase(i);
         // if boundary is closed
-        if (bb.closed())
+        if (boundary.closed())
         {
           // increment boundary count
           num_bou++;
@@ -1308,7 +1315,7 @@ void Object::countBoundaries (void)
     // then assume boundary is due to dangling face
     if (myfound==false)
     {
-      bb.open=false;
+      boundary.setOpen(false);
       num_bou++;
     }
   }
@@ -1321,13 +1328,13 @@ void Object::processEdgeLengths (Controls &cs)
   // for each edge in object
   for (e_iterator i=e.begin();i!=e.end();i++)
   {
-    double l = (*i)->l;
+    double l = (*i)->getOrigLength();
     //		edge_length.n++;
-    edge_length.sum+=l;
-    edge_length.sum2+=l*l;
-    edge_length.total+=l;
-    if (l<edge_length.min) edge_length.min=l;
-    if (l>edge_length.max) edge_length.max=l;
+    edge_length.add2sum(l);
+    edge_length.add2sum2(l*l);
+    edge_length.add2total(l);
+    if (l<edge_length.getMin()) edge_length.setMin(l);
+    if (l>edge_length.getMax()) edge_length.setMax(l);
     if (cs.signal[3]==true)
     {
       if (l<cs.thresholds[3]) bad_length[*i]=l;
@@ -1339,12 +1346,12 @@ void Object::processEdgeLengths (Controls &cs)
     // check distinguishability
     Vertex *v1=NULL,*v2=NULL,*o1=NULL,*o2=NULL;
     (*i)->getVertices(v1,v2,o1,o2);
-    if (!distinguishable(v1->pN[0],v2->pN[0]) &&
-        !distinguishable(v1->pN[1],v2->pN[1]) &&
-        !distinguishable(v1->pN[2],v2->pN[2]) 
+    if (!distinguishable(v1->getpN(0),v2->getpN(0)) &&
+        !distinguishable(v1->getpN(1),v2->getpN(1)) &&
+        !distinguishable(v1->getpN(2),v2->getpN(2)) 
       ){ indistin.push_back(*i); }
     // add to vector
-    edge_length.x.push_back(l);
+    edge_length.insertElement(l);
   }
   edge_length.createHistogram();
 }
@@ -1373,15 +1380,15 @@ void Object::computeEdgeAngles (void)
   for (e_iterator i=e.begin();i!=e.end();i++)
   {
     // if edge has exactly two adjacent faces
-    if ((*i)->f2!=NULL && (*i)->fvec.empty())
+    if ((*i)->ptr_f2()!=NULL && (*i)->noExtraFaces())
     {
       double angle = (*i)->getAngle()*180/cs.get_pi(); // degrees
       //			edge_angle.n++;
-      edge_angle.sum+=angle;
-      edge_angle.sum2+=angle*angle;
-      edge_angle.total+=angle;
-      if (angle<edge_angle.min) edge_angle.min=angle;
-      if (angle>edge_angle.max) edge_angle.max=angle;
+      edge_angle.add2sum(angle);
+      edge_angle.add2sum2(angle*angle);
+      edge_angle.add2total(angle);
+      if (angle<edge_angle.getMin()) edge_angle.setMin(angle);
+      if (angle>edge_angle.getMax()) edge_angle.setMax(angle);
       if (cs.signal[1]==true)
       {
         if (angle<cs.thresholds[1]) bad_angle[*i]=angle;
@@ -1391,7 +1398,7 @@ void Object::computeEdgeAngles (void)
         if (angle>cs.thresholds[2]) bad_angle[*i]=angle;
       }
       // add to vector
-      edge_angle.x.push_back(angle);
+      edge_angle.insertElement(angle);
     }
   }
   edge_angle.createHistogram();
@@ -1403,15 +1410,15 @@ void Object::computeVolume (void)
   // for each face in object
   for (f_iterator i=f.begin();i!=f.end();i++)
   {
-    double x1=(*i)->v[0]->pN[0];
-    double y1=(*i)->v[0]->pN[1];
-    double z1=(*i)->v[0]->pN[2];
-    double x2=(*i)->v[1]->pN[0];
-    double y2=(*i)->v[1]->pN[1];
-    double z2=(*i)->v[1]->pN[2];
-    double x3=(*i)->v[2]->pN[0];
-    double y3=(*i)->v[2]->pN[1];
-    double z3=(*i)->v[2]->pN[2];
+    double x1=(*i)->ptr_vertex(0)->getpN(0);
+    double y1=(*i)->ptr_vertex(0)->getpN(1);
+    double z1=(*i)->ptr_vertex(0)->getpN(2);
+    double x2=(*i)->ptr_vertex(1)->getpN(0);
+    double y2=(*i)->ptr_vertex(1)->getpN(1);
+    double z2=(*i)->ptr_vertex(1)->getpN(2);
+    double x3=(*i)->ptr_vertex(2)->getpN(0);
+    double y3=(*i)->ptr_vertex(2)->getpN(1);
+    double z3=(*i)->ptr_vertex(2)->getpN(2);
     /* compute determinant of oriented triangle */
     double det=x1*(y2*z3-y3*z2)+x2*(y3*z1-y1*z3)+x3*(y1*z2-y2*z1);
     vol+=det;
@@ -1434,7 +1441,7 @@ void Object::vertexDistin (void)
   for (v_iterator i=v.begin();i!=v.end();i++)
   {
     // add dot product of vertex and random vector to multimap
-    mm.insert(std::make_pair(dot((*i)->pN,rand_vec),*i));
+    mm.insert(std::make_pair(dot((*i)->getpN_ptr(),rand_vec),*i));
   }
   // for each multimap element
   dv_iterator j;
@@ -1444,9 +1451,9 @@ void Object::vertexDistin (void)
     if (j!=mm.end())
     {
       // if sequential pair of multimap elements is not distinguishable
-      if (!distinguishable((*i).second->pN[0],(*j).second->pN[0]) &&
-          !distinguishable((*i).second->pN[1],(*j).second->pN[1]) &&
-          !distinguishable((*i).second->pN[2],(*j).second->pN[2]) )
+      if (!distinguishable((*i).second->getpN(0),(*j).second->getpN(0)) &&
+          !distinguishable((*i).second->getpN(1),(*j).second->getpN(1)) &&
+          !distinguishable((*i).second->getpN(2),(*j).second->getpN(2)) )
       {
         indistin_v.push_back((*i).second);
         indistin_v.push_back((*j).second);
@@ -1460,7 +1467,7 @@ void Object::evalCharacteristics (Container* c,Controls &cs,Space &s)
   // vertices
   cerr << "Bound object [" << name << "]..........................................";
   cerr.flush();
-  boundObject(cs.bb);
+  boundObject(bb);
   cerr << "complete.\n";cerr.flush();
   cerr << "Check if vertices are distinguishable for object [" << name << "]......";
   cerr.flush();
@@ -1481,7 +1488,7 @@ void Object::evalCharacteristics (Container* c,Controls &cs,Space &s)
   areaAspectRatio(cs);
   cerr << "complete.\n";cerr.flush();
   // if not batch mode
-  if (cs.interf==false)
+  if (cs.get_detect_interobject_intersections()==0)
   {
     cerr << "Find intersecting faces for object [" << name << "]....................";
     cerr.flush();
@@ -1498,14 +1505,14 @@ void Object::evalCharacteristics (Container* c,Controls &cs,Space &s)
   processEdgeLengths(cs);
   cerr << "complete.\n";cerr.flush();
 
-  if (manifold && consistent)
+  if (isManifold() && isConsistent())
   {
     // manifold and consistently oriented face normals
     cerr << "Analyze edge angles for object [" << name << "]........................";
     cerr.flush();
     computeEdgeAngles();
     cerr << "complete.\n";cerr.flush();
-    if (closed)
+    if (isClosed())
     {
       // closed, manifold, and consistently oriented face normals
       cerr << "Compute volume of object [" << name << "]..............................";
@@ -1532,10 +1539,10 @@ void Object::analyze (Container *c,Controls &cs,Space &s)
   // evaluate mesh attributes
   evalAttributes(s);
   // eval mesh characteristics
-  if (cs.attr==false)
+  if (cs.get_compute_attributes_only()==0)
   {
     evalCharacteristics(c,cs,s);
-    assert(area.x.size() > 0);
+    assert(area.getSize() > 0);
   }
 }
 
@@ -1546,7 +1553,7 @@ void Object::printChars (Controls &cs)
         << "    # faces: " << f.size() << endl
         << "    # edges: " << e.size() << endl
         << "    # components: " << num_sep << endl;
-  if (manifold==false)
+  if (isManifold()==false)
   {
     cout << "    # boundaries: Since object is nonmanifold,\n"
           << "    # boundaries: the number of boundaries may be underestimated.\n";
@@ -1560,20 +1567,20 @@ void Object::printChars (Controls &cs)
   {
     cout << "    # boundaries: " << border.size() << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each border edge
       for (e_iterator i=border.begin();i!=border.end();i++)
       {
         cout << "    # boundaries: boundary edge " << j++ << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printEdgeCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printEdge((*i)->f1->v[0]->o->name);
+          (*i)->print(cout);
           cout << endl;
         }
       }
@@ -1588,27 +1595,30 @@ void Object::printChars (Controls &cs)
   {
     cout << "    # indistinguishable vertices: " << indistin_v.size() << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each indistinguishable vertec
       for (v_iterator i=indistin_v.begin();i!=indistin_v.end();i++)
       {
         cout << "    #  indistinguishable vertices: vertex " << j++ << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printVertexCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printVertex((*i)->o->name);
+          (*i)->print(cout);
           cout << endl;
         }
       }
     }
   }
+  //////////////// total area
+  cout << "    object area: [(data units)^2]" << endl;
+  cout << "    object area: " << area.getSum() << endl;
   //////////////// if volume computed
-  if (closed==true && manifold==true && consistent==true)
+  if (isClosed()==true && isManifold()==true && isConsistent()==true)
   {
     cout << "    object volume: [(data units)^3]" << endl;
     cout << "    object volume: " << vol << endl;
@@ -1616,22 +1626,22 @@ void Object::printChars (Controls &cs)
   else 
   {
     cout << "    object volume: not computed, since ";
-    if (closed==false){cout << "not closed,";}
-    if (consistent==false){cout << "not consistent,";}
-    if (manifold==false){cout << "not manifold";}
+    if (isClosed()==false){cout << "not closed,";}
+    if (isConsistent()==false){cout << "not consistent,";}
+    if (isManifold()==false){cout << "not manifold";}
     cout << endl;
   }
   /////////////// if genus computed
-  if (closed==true && manifold==true && consistent==true && num_sep==1 && orphan.empty())
+  if (isClosed()==true && isManifold()==true && isConsistent()==true && num_sep==1 && orphan.empty())
   {
     cout << "    object genus: " << genus << endl;
   }
   else 
   {
     cout << "    object genus: not computed, since ";
-    if (closed==false){cout << "not closed,";}
-    if (consistent==false){cout << "not consistent,";}
-    if (manifold==false){cout << "not manifold,";}
+    if (isClosed()==false){cout << "not closed,";}
+    if (isConsistent()==false){cout << "not consistent,";}
+    if (isManifold()==false){cout << "not manifold,";}
     if (num_sep>1){cout << "#components=" << num_sep << ",";}
     if (!orphan.empty()){cout << "orphan vertices were found";}
     cout << endl;
@@ -1640,12 +1650,12 @@ void Object::printChars (Controls &cs)
   cout << "    bounding box: [data units]\n";
   cout << "    bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]\n";
   cout << "    bounding box: ["
-        << cs.bb[0] << ","
-        << cs.bb[1] << ","
-        << cs.bb[2] << "]["
-        << cs.bb[3] << ","
-        << cs.bb[4] << ","
-        << cs.bb[5] << "]" << endl;
+        << bb[0] << ","
+        << bb[1] << ","
+        << bb[2] << "]["
+        << bb[3] << ","
+        << bb[4] << ","
+        << bb[5] << "]" << endl;
   ////////////////// edges with indistinguishable vertices
   if (indistin.empty()==true)
   {
@@ -1657,20 +1667,20 @@ void Object::printChars (Controls &cs)
           << indistin.size() << endl;
   }
   //	if -p option, print offending
-  if (cs.print)
+  if (cs.get_print_detailed_info()==1)
   {
     if (indistin.empty()==false)
     {
       // for each afflicted edge
       for (e_iterator i=indistin.begin();i!=indistin.end();i++)
       {
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printEdgeCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printEdge((*i)->f1->v[0]->o->name);
+          (*i)->print(cout);
           cout << endl;
         }
       }
@@ -1678,7 +1688,7 @@ void Object::printChars (Controls &cs)
   }
   /////////////// intersecting faces
   // if not batch mode
-  if (cs.interf==false)
+  if (cs.get_detect_interobject_intersections()==0)
   {
     // intersecting faces
     if (intf.empty())
@@ -1689,7 +1699,7 @@ void Object::printChars (Controls &cs)
     {
       cout << "    # intersecting faces: " << intf.size() << endl;
       //	if -p option, print offending
-      if (cs.print)
+      if (cs.get_print_detailed_info()==1)
       {
         int j=1;
         // for each intersected face
@@ -1697,13 +1707,13 @@ void Object::printChars (Controls &cs)
         {
           cout << "    # intersecting faces: intersected face " << j++ << endl;
           // print intersected face
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i).first->printFaceCP();
+            (*i).first->printCP(cout);
           }
           else 
           {
-            (*i).first->printFace((*i).first->v[0]->o);
+            (*i).first->print(cout);
           }
           // keep unique list of intersecting faces
           sort((*(*i).second).begin(),(*(*i).second).end());
@@ -1712,13 +1722,13 @@ void Object::printChars (Controls &cs)
           // print intersecting faces
           for (f_iterator k=(*(*i).second).begin();k!=(*(*i).second).end();k++)
           {
-            if (strcmp(cs.style,"cp")==false)
+            if (cs.get_use_dreamm_output_format())
             {
-              (*k)->printFaceCP();
+              (*k)->printCP(cout);
             }
             else 
             {
-              (*k)->printFace((*k)->v[0]->o);
+              (*k)->print(cout);
               cout << endl;
             }
           }
@@ -1735,7 +1745,7 @@ void Object::printChars (Controls &cs)
   cout << endl;
   ///////////////// face area
   cout << "    Face area statistics [(data units)^2]:" << endl;
-  cout << "       total    " << area.sum << endl;
+  //cout << "       total    " << area.getSum() << endl;
   area.printStats();
   cout << "    Face area histogram [(data units)^2]:" << endl;
   area.printHistogram();
@@ -1761,7 +1771,7 @@ void Object::printChars (Controls &cs)
     }
   }
   //	if -p option, print offending
-  if (cs.print)
+  if (cs.get_print_detailed_info()==1)
   {
     if (bad_aspect.empty()==false)
     {
@@ -1770,13 +1780,13 @@ void Object::printChars (Controls &cs)
       for (fd_iterator i=bad_aspect.begin();i!=bad_aspect.end();i++)
       {
         cout << "    face aspect ratio: " << (*i).second << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i).first->printFaceCP();
+          (*i).first->printCP(cout);
         }
         else 
         {
-          (*i).first->printFace((*i).first->v[0]->o);
+          (*i).first->print(cout);
           cout << endl;
         }
         fp.processBadFace((*i).first);
@@ -1804,7 +1814,7 @@ void Object::printChars (Controls &cs)
     }
   }
   //	if -p option, print offending
-  if (cs.print)
+  if (cs.get_print_detailed_info()==1)
   {
     if (bad_length.empty()==false)
     {
@@ -1812,20 +1822,20 @@ void Object::printChars (Controls &cs)
       for (ed_iterator i=bad_length.begin();i!=bad_length.end();i++)
       {
         cout << "    edge length: " << (*i).second << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i).first->printEdgeCP();
+          (*i).first->printCP(cout);
         }
         else 
         {
-          (*i).first->printEdge((*i).first->vv1->o->name);
+          (*i).first->print(cout);
           cout << endl;
         }
       }
     }
   }
   //////////////////// if edge angles computed
-  if (manifold==true && consistent==true)
+  if (isManifold()==true && isConsistent()==true)
   {
     cout << "    Edge angle statistics [degress]:" << endl;
     edge_angle.printStats();
@@ -1846,7 +1856,7 @@ void Object::printChars (Controls &cs)
       }
     }
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       if (bad_angle.empty()==false)
       {
@@ -1854,13 +1864,13 @@ void Object::printChars (Controls &cs)
         for (ed_iterator i=bad_angle.begin();i!=bad_angle.end();i++)
         {
           cout << "    edge angle: " << (*i).second << endl;
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i).first->printEdgeCP();
+            (*i).first->printCP(cout);
           }
           else 
           {
-            (*i).first->printEdge((*i).first->vv1->o->name);
+            (*i).first->print(cout);
             cout << endl;
           }
         }
@@ -1870,8 +1880,8 @@ void Object::printChars (Controls &cs)
   else 
   {
     cout << "    edge angles: not computed, since ";
-    if (consistent==false){cout << "not consistent,";}
-    if (manifold==false){cout << "not manifold";}
+    if (isConsistent()==false){cout << "not consistent,";}
+    if (isManifold()==false){cout << "not manifold";}
     cout << endl;
   }
 
@@ -1889,20 +1899,20 @@ void Object::printIntegrity (Controls &cs)
   {
     cout << "    # orphan vertices: " << orphan.size() << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each orphan vertex
       for (v_iterator i=orphan.begin();i!=orphan.end();i++)
       {
         cout << "    # orphan vertices: orphan vertex " << j++ << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printVertexCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printVertex((*i)->o->name);
+          (*i)->print(cout);
           cout << endl;
         }
       }
@@ -1917,7 +1927,7 @@ void Object::printIntegrity (Controls &cs)
   {
     cout << "    # missing vertices: " << missing_v.size() << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each missing vertex
@@ -1931,39 +1941,39 @@ void Object::printIntegrity (Controls &cs)
       for (f_iterator i=missing_f.begin();i!=missing_f.end();i++)
       {
         cout << "    # missing vertices: affected face " << j++ << endl;
-        if ((*i)->v[0]!=NULL)
+        if ((*i)->ptr_vertex(0)!=NULL)
         {
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i)->printFaceCP();
+            (*i)->printCP(cout);
           }
           else 
           {
-            (*i)->printFace((*i)->v[0]->o);
+            (*i)->print(cout);
             cout << endl;
           }
         }
-        else if ((*i)->v[1]!=NULL)
+        else if ((*i)->ptr_vertex(1)!=NULL)
         {
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i)->printFaceCP();
+            (*i)->printCP(cout);
           }
           else 
           {
-            (*i)->printFace((*i)->v[1]->o);
+            (*i)->print(cout);
             cout << endl;
           }
         }
-        else if ((*i)->v[2]!=NULL)
+        else if ((*i)->ptr_vertex(2)!=NULL)
         {
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i)->printFaceCP();
+            (*i)->printCP(cout);
           }
           else 
           {
-            (*i)->printFace((*i)->v[2]->o);
+            (*i)->print(cout);
             cout << endl;
           }
         }
@@ -1979,20 +1989,20 @@ void Object::printIntegrity (Controls &cs)
   {
     cout << "    # degenerate faces: " << degen.size() << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each degenerate face
       for (f_iterator i=degen.begin();i!=degen.end();i++)
       {
         cout << "    # degenerate faces: affected face " << j++ << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printFaceCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printFace((*i)->v[0]->o);
+          (*i)->print(cout);
           cout << endl;
         }
       }
@@ -2008,20 +2018,20 @@ void Object::printIntegrity (Controls &cs)
   {
     cout << "    # duplicat vertex indices: " << dupl_v_index.size() << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each vertex with a duplicate vertex index
       for (v_iterator i=dupl_v_index.begin();i!=dupl_v_index.end();i++)
       {
         cout << "    # duplicate vertex indices: affected vertex " << j++ << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printVertexCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printVertex((*i)->o->name);
+          (*i)->print(cout);
           cout << endl;
         }
       }
@@ -2035,20 +2045,20 @@ void Object::printIntegrity (Controls &cs)
   {
     cout << "    # duplicat face indices: " << dupl_f_index.size() << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each face with a duplicate face index
       for (f_iterator i=dupl_f_index.begin();i!=dupl_f_index.end();i++)
       {
         cout << "    # duplicate face indices: affected face " << j++ << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printFaceCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printFace((*i)->v[0]->o);
+          (*i)->print(cout);
           cout << endl;
         }
       }
@@ -2102,7 +2112,7 @@ void Object::printAttr (Controls &cs)
 {
   cout << "\nMESH ATTRIBUTES\n\n";
   // closed
-  if (closed==true)
+  if (isClosed()==true)
   {
     cout << "    mesh is closed: yes\n";
   }
@@ -2110,7 +2120,7 @@ void Object::printAttr (Controls &cs)
   {
     cout << "    mesh is closed: no\n";
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       cout << "    mesh is closed: # border edges - " << border.size() << endl;
@@ -2118,28 +2128,28 @@ void Object::printAttr (Controls &cs)
       for (e_iterator i=border.begin();i!=border.end();i++)
       {
         cout << "    mesh is closed: border edge # " << j++ << endl;
-        if (strcmp(cs.style,"cp")==false)
+        if (cs.get_use_dreamm_output_format())
         {
-          (*i)->printEdgeCP();
+          (*i)->printCP(cout);
         }
         else 
         {
-          (*i)->printEdge((*i)->f1->v[0]->o->name);
+          (*i)->print(cout);
           cout << endl;
         }
       }
     }
   }
   // manifold
-  if (manifold==true)
+  if (isManifold()==true)
   {
     cout << "    mesh is manifold: yes\n";
   }
-  else if (manifold==false && closed==true)
+  else if (isManifold()==false && isClosed()==true)
   {
     cout << "    mesh is manifold: no\n";
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       if (nonman_v.empty())
       {
@@ -2153,13 +2163,13 @@ void Object::printAttr (Controls &cs)
         for (v_iterator i=nonman_v.begin();i!=nonman_v.end();i++)
         {
           cout << "    mesh is manifold: nonmanifold vertex # " << j++ << endl;
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i)->printVertexCP();
+            (*i)->printCP(cout);
           }
           else 
           {
-            (*i)->printVertex((*i)->o->name);
+            (*i)->print(cout);
             cout << endl;
           }
         }
@@ -2176,13 +2186,13 @@ void Object::printAttr (Controls &cs)
         for (e_iterator i=nonman_e.begin();i!=nonman_e.end();i++)
         {
           cout << "    mesh is manifold: nonmanifold edge # " << j++ << endl;
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i)->printEdgeCP();
+            (*i)->printCP(cout);
           }
           else 
           {
-            (*i)->printEdge((*i)->f1->v[0]->o->name);
+            (*i)->print(cout);
             cout << endl;
           }
         }
@@ -2194,13 +2204,13 @@ void Object::printAttr (Controls &cs)
     cout << "    mesh is manifold: undefined since mesh is open\n";
   }
   // consistent
-  if (manifold==false)
+  if (isManifold()==false)
   {
     cout << "    mesh has consistently oriented face normals: undefined since not manifold\n";
   }
   else 
   {
-    if (consistent==true)
+    if (isConsistent()==true)
     {
       cout << "    mesh has consistently oriented face normals: yes\n";
     }
@@ -2208,7 +2218,7 @@ void Object::printAttr (Controls &cs)
     {
       cout << "    mesh has consistently oriented face normals: no\n";
       //	if -p option, print offending
-      if (cs.print)
+      if (cs.get_print_detailed_info()==1)
       {
         int j=1;
         cout << "    mesh has consistently oriented face normals: # flipped edges - " << flipped.size() << endl;
@@ -2217,13 +2227,13 @@ void Object::printAttr (Controls &cs)
         for (e_iterator i=flipped.begin();i!=flipped.end();i++)
         {
           cout << "    mesh has consistently oriented face normals: flipped edge # " << j++ << endl;
-          if (strcmp(cs.style,"cp")==false)
+          if (cs.get_use_dreamm_output_format())
           {
-            (*i)->printEdgeCP();
+            (*i)->printCP(cout);
           }
           else 
           {
-            (*i)->printEdge((*i)->f1->v[0]->o->name);
+            (*i)->print(cout);
             cout << endl;
           }
         }
@@ -2231,12 +2241,12 @@ void Object::printAttr (Controls &cs)
     }
   }
   // outward
-  if (manifold==false || consistent==false || closed==false)
+  if (isManifold()==false || isConsistent()==false || isClosed()==false)
   {
     cout << "    mesh has outward oriented face normals: uncomputable since ";
-    if (closed==false){cout << "not closed,";}
-    if (consistent==false){cout << "not consistent,";}
-    if (manifold==false){cout << "not manifold";}
+    if (isClosed()==false){cout << "not closed,";}
+    if (isConsistent()==false){cout << "not consistent,";}
+    if (isManifold()==false){cout << "not manifold";}
     cout << endl;
   }
   else 
@@ -2272,7 +2282,7 @@ void Object::print (Controls &cs)
     //	print attributes
     printAttr(cs);
     //	print characteristics
-    if (cs.attr==false)
+    if (cs.get_compute_attributes_only()==0)
     { 
       printChars(cs);
     }
@@ -2283,13 +2293,14 @@ void Object::store (Container & c)
 
 {
   Controls & cs(Controls::instance());
-  if (cs.attr==false)
+  if (cs.get_compute_attributes_only()==0)
   {
-    c.area.x.insert(                  c.area.x.end(),         area.x.begin(),         area.x.end());
-    c.aspect_ratio.x.insert(  c.aspect_ratio.x.end(), aspect_ratio.x.begin(), aspect_ratio.x.end());
-    c.edge_length.x.insert(    c.edge_length.x.end(), edge_length.x.begin(),  edge_length.x.end());
-    c.edge_angle.x.insert(      c.edge_angle.x.end(),   edge_angle.x.begin(),   edge_angle.x.end());
-    c.adjacent_face.x.insert(c.adjacent_face.x.end(),adjacent_face.x.begin(),adjacent_face.x.end());
+    //c.area.insertElementRange(                   area.first_element(),         area.one_past_last_element());
+    c.addAreaRange        (         area.first_element(),         area.one_past_last_element());
+    c.addAspectRatioRange ( aspect_ratio.first_element(), aspect_ratio.one_past_last_element());
+    c.addEdgeLengthRange  (  edge_length.first_element(),  edge_length.one_past_last_element());
+    c.addEdgeAngleRange   (   edge_angle.first_element(),   edge_angle.one_past_last_element());
+    c.addAdjacentFaceRange(adjacent_face.first_element(),adjacent_face.one_past_last_element());
   }
 }
 

@@ -1,11 +1,50 @@
+Create diff of their source code and my source code.
+diff -bBur source1 source2
 
-nov 2008
---------
-1) contour with single point seg faults contour_tiler
-2) add command line option to process contours matching user-defined pattern
-3) check for missing contours, e.g. object found on contours i, i+1, i+2, i+4, but object missing on section i+3
-4) remove '!' from convert.csh since '!' not allowed in zsh shell
+## LATER
 
-bool isDomain (char const * str)
-contains hardcoded exceptions
+contour_tiler goes into infinite loop tiling object
+with two contours, two contours, one contour with 3 points, one contour, one contour
+one five sections. Object s095.
 
+Confirm value of Epsilon
+
+Currently using binary exponents for radius of curvature.
+Consider using octal or higher to reduce range of exponents.
+
+Confirm proper handling of transform.
+Example: d001 contour on section 92 with '-3' y transform.
+
+report identity of min and max for all statistics.
+
+report median.
+
+Use same histogram bins for sample intervals before and after.
+
+consider using my own namespace.
+
+Option to subdivide long intervals.
+
+resolve all issues with nonintuituve aspects to erroneously
+appended data to output contour files and detailed info files.
+
+In Contour::fitAndSampleSplines copy and return vectors to 
+Object::fitAndSampleSplines so output data to files is written
+only if deviations are acceptable and not duplicated.
+
+Consider starting points at uniform linear distance interval
+rather than uniform path distance interval.
+// IMPLEMENTATION CHALLENGE:
+//   path length does not vary linearly with s parameter
+//   due to nonuniform spacing of control points.
+
+Consider allowing samples to cross one another. 
+Likely require lists rather than vectors.
+
+Check with valgrind.
+
+## PROFILING COMMANDS
+
+# ~/install/googleperf64/bin/pprof64 --gv ./reconstruct2contourtiler ./myprofile 
+# ~/install/googleperf64/bin/pprof64 --disasm=getEnergy ./reconstruct2contourtiler ./myprofile >| mofo
+# ~jed/install/bin/aggregate-pprof mofo 

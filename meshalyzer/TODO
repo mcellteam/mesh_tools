@@ -1,6 +1,25 @@
+Suspect edge angle command line flags are reversed.
+i.e. '-d' Detect edges with angle between two adjacent faces LARGER than NUM degrees.
+i.e. '-e' Detect edges with angle between two adjacent faces SMALLER than NUM degrees.
+
+
+July2009
+Meshalyzer needs octree from meshmorph.
+Discovered this using ciliary ganglion model.
+Most of mcell-type space partitions were consumed
+by empty interior of post and pre. Overall
+size of model imposed lower limit on partition size.
+Consequently distribution of faces per paritition
+was bimodal - 0 or > 300. Not good. Very slow.
+
+Apr2009
+vague recollection that boundaries are not counted or reported correctly
+Also doubt that face intersections between different objects works.
+move object area to spot above object volume
+
 Feb 13 2009
 Add option to detect and report faces with zero area.
-
+Use get_opt_long
 
 
 Not sure if face aspect ratio threshold should

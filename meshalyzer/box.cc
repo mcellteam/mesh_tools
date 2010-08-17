@@ -1,5 +1,6 @@
 #include "box.h"
 
+#include <algorithm>
 #include <iostream>
 
 #include "container.h"
@@ -17,12 +18,12 @@ void Box::printBox (Space *s)
         << y << " "
         << z << "]\n"
         << "Box range ["
-        << xmin(s->world[0],s->space_length) << " "
-        << xmax(s->world[0],s->space_length) << " "
-        << ymin(s->world[2],s->space_length) << " "
-        << ymax(s->world[2],s->space_length) << " "
-        << zmin(s->world[4],s->space_length) << " "
-        << zmax(s->world[4],s->space_length) << "]";
+        << xmin(s->getWorld(0),s->getSpaceLength()) << " "
+        << xmax(s->getWorld(0),s->getSpaceLength()) << " "
+        << ymin(s->getWorld(2),s->getSpaceLength()) << " "
+        << ymax(s->getWorld(2),s->getSpaceLength()) << " "
+        << zmin(s->getWorld(4),s->getSpaceLength()) << " "
+        << zmax(s->getWorld(4),s->getSpaceLength()) << "]";
 }
 
 bool Box::faceIntersectionAlreadyKnown (Face *a,Face *b)
@@ -33,7 +34,7 @@ bool Box::faceIntersectionAlreadyKnown (Face *a,Face *b)
   // get iterator pointing to location of Face a in it's object list
   ff_iterator i= a->findFaceInTable_intf();
   // if Face a is in it's object list
-  if (i!=a->v[0]->o->intf.end())
+  if (i!=a->ptr_vertex(0)->getObject()->getOnePastLastIntFace())
   {
     // if Face b is in Face a's vector of intersecting faces
     if (find((*(*i).second).begin(),(*(*i).second).end(),b)!=(*(*i).second).end())

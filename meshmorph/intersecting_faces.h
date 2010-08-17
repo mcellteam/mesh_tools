@@ -6,10 +6,14 @@
 
 #include "meshmorph.h"
 
-typedef __gnu_cxx::hash_map<Face*,vec_fp,f_hash,eqf>                 hmap_f_f;
-typedef __gnu_cxx::hash_map<Face*,vec_fp,f_hash,eqf>::iterator       htff_it;
-typedef __gnu_cxx::hash_map<Face*,vec_fp,f_hash,eqf>::const_iterator htff_cit;
-typedef __gnu_cxx::hash_set<Vertex*,v_hash,eqv>::iterator            hv_it;
+//typedef __gnu_cxx::hash_map<Face*,vec_fp,f_hash,eqf>                 hmap_f_f;
+//typedef __gnu_cxx::hash_map<Face*,vec_fp,f_hash,eqf>::iterator       htff_it;
+//typedef __gnu_cxx::hash_map<Face*,vec_fp,f_hash,eqf>::const_iterator htff_cit;
+//typedef __gnu_cxx::hash_set<Vertex*,v_hash,eqv>::iterator            hv_it;
+typedef std::unordered_map<Face*,vec_fp,f_hash,eqf>                 hmap_f_f;
+typedef std::unordered_map<Face*,vec_fp,f_hash,eqf>::iterator       htff_it;
+typedef std::unordered_map<Face*,vec_fp,f_hash,eqf>::const_iterator htff_cit;
+typedef std::unordered_set<Vertex*,v_hash,eqv>::iterator            hv_it;
 
 class Intersecting_Faces
 {
@@ -44,7 +48,7 @@ public:
   bool      vertAdjFacesHaveNewInt       (Vertex const * const);
   bool      checkFaceFaceInts            (Face const * const,
                                           Face const * const) const;
-  bool      detectNewFaceInts            (Face * const);
+  bool      detectNewFaceInts            (Face * const,vec_fp &);
   void      getNiceSet                   (v_set &,hashset_v &);
   hashset_v getNiceCheckSet              (Vertex const * const);
   void      addFaceToFace                (Face * const,Face const * const);
@@ -54,6 +58,7 @@ public:
   void      setFaceNotIntersectedLHS     (Face const * const);
   void      removeFaceFromFaceInt        (Face * const haystack,
                                           Face const * const needle);
+  bool      intFacesAreSymmetric         (void);
   // intersection force
   void     getFaceIntersectionForce      (Face * const f,
                                           vector3 & total_force);

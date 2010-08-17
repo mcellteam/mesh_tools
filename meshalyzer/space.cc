@@ -1,7 +1,10 @@
 #include "space.h"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <stdlib.h>
+#include <string.h>
 #include <vector>
 
 #include "box.h"
@@ -20,7 +23,7 @@ Space::~Space (void)
   }
 }
 
-int Space::screenIndex (int i,char *c)
+int Space::screenIndex (int i,const char *c)
 {
   int a=0;
   if      (!strcmp(c,"x")){a=num_space[0]-1;}
@@ -141,7 +144,7 @@ void Space::index2Range (int i,double r[2],char *c)
   }
 }
 
-int Space::location2Index (double ss,char *c)
+int Space::location2Index (double ss,const char * c)
 {
   // since world[] is calculated only once, face limits may be less than world[0,2,4]
   // and greater than world[1,3,5]. Consequently, box_range as computed above may
@@ -182,14 +185,14 @@ void Space::initBoxes (double num_faces)
   // subdivide space
   double world_volume = (world[1]-world[0])*(world[3]-world[2])*(world[5]-world[4]);
   double box_volume = Controls::instance().get_faces_per_box() * world_volume / num_faces;
-  //	cout << "Space::initBoxes: "
-  //	<< "FACES_PER_BOX = " << FACES_PER_BOX
-  //	<< ", world_volume = " << world_volume
-  //	<< ", num_faces = " << num_faces << "\n";
+  	cout << "\nSpace::initBoxes: "
+  	<< "FACES_PER_BOX = " << Controls::instance().get_faces_per_box()
+  	<< ", world_volume = " << world_volume
+  	<< ", num_faces = " << num_faces << "\n";
   space_length = pow ( fabs ( box_volume ), 1.0 / 3.0 );
-  //	cout << "Space::initBoxes: "
-  //	<< "space_length = " << space_length << "\n";
-  /*	cout << "\nSpace::initBoxes: "
+  	cout << "Space::initBoxes: "
+  	<< "space_length = " << space_length << "\n";
+  	cout << "Space::initBoxes: "
         << "world ["
         << world[0] << ","
         << world[1] << ","
@@ -197,16 +200,16 @@ void Space::initBoxes (double num_faces)
         << world[3] << ","
         << world[4] << ","
         << world[5] << "]\n";
-        */
+        
   num_space[0] = (int) ceil( (world[1]-world[0])/space_length );
   num_space[1] = (int) ceil( (world[3]-world[2])/space_length );
   num_space[2] = (int) ceil( (world[5]-world[4])/space_length );
-  /*	cout << "Space::initBoxes: "
+  	cout << "Space::initBoxes: "
         << "num_space ["
         << num_space[0] << ","
         << num_space[1] << ","
-        << num_space[2] << "]\n";
-        */
+        << num_space[2] << "]\n\n";
+        
   num_boxes = num_space[0]*num_space[1]*num_space[2];
   // allocate memory for boxes
   b.reserve(num_boxes);
@@ -228,15 +231,15 @@ void Space::computeBoxesToCheck (Face *f,vec_b &bp)
 {
   vec_d xv,yv,zv;
   // identify face bounding box limits
-  xv.push_back(f->v[0]->pN[0]);
-  xv.push_back(f->v[1]->pN[0]);
-  xv.push_back(f->v[2]->pN[0]);
-  yv.push_back(f->v[0]->pN[1]);
-  yv.push_back(f->v[1]->pN[1]);
-  yv.push_back(f->v[2]->pN[1]);
-  zv.push_back(f->v[0]->pN[2]);
-  zv.push_back(f->v[1]->pN[2]);
-  zv.push_back(f->v[2]->pN[2]);
+  xv.push_back(f->ptr_vertex(0)->getpN(0));
+  xv.push_back(f->ptr_vertex(1)->getpN(0));
+  xv.push_back(f->ptr_vertex(2)->getpN(0));
+  yv.push_back(f->ptr_vertex(0)->getpN(1));
+  yv.push_back(f->ptr_vertex(1)->getpN(1));
+  yv.push_back(f->ptr_vertex(2)->getpN(1));
+  zv.push_back(f->ptr_vertex(0)->getpN(2));
+  zv.push_back(f->ptr_vertex(1)->getpN(2));
+  zv.push_back(f->ptr_vertex(2)->getpN(2));
   sort(xv.begin(),xv.end());
   sort(yv.begin(),yv.end());
   sort(zv.begin(),zv.end());
@@ -277,7 +280,7 @@ void Space::clearBoxes (void)
 {
   b_iterator i;
   // for each box in space, clear vector of face*
-  for (i=b.begin();i!=b.end();i++) {(*i)->f.clear();}
+  for (i=b.begin();i!=b.end();i++) {(*i)->clearFaces();}
 }
 
 void Space::recordFace (std::vector<Box*> &ptr,Face* f) 
@@ -286,7 +289,7 @@ void Space::recordFace (std::vector<Box*> &ptr,Face* f)
   // for each box, add face
   for (i=ptr.begin();i!=ptr.end();i++) 
   {
-    (*i)->f.push_back(f);
+    (*i)->addFace(f);
   }
 }
 

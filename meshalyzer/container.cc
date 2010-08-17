@@ -1,10 +1,13 @@
 #include "container.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <dirent.h>
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
+#include <string.h>
 
 #include "box.h"
 #include "controls.h"
@@ -18,11 +21,14 @@ using std::endl;
 
 Container::Container (void)
 :eg(NULL),o(),files(),num_files(0),area(),aspect_ratio(),edge_length(),
-  edge_angle(),adjacent_face(),num_orph(0),num_mis(0),num_deg(0),num_bor(0),
+  edge_angle(),adjacent_face(),good_integrity(true),num_orph(0),num_mis(0),num_deg(0),num_bor(0),
   num_flip(0),num_nonman_e(0),num_nonman_v(0),num_obj(0),num_vert(0),
   num_face(0),num_edge(0),num_vol(0),num_sep(0),num_bou(0),num_indistin(0),
   num_dupl_v(0),num_dupl_f(0),num_clo_cc(0),num_clo_nn(0)
 {
+  // cumulative Stats
+  setbb[0]=setbb[1]=setbb[2]=1E30;
+  setbb[3]=setbb[4]=setbb[5]=-1E30;
   num_man[0]=num_man[1]=num_man[2]=0;
   num_cons[0]=num_cons[1]=num_cons[2]=0;
   num_out[0]=num_out[1]=num_out[2]=0;
@@ -39,7 +45,7 @@ int Container::countIntFace (void)
   int a=0;
   for (o_iterator i=o.begin();i!=o.end();i++)
   {
-    a+=(*i)->intf.size();
+    a+=(*i)->getNumIntFace();
   }
   return a;
 }
@@ -161,7 +167,7 @@ double Container::countArea (void)
   double a=0.0;
   for (o_iterator i=o.begin();i!=o.end();i++)
   {
-    a+=(*i)->area.sum;
+    a+=(*i)->getAreaSum();
   }
   return a;
 }
@@ -307,10 +313,10 @@ int Container::checkEdgeEdgeIntersection (Face *cf,Face *of,bool share_edge_flag
     // for each other face edge
     for (int j=0;j<3;j++) 
     {
-      cv[0] = cf->v[pairs[i][0]];
-      cv[1] = cf->v[pairs[i][1]];
-      ov[0] = of->v[pairs[j][0]];
-      ov[1] = of->v[pairs[j][0]];
+      cv[0] = cf->ptr_vertex(pairs[i][0]);
+      cv[1] = cf->ptr_vertex(pairs[i][1]);
+      ov[0] = of->ptr_vertex(pairs[j][0]);
+      ov[1] = of->ptr_vertex(pairs[j][0]);
       // if the edges do not share a vertex
       if (cv[0]!=ov[0]&&cv[0]!=ov[1]&&cv[1]!=ov[0]&&cv[1]!=ov[1]) 
       {
@@ -319,8 +325,8 @@ int Container::checkEdgeEdgeIntersection (Face *cf,Face *of,bool share_edge_flag
         double x[3],y[3];
         for (int k=0;k<3;k++) 
         {
-          x[k] = cv[1]->pN[k]-cv[0]->pN[k];
-          y[k] = ov[1]->pN[k]-ov[0]->pN[k];
+          x[k] = cv[1]->getpN(k)-cv[0]->getpN(k);
+          y[k] = ov[1]->getpN(k)-ov[0]->getpN(k);
         }
         double term1 = x[0]*y[0]+ x[1]*y[1]+ x[2]*y[2];
         if ( !distinguishable(term1*term1,
@@ -332,13 +338,13 @@ int Container::checkEdgeEdgeIntersection (Face *cf,Face *of,bool share_edge_flag
         if (!parallel_flag) 
         {
           // compute scalars
-          double qDen = (cv[1]->pN[0]-cv[0]->pN[0])*(ov[1]->pN[1]-ov[0]->pN[1])
-                -(cv[1]->pN[1]-cv[0]->pN[1])*(ov[1]->pN[0]-ov[0]->pN[0]);
-          double qNum = (cv[1]->pN[0]-cv[0]->pN[0])*(cv[0]->pN[1]-ov[0]->pN[1])
-                -(cv[1]->pN[1]-cv[0]->pN[1])*(cv[0]->pN[0]-ov[0]->pN[0]);
+          double qDen = (cv[1]->getpN(0)-cv[0]->getpN(0))*(ov[1]->getpN(1)-ov[0]->getpN(1))
+                -(cv[1]->getpN(1)-cv[0]->getpN(1))*(ov[1]->getpN(0)-ov[0]->getpN(0));
+          double qNum = (cv[1]->getpN(0)-cv[0]->getpN(0))*(cv[0]->getpN(1)-ov[0]->getpN(1))
+                -(cv[1]->getpN(1)-cv[0]->getpN(1))*(cv[0]->getpN(0)-ov[0]->getpN(0));
           double q = qNum/qDen;
-          double uNum = ov[0]->pN[0]-cv[0]->pN[0]+q*(ov[1]->pN[0]-ov[0]->pN[0]);
-          double uDen = cv[1]->pN[0]-cv[0]->pN[0];
+          double uNum = ov[0]->getpN(0)-cv[0]->getpN(0)+q*(ov[1]->getpN(0)-ov[0]->getpN(0));
+          double uDen = cv[1]->getpN(0)-cv[0]->getpN(0);
           if (fabs(qDen)>cs.get_double_epsilon() && fabs(uDen)>cs.get_double_epsilon()) 
           {
             double u = uNum/uDen;
@@ -422,22 +428,22 @@ void Container::printBatch (Controls &cs)
   {
     cout << "# intersecting faces: " << num_intf << endl;
     //	if -p option, print offending
-    if (cs.print)
+    if (cs.get_print_detailed_info()==1)
     {
       int j=1;
       // for each object
       for (o_iterator m=o.begin();m!=o.end();m++)
       {
         // for each intersected face
-        for (ff_iterator i=(*m)->intf.begin();i!=(*m)->intf.end();i++)
+        for (ff_iterator i=(*m)->getFirstIntFace();i!=(*m)->getOnePastLastIntFace();i++)
         {
           cout << "# intersecting faces: intersected face " << j++ << endl;
           // print intersected face
-          (*i).first->printFace((*i).first->v[0]->o);
+          (*i).first->print(cout);
           // print intersecting faces
           for (f_iterator k=(*(*i).second).begin();k!=(*(*i).second).end();k++)
           {
-            (*k)->printFace((*k)->v[0]->o);
+            (*k)->print(cout);
             cout << endl;
           }
         }
@@ -500,7 +506,7 @@ Object* Container::processFile (std::string filename)
   // scan file
   scanFile(obj,filename);
   // check object contents
-  if (obj->v.empty()==true || obj->f.empty()==true)
+  if (obj->noVertices()==true || obj->noFaces()==true)
   {
     delete obj;
     cout << "\n Container::processFile: "
@@ -513,14 +519,14 @@ Object* Container::processFile (std::string filename)
     // save Object* in container
     o.push_back(obj);
     // save first vertex* in object
-    if (obj->v.empty()==false)
+    if (obj->noVertices()==false)
     {
-      eg=obj->v.front();
+      eg=obj->getFrontVertex();
     }
     else 
     {
       cout << "\nContainer::processFile: Error. "
-            << "Object " << obj->name
+            << "Object " << obj->getName()
             << " contains no vertices.\n";
       exit(1);
     }
@@ -533,39 +539,44 @@ void Container::update (Object *oo)
 {
   // update Container
   num_obj++;
-  num_vert+=oo->v.size();
+  num_vert+=oo->getNumVertices();
   // DEBUG
   //	cout << "\nContainer::update: "
   //	<< "oo->f.size()=" << oo->f.size() << endl;
   // DEBUG
-  num_face+=oo->f.size();
-  num_edge+=oo->e.size();
-  num_sep+=oo->num_sep;
+  num_face+=oo->getNumFaces();
+  num_edge+=oo->getNumEdges();
+  num_sep+=oo->getNumSep();
   //	if (oo->manifold==true){num_man_cc++;}
   //	else {num_man_nn++;}
-  if (oo->manifold==true){num_man[0]++;}
-  else if (oo->manifold==false && oo->closed==true) {num_man[1]++;}
+  bool closed     = oo->isClosed();
+  bool consistent = oo->isConsistent();
+  bool outward    = oo->getOutward();
+  bool manifold   = oo->isManifold();
+  if (manifold==true){num_man[0]++;}
+  else if (manifold==false && closed==true) {num_man[1]++;}
   else {num_man[2]++;}
-  num_bou+=oo->num_bou;
-  num_indistin+=oo->indistin_v.size();
-  if     (oo->manifold==true && oo->consistent==true) {num_cons[0]++;}
-  else if (oo->manifold==true && oo->consistent==false){num_cons[1]++;}
+  num_bou+=oo->getNumBoundaries();
+  num_indistin+=oo->getNumIndistinVertices();
+  if     (manifold==true && consistent==true) {num_cons[0]++;}
+  else if (manifold==true && consistent==false){num_cons[1]++;}
   else {num_cons[2]++;}
-  num_vol+=oo->vol;
-  if (oo->closed==true){num_clo_cc++;}
+  num_vol+=oo->getVolume();
+  if (closed==true){num_clo_cc++;}
   else {num_clo_nn++;}
-  num_bor+=oo->border.size();
-  num_nonman_v+=oo->nonman_v.size();
-  num_nonman_e+=oo->nonman_e.size();
-  num_flip+=oo->flipped.size();
-  if     (oo->consistent==true && oo->outward==true) {num_out[0]++;}
-  else if (oo->consistent==true && oo->outward==false){num_out[1]++;}
+  //num_bor+=oo->border.size();
+  num_bor+=oo->getNumBorderEdges();
+  num_nonman_v+=oo->getNumNonmanVertices();
+  num_nonman_e+=oo->getNumNonmanEdges();
+  num_flip+=oo->getNumFlippedEdges();
+  if     (consistent==true && outward==true) {num_out[0]++;}
+  else if (consistent==true && outward==false){num_out[1]++;}
   else {num_out[2]++;}
-  num_orph+=oo->orphan.size();
-  num_mis+=oo->missing_v.size();
-  num_deg+=oo->degen.size();
-  num_dupl_v+=oo->dupl_v_index.size();
-  num_dupl_f+=oo->dupl_f_index.size();
+  num_orph+=oo->getNumOrphanVertices();
+  num_mis+=oo->getNumMissingVertices();
+  num_deg+=oo->getNumDegenerateFaces();
+  num_dupl_v+=oo->getNumDuplVertexIndices();
+  num_dupl_f+=oo->getNumDuplFaceIndices();
 }
 
 void Container::scanFile (Object *obj,std::string filename) 
@@ -584,7 +595,7 @@ void Container::scanFile (Object *obj,std::string filename)
     cerr << "\n\n" << "/* ********************** "
           << "OBJECT ********************** */\n";
     //	print object name 
-    cerr << "name: " << obj->name << endl;
+    cerr << "name: " << obj->getName() << endl;
     cerr.flush();
     //		cout << "file found: " << filename << "\n"; cout.flush();
   }
@@ -597,15 +608,18 @@ void Container::scanFile (Object *obj,std::string filename)
     if (strchr("V",*str)!=NULL)
     {
       Vertex *v=new Vertex(str,obj);
-      obj->v.push_back(v);
-      obj->vp.insert(std::make_pair(v->index,v));
-      obj->found.insert(std::make_pair(v->index,false));
+      // obj->v.push_back(v);
+      obj->addVertex(v);
+      //obj->vp.insert(std::make_pair(v->getIndex(),v));
+      obj->addVertexIndexPair(v->getIndex(),v);
+      //obj->found.insert(std::make_pair(v->getIndex(),false));
+      obj->addIndexBoolPair(v->getIndex(),false);
     }
     // if first character is F for Face, add new linked list class instance
     else if (strchr("F",*str)!=NULL)
     {
       Face *f=new Face(str,obj);
-      obj->f.push_back(f);
+      obj->addFace(f);
     }
   }
   fclose(F);
@@ -625,14 +639,14 @@ void Container::writeDistances (void)
     for (o_iterator i=o.begin();i!=o.end();i++) 
     {
       // for each vertex in object
-      for (v_iterator j=(*i)->v.begin();j!=(*i)->v.end();j++) 
+      for (v_iterator j=(*i)->getFirstVertex();j!=(*i)->getOnePastLastVertex();j++) 
       {
         // if vertex has a closest face
-        if ((*j)->cl!=NULL)
+        if ((*j)->ptr_closest_face()!=NULL)
         {
           // compute separation vector
           double s[3];
-          for (int k=0;k<3;k++){ s[k]=(*j)->pC[k]-(*j)->pN[k]; }
+          for (int k=0;k<3;k++){ s[k]=(*j)->getpC(k)-(*j)->getpN(k); }
           // print separation distance
           if ((*i)->vertexIsNice(*j)){ newfile << sqrt(dot(s,s)) << endl;}
           else {newfile << -sqrt(dot(s,s)) << endl;}
@@ -643,29 +657,23 @@ void Container::writeDistances (void)
   }
 }
 
-void Container::boundWorld (Space &s,Controls &cs) 
+void Container::boundWorld (Space &s) 
 {
   o_iterator i;
   double xmin,xmax,ymin,ymax,zmin,zmax,range[6];
   //initialize mins and maxes
-  //	xmin = o[0]->v[0]->pN[0];
-  //	xmax = o[0]->v[0]->pN[0];
-  //	ymin = o[0]->v[0]->pN[1];
-  //	ymax = o[0]->v[0]->pN[1];
-  //	zmin = o[0]->v[0]->pN[2];
-  //	zmax = o[0]->v[0]->pN[2];
-  xmin = eg->pN[0];
-  xmax = eg->pN[0];
-  ymin = eg->pN[1];
-  ymax = eg->pN[1];
-  zmin = eg->pN[2];
-  zmax = eg->pN[2];
-  //	cs.wbb[0] = xmin;
-  //	cs.wbb[1] = ymin;
-  //	cs.wbb[2] = zmin;
-  //	cs.wbb[3] = xmax;
-  //	cs.wbb[4] = ymax;
-  //	cs.wbb[5] = zmax;
+  //	xmin = o[0]->v[0]->getpN(0);
+  //	xmax = o[0]->v[0]->getpN(0);
+  //	ymin = o[0]->v[0]->getpN(1);
+  //	ymax = o[0]->v[0]->getpN(1);
+  //	zmin = o[0]->v[0]->getpN(2);
+  //	zmax = o[0]->v[0]->getpN(2);
+  xmin = eg->getpN(0);
+  xmax = eg->getpN(0);
+  ymin = eg->getpN(1);
+  ymax = eg->getpN(1);
+  zmin = eg->getpN(2);
+  zmax = eg->getpN(2);
   ////////// loop through all objects //////////
   // for each object
   for (i=o.begin();i!=o.end();i++) 
@@ -679,19 +687,19 @@ void Container::boundWorld (Space &s,Controls &cs)
     if (range[3]>xmax) {xmax = range[3];}
     if (range[4]>ymax) {ymax = range[4];}
     if (range[5]>zmax) {zmax = range[5];}
-    if (xmin <cs.wbb[0]) {cs.wbb[0]=xmin;}
-    if (ymin <cs.wbb[1]) {cs.wbb[1]=ymin;}
-    if (zmin <cs.wbb[2]) {cs.wbb[2]=zmin;}
-    if (xmax >cs.wbb[3]) {cs.wbb[3]=xmax;}
-    if (ymax >cs.wbb[4]) {cs.wbb[4]=ymax;}
-    if (zmax >cs.wbb[5]) {cs.wbb[5]=zmax;}
+    if (xmin <setbb[0]) {setbb[0]=xmin;}
+    if (ymin <setbb[1]) {setbb[1]=ymin;}
+    if (zmin <setbb[2]) {setbb[2]=zmin;}
+    if (xmax >setbb[3]) {setbb[3]=xmax;}
+    if (ymax >setbb[4]) {setbb[4]=ymax;}
+    if (zmax >setbb[5]) {setbb[5]=zmax;}
   }
-  if (xmin<0) {s.world[0]=xmin*1.01;} else {s.world[0]=xmin*0.99;}
-  if (xmax<0) {s.world[1]=xmax*0.99;} else {s.world[1]=xmax*1.01;}
-  if (ymin<0) {s.world[2]=ymin*1.01;} else {s.world[2]=ymin*0.99;}
-  if (ymax<0) {s.world[3]=ymax*0.99;} else {s.world[3]=ymax*1.01;}
-  if (zmin<0) {s.world[4]=zmin*1.01;} else {s.world[4]=zmin*0.99;}
-  if (zmax<0) {s.world[5]=zmax*0.99;} else {s.world[5]=zmax*1.01;}
+  if (xmin<0) {s.setWorld(0,xmin*1.01);} else {s.setWorld(0,xmin*0.99);}
+  if (xmax<0) {s.setWorld(1,xmax*0.99);} else {s.setWorld(1,xmax*1.01);}
+  if (ymin<0) {s.setWorld(2,ymin*1.01);} else {s.setWorld(2,ymin*0.99);}
+  if (ymax<0) {s.setWorld(3,ymax*0.99);} else {s.setWorld(3,ymax*1.01);}
+  if (zmin<0) {s.setWorld(4,zmin*1.01);} else {s.setWorld(4,zmin*0.99);}
+  if (zmax<0) {s.setWorld(5,zmax*0.99);} else {s.setWorld(5,zmax*1.01);}
 }
 
 void Container::getExtraRay (Vertex *v,double lp[2][3],int index) 
@@ -701,15 +709,15 @@ void Container::getExtraRay (Vertex *v,double lp[2][3],int index)
   double n[3];
   v->f[index]->getNormal(n);
   // compute centroid of first adjacent face
-  double cx = (v->f[index]->v[0]->pN[0]+
-               v->f[index]->v[1]->pN[0]+
-               v->f[index]->v[2]->pN[0])/3.0;
-  double cy = (v->f[index]->v[0]->pN[1]+
-               v->f[index]->v[1]->pN[1]+
-               v->f[index]->v[2]->pN[1])/3.0;
-  double cz = (v->f[index]->v[0]->pN[2]+
-               v->f[index]->v[1]->pN[2]+
-               v->f[index]->v[2]->pN[2])/3.0;
+  double cx = (v->f[index]->ptr_vertex(0)->getpN(0)+
+               v->f[index]->ptr_vertex(1)->getpN(0)+
+               v->f[index]->ptr_vertex(2)->getpN(0))/3.0;
+  double cy = (v->f[index]->ptr_vertex(0)->getpN(1)+
+               v->f[index]->ptr_vertex(1)->getpN(1)+
+               v->f[index]->ptr_vertex(2)->getpN(1))/3.0;
+  double cz = (v->f[index]->ptr_vertex(0)->getpN(2)+
+               v->f[index]->ptr_vertex(1)->getpN(2)+
+               v->f[index]->ptr_vertex(2)->getpN(2))/3.0;
   double L=sqrt( dot(n,n) );
   lp[0][0] = cx;
   lp[1][0] = lp[0][0]+n[0]/L*cs.get_ray_epsilon();
@@ -744,7 +752,7 @@ int Container::findExtraPoint (Space &s,Vertex *v,double p[3],int index)
   p[2]=lp[1][2];
   if (!tmp.empty())
   {
-    ppp=equal_range(tmp.begin(),tmp.end(),v->o);
+    ppp=equal_range(tmp.begin(),tmp.end(),v->getObject());
     if (ppp.first!=ppp.second)
     {
       return 0;
@@ -799,18 +807,18 @@ void Container::collectCrossed (Space &s,Vertex *v,vec_o &cb)
     if (index>(v->f.size()-1))
     {
       cout << "\n\nEvery adjacent face failed!\n";
-      cout << v->o->name << "->" << v->index 
-            << " current vertex [" << v->pN[0] << " "
-            << v->pN[1] << " "
-            << v->pN[2] << "]"
+      cout << v->getObject()->getName() << "->" << v->getIndex() 
+            << " current vertex [" << v->getpN(0) << " "
+            << v->getpN(1) << " "
+            << v->getpN(2) << "]"
             << endl;
       exit(1);
     }
   }
   // grab intersected objects between pN and RAY ORIGIN and return as ca
-  lp[0][0]=v->pN[0];
-  lp[0][1]=v->pN[1];
-  lp[0][2]=v->pN[2];
+  lp[0][0]=v->getpN(0);
+  lp[0][1]=v->getpN(1);
+  lp[0][2]=v->getpN(2);
   lp[1][0]=p[0];
   lp[1][1]=p[1];
   lp[1][2]=p[2];
@@ -828,7 +836,7 @@ void Container::collectCrossed (Space &s,Vertex *v,vec_o &cb)
   lp[0][2]=p[2];
   lp[1][1]=p[1];
   lp[1][2]=p[2];
-  if (v->index==531 && !strcmp(v->o->name.c_str(),"a001_FILTERED_SMOOTH_SMOOTH"))
+  if (v->getIndex()==531 && !strcmp(v->getObject()->getName().c_str(),"a001_FILTERED_SMOOTH_SMOOTH"))
   {
   }
   findCrossed2(s,lp,cb);
@@ -865,23 +873,23 @@ bool Container::updateNiceness (Vertex *v,vec_o &cb)
     if (!old_nice)
     {
       flag = true;
-      pp=equal_range(cb.begin(),cb.end(),v->o);
+      pp=equal_range(cb.begin(),cb.end(),v->getObject());
       // if vertex is inside self object
       if (pp.first!=pp.second)
       {
         v->setVertexNiceness(2);
         cout << endl << endl 
-              << v->o->name << "->" << v->index 
-              << " vertex inside self [" << v->pN[0] << " "
-              << v->pN[1] << " "
-              << v->pN[2]
+              << v->getObject()->getName() << "->" << v->getIndex() 
+              << " vertex inside self [" << v->getpN(0) << " "
+              << v->getpN(1) << " "
+              << v->getpN(2)
               << "], cb.size() " << cb.size()
               << endl;
         for (f_iterator jj=v->nf.begin();jj!=v->nf.end();jj++)
         {
-          cout << v->o->name << "->" << (*jj)->index 
+          cout << v->getObject()->getName() << "->" << (*jj)->getIndex() 
                 << " adjacent face\n";
-          (*jj)->printFace(v->o);
+          (*jj)->print(cout);
           cout << endl;
         }
       }
@@ -926,7 +934,7 @@ void Container::findNice (Space &s)
   for (i=o.begin();i!=o.end();i++) 
   {
     // for each vertex in object
-    for (j=(*i)->v.begin();j!=(*i)->v.end();j++) 
+    for (j=(*i)->getFirstVertex();j!=(*i)->getOnePastLastVertex();j++) 
     {
       checkNiceness(s,*j);
     }
@@ -941,12 +949,12 @@ void Container::findClosestAxis (Space &s,Vertex *v,double lp[2][3])
   // get normal info
   // identify nearest boundary
   double dis[6] = 
-  { fabs(v->pN[0]-s.world[0]),
-    fabs(v->pN[0]-s.world[1]),
-    fabs(v->pN[1]-s.world[2]),
-    fabs(v->pN[1]-s.world[3]),
-    fabs(v->pN[2]-s.world[4]),
-    fabs(v->pN[2]-s.world[5])
+  { fabs(v->getpN(0)-s.getWorld(0)),
+    fabs(v->getpN(0)-s.getWorld(1)),
+    fabs(v->getpN(1)-s.getWorld(2)),
+    fabs(v->getpN(1)-s.getWorld(3)),
+    fabs(v->getpN(2)-s.getWorld(4)),
+    fabs(v->getpN(2)-s.getWorld(5))
   };
   int i=0;
   double min = dis[i];
@@ -957,39 +965,39 @@ void Container::findClosestAxis (Space &s,Vertex *v,double lp[2][3])
   // configure ray
   if      (i==0)
   {
-    lp[1][0] = lp[0][0]-2*(s.world[1]-s.world[0]);	// end x
+    lp[1][0] = lp[0][0]-2*(s.getWorld(1)-s.getWorld(0));	// end x
     lp[1][1] = lp[0][1];				// end y
     lp[1][2] = lp[0][2];				// end z
   }
   else if (i==1)
   {
-    lp[1][0] = lp[0][0]+2*(s.world[1]-s.world[0]);	// end x
+    lp[1][0] = lp[0][0]+2*(s.getWorld(1)-s.getWorld(0));	// end x
     lp[1][1] = lp[0][1];				// end y
     lp[1][2] = lp[0][2];				// end z
   }
   else if (i==2)
   {
     lp[1][0] = lp[0][0];				// end x
-    lp[1][1] = lp[0][1]-2*(s.world[3]-s.world[2]);	// end y
+    lp[1][1] = lp[0][1]-2*(s.getWorld(3)-s.getWorld(2));	// end y
     lp[1][2] = lp[0][2];				// end z
   }
   else if (i==3)
   {
     lp[1][0] = lp[0][0];				// end x
-    lp[1][1] = lp[0][1]+2*(s.world[3]-s.world[2]);	// end y
+    lp[1][1] = lp[0][1]+2*(s.getWorld(3)-s.getWorld(2));	// end y
     lp[1][2] = lp[0][2];				// end z
   }
   else if (i==4)
   {
     lp[1][0] = lp[0][0];				// end x
     lp[1][1] = lp[0][1];				// end y
-    lp[1][2] = lp[0][2]-2*(s.world[5]-s.world[4]);	// end z
+    lp[1][2] = lp[0][2]-2*(s.getWorld(5)-s.getWorld(4));	// end z
   }
   else if (i==5)
   {
     lp[1][0] = lp[0][0];				// end x
     lp[1][1] = lp[0][1];				// end y
-    lp[1][2] = lp[0][2]+2*(s.world[5]-s.world[4]);	// end z
+    lp[1][2] = lp[0][2]+2*(s.getWorld(5)-s.getWorld(4));	// end z
   }
 }
 
@@ -1012,7 +1020,7 @@ void Container::collectNiceFaces (Space &s,double lp[2][3],vec_f &uf)
   int br[6];
   vec_b b;
   b_iterator i;
-  f_iterator j,new_end;
+  f_iterator new_end;
 
   bool flag = false;
   if (
@@ -1043,7 +1051,8 @@ void Container::collectNiceFaces (Space &s,double lp[2][3],vec_f &uf)
   for (i=b.begin();i!=b.end();i++) 
   {
     // for each face in box
-    for (j=(*i)->f.begin();j!=(*i)->f.end();j++) 
+    //for (j=(*i)->f.begin();j!=(*i)->f.end();j++) 
+    for (c_f_iterator j=(*i)->first_face();j!=(*i)->one_past_last_face();j++) 
     {
       uf.push_back(*j);
     }
@@ -1107,15 +1116,15 @@ void Container::findOddMeshes (vec_f & cf,vec_i & ff,int & num_odd_objects,vec_o
         for (j=i+1;j!=cf.end();j++) 
         {
           // if ray intersected face edge, and faces have same object index
-          if (ff[L++] && ((*i)->index==(*j)->index)){sum++;}
+          if (ff[L++] && ((*i)->getIndex()==(*j)->getIndex())){sum++;}
         }
         // compute parity of sum
         parity=sum%2;
         // if even, add instance to object list
-        if (!parity) {ol.push_back((*i)->v[0]->o);}
+        if (!parity) {ol.push_back((*i)->ptr_vertex(0)->getObject());}
       }
     }
-    else {ol.push_back((*i)->v[0]->o);}
+    else {ol.push_back((*i)->ptr_vertex(0)->getObject());}
   }
   ///// sort object_index_list /////
   sort(ol.begin(),ol.end());
@@ -1179,8 +1188,8 @@ bool Container::facesColinear(Face *cf,Face *of)
   cf->getVertexCoordinates(cpvc);
   of->getVertexCoordinates(opvc);
   // get face vertex indices
-  int cpvi[3] = {cf->v[0]->index,cf->v[1]->index,cf->v[2]->index};
-  int opvi[3] = {of->v[0]->index,of->v[1]->index,of->v[2]->index};
+  int cpvi[3] = {cf->ptr_vertex(0)->getIndex(),cf->ptr_vertex(1)->getIndex(),cf->ptr_vertex(2)->getIndex()};
+  int opvi[3] = {of->ptr_vertex(0)->getIndex(),of->ptr_vertex(1)->getIndex(),of->ptr_vertex(2)->getIndex()};
   // get face normal
   of->getNormal(on);
   // dot product of other face normal and 
@@ -1207,7 +1216,7 @@ int Container::numUniqueVertices (Face *cf,Face *of,int single_shared_vert[2])
   {
     for (int k=0;k<3;k++) 
     {
-      if (cf->v[j]!=of->v[k]) {num_unique++;} else {single_shared_vert[0]=j;single_shared_vert[1]=k;}
+      if (cf->ptr_vertex(j)!=of->ptr_vertex(k)) {num_unique++;} else {single_shared_vert[0]=j;single_shared_vert[1]=k;}
     }
   }
   return num_unique;
@@ -1311,7 +1320,7 @@ void Container::assignFacesToBoxes (Space &s)
   for (i=o.begin();i!=o.end();i++) 
   {
     // for each face in object
-    for (j=(*i)->f.begin();j!=(*i)->f.end();j++) 
+    for (j=(*i)->getFirstFace();j!=(*i)->getOnePastLastFace();j++) 
     {
       // identify boxes  that overlap to any degree the face bounding box.
       // This conservative approach, i.e. always including the actual 
@@ -1323,9 +1332,9 @@ void Container::assignFacesToBoxes (Space &s)
       // check	
       if (bp.empty())
       { 
-        cout << "ERROR: NO BOXES FOR\n" << "Face " << (*j)->index << " " 
-              << ((*j)->v[0])->index << " " << ((*j)->v[1])->index << " "
-              << ((*j)->v[2])->index << endl;
+        cout << "ERROR: NO BOXES FOR\n" << "Face " << (*j)->getIndex() << " " 
+              << ((*j)->ptr_vertex(0))->getIndex() << " " << ((*j)->ptr_vertex(1))->getIndex() << " "
+              << ((*j)->ptr_vertex(2))->getIndex() << endl;
         exit(1);
       }
       // record face in boxes class
@@ -1345,7 +1354,7 @@ void Container::getSeparationDistances (Space &s)
   for (i=o.begin();i!=o.end();i++) 
   {
     // for each vertex in object
-    for (j=(*i)->v.begin();j!=(*i)->v.end();j++) 
+    for (j=(*i)->getFirstVertex();j!=(*i)->getOnePastLastVertex();j++) 
     {
       ////////// find closest point to current vertex //////////
       // false => just add value to table, do not touch existing elements
@@ -1361,9 +1370,9 @@ void Container::getBoxes (std::vector<Box*> &bp,Vertex *v,int offset,Space &s)
 {
   int cbi[3],br[6];
   // compute box index that contains current_vertex
-  cbi[0] = s.location2Index(v->pN[0],"x");
-  cbi[1] = s.location2Index(v->pN[1],"y");
-  cbi[2] = s.location2Index(v->pN[2],"z");
+  cbi[0] = s.location2Index(v->getpN(0),"x");
+  cbi[1] = s.location2Index(v->getpN(1),"y");
+  cbi[2] = s.location2Index(v->getpN(2),"z");
   // box_range
   br[0]=cbi[0]-offset;
   br[1]=cbi[0]+offset;
@@ -1372,9 +1381,9 @@ void Container::getBoxes (std::vector<Box*> &bp,Vertex *v,int offset,Space &s)
   br[4]=cbi[2]-offset;
   br[5]=cbi[2]+offset;
   // handle case where vertex lies on subspace boundary
-  if (!(br[0]*s.space_length-v->pN[0])){br[0]--;}
-  if (!(br[2]*s.space_length-v->pN[1])){br[2]--;}
-  if (!(br[4]*s.space_length-v->pN[2])){br[4]--;}
+  if (!(br[0]*s.getSpaceLength()-v->getpN(0))){br[0]--;}
+  if (!(br[2]*s.getSpaceLength()-v->getpN(1))){br[2]--;}
+  if (!(br[4]*s.getSpaceLength()-v->getpN(2))){br[4]--;}
   // screen range
   br[0]=s.screenIndex(br[0],"x");
   br[1]=s.screenIndex(br[1],"x");
@@ -1389,7 +1398,7 @@ void Container::getBoxes (std::vector<Box*> &bp,Vertex *v,int offset,Space &s)
 bool Container::faceInNeighborhood (Face *f,Vertex *v)
 {
   // if face is in different object than vertex, then return false
-  if (f->v[0]->o!=v->o){return false;}
+  if (f->ptr_vertex(0)->getObject()!=v->getObject()){return false;}
   // else if face and vertex are in same object
   std::pair<f_iterator,vec_f::iterator> p
         =equal_range(v->nf.begin(),v->nf.end(),f);
@@ -1404,7 +1413,7 @@ void Container::getCandidateFaces (std::vector<Box*> &bp,Vertex *v,hset_f &cf)
   for (b_iterator j=bp.begin();j!=bp.end();j++) 
   {
     // for each face in box
-    for (f_iterator k=(*j)->f.begin();k!=(*j)->f.end();k++) 
+    for (c_f_iterator k=(*j)->first_face();k!=(*j)->one_past_last_face();k++) 
     {
       // if face vertices are not in current vertex neighborhood, face is candidate
       if (!faceInNeighborhood(*k,v))
@@ -1443,9 +1452,9 @@ bool Container::findClosest (Space &s,Vertex *v)
     if (!gate)
     {
       // reset pointer to closest face
-      v->cl=NULL;
+      v->setClosestFacePtr(NULL);
       // set closest point to current vertex location
-      for (int i=0;i<3;i++) {v->pC[i]=v->pN[i];}
+      for (int i=0;i<3;i++) {v->setpC(i,v->getpN(i));}
     }
   }
   return gate;
@@ -1457,8 +1466,8 @@ bool Container::getPlaneIntersection (Face *f,Vertex *v,double *n,double num,dou
   // i.e. intersection of plane with face normal through current vertex
   bool line_flag, poly_flag=false,poly_edge_flag;
   double u=num/den;
-  double lp[2][3] = {{v->pN[0],v->pN[1],v->pN[2]},
-    {v->pN[0]+u*n[0],v->pN[1]+u*n[1],v->pN[2]+u*n[2]}};
+  double lp[2][3] = {{v->getpN(0),v->getpN(1),v->getpN(2)},
+    {v->getpN(0)+u*n[0],v->getpN(1)+u*n[1],v->getpN(2)+u*n[2]}};
   checkLineFaceIntersection(f,lp,line_flag,poly_flag,poly_edge_flag);
   // if intersection point is on face,then save point
   if (poly_flag) {p.add(lp[1][0],lp[1][1],lp[1][2]);}
@@ -1473,9 +1482,9 @@ void Container::getEdgeIntersection (Vertex *v,double *P[3],Point &p)
          d=dot(P[0],P[1]),
          e=dot(P[1],P[2]),
          f=dot(P[2],P[0]),
-         g=dot(P[0],v->pN),
-         h=dot(P[1],v->pN),
-         i=dot(P[2],v->pN);
+         g=dot(P[0],v->getpN_ptr()),
+         h=dot(P[1],v->getpN_ptr()),
+         i=dot(P[2],v->getpN_ptr());
   // first pair of face vertices, P[0],P[1]
   double uDen = a-2*d+b;
   if (uDen) 
@@ -1519,12 +1528,17 @@ bool Container::computeClosest (Face *f,Vertex *v,double &squareD,double vn[3])
   Controls & cs(Controls::instance());
   bool signal = false;
   // initialize point class instance with current vertex
-  Point p(v->pN[0],v->pN[1],v->pN[2]);
+  Point p(v->getpN(0),v->getpN(1),v->getpN(2));
   // get face vertex coordinates
-  double *P[3] = {&(f->v[0])->pN[0],&(f->v[1])->pN[0],&(f->v[2])->pN[0]};
+  //double *P[3] = {&(f->ptr_vertex(0)->getpN(0)),
+  //                &(f->ptr_vertex(1)->getpN(0)),
+  //                &(f->ptr_vertex(2)->getpN(0))};
+  double *P[3] = {f->ptr_vertex(0)->getpN_ptr(),
+                  f->ptr_vertex(1)->getpN_ptr(),
+                  f->ptr_vertex(2)->getpN_ptr()};
 
   // compute vector connecting arbitrary face vertex and current vertex
-  double diff[3] = {P[0][0]-v->pN[0],P[0][1]-v->pN[1],P[0][2]-v->pN[2]};
+  double diff[3] = {P[0][0]-v->getpN(0),P[0][1]-v->getpN(1),P[0][2]-v->getpN(2)};
   // compute indicators
   double num=dot(vn,diff);
   // if current vertex does not lie on face plane
@@ -1554,10 +1568,10 @@ bool Container::computeClosest (Face *f,Vertex *v,double &squareD,double vn[3])
   double c[3] = { p.a , p.b , p.c };
   // invert vertex normal if vertex is not nice
   double vn_copy[3];
-  if (v->o->vertexIsNice(v)){vn_copy[0]=vn[0];vn_copy[1]=vn[1];vn_copy[2]=vn[2]; } 
+  if (v->getObject()->vertexIsNice(v)){vn_copy[0]=vn[0];vn_copy[1]=vn[1];vn_copy[2]=vn[2]; } 
   else 					  {vn_copy[0]=-vn[0];vn_copy[1]=-vn[1];vn_copy[2]=-vn[2]; } 
   // compute separation vector
-  double sep_vec[3] = {c[0]-v->pN[0],c[1]-v->pN[1],c[2]-v->pN[2]};
+  double sep_vec[3] = {c[0]-v->getpN(0),c[1]-v->getpN(1),c[2]-v->getpN(2)};
   // compute cosine of angle between outward normal and separation vector
   // which is equal to dot product of vectors divided by vector magnitudes
   double cos_angle = dot(sep_vec,vn_copy)/sqrt(dot(vn_copy,vn_copy))/sqrt(dot(sep_vec,sep_vec));
@@ -1566,7 +1580,7 @@ bool Container::computeClosest (Face *f,Vertex *v,double &squareD,double vn[3])
   {
     // compute square of separation distance
     double temp=0;
-    for (int i=0;i<3;i++) {temp+=(c[i]-v->pN[i])*(c[i]-v->pN[i]);}
+    for (int i=0;i<3;i++) {temp+=(c[i]-v->getpN(i))*(c[i]-v->getpN(i));}
     // closest point must be within a specified angle of vertex normal
     // to avoid grabbing points on same object
     // alternatively, the point is allowed to be within neighborhood_radius of vertex
@@ -1581,8 +1595,10 @@ bool Container::computeClosest (Face *f,Vertex *v,double &squareD,double vn[3])
         if (temp<squareD||!squareD) 
         {
           // save 
-          for (int i=0;i<3;i++) {v->pC[i]=c[i];}
-          v->cl=f;
+          //for (int i=0;i<3;i++) {v->getpC(i)=c[i];}
+          for (int i=0;i<3;i++) {v->setpC(i,c[i]);}
+          //v->ptr_closest_face()=f;
+          v->setClosestFacePtr(f);
           squareD = temp;
           signal=true;
         }
@@ -1601,7 +1617,7 @@ void Container::printCumulative (void)
   //	print Integrity
   Controls & cs(Controls::instance());
   printIntegrity();
-  if (cs.good_integrity==false)
+  if (good_integrity==false)
   {
     cout << "\n\nWarning: Attributes and "
           << "characteristics were not evaluated,\n"
@@ -1612,7 +1628,7 @@ void Container::printCumulative (void)
     //	print attributes
     printAttr();
     //	print characteristics
-    if (cs.attr==false) 
+    if (cs.get_compute_attributes_only()==0) 
     {
       printChars();
     }
@@ -1623,9 +1639,8 @@ void Container::printCumulative (void)
 
 void Container::printAttr (void)
 {
-  Controls & cs(Controls::instance());
   cout << "MESH SET ATTRIBUTES:\n\n";
-  if (cs.good_integrity==false)
+  if (good_integrity==false)
   {
     cout << "    Warning: These attribute summaries may be inaccurate,\n"
           << "    since some mesh files failed the integrity check.\n";
@@ -1707,12 +1722,12 @@ void Container::printAttr (void)
   if (val[2]==0)
   {
     cout << "    # mesh objects whose face normal "
-          << "orientation is undefined: none\n";
+          << "orientation is undefined (because mesh is nonmanifold): none\n";
   }
   else 
   {
     cout << "    # mesh objects whose face normal "
-          << "orientation is undefined: " << val[2] << endl;
+          << "orientation is undefined (because mesh is nonmanifold): " << val[2] << endl;
   }
   // outward
   countOutward(val);
@@ -1736,25 +1751,24 @@ void Container::printAttr (void)
     cout << "    # mesh objects with inward "
           << "oriented face normals: " << val[1] << endl;
   }
-  if (val[2]==0)
-  {
-    cout << "    # mesh objects whose face normal "
-          << "orientation is undefined: none\n";
-  }
-  else 
-  {
-    cout << "    # mesh objects whose face normal "
-          << "orientation is undefined: " << val[2] << endl;
-  }
+//  if (val[2]==0)
+//  {
+//    cout << "    # mesh objects whose face normal "
+//          << "orientation is undefined: none\n";
+//  }
+//  else 
+//  {
+//    cout << "    # mesh objects whose face normal "
+//          << "orientation is undefined: " << val[2] << endl;
+//  }
   cout << endl;
 }
 
 void Container::printChars (void)
 {
-  Controls & cs(Controls::instance());
   cout << "MESH SET CHARACTERISTICS:\n\n";
   //	print characteristics
-  if (cs.good_integrity==false)
+  if (good_integrity==false)
   {
     cout << "    Warning: These characteristics "
           << "summaries may be inaccurate,\n"
@@ -1809,12 +1823,12 @@ void Container::printChars (void)
   cout << "    bounding box: [data units]\n";
   cout << "    bounding box: [xmin,ymin,zmin][xmax,ymax,zmax]\n";
   cout << "    bounding box: ["
-        << cs.wbb[0] << ","
-        << cs.wbb[1] << ","
-        << cs.wbb[2] << "]["
-        << cs.wbb[3] << ","
-        << cs.wbb[4] << ","
-        << cs.wbb[5] << "]" << endl << endl;
+        << setbb[0] << ","
+        << setbb[1] << ","
+        << setbb[2] << "]["
+        << setbb[3] << ","
+        << setbb[4] << ","
+        << setbb[5] << "]" << endl << endl;
   // vertex adjacent faces
   cout << "    Vertex adjacent face statistics [faces]:" << endl;
   adjacent_face.printStats();
@@ -1823,7 +1837,7 @@ void Container::printChars (void)
   cout << endl;
   // face area
   cout << "    Face area statistics [(data units)^2]:" << endl;
-  cout << "       total    " << area.sum << endl;
+  cout << "       total    " << area.getSum() << endl;
   area.printStats();
   cout << "    Face area histogram [(data units)^2]:" << endl;
   area.printHistogram();
@@ -1891,7 +1905,7 @@ void Container::printChars (void)
 void Container::analyzeBatch (Space &s)
 {
   // find intersecting faces
-  if (Controls::instance().interf)
+  if (Controls::instance().get_detect_interobject_intersections())
   {
     cout << "Find intersecting faces of all objects...";cout.flush();
     Object *oo=o.front();
@@ -1955,16 +1969,16 @@ void Container::vertexAdjacentFaces (void)
 {
   //	mmap_iv af;
   // for each element in vector
-  for (d_iterator i=adjacent_face.x.begin();i!=adjacent_face.x.end();i++)
+  for (c_d_iterator i=adjacent_face.first_element();i!=adjacent_face.one_past_last_element();i++)
   {
     //		int c=(*i)->f.size();
     //		af.insert(std::make_pair(c,*i));
     //		adjacent_face.n++;
-    adjacent_face.sum+=*i;
-    adjacent_face.sum2+=(*i)*(*i);
-    adjacent_face.total+=*i;
-    if (*i<adjacent_face.min) {adjacent_face.min=*i;}
-    if (*i>adjacent_face.max) {adjacent_face.max=*i;}
+    adjacent_face.add2sum(*i);
+    adjacent_face.add2sum2((*i)*(*i));
+    adjacent_face.add2total(*i);
+    if (*i<adjacent_face.getMin()) {adjacent_face.setMin(*i);}
+    if (*i>adjacent_face.getMax()) {adjacent_face.setMax(*i);}
     // add to vector
     //		adjacent_face.x.push_back(c);
   }
@@ -1974,27 +1988,27 @@ void Container::vertexAdjacentFaces (void)
 
 void Container::areaAspectRatio (void)
 {
-  assert(area.x.size()>0);
+  assert(area.getSize()>0);
   // for each element in area vector
-  for (d_iterator i=area.x.begin();i!=area.x.end();i++)
+  for (c_d_iterator i=area.first_element();i!=area.one_past_last_element();i++)
   {
     //    cout << "1" << endl;cout.flush();
-    area.sum+=*i;
-    area.sum2+=(*i)*(*i);
-    area.total+=*i;
-    if (*i<area.min) {area.min=*i;}
-    if (*i>area.max) {area.max=*i;}
+    area.add2sum(*i);
+    area.add2sum2((*i)*(*i));
+    area.add2total(*i);
+    if (*i<area.getMin()) {area.setMin(*i);}
+    if (*i>area.getMax()) {area.setMax(*i);}
   }
 
   // for each element in aspect ratio vector
-  for (d_iterator i=aspect_ratio.x.begin();i!=aspect_ratio.x.end();i++)
+  for (c_d_iterator i=aspect_ratio.first_element();i!=aspect_ratio.one_past_last_element();i++)
   {
     //    cout << "2" << endl;cout.flush();
-    aspect_ratio.sum+=*i;
-    aspect_ratio.sum2+=(*i)*(*i);
-    aspect_ratio.total+=*i;
-    if (*i<aspect_ratio.min) aspect_ratio.min=*i;
-    if (*i>aspect_ratio.max) aspect_ratio.max=*i;
+    aspect_ratio.add2sum(*i);
+    aspect_ratio.add2sum2((*i)*(*i));
+    aspect_ratio.add2total(*i);
+    if (*i<aspect_ratio.getMin()) aspect_ratio.setMin(*i);
+    if (*i>aspect_ratio.getMax()) aspect_ratio.setMax(*i);
   }
   // build face area histogram
   //  cout << "3" << endl;cout.flush();
@@ -2008,15 +2022,15 @@ void Container::areaAspectRatio (void)
 void Container::processEdgeLengths (void)
 {
   // for each element in area vector
-  for (d_iterator i=edge_length.x.begin();i!=edge_length.x.end();i++)
+  for (c_d_iterator i=edge_length.first_element();i!=edge_length.one_past_last_element();i++)
   {
     //		double l = (*i)->l;
     //		edge_length.n++;
-    edge_length.sum+=*i;
-    edge_length.sum2+=(*i)*(*i);
-    edge_length.total+=*i;
-    if (*i<edge_length.min) edge_length.min=*i;
-    if (*i>edge_length.max) edge_length.max=*i;
+    edge_length.add2sum(*i);
+    edge_length.add2sum2((*i)*(*i));
+    edge_length.add2total(*i);
+    if (*i<edge_length.getMin()) edge_length.setMin(*i);
+    if (*i>edge_length.getMax()) edge_length.setMax(*i);
   }
   edge_length.createHistogram();
 }
@@ -2024,13 +2038,13 @@ void Container::processEdgeLengths (void)
 void Container::computeEdgeAngles (void)
 {
   // for each element in area vector
-  for (d_iterator i=edge_angle.x.begin();i!=edge_angle.x.end();i++)
+  for (c_d_iterator i=edge_angle.first_element();i!=edge_angle.one_past_last_element();i++)
   {
-    edge_angle.sum+=*i;
-    edge_angle.sum2+=(*i)*(*i);
-    edge_angle.total+=*i;
-    if (*i<edge_angle.min) edge_angle.min=*i;
-    if (*i>edge_angle.max) edge_angle.max=*i;
+    edge_angle.add2sum(*i);
+    edge_angle.add2sum2((*i)*(*i));
+    edge_angle.add2total(*i);
+    if (*i<edge_angle.getMin()) edge_angle.setMin(*i);
+    if (*i>edge_angle.getMax()) edge_angle.setMax(*i);
   }
   edge_angle.createHistogram();
 }

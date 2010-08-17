@@ -7,8 +7,10 @@
 #include <cmath>
 #include <iostream>
 
-#include <ext/hash_map>
-#include <ext/hash_set>
+//#include <ext/hash_map>
+#include <unordered_map>
+//#include <ext/hash_set>
+#include <unordered_set>
 #include <map>
 #include <set>
 #include <string>
@@ -72,8 +74,10 @@ typedef std::vector<Object>::iterator	     o_it;
 typedef std::vector<Object>::const_iterator  o_cit;
 
 typedef std::vector<Vertex*>		     vec_vp;
+typedef std::vector<const Vertex*>  	     vec_cvp;
 typedef std::vector<Vertex*>::iterator	     vp_it;
 typedef std::vector<Vertex*>::const_iterator vp_cit;
+typedef std::vector<const Vertex*>::const_iterator cvp_cit;
 typedef std::vector<Face*>		     vec_fp;
 typedef std::vector<Face*>::iterator	     fp_it;
 typedef std::vector<Face*>::const_iterator   fp_cit;
@@ -89,6 +93,7 @@ typedef std::vector<double>		     vec_d;
 typedef std::vector<double>::iterator	     d_it;
 typedef std::vector<double>::const_iterator  d_cit;
 typedef std::vector<std::string>             vec_s;
+typedef std::vector<std::string>::const_iterator s_cit;
 
 typedef std::set<std::string,lts>            s_set;
 typedef std::set<std::string,lts>::iterator  ss_it;
@@ -98,11 +103,16 @@ typedef std::set<Vertex*,ltv>                v_set;
 typedef std::set<Vertex*,ltv>::iterator      vs_it;
 typedef std::set<Face*,ltf>                  f_set;
 typedef std::set<Face*,ltf>::iterator        fs_it;
+typedef std::set<Object const*,lto>                o_set;
+typedef std::set<Object const*,lto>::iterator      os_it;
 
-typedef __gnu_cxx::hash_set<Vertex*,v_hash,eqv>                      hashset_v;
+//typedef __gnu_cxx::hash_set<Vertex*,v_hash,eqv>                      hashset_v;
+typedef std::unordered_set<Vertex*,v_hash,eqv>                      hashset_v;
 typedef std::map<std::string,Edge*,lts>                              map_s_ep;
-typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv>                  hmap_v;
-typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv>::const_iterator  vhm_cit;
+//typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv>                  hmap_v;
+//typedef __gnu_cxx::hash_map<Vertex*,int,v_hash,eqv>::const_iterator  vhm_cit;
+typedef std::unordered_map<Vertex*,int,v_hash,eqv>                  hmap_v;
+typedef std::unordered_map<Vertex*,int,v_hash,eqv>::const_iterator  vhm_cit;
 
 struct vector3
 {

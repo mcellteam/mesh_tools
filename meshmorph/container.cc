@@ -14,6 +14,8 @@
 #include "edge.h"
 #include "nice.h"
 #include "controls.h"
+#include "intersecting_faces.h"
+#include "meshmorph.h"
 #include "opttritri.h"
 #include "Wm4Quaternion.h"
 #include "vertex_schedule.h"
@@ -35,7 +37,7 @@ Container & Container::instance()
 }
 
 Container::Container (void)
-:fo(NULL),files(),frozen(),world(6,0),octree(),o()
+:fo(NULL),files(),frozen(),world(6,0),cleft(),peri(),octree(),o()
 {
   scanDir();
   scanFiles();
@@ -155,6 +157,7 @@ void Container::checkClosestFace (int const & group,std::string suffix)
         //}
         // DEBUG
         Face *ncl = NULL;
+        //int neighbor_count = -666;
         // find closest point to current vertex
         findClosestPtToVertex(&(*j),p,sqd,ncl);
         // if closest faces are the same, then no problem
@@ -216,7 +219,6 @@ void Container::checkClosestFace (int const & group,std::string suffix)
       }
     }
   }
-//  F.close();
   cout << "complete.\n";
   cout.flush();
 }
@@ -233,12 +235,18 @@ void Container::createEdges (void)
     cout << "Creating edges.................................";
     cout.flush();
   }
-  int k=1;
+  int k=0;
   double goal = 0.2;
+  double inc = 0.2;
+  double a = 1.0/o.size();
+  if (goal<a)
+  {
+    goal=a;
+    inc = a;
+  }
   printf("0%%..");
   fflush(stdout);
   // for each object, create edges
-  double a = 1.0/o.size();
   for (o_it i=o.begin();i!=o.end();++i)
   {
     if (cs.get_write_verbose_init()==true)
@@ -265,11 +273,11 @@ void Container::createEdges (void)
     }
     // track progress
     double progress = static_cast<double>(++k)*a;
-    if (progress>goal)
+    if (progress>goal || !distinguishable(progress,goal))
     {
       printf("%d%%..",static_cast<int>(goal*100));
       fflush(stdout);
-      goal+=0.2;
+      goal+=inc;
     }
     assert(i->getFE()==&i->e[0]);
   }
@@ -815,6 +823,64 @@ mmap_oi Container::loadMap(const char *filename,s_set & not_found)
  * \param[in] filename Frozen vertex file name.
  */
 
+void Container::readCleft (const char *filename)
+{
+  cout << "Read cleft vertices...........................";
+  cout.flush();
+  // load cleft map: object*->Vertex_index (int)
+  oi_it front;
+  // set of object names from cleft file not found as Object name
+  s_set not_found;
+  // read cleft vertex file 
+  mmap_oi cleft_map = loadMap(filename,not_found);
+
+  // for each element in multimap
+  for (oi_it i=cleft_map.begin();i!=cleft_map.end();++i)
+  {
+    Object *oo=(*i).first;
+    int t = (*i).second;
+    int a = t-1;
+    if (static_cast<uint>(a) >= oo->v.size())
+    {
+      cout << "Vertex index (" << a
+            << ") exceeds vector length ("
+            << oo->v.size() << ") "
+            << "for object " << oo->getName() << endl;
+    }
+    assert(static_cast<uint>(a)<oo->v.size());
+    int b = oo->v[a].getIndex();
+    do{
+      if (t==b)
+      {
+        cleft.push_back(&oo->v[a]);
+      }
+      else if (t<b){a++;}
+      else if (t>b){a--;}
+    } while (t!=b);
+  }
+  sort(cleft.begin(),cleft.end());
+  cout << "complete.\n";
+
+  // print objects not found
+  if (not_found.empty()==false)
+  {
+    cout << "\nContainer::readCleft: Warning.\n"
+          << "No matching Object* found in container "
+          << "for following cleft objects:\n";
+    for (ss_it j = not_found.begin();j!=not_found.end();++j)
+    {
+      cout << *j << endl;
+    }
+    cout << endl;
+  }
+
+  cout.flush();
+}
+
+/** Process frozen vertex data.
+ * \param[in] filename Frozen vertex file name.
+ */
+
 void Container::readFrozen (const char *filename)
 {
   cout << "Read frozen vertices...........................";
@@ -868,6 +934,12 @@ void Container::writeMeshData (int const & group) const
   // for each object
   for (o_cit i=o.begin();i!=o.end();++i)
   {
+    // if block wrap
+    if (cs.get_recon_block_wrap()!="")
+    {
+      // if object is wrapper
+      if (i->getName()!=cs.get_recon_block_wrap()) continue;
+    }
     // create output filename
     std::string file;
     if (cs.get_append_group_number()==true)
@@ -944,12 +1016,18 @@ void Container::findClosestFaceToEachVertex (void)
 {
   cout << "Find closest face to each vertex...............";
   cout.flush();
-  int index=1;
+  int index=0;
   double goal = 0.2;
+  double inc = 0.2;
+  double a = 1.0/o.size();
+  if (goal<a)
+  {
+    goal=a;
+    inc = a;
+  }
   printf("0%%..");
   fflush(stdout);
   // for each object in container
-  double a = 1.0/o.size();
   vector3 dummy_p;
   double dummy_sqd;
   for (o_it i=o.begin();i!=o.end();++i)
@@ -963,9 +1041,11 @@ void Container::findClosestFaceToEachVertex (void)
         // true => record closest face in vertex class
         // dummy => return closest face
         Face *cl=NULL;
+        //int neighbor_count = -666;
         if (findClosestPtToVertex(&(*j),dummy_p,dummy_sqd,cl)==true)
         {
           j->setFace(cl);
+          //j->setNeighborCount(neighbor_count);
         }
         //assert(dummy_sqd<1E10);
         assert(dummy_sqd==dummy_sqd);
@@ -973,11 +1053,11 @@ void Container::findClosestFaceToEachVertex (void)
     }
     // track progress
     double progress = static_cast<double>(index++)*a;
-    if (progress>goal)
+    if (progress>goal || !distinguishable(progress,goal))
     {
       printf("%d%%..",static_cast<int>(goal*100));
       fflush(stdout);
-      goal+=0.2;
+      goal+=inc;
     }
   }
 //  printf("100%%..");
@@ -1283,13 +1363,17 @@ bool Container::findClosestPtToBarycenter (vector3 const & pt,Face * const f,
   Controls & cs(Controls::instance());
   int num_faces=0,num_leaves = 0,total_faces_checked=0;
   bool found = false;
-  double radius_step = (sqrt(cs.get_search_radius_sq())-cs.get_min_search_cone_radius())
+  double radius_step = 0.0;
+  if (cs.get_number_radius_steps()>0)
+  {
+    radius_step = (sqrt(cs.get_search_radius_sq())-cs.get_min_search_cone_radius())
         /static_cast<double>(cs.get_number_radius_steps());
+  }
   // DEBUG
   //bool flag = false;
-  //if (distinguishable(pt.p[0],4431.686,1E-7)==false &&
-  //    distinguishable(pt.p[1],5570.356,1E-7)==false &&
-  //    distinguishable(pt.p[2],6260.725,1E-7)==false)
+  //if (distinguishable(pt.p[0],4741.524,1E-5)==false &&
+  //    distinguishable(pt.p[1],-2525.161,1E-5)==false &&
+  //    distinguishable(pt.p[2],-1302.223,1E-5)==false)
   //{
   //  flag = true;
   //}
@@ -1347,14 +1431,14 @@ bool Container::findClosestPtToBarycenter (vector3 const & pt,Face * const f,
     octree->visit( visitor );
     num_faces += visitor.num_faces();
     num_leaves += visitor.num_leaves();
-      // DEBUG
-      //if (flag==true)
-      //{
-      //  cout << "Container::findClosestPtToBarycenter: "
-      //        << "# faces to check = " << visitor.num_faces()
-      //        << ", # leaves checked = " << visitor.num_leaves() << endl;
-      //}
-      // DEBUG
+    // DEBUG
+    //if (flag==true)
+    //{
+    //  cout << "Container::findClosestPtToBarycenter: "
+    //        << "# faces to check = " << visitor.num_faces()
+    //        << ", # leaves checked = " << visitor.num_leaves() << endl;
+    //}
+    // DEBUG
     // find closest point to vertex among faces
     sqd=1E30;
     int faces_checked=0;
@@ -1403,13 +1487,14 @@ bool Container::findClosestPtToBarycenter (vector3 const & pt,Face * const f,
   //          << p.p[2] << "], d = " << sqrt(sqd) << endl;
   //    ncl->print(cout);
   //    cout << endl;
-  //    exit(1);
+  //    //exit(1);
   //  }
   //  else
   //  {
   //    cout << "\n closest_point not found, d = ???\n";
+  //    cout << " found = " << found << "\n";
   //  }
-  //  exit(1);
+  //  //exit(1);
   //}
   // DEBUG
   // update statistics of count of face and boxes used in search
@@ -1417,12 +1502,196 @@ bool Container::findClosestPtToBarycenter (vector3 const & pt,Face * const f,
   return found;
 }
 
+///** Ray trace from vertex to discover the number of neighboring objects.
+// * \param[in] v Vertex for which nieghboring objects are counted.
+// * \return Number of objects around vertex.
+// */
+//
+//int Container::calculateVertexNeighborCount (Vertex const * const v) const
+//{
+//  Controls & cs(Controls::instance());
+//  o_set neighbors;
+//  double search_cone_radius = sqrt(cs.get_search_radius_sq());
+//  // collect rays defined by search cone
+//  std::vector<vector3> rays;
+//  getSphericalConeRays(*v->getPos(),v->getNormal(),search_cone_radius,rays);
+//  // for each ray
+//  for (std::vector<vector3>::iterator j=rays.begin();j!=rays.end();j++)
+//  {
+//    // find intersected faces along ray
+//    face_grp fg = Nice::instance().findIntFacesAlongRay(v,*v->getPos(),*j,false);
+//    Object const * closest_object = NULL;
+//    double min_sqd = 1E30;
+//    // for each intersected face
+//    for (fp_it k=fg.crossed_faces.begin();k!=fg.crossed_faces.end();++k)
+//    {
+//      // compute squared distance to face
+//      vector3 closest_point;
+//      double sqd;
+//      findClosestPtInFaceToLocation(*v->getPos(),*k,closest_point,sqd);
+//      // if distance is least
+//      if (sqd<min_sqd)
+//      {
+//        // record distance and object
+//        min_sqd = sqd;
+//        closest_object = (*k)->getObject();
+//      }
+//    }
+//    for (fp_it k=fg.edge_faces.begin();k!=fg.edge_faces.end();++k)
+//    {
+//      // compute squared distance to face
+//      vector3 closest_point;
+//      double sqd;
+//      findClosestPtInFaceToLocation(*v->getPos(),*k,closest_point,sqd);
+//      // if distance is least
+//      if (sqd<min_sqd)
+//      {
+//        // record distance and object
+//        min_sqd = sqd;
+//        closest_object = (*k)->getObject();
+//      }
+//    }
+//    if (closest_object!=NULL) neighbors.insert(closest_object);
+//  }
+//  // return number of unique objects
+//  return neighbors.size();
+//}
+
+/** Ray trace from vertex to discover the number of neighboring objects.
+ * \param[in] v Vertex for which nieghboring objects are counted.
+ * \return Number of objects around vertex.
+ */
+
+int Container::calculateVertexNeighborCount (Vertex const * const v,vector3 const * pos,vector3 const & normal) const
+{
+  Controls & cs(Controls::instance());
+  o_set neighbors;
+  double search_cone_radius = sqrt(cs.get_search_radius_sq());
+  // collect rays defined by search cone
+  std::vector<vector3> rays;
+  //getSphericalConeRays(*v->getPos(),v->getNormal(),search_cone_radius,rays);
+  getSphericalConeRays(*pos,normal,search_cone_radius,rays);
+  // for each ray
+  for (std::vector<vector3>::iterator j=rays.begin();j!=rays.end();j++)
+  {
+    // find intersected faces along ray
+    //face_grp fg = Nice::instance().findIntFacesAlongRay(v,*v->getPos(),*j,false);
+    face_grp fg = Nice::instance().findIntFacesAlongRay(v,*pos,*j,false);
+    Object const * closest_object = NULL;
+    double min_sqd = 1E30;
+    // for each intersected face
+    for (fp_it k=fg.crossed_faces.begin();k!=fg.crossed_faces.end();++k)
+    {
+      // compute squared distance to face
+      vector3 closest_point;
+      double sqd;
+      //findClosestPtInFaceToLocation(*v->getPos(),*k,closest_point,sqd);
+      findClosestPtInFaceToLocation(*pos,*k,closest_point,sqd);
+      // if distance is least
+      if (sqd<min_sqd)
+      {
+        // record distance and object
+        min_sqd = sqd;
+        closest_object = (*k)->getObject();
+      }
+    }
+    for (fp_it k=fg.edge_faces.begin();k!=fg.edge_faces.end();++k)
+    {
+      // compute squared distance to face
+      vector3 closest_point;
+      double sqd;
+      //findClosestPtInFaceToLocation(*v->getPos(),*k,closest_point,sqd);
+      findClosestPtInFaceToLocation(*pos,*k,closest_point,sqd);
+      // if distance is least
+      if (sqd<min_sqd)
+      {
+        // record distance and object
+        min_sqd = sqd;
+        closest_object = (*k)->getObject();
+      }
+    }
+    if (closest_object!=NULL) neighbors.insert(closest_object);
+  }
+  // return number of unique objects
+  return neighbors.size();
+}
+
+/** Compute rays along perimeter of cone originating at vertex.
+ * \param[in] pt Point of interest.
+ * \param[in] n Normal vector at point of interest.
+ * \param[in] cone_radius Spherical cone radius.
+ * \param[out] rays Endpoints of rays.
+ */
+
+void Container::getSphericalConeRays (vector3 const & pt,
+                                      vector3 n,
+                                      double const & cone_radius,
+                                      std::vector<vector3> & rays) const
+{
+  // Algorithm
+  // Sweeping the cone normal vector
+  // toward both ends of each cartesian axis.
+  // To rotate the normal towards a principal axis,
+  // compute a vector perpendicular to both the normal vector
+  // and the principal axis via the cross product.
+  // Use quaternions to rotate vector v ccw (right-hand rule)
+  // around axis u a desired angle.
+  // Negate the rotation angle to sweep towards the opposite end
+  // of principal axis.
+  Controls & cs(Controls::instance());
+  vector3 pos_x(1.0,0.0,0.0);
+  vector3 pos_y(0.0,1.0,0.0);
+  vector3 pos_z(0.0,0.0,1.0);
+  // set normal length to 1.0 
+  n *= 1.0/sqrt(n.dot(n));
+  // compute unit rotation axes
+  // as vectors perpendicular to the plane that
+  // contains the normal vector and x,y, or z axes
+  vector3 axis_x = n.cross(pos_x);
+  vector3 axis_y = n.cross(pos_y);
+  vector3 axis_z = n.cross(pos_z);
+  vector3 axes[3] = { axis_x/axis_x.length(), axis_y/axis_y.length(), axis_z/axis_z.length() };
+  //// cosine of angle between normal vector and each cartesian axis
+  //double x_val = n.dot(pos_x);
+  //double y_val = n.dot(pos_y);
+  //double z_val = n.dot(pos_z);
+  // set normal length equal to search cone radius
+  n *= cone_radius;
+  // add vertex location
+  Wm4::Vector3<double> v( n.p[0], n.p[1], n.p[2]);
+  Wm4::Vector3<double> p(pt.p[0],pt.p[1],pt.p[2]);
+  rays.push_back(n+pt);
+  //vector3 min(1.0e30,1.0e30,1.0e30);
+  //vector3 max(0.0,0.0,0.0);
+  //keepMin(min,p);
+  //keepMax(max,p);
+  double sign = 1.0;
+  // rotate normal vector 
+  for (int i=0;i<3;i++)
+  {
+    for (int j=0;j<2;j++)
+    {
+      Wm4::Vector3<double>    u(axes[i].p[0],axes[i].p[1],axes[i].p[2]); 
+      Wm4::Quaternion<double> q(u,sign*cs.get_closest_point_angle());
+      q /= q.Length();
+      Wm4::Vector3<double> rotated = q.Rotate(v)+p;
+      rays.push_back(vector3(rotated[0],rotated[1],rotated[2]));
+      //keepMin(min,rotated);
+      //keepMax(max,rotated);
+      // update sign
+      sign *= -1.0;
+    }
+  }
+}
+
+
 /** Find the closest point to a vertex.
  * \param[in] v Vertex for which closest point is searched.
  * \param[out] p Closest point position, if found.
  * \param[out] sqd Squared distance between vertex
  * and closest point, if found.
  * \param[out] ncl Parent face of closest point, if found.
+ * \param[out] neighbor_count Number of different objects encountered in search for closest face.
  * \return True if closest point found; otherwise false.
  */
 
@@ -1434,8 +1703,12 @@ bool Container::findClosestPtToVertex (Vertex const * const v,
   Controls & cs(Controls::instance());
   int num_faces=0,num_leaves = 0,total_faces_checked=0;
   bool found = false;
-  double radius_step = (sqrt(cs.get_search_radius_sq())-cs.get_min_search_cone_radius())
+  double radius_step = 0.0;
+  if (cs.get_number_radius_steps()>0)
+  {
+    radius_step = (sqrt(cs.get_search_radius_sq())-cs.get_min_search_cone_radius())
         /static_cast<double>(cs.get_number_radius_steps());
+  }
   // for search cone radius small to max
   //// DEBUG
   //if (v->isMatch(TARGET_VERTEX_INDEX,TARGET_VERTEX_NAME)==true)
@@ -1541,6 +1814,10 @@ bool Container::findClosestPtToVertex (Vertex const * const v,
       //        << "sep_dis = " << sqrt(sqd) << endl;
       //}
       //// DEBUG
+      //if (cs.get_count_neighbors()==true)
+      //{
+      //  neighbor_count = countObjects(visitor.mybegin(),visitor.myend());
+      //}
       if (sqd < (search_cone_radius*search_cone_radius)) break;
     }
     //// DEBUG
@@ -1643,11 +1920,13 @@ bool Container::findClosestPtToBarycenterAmongFaces (vector3 const & pt,
 {
   // DEBUG
   //bool flag = false;
-  //if (distinguishable(pt.p[0],4431.686,1E-7)==false &&
-  //    distinguishable(pt.p[1],5570.356,1E-7)==false &&
-  //    distinguishable(pt.p[2],6260.725,1E-7)==false)
+  //if (distinguishable(pt.p[0],4741.524,1E-5)==false &&
+  //    distinguishable(pt.p[1],-2525.161,1E-5)==false &&
+  //    distinguishable(pt.p[2],-1302.223,1E-5)==false)
   //{
   //  flag = true;
+  //  cout << "Container::findClosestPtToBarycenterAmongFaces: This face:\n";
+  //  f->print(cout);
   //}
   //if (flag==false)
   //{
@@ -1678,14 +1957,38 @@ bool Container::findClosestPtToBarycenterAmongFaces (vector3 const & pt,
     // DEBUG
     //if (flag==true)
     //{
+    //  cout << "Container::findClosestPtToBarycenterAmongFaces: test face:\n";
     //  (*j)->print(cout);
     //}
     // DEBUG
     (*j)->clearFlag();
     // reject face of tile
-    if (*j==f) continue;
+    if (*j==f)
+    {
+      //if (flag==true)
+      //{
+      //  cout << "Container::findClosestPtToBarycenterAmongFaces: face rejected as same.\n";
+      //}
+      continue;
+    }
     // reject faces on wrong side of orthogonal plane to vertex normal
-    if (faceLiesOppositeToNormal(pt,*j,n)==true) continue;
+    if (faceLiesOppositeToNormal(pt,*j,n)==true)
+    {
+      //if (flag==true)
+      //{
+      //  cout << "Container::findClosestPtToBarycenterAmongFaces: face rejected as wrong side.\n";
+      //}
+      continue;
+    }
+    // reject coplanar faces
+    if (Intersecting_Faces::instance().facesCoplanar(f,*j)==true)
+    {
+      //if (flag==true)
+      //{
+      //  cout << "Container::findClosestPtToBarycenterAmongFaces: reject coplanar.\n";
+      //}
+      continue;
+    }
     // if current vertex, v, lies inside sphere
     faces_checked++;
     // then process face
@@ -1768,6 +2071,32 @@ bool Container::findClosestPtToBarycenterAmongFaces (vector3 const & pt,
     }
   }
   return closest_point_found;
+}
+
+/** Count number of different objects contained in collection of input faces.
+ *
+ * \param[in] begin Iterator pointing to first face in vector of faces to check.
+ * \param[in] end Iterator pointing to one past the last face in vector of faces to check.
+ * \return Number of different objects.
+ */
+
+int Container::countObjects (fp_cit begin,fp_cit end) const
+{
+  // if candidate faces were NOT found
+  if (begin==end)
+  {
+    cout << "\n\nContainer::countObject: ERROR. Zero candidate faces but closest face found.!\n";
+    exit(1);
+    //return 0;
+  }
+  // store pointer to face parent object in set
+  o_set unique_objects;
+  // for each candidate face
+  for (fp_cit j=begin;j!=end;++j)
+  {
+    unique_objects.insert((*j)->getObject());
+  }
+  return unique_objects.size();
 }
 
 /** Find closest point to vertex among input faces.
@@ -2498,4 +2827,521 @@ bool Container::vertexOutsideOctreeBounds (vector3 const * const new_pos)
          new_pos->p[2]>high.p[2];  
 }
 
+void Container::writeOrthVerts2Dreamm (std::vector<const Vertex *> & orthogonal_vertices) 
+{
+  char mystr[256];
+  sprintf(mystr,"%sorth_verts.mdl",Controls::instance().get_output_data_dir().c_str());
+  //std::string orth_verts_filename = "orth_verts.mdl";
+  std::ofstream orth_verts_handle (mystr);
+  sprintf(mystr,"%sreleases.mdl",Controls::instance().get_output_data_dir().c_str());
+  //std::string releases_filename   = "releases.mdl";
+  std::ofstream releases_handle (mystr);
 
+  orth_verts_handle << "orth_verts OBJECT\n{\n";
+  std::string body = "\n  NUMBER_TO_RELEASE = 1\n  SITE_DIAMETER = 0\n  RELEASE_PATTERN = rp\n}\n\n";
+  int total_count = 0;
+  std::set<std::string> molecule_set;
+  std::set<std::string>::iterator i;
+
+  // instantiate molecule releases (t=0,zero diffusion,single molecule)
+  // centered at each orthogonal vertex
+  //
+  // for each orthogonal vertex
+  for (cvp_cit j=orthogonal_vertices.begin();j!=orthogonal_vertices.end();++j)
+  {
+
+    vector3 const * p = (*j)->getPos();
+    double sB = p->p[0]/1000.0;
+    double sC = p->p[1]/1000.0;
+    double sD = p->p[2]/1000.0;
+    char name[256];
+    sprintf(name,"rs_%d",total_count);
+    char str[1024];
+    sprintf(str,"%s SPHERICAL_RELEASE_SITE\n{\n",name);
+    releases_handle << str;
+    sprintf(str,"  LOCATION = [%g,%g,%g]\n",sB,sC,sD);
+    releases_handle <<  str;
+    sprintf(str,"  LIGAND = %s",(*j)->getObjectName().c_str());
+    molecule_set.insert((*j)->getObjectName());
+    releases_handle <<  str;
+    releases_handle <<  body;
+    sprintf(str,"  %s OBJECT %s {}\n",name,name);
+    orth_verts_handle <<  str;
+    total_count++;
+  }
+  orth_verts_handle << "}";
+  orth_verts_handle.close();
+  releases_handle.close();
+
+  cout << "num different molecules (i.e. objects) found  = " << molecule_set.size() << endl;
+  sprintf(mystr,"%smolecules.mdl",Controls::instance().get_output_data_dir().c_str());
+  //std::string molecule_filename = "molecules.mdl";
+  std::ofstream molecule_handle (mystr);
+  for (i=molecule_set.begin();i!=molecule_set.end();i++)
+  {
+    molecule_handle << "DEFINE_MOLECULE "
+          << *i << " {DIFFUSION_CONSTANT_3D=0}" << endl;
+  }
+  molecule_handle.close();
+}
+
+void Container::writeContoursSingleSection (std::vector<const Vertex*> & single_section, double z) 
+{
+  std::ofstream contour_handle;
+  openContourFile(contour_handle,z);
+
+  // organize Vertex * by object name
+  std::multimap<std::string,const Vertex*>  map_s_v;
+  std::multimap<std::string,const Vertex*>::iterator j,k;
+
+  // for each vertex in section
+  for (cvp_cit i=single_section.begin();i!=single_section.end();i++)
+  {
+    std::string name = (*i)->getObjectName();
+    map_s_v.insert(std::make_pair(name,*i));
+  }
+
+  k = map_s_v.begin();
+  std::string last = (*k).first;
+
+  //double r = static_cast<double>(rand())/static_cast<double>(RAND_MAX);
+  //double g = static_cast<double>(rand())/static_cast<double>(RAND_MAX);
+  //double b = static_cast<double>(rand())/static_cast<double>(RAND_MAX);
+  double r = 1.0;
+  double g = 0;
+  double b = 1.0;
+
+  //initializeContour(contour_handle,last);
+
+  // for each orthogonal vertex in section
+  // presorted by object name
+  for (j=map_s_v.begin();j!=map_s_v.end();j++)
+  {
+    if ((*j).first==last)
+    {
+      initializeContour(contour_handle,last,r,g,b);
+      addVertexToFile(contour_handle,(*j).second);
+      finalizeContour(contour_handle);
+    }
+    else
+    {
+      //finalizeContour(contour_handle);
+      last = (*j).first;
+      //r = static_cast<double>(rand())/static_cast<double>(RAND_MAX);
+      //g = static_cast<double>(rand())/static_cast<double>(RAND_MAX);
+      //b = static_cast<double>(rand())/static_cast<double>(RAND_MAX);
+      r = 1.0;
+      g = 0;
+      b = 1.0;
+      initializeContour(contour_handle,last,r,g,b);
+      addVertexToFile(contour_handle,(*j).second);
+      finalizeContour(contour_handle);
+    }
+  }
+  //finalizeContour(contour_handle);
+  contour_handle << "</Section>";
+  contour_handle.close();
+}
+
+void Container::writeOrthVerts2Recon3D (std::vector<const Vertex*> & orthogonal_vertices) 
+{
+  std::multimap<double,const Vertex*>  map_d_v;
+  std::multimap<double,const Vertex*>::iterator i,k;
+
+  // for each orthogonal vertex
+  for (cvp_cit j=orthogonal_vertices.begin();j!=orthogonal_vertices.end();++j)
+  {
+    const double z = *((*j)->getCoord(2));
+    map_d_v.insert(std::make_pair(z,*j));
+  }
+
+  i = map_d_v.begin();
+  double last = (*i).first;
+  int myvert_count = 0;
+  const double spacing = 50.0;
+  std::vector<const Vertex*> single_section;
+
+  // for each orthogonal vertex
+  // presorted numerically, descreasing by z value
+  for (i=map_d_v.begin();i!=map_d_v.end();i++)
+  {
+    double a = (*i).first / spacing;
+    float rem = a - floor(a);
+    if (fabs(rem) > Controls::instance().get_epsilon()) continue;
+
+    ++myvert_count;
+    if (distinguishable((*i).first,last))
+    {
+      if (!single_section.empty())
+      {
+        writeContoursSingleSection(single_section,last);
+        single_section.clear();
+      }
+      last = (*i).first;
+    }
+    single_section.push_back((*i).second);
+  }
+
+  cout << "num aligned orth verts (written to file) = " << myvert_count << endl;
+}
+
+void Container::finalizeContour (std::ofstream & contour_handle)
+{
+  contour_handle << "	  \"/>\n</Transform>\n\n";
+}
+
+void Container::initializeContour (std::ofstream & contour_handle,const std::string & name,
+                                   const double & r,const double & g,const double & b)
+{
+  contour_handle
+    << "<Transform dim=\"0\"\n"
+    << " xcoef=\" 0 1 0 0 0 0\"\n"
+    << " ycoef=\" 0 0 1 0 0 0\">\n"
+    << "<Contour name=\"" << name
+    //<< "\" hidden=\"false\" closed=\"true\" simplified=\"true\" border=\"0.501961 0 1\" fill=\"1 1 0.72549\" mode=\"9\"\n"
+    << "\" hidden=\"false\" closed=\"true\" simplified=\"true\" border=\""
+    << r << " "
+    << g << " "
+    << b << "\" fill=\""
+    << r << " "
+    << g << " "
+    << b << "\" mode=\"9\"\n"
+    << " points=\"";
+}
+
+void Container::addVertexToFile (std::ofstream & contour_handle,const Vertex * vp)
+{
+  const double offset = 0.002;
+  double const * a = vp->getCoord(0);
+  double const * b = vp->getCoord(1);
+  char str[256];
+  //sprintf(str,"        %g %g,\n",(*a)/1000.0,(*b)/1000.0);
+  sprintf(str,"        %g %g,\n",(*a)/1000.0-offset,(*b)/1000.0-offset);
+  contour_handle << str;
+  sprintf(str,"        %g %g,\n",(*a)/1000.0-offset,(*b)/1000.0+offset);
+  contour_handle << str;
+  sprintf(str,"        %g %g,\n",(*a)/1000.0+offset,(*b)/1000.0-offset);
+  contour_handle << str;
+  sprintf(str,"        %g %g,\n",(*a)/1000.0+offset,(*b)/1000.0+offset);
+  contour_handle << str;
+}
+
+//const char img_data[3][256] = {
+//{"\"A1-B_S12.160.jpg\" />"},
+//{"\"A1-B_S12.160.jpg\" />"},
+//{"\"A1-B_S12.160.jpg\" />"}}
+
+const char img_data[101][256] = {
+{"<Transform dim=\"3\"\n xcoef=\" -0.567106 0.908516  0.279141 0 0 0\"\n ycoef=\"  1.87787  -0.329688 0.8712   0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.160.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.865917 0.923752  0.283536 0 0 0\"\n ycoef=\"  1.49572  -0.314659 0.897645 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.161.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.831868 0.929041  0.260561 0 0 0\"\n ycoef=\"  1.27392  -0.293663 0.895238 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.162.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.768474 0.943801  0.247365 0 0 0\"\n ycoef=\"  1.13071  -0.285576 0.905262 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.163.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.805632 0.945825  0.228786 0 0 0\"\n ycoef=\"  1.07788  -0.26981  0.908425 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.164.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.757899 0.954317  0.220822 0 0 0\"\n ycoef=\"  0.918611 -0.259237 0.930146 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.165.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.645357 0.956967  0.18769  0 0 0\"\n ycoef=\"  0.861434 -0.233107 0.92383  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.166.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.575172 0.954218  0.160956 0 0 0\"\n ycoef=\"  0.876024 -0.216296 0.881098 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.167.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.672134 0.965437  0.167847 0 0 0\"\n ycoef=\"  0.801169 -0.206858 0.884693 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.168.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.64109  0.945975  0.167473 0 0 0\"\n ycoef=\"  0.775758 -0.195263 0.869563 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.169.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.757725 0.975328  0.176162 0 0 0\"\n ycoef=\"  0.467626 -0.19215  0.939955 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.170.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.574634 0.967270  0.15724  0 0 0\"\n ycoef=\"  0.387368 -0.176538 0.931817 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.171.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.345244 0.955863  0.120641 0 0 0\"\n ycoef=\"  0.354572 -0.156131 0.911487 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.172.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.232312 0.957871  0.099471 0 0 0\"\n ycoef=\"  0.34869  -0.129712 0.857674 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.173.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.263422 0.990501  0.083953 0 0 0\"\n ycoef=\"  0.289201 -0.123626 0.855877 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.174.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.092615 0.982441  0.041032 0 0 0\"\n ycoef=\"  0.323915 -0.089680 0.820583 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.175.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.221774 0.951882  0.085049 0 0 0\"\n ycoef=\"  0.726552 -0.131599 0.806829 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.176.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\"  0.086517 0.946791  0.057829 0 0 0\"\n ycoef=\"  0.327542 -0.122283 0.846494 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.177.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\"  0.362542 0.93642   0.035024 0 0 0\"\n ycoef=\"  0.061469 -0.101223 0.879123 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.178.jpg\" />\n"},
+{"<Transform dim=\"5\"\n xcoef=\"  0.275379 0.91144   0.082182 0 0 0\"\n ycoef=\" -0.186991 -0.047717 0.876127 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.179.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\"  0.327895 0.889087  0.061304 0 0 0\"\n ycoef=\" -0.162636 -0.011406 0.857243 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.180.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\"  0.555568 0.90288   0.036076 0 0 0\"\n ycoef=\"  0.280108 -0.051341 0.857085 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.181.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\"  0.373342 0.908789  0.052171 0 0 0\"\n ycoef=\"  0.612486 -0.102106 0.864458 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.182.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\"  0.166105 0.912235  0.093130 0 0 0\"\n ycoef=\"  1.03847  -0.172595 0.877695 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.183.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.128142 0.912321  0.121956 0 0 0\"\n ycoef=\"  0.857257 -0.205699 0.917056 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.184.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.299415 0.938929  0.116941 0 0 0\"\n ycoef=\"  0.822884 -0.232976 0.941297 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.185.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.263943 0.975146  0.135819 0 0 0\"\n ycoef=\"  1.16998  -0.222324 0.92108  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.186.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.144616 0.981653  0.119271 0 0 0\"\n ycoef=\"  1.25191  -0.207466 0.925867 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.187.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.435291 1.01591   0.10602  0 0 0\"\n ycoef=\"  0.840253 -0.149542 0.960153 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.188.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.448744 1.02806   0.085348 0 0 0\"\n ycoef=\"  0.772701 -0.118098 0.959777 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.189.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.372011 1.0242    0.064173 0 0 0\"\n ycoef=\"  0.491639 -0.087172 0.966604 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.190.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.303778 1.01996   0.053958 0 0 0\"\n ycoef=\"  0.484059 -0.077729 0.968171 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.191.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.208073 1.01628   0.034365 0 0 0\"\n ycoef=\"  0.420249 -0.054410 0.970022 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.192.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.055000 1.00581   0.018570 0 0 0\"\n ycoef=\"  0.34236  -0.052159 0.975393 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.193.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\"  0.132279 0.990768  0.002700 0 0 0\"\n ycoef=\"  0.286624 -0.035613 0.979478 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.194.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\"  0.204218 1.00125  -0.026736 0 0 0\"\n ycoef=\"  0.587619 -0.026077 0.919795 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.195.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\"  0.073291 0.992519  0.002385 0 0 0\"\n ycoef=\"  0.506158 -0.010611 0.892593 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.196.jpg\" />\n"},
+{"<Transform dim=\"1\"\n xcoef=\"  0        1         0        0 0 0\"\n ycoef=\"  0         0        1        0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.197.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\"  0.27253  0.989669 -0.039327 0 0 0\"\n ycoef=\"  0.348675 -0.021699 0.968097 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.198.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\"  0.325072 0.984014 -0.039448 0 0 0\"\n ycoef=\"  0.416136 -0.023148 0.953598 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.199.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\"  0.330289 0.97511  -0.031893 0 0 0\"\n ycoef=\"  0.404986 -0.032236 0.9648   0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.200.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\"  0.136082 0.995151 -0.032178 0 0 0\"\n ycoef=\"  0.121593 -0.000853 0.978634 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.201.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.09065  1.00328  -0.036164 0 0 0\"\n ycoef=\" -0.097670  0.035650 0.952329 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.202.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.059485 1.0137   -0.038432 0 0 0\"\n ycoef=\" -0.409962  0.074925 0.975278 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.203.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.104324 1.01133  -0.007118 0 0 0\"\n ycoef=\"  0.047449  0.024072 0.945988 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.204.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.192996 1.02209  -0.007660 0 0 0\"\n ycoef=\"  0.024973  0.038426 0.909541 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.205.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\"  0.155243 0.981077 -0.047352 0 0 0\"\n ycoef=\" -0.135798  0.081202 0.897562 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.206.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.159184 1.01125   0.001690 0 0 0\"\n ycoef=\" -0.016627  0.022632 0.932037 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.207.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.27954  1.02071   0.020250 0 0 0\"\n ycoef=\" -0.050841  0.023077 0.93891  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.208.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.311175 1.00913   0.052492 0 0 0\"\n ycoef=\" -0.157851  0.054966 0.964588 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.209.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.292632 1.00852   0.055014 0 0 0\"\n ycoef=\" -0.247812  0.097687 0.952239 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.210.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.352196 1.0113    0.051685 0 0 0\"\n ycoef=\" -0.320865  0.072630 0.972166 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.211.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.517736 1.01814   0.057519 0 0 0\"\n ycoef=\"  0.088489  0.028498 0.961353 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.212.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.618524 1.03833   0.046930 0 0 0\"\n ycoef=\" -0.095403  0.034972 0.968201 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.213.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.640915 1.0417    0.024168 0 0 0\"\n ycoef=\"  0.124188  0.033604 0.910679 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.214.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.659717 1.01871   0.022580 0 0 0\"\n ycoef=\"  0.419468  0.028311 0.85005  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.215.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.495591 1.004     0.017757 0 0 0\"\n ycoef=\"  0.533418  0.048065 0.842181 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.216.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.620478 1.01627   0.016763 0 0 0\"\n ycoef=\"  0.122618  0.056544 0.903929 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.536\" brightness=\"-0.525\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.217.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.376811 1.00842   0.023513 0 0 0\"\n ycoef=\" -0.543506  0.044956 0.996859 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.218.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.347052 1.00961   0.026795 0 0 0\"\n ycoef=\" -0.410749  0.038119 0.981788 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.219.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.663176 1.05941   0.041255 0 0 0\"\n ycoef=\" -0.314064  0.005371 0.993747 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.220.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.763934 1.06496   0.058509 0 0 0\"\n ycoef=\" -0.412361  0.010700 0.974029 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.221.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.784827 1.05772   0.069075 0 0 0\"\n ycoef=\"  0.031003 -0.005328 0.969049 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.222.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.64403  1.05804   0.049062 0 0 0\"\n ycoef=\" -0.135916  0.023965 0.962666 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.223.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.596945 1.05616   0.046746 0 0 0\"\n ycoef=\" -0.236727  0.028652 0.96731  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.224.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.481917 1.06206   0.034466 0 0 0\"\n ycoef=\" -0.219585  0.022361 0.965894 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.225.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.514526 1.07158   0.013272 0 0 0\"\n ycoef=\" -0.177502  0.037844 0.962736 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.226.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.755211 1.05395   0.034348 0 0 0\"\n ycoef=\" -0.063100  0.033946 0.956009 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.227.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -0.696786 1.04958   0.034329 0 0 0\"\n ycoef=\" -0.181886  0.047434 0.972457 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.228.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -0.715407 1.04153   0.060353 0 0 0\"\n ycoef=\"  0.318194 -0.005487 0.946767 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.229.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -0.710064 1.01696   0.085684 0 0 0\"\n ycoef=\"  0.643598 -0.045513 0.879763 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.230.jpg\" />\n"},
+{"<Transform dim=\"5\"\n xcoef=\" -1.16379  1.08583   0.075300 0 0 0\"\n ycoef=\"  0.377913 -0.009395 0.897096 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.231.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -1.25433  1.07844   0.068434 0 0 0\"\n ycoef=\"  0.360629 -0.039616 0.991683 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.232.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -1.24871  1.06816   0.075640 0 0 0\"\n ycoef=\"  0.396387 -0.037202 0.997071 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.233.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -1.24117  1.05192   0.085490 0 0 0\"\n ycoef=\"  0.509605 -0.064906 0.961517 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.234.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -1.45834  1.0646    0.106936 0 0 0\"\n ycoef=\"  0.326807 -0.055998 0.975617 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.235.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -1.4302   1.06469   0.127169 0 0 0\"\n ycoef=\"  0.532403 -0.070365 0.96537  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.236.jpg\" />\n"},
+{"<Transform dim=\"5\"\n xcoef=\" -1.52792  1.07429   0.143841 0 0 0\"\n ycoef=\"  0.649129 -0.103984 0.971546 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.237.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -1.72439  1.07799   0.165071 0 0 0\"\n ycoef=\"  0.788722 -0.104344 0.951925 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.238.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -1.56433  1.06795   0.154614 0 0 0\"\n ycoef=\"  0.896773 -0.104341 0.952253 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.239.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -1.70677  1.08287   0.165337 0 0 0\"\n ycoef=\"  0.873286 -0.105163 0.981151 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.240.jpg\" />\n"},
+{"<Transform dim=\"5\"\n xcoef=\" -1.93115  1.09273   0.166158 0 0 0\"\n ycoef=\"  1.03756  -0.109699 0.960169 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.241.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -2.19938  1.09911   0.196347 0 0 0\"\n ycoef=\"  1.32725  -0.143896 0.954941 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.242.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -2.11207  1.08446   0.191679 0 0 0\"\n ycoef=\"  1.29066  -0.123522 0.94935  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.243.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -2.26635  1.1152    0.143889 0 0 0\"\n ycoef=\"  0.735342 -0.072433 0.966669 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.244.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -2.13363  1.11236   0.127081 0 0 0\"\n ycoef=\"  0.700579 -0.058386 0.957397 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.245.jpg\" />\n"},
+{"<Transform dim=\"3\"\n xcoef=\" -2.3825   1.12435   0.134263 0 0 0\"\n ycoef=\"  0.92583  -0.065302 0.978261 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.246.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -2.54387  1.12134   0.175902 0 0 0\"\n ycoef=\"  1.28503  -0.113561 0.964423 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.247.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -1.99091  1.06984   0.192905 0 0 0\"\n ycoef=\"  1.13652  -0.131673 0.952262 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.248.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -2.45699  1.09211   0.209045 0 0 0\"\n ycoef=\"  0.844755 -0.105703 0.985923 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.249.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -2.59333  1.10207   0.207521 0 0 0\"\n ycoef=\"  1.63528  -0.180552 0.923165 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.102\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.250.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -2.61576  1.11149   0.171091 0 0 0\"\n ycoef=\"  1.09958  -0.12532  0.929613 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.251.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -2.39431  1.12068   0.091140 0 0 0\"\n ycoef=\"  0.729446 -0.029549 0.876252 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.252.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -1.54375  0.995467  0.100091 0 0 0\"\n ycoef=\"  1.17229  -0.044727 0.834971 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.253.jpg\" />\n"},
+{"<Transform dim=\"5\"\n xcoef=\" -1.71362  0.996894  0.128574 0 0 0\"\n ycoef=\"  1.03975  -0.064026 0.887317 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.254.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -1.38566  0.936509  0.136393 0 0 0\"\n ycoef=\"  1.12851  -0.110456 0.927976 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.255.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -2.08588  1.01388   0.144965 0 0 0\"\n ycoef=\"  1.39503  -0.152661 0.97403  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.256.jpg\" />\n"},
+{"<Transform dim=\"5\"\n xcoef=\" -2.01715  1.02005   0.14098  0 0 0\"\n ycoef=\"  1.12674  -0.105629 0.965139 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.257.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -2.17679  1.03498   0.107633 0 0 0\"\n ycoef=\"  0.803071 -0.065977 0.965064 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.258.jpg\" />\n"},
+{"<Transform dim=\"6\"\n xcoef=\" -2.22523  1.03516   0.121136 0 0 0\"\n ycoef=\"  0.974713 -0.092563 0.961757 0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.259.jpg\" />\n"},
+{"<Transform dim=\"4\"\n xcoef=\" -2.24839  1.08261   0.028368 0 0 0\"\n ycoef=\"  0.922613 -0.061297 0.93662  0 0 0\">\n<Image mag=\"0.0022159\" contrast=\"1.103\" brightness=\"-0.345\" red=\"true\" green=\"true\" blue=\"true\"\n src=\"R34CA1-B_S12.260.jpg\" />\n"}};
+
+void Container::openContourFile (std::ofstream & contour_handle,double z)
+{
+  int index = z/50.0;
+  char str[256];
+  sprintf(str,"%sorthogonal_vertices.%d",Controls::instance().get_output_data_dir().c_str(),
+                                         index);
+  contour_handle.open(str);
+  assert (contour_handle.is_open());
+  //contour_handle << "<?xml version=\"1.0\"?>\n"
+  //  << "<!DOCTYPE Section SYSTEM \"section.dtd\">\n\n"
+  //  << "<Section index=\"" << index << "\" thickness=\"0.05\" alignLocked=\"true\">\n"
+  //  << "<Transform dim=\"3\"\n"
+  //  << " xcoef=\" -0.567106 0.908516 0.279141 0 0 0\"\n"
+  //  << " ycoef=\" 1.87787 -0.329688 0.8712 0 0 0\">\n"
+  //  << "<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n"
+  //  << " src=\"R34CA1-B_S12." << index+100 << ".jpg\" />\n"
+  //  << "<Contour name=\"domain1\" hidden=\"false\" closed=\"true\" simplified=\"false\" border=\"1 0 1\" fill=\"1 0 1\" mode=\"11\"\n"
+  //  << " points=\"0 0,\n"
+  //  << "	4096 0,\n"
+  //  << "	4096 4096,\n"
+  //  << "	0 4096,\n"
+  //  << "	\"/>\n"
+  //  << "</Transform>\n\n";
+  contour_handle << "<?xml version=\"1.0\"?>\n"
+    << "<!DOCTYPE Section SYSTEM \"section.dtd\">\n\n"
+    << "<Section index=\"" << index << "\" thickness=\"0.05\" alignLocked=\"true\">\n"
+    //<< "<Transform dim=\"3\"\n"
+    //<< " xcoef=\" -0.567106 0.908516 0.279141 0 0 0\"\n"
+    //<< " ycoef=\" 1.87787 -0.329688 0.8712 0 0 0\">\n"
+    //<< "<Image mag=\"0.0022159\" contrast=\"0.882\" brightness=\"-0.075\" red=\"true\" green=\"true\" blue=\"true\"\n"
+    //<< " src=\"R34CA1-B_S12." << index+100 << ".jpg\" />\n"
+    << img_data[index-60]
+    << "<Contour name=\"domain1\" hidden=\"false\" closed=\"true\" simplified=\"false\" border=\"1 0 1\" fill=\"1 0 1\" mode=\"11\"\n"
+    << " points=\"0 0,\n"
+    << "	4096 0,\n"
+    << "	4096 4096,\n"
+    << "	0 4096,\n"
+    << "	\"/>\n"
+    << "</Transform>\n\n";
+}
+
+void Container::binVertexNormalAngle (double * bins,int * count,const double & cos_angle)
+{
+  int a = 12;
+  unsigned int start=0;
+  unsigned int end=a-1;
+  while (end-start>1)
+  {
+    unsigned int mid=(start+end)/2;
+    if (cos_angle <= bins[start] && cos_angle >= bins[mid]) { end=mid;}
+    else { start=mid; }
+  }
+  if (cos_angle <= bins[start] && cos_angle >= bins[end]) { count[start]++;}
+  else { count[end]++; }
+}
+
+void Container::findOrthogonalRegions (void)
+{
+  double pi = 3.14159;
+  double threshold = cos(pi/2.0*Controls::instance().get_region_orthogonality_threshold());
+  // instantiate vector of vertex pointers (or vertex vector index)
+  std::vector<const Vertex*> orthogonal_vertices; 
+  // initialize vertex normal angle histogram
+  double bins[13];
+  bins[0]  = 1.0;
+  bins[1]  = 1.0;
+  for (int i=2;i<11;i++) bins[i]  = cos(pi/2.0*(static_cast<double>(i-1)/10.0));
+  bins[11] = 0.0;
+  bins[12] = 0.0;
+  int   count[12];
+  for (int i=0;i<12;i++) count[i]=0;
+
+  cout << "# ecw num_neighbors\n";
+  // for each object in container
+  for (o_it i=o.begin();i!=o.end();++i)
+  {
+    // for each vertex in object
+    for (v_it j=i->v.begin();j!=i->v.end();++j)
+    {
+      // get vertex normal
+      // (previously calculated and stored during initialization)
+      vector3 n = j->getNormal(); 
+      // compute cosine of angle between vertex normal and section plane
+      double a = n.p[0]*n.p[0];
+      double b = n.p[1]*n.p[1];
+      double c = n.p[2]*n.p[2];
+      double d = a+b;
+      double e = d+c;
+      double cos_angle = d/sqrt(d*e);
+      // bin vertex normal angle
+      binVertexNormalAngle (&bins[0],&count[0],cos_angle);
+      // if normal satisfies orthogonality threshold then keep
+      if (cos_angle>= threshold)
+      {
+        orthogonal_vertices.push_back(&(*j));
+        // if vertex has a closest face
+        if (j->getClosestFace()!=NULL)
+        {
+          // get closest point
+          vector3 closest_point;
+          double sqd;
+          findClosestPtInFaceToLocation(*j->getPos(),j->getClosestFace(),closest_point,sqd);
+          double dd = sqrt(sqd);
+          cout << dd << " " << calculateVertexNeighborCount(&(*j),j->getPos(),j->getNormal())
+                << endl;
+        }
+      }
+      //orthogonal_vertices.push_back(&(*j));
+    }
+  }
+  cout << "            total num vertices = " << getVertexCount() << endl;
+  cout << "       num orthogonal vertices = " << orthogonal_vertices.size() << endl;
+
+  // 1) output to contour files
+  writeOrthVerts2Recon3D(orthogonal_vertices);
+  // 2) output to visualize in dreamm
+  writeOrthVerts2Dreamm(orthogonal_vertices);
+  // write histogram to stdout
+  cout << "\n\n"
+        << "Histogram of vertex normal angle relative to plane of section (degrees):\n\n";
+  printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+         acos(bins[0])*180.0/pi, acos(bins[1])*180.0/pi, count[0], acos(bins[6])*180.0/pi, acos(bins[7])*180.0/pi, count[6]);
+  printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+         acos(bins[1])*180.0/pi, acos(bins[2])*180.0/pi, count[1], acos(bins[7])*180.0/pi, acos(bins[8])*180.0/pi, count[7]);
+  printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+         acos(bins[2])*180.0/pi, acos(bins[3])*180.0/pi, count[2], acos(bins[8])*180.0/pi, acos(bins[9])*180.0/pi, count[8]);
+  printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+         acos(bins[3])*180.0/pi, acos(bins[4])*180.0/pi, count[3], acos(bins[9])*180.0/pi, acos(bins[10])*180.0/pi, count[9]);
+  printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+         acos(bins[4])*180.0/pi, acos(bins[5])*180.0/pi, count[4], acos(bins[10])*180.0/pi, acos(bins[11])*180.0/pi, count[10]);
+  printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+         acos(bins[5])*180.0/pi, acos(bins[6])*180.0/pi, count[5], acos(bins[11])*180.0/pi, acos(bins[12])*180.0/pi, count[11]);
+  cout << "\n\n";
+  //printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+  //       bins[6], bins[7], count[6], bins[13], bins[15], count[14]);
+  //printf("  %9.4g - %-9.4g    : %9d  | %9.4g - %-9.4g   : %9d\n",
+  //       bins[7], bins[8], count[7], bins[15], bins[16], count[15]);
+}
+
+void Container::findVertexNeighbors (const int & group)
+{
+  cout << "Iteration " << group << ": ";
+  cout << "Counting vertex neighbor objects...............";
+  cout.flush();
+  // for each object
+  for (o_it i=o.begin();i!=o.end();++i)
+  {
+    // for each vertex in object
+    for (v_it j=i->v.begin();j!=i->v.end();++j)
+    {
+      j->setNeighborCount(calculateVertexNeighborCount(&(*j),j->getPos(),j->getNormal()));
+    }
+  }
+  cout << "complete.\n";
+  cout.flush();
+}
+
+double Container::calculateCleftArea (void) const
+{
+  double area = 0.0;
+  // for each cleft vertex
+  for (vp_cit i = cleft.begin();i!=cleft.end();i++)
+  {
+    area += (*i)->getArea();
+  }
+  return area;
+}
+
+void Container::findPerisynaptic (void)
+{
+  // since clefts do NOT cover entire synapse junction,
+  // then perisynaptic regions should be twice (not equal)
+  // as wide as clefts to adequately sample ECS around synapses.
+  //
+  // in doc/perisynaptic.m determine that a perisynaptic region twice
+  // as wide as cleft will have area 8 times larger than cleft area.
+
+  cout << "Finding perisynaptic vertices..................";
+  cout.flush();
+  v_set newest,keepers;
+  v_set next_to_check(cleft.begin(),cleft.end());
+  double cleft_area = calculateCleftArea();
+  double peri_area  = 0.0;
+
+  while (true)
+  {
+    for (vs_it i=next_to_check.begin();i!=next_to_check.end();i++)
+    {
+      vec_vp adjacent_vertices;
+      (*i)->getAdjVertices(adjacent_vertices);
+      for (vp_it j=adjacent_vertices.begin();j!=adjacent_vertices.end();j++)
+      {
+        // if vertex is cleft or keeper, then continue
+        if (vertexIsCleft(*j) || (keepers.count(*j)>0)) continue;
+        // vertex is perisynaptic
+        newest.insert(*j);
+        peri_area += (*j)->getArea();
+      }
+    }
+
+    keepers.insert(newest.begin(),newest.end());
+    if (peri_area >= 8.0*cleft_area) break;
+    //next_to_check.clear();
+    //next_to_check;.insert(newest.begin(),newest.end());
+    next_to_check = newest;
+    newest.clear();
+  }
+  peri.assign(keepers.begin(),keepers.end());
+  cout << "complete.\n";
+  cout.flush();
+}

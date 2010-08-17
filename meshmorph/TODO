@@ -1,6 +1,81 @@
+Apr 2010
+Suppose I have a reconstruction whose tunnels (and sheets) have
+some distribution of ECWs. Also suppose that I want to freeze
+the sheets and expand the tunnel volume to increase the EVF of the
+reconstruction. Consider the case where to shift the median of the tunnel
+ecw distribution the entire distribution of ecws must increase (like a
+translation of the distribution up the width axis). It therefore seems
+reasonable in meshmorph to keep
+
+target_ecw_high > current_ecw_mean + n * current_ecw_stddev
+
+(n = 2 or three)
+
+where target_ecw_high is the target ecw of the tunnel vertices. The
+reason is that the fraction of the tunnel ecw distribution larger thatn
+the target ecw will not increase (either not moving or decreasing!).
+
+The alternative way of increasing the volume of the tunnels by shifting
+the median ecw of tunnels is by a sharpening of the distribution towards
+the current distribution max value. The increase of median via this
+process has an upperbound equal to the max ecw in teh distribution.
+
+Additionally, must continue updating closest points that are
+on the high end of the ecw distribution. For example,
+if target_ecw_high=160
+then perhaps --update_region_size=160
+and --search_radius=160
+
+
+
+Sep2009
+Redefine command line options so an organization by topic also
+is organized by some natural progression
+of option number (-0,-1,-2,...)
+or option character (-a,-b,-c,...,-A,-B,-C,...).
+
+Would be cool if diagnostic print states could include
+Class_name::function_name automatically.
+
+Explicitely report for each measurement of mesh
+whether mesh state conforms to high-quality expectations.
+E.g. # orphan vertices: none/
+            becomes
+     (good) # orphan vertices: none/
+      (bad) mesh is closed: no
+Define a map from each possible meshalyzer output to conformity label.
+
+
+
+July2009
+High-aspect ratio faces are a problem.
+Specifically, finding closest points to barycenters of tiles.
+The closest point on adjacent faces may not be within
+the cone of search but are less than SMALL_ECW_THRESHOLD.
+Consequently, the situation arises where two faces are coplanar
+and the barycenter of a tile and its closest point are coplanar.
+
+Had trouble finding algorithm to work, so I made --ecw_sampling_length=1000
+so no tiles would be checked. ECW only measured at vertices.
+
+22Mar2009
+Does intersecting-face detection depend on value of search cone angle?
+Or new closest point policy (i.e. no closest point => zero sep force)?
+
+In timeline.log, simulation time steadily-increases for each subsequent
+group of vertex moves.
+
+Possible systematic, preferential crushing of processes according to radius
+or smallest cross-sectional dimension. So glia, with high proportion of volume
+confined to small processes, is crushed the most. Report change in surface area.
+
+
 Feb 13 2009
 Add option to assume vertices are nice and NOT check niceness
-
+Note that faces that intersect at a point, i.e. edges intersect
+may fail assertion in Intersecting_Faces::getCountOfIntFaces
+that demands that if face A intersects face B, then Face B intersects
+Face A. Came across this with raw output from contour_tiles.
 
 
 Accomplished

@@ -3,6 +3,7 @@
 
 #include "state.h"
 
+#include <cassert>
 #include <cmath>
 #include <iostream>
 
@@ -220,6 +221,7 @@ Search_Stats State::updateClosestFaceToVertices (Vertex * const v,
       Face * new_face = NULL;
       vector3 p;
       double sqd = 1E30;
+      //int neighbor_count = 0;
       bool closest_pt_found = c.findClosestPtToVertex(*i,p,sqd,new_face);
       if (closest_pt_found==true)
       {
@@ -234,6 +236,7 @@ Search_Stats State::updateClosestFaceToVertices (Vertex * const v,
         }
         // update closest face
         (*i)->setFace(new_face);
+        //(*i)->setNeighborCount(neighbor_count);
         // DEBUG
 //        if ((*i)->isMatch(TARGET_VERTEX_INDEX,TARGET_VERTEX_NAME)==true)
 //        {
@@ -506,6 +509,7 @@ bool State::assignNewVertexCoords (Vertex * const v,
     v_set ps = getVertsForPartialClosestPtSearch(lower,upper);
     // update closest point and global energy 
     // for affected vertices collected before
+    assert(Intersecting_Faces::instance().intFacesAreSymmetric());
     Search_Stats ss = updateClosestFaceToVertices(v,fs,ps);
     // update sets with squared virtual displacement of nearby vertices
     updateVertexVD(v);

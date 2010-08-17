@@ -1,0 +1,1 @@
+do not print all orphaned vertices to stderr, just total # orphaned vertices

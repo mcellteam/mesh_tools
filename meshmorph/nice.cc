@@ -104,7 +104,7 @@ bool Nice::findExtraPoint (Vertex const * const v,
   // find all intersected faces along ray
   vec_fp crossed_faces,edge_faces;
   // find intersected faces along ray
-  face_grp fg = findIntFacesAlongRay(v,face_centroid,extra_obj_pt);
+  face_grp fg = findIntFacesAlongRay(v,face_centroid,extra_obj_pt,false);
   sort(fg.crossed_faces.begin(),fg.crossed_faces.end());
   // prohibit edge intersections, since they are tricky and avoidable
   if (fg.edge_faces.empty()==false) return false;
@@ -132,12 +132,18 @@ void Nice::findNonniceVertices (void)
 {
   cout << "Find nice vertices.............................";
   cout.flush();
-  int k=1;
+  Container & c(Container::instance());
+  int k=0;
   double goal = 0.2;
+  double inc = 0.2;
+  double a = 1.0/c.o.size();
+  if (goal<a)
+  {
+    goal=a;
+    inc = a;
+  }
   printf("0%%..");
   fflush(stdout);
-  Container & c(Container::instance());
-  double a = 1.0/c.o.size();
   // for each object in container
   for (o_it i=c.o.begin();i!=c.o.end();++i)
   {
@@ -148,11 +154,11 @@ void Nice::findNonniceVertices (void)
     }
     // track progress
     double progress = static_cast<double>(k++)*a;
-    if (progress>goal)
+    if (progress>=goal)
     {
       printf("%d%%..",static_cast<int>(goal*100));
       fflush(stdout);
-      goal+=0.2;
+      goal+=inc;
     }
   }
 //  printf("100%%..");
@@ -398,7 +404,7 @@ bool Nice::getCrossedObjFromVertToExtra (Vertex const * const v,
   origin.p[2] = *v->getCoord(2);
   // find and return crossed objects between origin point and end point
   vec_fp crossed_faces,edge_faces;
-  face_grp fg = findIntFacesAlongRay(v,origin,extra_obj_pt);
+  face_grp fg = findIntFacesAlongRay(v,origin,extra_obj_pt,false);
   // prohibit edge intersection, since it is tricky and avoidable
   if (fg.edge_faces.empty()==false) return true;
   // remove current vertex adjacent faces from crossed_faces
@@ -435,7 +441,7 @@ bool Nice::getCrossedObjFromExtraToLimit (vector3 const & extra_obj_pt,
 {
   vec_fp crossed_faces,edge_faces;
   // keep intersected faces
-  face_grp fg = findIntFacesAlongRay(NULL,extra_obj_pt,world_limit);
+  face_grp fg = findIntFacesAlongRay(NULL,extra_obj_pt,world_limit,false);
   // prohibit edge intersection, since it is tricky and avoidable
   if (fg.edge_faces.empty()==false) return true;
   // get objects penetrated by ray
@@ -482,17 +488,61 @@ void Nice::getVertAdjFaceRay (vector3 & centroid,
 
 face_grp Nice::findIntFacesAlongRay (Vertex const * const v,
                                      vector3 const & origin,
-                                     vector3 const & end) const
+                                     vector3 const & end,
+                                     bool gate) const
 {
   face_grp fg;
+  // DEBUG
+  vector3 lower(0,0,0);
+  vector3 upper(0,0,0);
+  for (int i=0;i<3;i++)
+  {
+    if (origin.p[i]<end.p[i])
+    {
+      lower.p[i] = origin.p[i];
+      upper.p[i] = end.p[i];
+    }
+    else
+    {
+      lower.p[i] = end.p[i];
+      upper.p[i] = origin.p[i];
+    }
+  }
+  Octree_Visitor_Face visitor(Vector3r(lower.p[0],lower.p[1],lower.p[2]),
+                              Vector3r(   upper.p[0],   upper.p[1],   upper.p[2]));
+  // DEBUG
   // make a visitor
-  Octree_Visitor_Face visitor(Vector3r(origin.p[0],origin.p[1],origin.p[2]),
-                              Vector3r(   end.p[0],   end.p[1],   end.p[2]));
+  //Octree_Visitor_Face visitor(Vector3r(origin.p[0],origin.p[1],origin.p[2]),
+  //                            Vector3r(   end.p[0],   end.p[1],   end.p[2]));
   // execute visitor
   Container::instance().octree->visit( visitor );
+  // DEBUG
+  if (gate)
+  {
+    cout << "\nNice::findIntFacesAlongRay : ";
+    v->print(cout);
+    cout << "Nice::findIntFacesAlongRay : "
+        << "ray origin = [" << origin.p[0]
+        << " " << origin.p[1]
+        << " " << origin.p[2] << "]" << endl;
+    cout << "Nice::findIntFacesAlongRay : "
+        << "ray end = [" << end.p[0]
+        << " " << end.p[1]
+        << " " << end.p[2] << "]" << endl;
+    cout << "Nice::findIntFacesAlongRay : "
+          << "number of faces to check = " << visitor.myend()-visitor.mybegin() << endl;
+  }
+  // DEBUG
   // for each face assumed to contain only unique elements
   for (fp_it j=visitor.mybegin();j!=visitor.myend();++j)
   {
+    // DEBUG
+    if (gate)
+    {
+      cout << "Nice::findIntFacesAlongRay :\n";
+      (*j)->print(cout);
+    }
+    // DEBUG
     (*j)->clearFlag();
     // skip adjacent faces since vertex is coincident
     // with the face which would result in edge intersection

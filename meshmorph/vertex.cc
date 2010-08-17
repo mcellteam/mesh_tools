@@ -7,6 +7,7 @@
 #include <cmath>
 #include <iostream>
 
+#include "bestfit.h"
 #include "edge.h"
 #include "nice.h"
 #include "controls.h"
@@ -18,7 +19,7 @@ using std::endl;
 
 Vertex::Vertex (const Vertex& rhs)
 :index(rhs.index),cl(rhs.cl),o(rhs.o),
-  f(rhs.f),n(rhs.n),p(rhs.p),r(0)
+  f(rhs.f),n(rhs.n),p(rhs.p),r(0),m(-1)
 {
 }
 
@@ -37,7 +38,7 @@ Vertex& Vertex::operator = (const Vertex& rhs)
 
 Vertex::Vertex (int const & in,double const & x, double const & y,double const & z,Object * const q)
 //Vertex::Vertex (int in,double x, double y,double z,Object * const q)
-:index(in),cl(NULL),o(q),f(),n(),p(x,y,z),r(0)
+:index(in),cl(NULL),o(q),f(),n(),p(x,y,z),r(0),m(-1)
 {
 }
 
@@ -149,6 +150,29 @@ void Vertex::printCP (std::ostream &target) const
   target << str;
 }
 
+/** Calculate surface area around vertex as one-third sum of
+ *  adjacent face areas.
+ * \return Surface area around this vertex.
+ */
+
+double Vertex::getArea (void) const
+{
+  double area = 0.0;
+  // for each adjacent face
+  for (fp_cit i=f.begin();i!=f.end();++i)
+  {
+    // get face area
+    area += (*i)->computeArea();
+  }
+  // see doc/triangle.py for a little more detail
+  // as to why 1/3 is used. The idea is that each
+  // of three vertices of a triangle share the
+  // triangle's area. The amazing part is that
+  // the division is precisely in thirds if the
+  // triangle's edges are bisected.
+  return area/3.0;
+}
+
 /** Calculate and store vertex normal vector computed as a
  *  weighted sum of adjacent face normals.
  */
@@ -199,15 +223,20 @@ double Vertex::getEcwForceEnergy (vector3 & force,bool compute_force) const
     double sd = sqrt(sqd);
     // compute target ecw
     double target_ecw = cs.get_target_ecw();
-    // if thresholding
-    if (cs.get_ecw_threshold()>0)
+    // if employing dual target ecw
+    if (cs.get_dual_vertex_ecws())
     {
-      // if ecw less than threshold
-      if (sd < cs.get_ecw_threshold())
+      // insure that number of neighbors has been determined
+      //if (m<0)
+      //{
+      //  setNeighborCount(Container::instance().calculateVertexNeighborCount(this));
+      //}
+      // if sheet
+      if (isSheet())
       {
         target_ecw = cs.get_target_ecw_low();
       }
-      // else if ecw greater than or equal to threshold
+      // else tunnel
       else
       {
         target_ecw = cs.get_target_ecw_high();
@@ -270,10 +299,17 @@ double Vertex::getEcwForceEnergy (vector3 & force,bool compute_force) const
   else
   {
     // cl==NULL, i.e. no closest point
-    // therefore no contribution to force
-    // peg energy at maximum possible value, i.e. max ecw error
-    double max_se = sqrt(cs.get_search_radius_sq());
-    return 0.5*cs.get_ecw_gain()*cs.get_ecw_weight()*max_se*max_se;
+    if (cs.get_assume_max_ecw_error())
+    {
+      // assume maximum ecw error
+      double max_se = sqrt(cs.get_search_radius_sq());
+      return 0.5*cs.get_ecw_gain()*cs.get_ecw_weight()*max_se*max_se;
+    }
+    else
+    {
+      // assume zero ecw error
+      return 0;
+    }
   }
 }
 
@@ -538,6 +574,73 @@ void Vertex::getAdjVertices (vec_vp & adjacent_vertices) const
   }
 }
 
+// DEBUG
+//void Vertex::getAdjVerticesLevel2 (vec_vp & adj_vert_L2) const
+//{
+//  adj_vert_L2.clear();
+//  getAdjVertices(adj_vert_L2);
+//  vec_vp adj_vert_L1(adj_vert_L2);
+//  // for each level 1 adjacent vertex
+//  vp_cit i=adj_vert_L1.begin();
+//  while (i!=adj_vert_L1.end())
+//  {
+//    vec_vp adj_vert_temp;
+//    (*i)->getAdjVertices(adj_vert_temp);
+//    adj_vert_L2.insert(adj_vert_L2.end(),adj_vert_temp.begin(),adj_vert_temp.end());
+//    ++i;
+//  }
+//  // keep unique
+//  // sort and keep unique 
+//  sort(adj_vert_L2.begin(),adj_vert_L2.end());
+//  adj_vert_L2.assign(adj_vert_L2.begin(),unique(adj_vert_L2.begin(),adj_vert_L2.end()));
+//}
+
+void Vertex::getAdjVerticesMulti (vec_vp & expanded_verts, const int num_expansions) const
+{
+  getAdjVertices(expanded_verts);
+  expanded_verts.push_back(const_cast<Vertex*>(this));
+  sort(expanded_verts.begin(),expanded_verts.end());
+
+  // expecting num_expansions>=0
+  
+  if (num_expansions<1) return; 
+  for (int i=0;i<num_expansions;i++)
+  {
+    // for each level 1 adjacent vertex
+    vec_vp vert_copy(expanded_verts);
+    vp_cit j=vert_copy.begin();
+    while (j!=vert_copy.end())
+    {
+      vec_vp adj_vert_temp;
+      (*j)->getAdjVertices(adj_vert_temp);
+      expanded_verts.insert(expanded_verts.end(),adj_vert_temp.begin(),adj_vert_temp.end());
+      ++j;
+    }
+    // keep unique
+    // sort and keep unique 
+    sort(expanded_verts.begin(),expanded_verts.end());
+    vp_it k = unique(expanded_verts.begin(),expanded_verts.end());
+    expanded_verts.assign(expanded_verts.begin(),k);
+  }
+
+//  // for each level 2 adjacent vertex
+//  vec_vp adj_vert_L2(adj_vert_L3);
+//  vp_cit i=adj_vert_L2.begin();
+//  while (i!=adj_vert_L2.end())
+//  {
+//    vec_vp adj_vert_temp;
+//    (*i)->getAdjVertices(adj_vert_temp);
+//    adj_vert_L3.insert(adj_vert_L3.end(),adj_vert_temp.begin(),adj_vert_temp.end());
+//    ++i;
+//  }
+//  // keep unique
+//  // sort and keep unique 
+//  sort(adj_vert_L3.begin(),adj_vert_L3.end());
+//  adj_vert_L3.assign(adj_vert_L3.begin(),unique(adj_vert_L3.begin(),adj_vert_L3.end()));
+
+}
+// DEBUG
+
 /** Calculare and return squared extracellular width of this vertex.
  * \return Squared extracellular width of this vertex.
  */
@@ -635,8 +738,12 @@ void Vertex::getAdjacentEdges (vec_ep & adjacent_edges) const
 
 double Vertex::getSqVirtualDisp (double gain)
 {
+  // DEBUG
+  //if (isSheet()) return 0;
+  // DEBUG
   // compute new vertex coords
   // q = new holding position coordinates (x,y,z)
+  //cout << "111";cout.flush();
   vector3 q = getNewPos(gain);
   vector3 diff = q-p;
   // DEBUG
@@ -710,3 +817,84 @@ void Vertex::defineLocalRegion (vector3 & lower,vector3 & upper)
   upper += cs.get_update_region_size();
 }
 
+/** Determine if radius should be positive (surface is locally convex around vertex)
+ *  or if radius should be negative (surface is locally concave around vertex).
+ * \param[in] radial_vector Vector from thsi vertex to sphere center.
+ * \return True if surface is concave; false otherwise.
+ */
+
+bool Vertex::surfaceIsConcave (const vector3 & radial_vector) const
+{
+  if (n.dot(radial_vector)>0) return true;
+  return false;
+}
+
+/** Calculate radius of curvature at this vertex by fitting a sphere
+ *  to this and adjacent vertices.
+ * \return Radius of best fit sphere.
+ */
+
+std::string Vertex::getRadiusOfCurvatureDEBUG (void) const
+{
+  std::string message;
+  char mymessage[1024];
+  //1. Define a set of points P as unique collection of vertices of adjacent faces
+  vec_vp P;
+  std::vector<vector3> Q;
+  getAdjVerticesMulti(P,Controls::instance().get_curvature_neighborhood_size()-1);
+  std::pair<vp_cit,vp_cit> mypair;
+  mypair = equal_range(P.begin(),P.end(),this);
+  assert (mypair.first!=P.end());
+  assert (mypair.first!=mypair.second);
+  vp_cit i = mypair.first;
+  //double min_energy=1e300;
+  double radius_of_curvature=0.0;
+  //2. For each point p_i in P:
+  //  a. Let p_i be the inversion point (p, q, r)
+  //     and points {x_i, y_i, z_i} be all other points in P.
+  vector3 p_i = *(*i)->getPos();
+  Q.clear();
+  // For each point q_i in P:
+  for (vp_cit j=P.begin();j!=P.end();j++)
+  {
+    if (*i==*j) continue;
+    vector3 q_i = *(*j)->getPos();
+    //  b. Invert {x_i, y_i, z_i} to generate points t_i.    
+    vector3 diff = q_i-p_i;
+    vector3 q_i_invert = p_i+diff/(diff.dot(diff));
+    Q.push_back(q_i_invert);
+  }
+  //  c. Find the least sum of squares plane fit to the points t_i. 
+  // ax+by+cz+d=0 best fit plane, where plane = {a,b,c,d}
+  double plane[4];
+  //double energy = getBestFitPlane(Q,plane);
+  getBestFitPlane(Q,plane);
+  //  d. Find the point on the plane closest to p_i. Call this point a.                               
+  //      let nn = [a b c]
+  vector3 nn(plane[0],plane[1],plane[2]);
+  //      a = p_i - ((d+n.p_i)/(n.n))*n
+  double den1 = nn.dot(nn);
+  assert(den1!=0);
+  vector3 a = p_i - nn*((plane[3]+nn.dot(p_i))/den1);
+  //  e. Transform a using the inversion defined in the methods to generate a'.                        
+  vector3 diff = a-p_i;
+  double den2 = diff.dot(diff);
+  if (den2==0)
+  {
+    radius_of_curvature = Controls::instance().get_max_radius_of_curvature();
+  }
+  else
+  {
+    vector3 a_invert = p_i+diff/den2;
+    //  f. Define the sphere center, c_i, as the average of p_i and a'.                                  
+    vector3 c_i = p_i*0.5 + a_invert*0.5;
+    //  g. Define the radius for the sphere given center c_i.                                           
+    vector3 radial_vector = c_i-p_i;
+    radius_of_curvature = sqrt(radial_vector.dot(radial_vector));
+    if (surfaceIsConcave(radial_vector)) radius_of_curvature *= -1.0; 
+  }
+  sprintf(mymessage,"%g",radius_of_curvature);
+  message = mymessage;
+  //assert (radius_of_curvature>0.0);
+  return message;
+}
