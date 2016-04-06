@@ -1,25 +1,23 @@
 CC = gcc
 DEFS =
-#FLAGS = -O3 -march=pentiumpro
 FLAGS = -O3
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 
 SHELL = /bin/sh
-OBJS = parse.o vector.o mesh_tag_region.o 
+OBJS = parse.bison.o vector.o mesh_tag_region.o 
 
 mesh_tag_region: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o mesh_tag_region
 
-lex.c: lex.l
-	flex lex.l
-	mv lex.yy.c lex.c
+lex.flex.c: lex.l
+	flex -Cfra lex.l
 
-parse.c: lex.c parse.y mesh_tag_region.h
-	bison -o parse.c parse.y
+parse.bison.c: lex.flex.c parse.y mesh_tag_region.h
+	bison parse.y
 
-parse.o: parse.c mesh_tag_region.h
-	$(CC) $(FLAGS) $(DEFS) -c parse.c
+parse.bison.o: parse.bison.c mesh_tag_region.h
+	$(CC) $(FLAGS) $(DEFS) -c parse.bison.c
 
 vector.o: vector.h
 	$(CC) $(FLAGS) $(DEFS) -c vector.c
@@ -28,7 +26,7 @@ mesh_tag_region.o: mesh_tag_region.c mesh_tag_region.h
 	$(CC) $(FLAGS) $(DEFS) -c mesh_tag_region.c
 
 clean:
-	rm -f $(OBJS) lex.c parse.c mesh_tag_region
+	rm -f $(OBJS) lex.flex.c parse.bison.c mesh_tag_region
 
 install: mesh_tag_region
 	@if [ "$(INSTALL_DIR)" ]; then \

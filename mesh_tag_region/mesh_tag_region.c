@@ -226,7 +226,7 @@ void swap_double(x,y)
 }
 
 
-sort_dbl_array(array,n)
+void sort_dbl_array(array,n)
   double *array;
   int n;
 {
@@ -798,7 +798,7 @@ int find_range(u,u_range,n_u_range)
 }
 
 /* find range of partitions spanned by a polygon */
-find_polygon_range(umin_part,umax_part,vmin_part,vmax_part,
+void find_polygon_range(umin_part,umax_part,vmin_part,vmax_part,
                    wmin_part,wmax_part,volp,wp)
 int *umin_part,*umax_part,*vmin_part,*vmax_part,*wmin_part,*wmax_part;
 struct volume *volp;
@@ -851,7 +851,7 @@ struct wall *wp;
 }
 
 
-repartition_volume(volp)
+void repartition_volume(volp)
   struct volume *volp;
 {
   struct subvolume *subvolp;

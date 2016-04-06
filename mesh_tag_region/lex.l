@@ -9,6 +9,7 @@ char *my_strdup();
 
 %}
 
+%option outfile="lex.flex.c"
 %option noyywrap
 
 %p 10000

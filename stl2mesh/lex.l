@@ -9,6 +9,7 @@ char *my_strdup();
 
 %}
 
+%option outfile="lex.flex.c"
 %option noyywrap
 
 %p 10000
@@ -24,24 +25,15 @@ I ([-]*[0-9]+)
 %%
 
 [ \t]+			;
-"endfacet"		{return(ENDFACET);}
-"endloop"		{return(ENDLOOP);}
-"endsolid"		{return(ENDSOLID);}
-"facet"			{return(FACET);}
-"loop"			{return(LOOP);}
-"normal"		{return(NORMAL);}
-"outer"			{return(OUTER);}
-"solid"			{return(SOLID);}
-"vertex"		{return(VERTEX);}
+^"endfacet"	{return(ENDFACET);}
+^"endloop"		{return(ENDLOOP);}
+^"endsolid "[^\n]*$	{return(ENDSOLID);}
+^"facet normal"			{return(FACET_NORMAL);}
+^"outer loop"			{return(OUTER_LOOP);}
+^"solid "[^\n]*$    {return(SOLID);}
+^"vertex"		{return(VERTEX);}
 {R}			{sscanf((const char *)yytext,"%lf",&rval); return(REAL);}
 {I}			{sscanf((const char *)yytext,"%d",&ival); return(INTEGER);}
-[\,\(\)\/\-\+\=\[\]\{\}\|\>\*\#\:]      {return(yytext[0]);}
-[[:alnum:][:punct:]]+    {cval=my_strdup(yytext);
-                          if(cval == NULL){
-                            printf("Memory allocation error.\n");
-                            exit(1);
-                          }
-                          return(OBJ_NAME);}
 .			;
 \n			{line_num++;}
 <<EOF>>                 {return(EOF_TOK);}

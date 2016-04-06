@@ -4,8 +4,6 @@
 #include <math.h>
 #include "mesh2mcell.h"
 
-#include "lex.c"
-
 #ifdef DEBUG
 #define no_printf printf
 #endif
@@ -67,6 +65,14 @@ double dbl;
 struct vector3 *vec;
 struct object *obj;
 } 
+
+
+%{
+  #include "lex.flex.c"
+%}
+
+%output="parse.bison.c"
+
 
 %token <tok> REAL INTEGER VERTEX FACE
 %type <dbl> int_arg real_arg num_arg 

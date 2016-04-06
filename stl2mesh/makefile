@@ -1,24 +1,23 @@
 CC = gcc
 DEFS =
-FLAGS = -O3 -march=pentiumpro
+FLAGS = -O3
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 
 SHELL = /bin/sh
-OBJS = parse.o vector.o stl2mesh.o 
+OBJS = parse.bison.o vector.o stl2mesh.o 
 
 stl2mesh: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o stl2mesh
 
-lex.c: lex.l
-	flex lex.l
-	mv lex.yy.c lex.c
+lex.flex.c: lex.l
+	flex -Cfra lex.l
 
-parse.c: lex.c parse.y vector.h stl2mesh.h
-	bison -o parse.c parse.y
+parse.bison.c: lex.flex.c parse.y vector.h stl2mesh.h
+	bison parse.y
 
-parse.o: parse.c vector.h stl2mesh.h
-	$(CC) $(FLAGS) $(DEFS) -c parse.c
+parse.bison.o: parse.bison.c vector.h stl2mesh.h
+	$(CC) $(FLAGS) $(DEFS) -c parse.bison.c
 
 vector.o: vector.c vector.h
 	$(CC) $(FLAGS) $(DEFS) -c vector.c
@@ -27,7 +26,7 @@ stl2mesh.o: stl2mesh.c vector.h stl2mesh.h
 	$(CC) $(FLAGS) $(DEFS) -c stl2mesh.c
 
 clean:
-	rm -f $(OBJS) lex.c parse.c stl2mesh
+	rm -f $(OBJS) lex.flex.c parse.bison.c stl2mesh
 
 install:
 	@if [ "$(INSTALL_DIR)" ]; then \

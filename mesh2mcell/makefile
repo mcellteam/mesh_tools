@@ -1,30 +1,29 @@
 CC = gcc
 DEFS =
-FLAGS = -O3 -march=pentiumpro
+FLAGS = -O3
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 
 SHELL = /bin/sh
-OBJS = parse.o mesh2mcell.o 
+OBJS = parse.bison.o mesh2mcell.o 
 
 mesh2mcell: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o mesh2mcell
 
-lex.c: lex.l
-	flex lex.l
-	mv lex.yy.c lex.c
+lex.flex.c: lex.l
+	flex -Cfra lex.l
 
-parse.c: lex.c parse.y mesh2mcell.h
-	bison -o parse.c parse.y
+parse.bison.c: lex.flex.c parse.y mesh2mcell.h
+	bison parse.y
 
-parse.o: parse.c mesh2mcell.h
-	$(CC) $(FLAGS) $(DEFS) -c parse.c
+parse.bison.o: parse.bison.c mesh2mcell.h
+	$(CC) $(FLAGS) $(DEFS) -c parse.bison.c
 
 mesh2mcell.o: mesh2mcell.c mesh2mcell.h
 	$(CC) $(FLAGS) $(DEFS) -c mesh2mcell.c
 
 clean:
-	rm -f $(OBJS) lex.c parse.c mesh2mcell
+	rm -f $(OBJS) lex.flex.c parse.bison.c mesh2mcell
 
 install:
 	@if [ "$(INSTALL_DIR)" ]; then \

@@ -5,8 +5,6 @@
 #include "mesh_tag_region.h"
 #include "vector.h"
 
-#include "lex.c"
-
 #ifdef DEBUG
 #define no_printf printf
 #endif
@@ -69,6 +67,12 @@ double dbl;
 struct vector3 *vec;
 struct object *obj;
 } 
+
+%{
+  #include "lex.flex.c"
+%}
+
+%output="parse.bison.c"
 
 %token <tok> REAL INTEGER VERTEX FACE COMMENT
 %type <dbl> int_arg real_arg num_arg 

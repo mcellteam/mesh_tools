@@ -7,8 +7,6 @@
 #include "vector.h"
 #include "stl2mesh.h"
 
-#include "lex.c"
-
 #ifdef DEBUG
 #define no_printf printf
 #endif
@@ -61,13 +59,18 @@ struct vector3 *vec;
 struct object *obj;
 } 
 
-%token <tok> SOLID OBJ_NAME FACET NORMAL OUTER LOOP VERTEX
+%{
+  #include "lex.flex.c"
+%}
+
+%output="parse.bison.c"
+
+%token <tok> SOLID FACET_NORMAL OUTER_LOOP VERTEX
 %token <tok> ENDLOOP ENDFACET ENDSOLID
 %token <tok> INTEGER REAL
 %token <tok> EOF_TOK
-%type <tok> normal
+%type <tok> facet_normal
 %type <tok> polyhedron facet outer_loop
-%type <str> object_name
 %type <dbl> num_arg
 %type <vec> vert
 
@@ -83,7 +86,7 @@ stl_format: solid_def
 ;
 
 
-solid_def:  SOLID object_name
+solid_def:  SOLID
 {
     if ((op=(struct object *)malloc(sizeof(struct object)))==NULL) {
       yyerror("Cannot store object");
@@ -102,7 +105,10 @@ solid_def:  SOLID object_name
     op->parent=world_obj;
     op->first_child=NULL;
     op->last_child=NULL;
+/*
     op->name=$<str>2; 
+*/
+    op->name="";
     op->object_type=POLY;
     op->contents=NULL;
 
@@ -165,19 +171,9 @@ end_of_stl_file: EOF_TOK
 {
   return(0);
 }
-	| ENDSOLID object_name EOF_TOK
+	| ENDSOLID EOF_TOK
 {
   return(0);
-};
-
-
-object_name: /* empty */
-{
-  $$ = "";
-}
-	| OBJ_NAME
-{
-  $$ = cval;
 };
 
 
@@ -186,11 +182,11 @@ polyhedron: facet
 ;
 
 
-facet: FACET normal outer_loop ENDFACET
+facet: facet_normal outer_loop ENDFACET
 ;
 
 
-normal: NORMAL num_arg num_arg num_arg
+facet_normal: FACET_NORMAL num_arg num_arg num_arg
 ;
 
 
@@ -199,7 +195,7 @@ num_arg: INTEGER {$$=(double)ival;}
 ;
 
 
-outer_loop: OUTER LOOP
+outer_loop: OUTER_LOOP
 {
     vlp=NULL;
     vertex_head=NULL;

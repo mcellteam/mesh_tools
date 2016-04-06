@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE Section SYSTEM "section.dtd">
+
+<Section index="0" thickness="0.05" alignLocked="false">
+<Transform dim="6"
+ xcoef=" -0.537382661890608 0.926329548413158 0.266722722401736 0 0 0"
+ ycoef=" 1.86130098134062 -0.360493703891581 0.913372398721231 0 0 0">
+<Image mag="0.0022159" contrast="1" brightness="0"
+ src="R34CA1-B_S12.0.jpg" />
+<Contour name="domain1" hidden="false" closed="true" simplified="false" border="1 0 1" fill="1 0 1" mode="11"
+ points="0 0,
+	4096 0,
+	4096 4096,
+	0 4096,
+	"/>
+</Transform>
+
+<Transform dim="6"
+ xcoef=" -0.537382661890608 0.926329548413158 0.266722722401736 0 0 0"
+ ycoef=" 1.86130098134062 -0.360493703891581 0.913372398721231 0 0 0">
+<Contour name="x" hidden="false" closed="false" simplified="true" border="1 0 0" fill="1 0 1" mode="9"
+ points="3.04479 3.59835,
+	8.40361 3.61195,
+	"/>
+<Contour name="x" hidden="false" closed="false" simplified="true" border="1 0 0" fill="1 0 1" mode="9"
+ points="3.09239 7.29104,
+	8.45122 7.30465,
+	"/>
+<Contour name="x" hidden="false" closed="false" simplified="true" border="1 0 0" fill="1 0 1" mode="9"
+ points="3.03799 5.3937,
+	8.39681 5.35289,
+	"/>
+<Contour name="x" hidden="false" closed="false" simplified="true" border="1 0 0" fill="1 0 1" mode="9"
+ points="3.58203 5.06047,
+	8.92045 5.06727,
+	"/>
+<Contour name="y" hidden="false" closed="false" simplified="true" border="0 0 1" fill="1 0 1" mode="9"
+ points="5.19462 2.04568,
+	5.20385 7.25389,
+	"/>
+<Contour name="y" hidden="false" closed="false" simplified="true" border="0 0 1" fill="1 0 1" mode="9"
+ points="5.73021 1.48239,
+	5.72098 6.72753,
+	"/>
+<Contour name="y" hidden="false" closed="false" simplified="true" border="0 0 1" fill="1 0 1" mode="9"
+ points="6.25658 2.02722,
+	6.28428 7.26313,
+	"/>
+<Contour name="y" hidden="false" closed="false" simplified="true" border="0 0 1" fill="1 0 1" mode="9"
+ points="7.35547 6.81064,
+	7.337 1.51009,
+	"/>
+<Contour name="y" hidden="false" closed="false" simplified="true" border="0 0 1" fill="1 0 1" mode="9"
+ points="9.43321 1.48239,
+	9.46092 6.81064,
+	"/>
+</Transform>
+
+<Transform dim="6"
+ xcoef=" -0.537382661890608 0.926329548413158 0.266722722401736 0 0 0"
+ ycoef=" 1.86130098134062 -0.360493703891581 0.913372398721231 0 0 0">
+<Contour name="x" hidden="false" closed="false" simplified="true" border="1 0 0" fill="1 0 1" mode="9"
+ points="3.07199 6.99182,
+	8.41041 7.01222,
+	"/>
+<Contour name="Xaftercalib" hidden="false" closed="false" simplified="true" border="1 1 0" fill="1 0 1" mode="9"
+ points="0.771098 1.77168,
+	5.46096 1.78157,
+	"/>
+</Transform>
+
+<Transform dim="6"
+ xcoef=" -0.537382661890608 0.926329548413158 0.266722722401736 0 0 0"
+ ycoef=" 1.86130098134062 -0.360493703891581 0.913372398721231 0 0 0">
+<Contour name="Yaftercalib" hidden="false" closed="false" simplified="true" border="1 1 0" fill="1 0 1" mode="9"
+ points="1.76052 6.80784,
+	1.72094 2.20702,
+	"/>
+</Transform>
+
+</Section>
