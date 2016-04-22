@@ -71,7 +71,15 @@ main(argc,argv)
 
   if (argc<3) {
     fprintf(stderr,
-            "Usage: %s input_mesh_filename tagging_mesh_filename\n",argv[0]);
+            "\nUsage: %s input_mesh_filename tagging_mesh_filename\n",argv[0]);
+    fprintf(stderr,
+            "\n  Create an MCell Surface Region by tagging the\n");
+    fprintf(stderr,
+            "  triangles of the input mesh which are fully inside or\n");
+    fprintf(stderr,
+            "  overlapping with the boundary of the tagging mesh.\n");
+    fprintf(stderr,
+            "  Output is written to stdout\n\n");
     exit(1);
   }
 
@@ -120,7 +128,6 @@ main(argc,argv)
             input_mesh_filename);
     exit(1);
   } 
-  fflush(stdout);
   infile=input_mesh_filename;
   line_num=0;
   if (yyparse()) {
@@ -136,7 +143,6 @@ main(argc,argv)
             tagging_mesh_filename);
     exit(1);
   } 
-  fflush(stdout);
   infile=tagging_mesh_filename;
   line_num=0;
   if (yyparse()) {
@@ -184,32 +190,43 @@ main(argc,argv)
   }
 
   fprintf(stderr,"Partitioning volume...");
+  fflush(stderr);
   if (partition_volume(volume)) {
     fprintf(stderr,"mesh_tag_region: error partitioning volume\n");
     exit(1);
   }
   fprintf(stderr,"Done\n");
+  fflush(stderr);
 
   fprintf(stderr,"Initializing tagging geometry...");
+  fflush(stderr);
   if (init_geom(tagging_mesh)) {
     fprintf(stderr,"mesh_tag_region: error initializing geometry\n");
     exit(1);
   }
   fprintf(stderr,"Done\n");
+  fflush(stderr);
 
   fprintf(stderr,"Decomposing volume...");
+  fflush(stderr);
   if (decompose_volume(volume,wall_head)) {
     fprintf(stderr,"mesh_tag_region: error decomposing volume\n");
     exit(1);
   }
   fprintf(stderr,"Done\n");
+  fflush(stderr);
 
   fprintf(stderr,"Clipping...\n");
+  fflush(stderr);
   if (clip_mesh(volume,input_mesh,input_mesh_filename,tagging_mesh_filename)) {
     fprintf(stderr,"mesh_tag_region: error tagging mesh\n");
     exit(1);
   }
+  fprintf(stderr,"Done clipping\n");
+  fflush(stderr);
+
   fprintf(stderr,"Done tagging\n");
+  fflush(stderr);
 
   exit(0);
 }
@@ -1895,7 +1912,8 @@ int clip_mesh(volp,php,input_mesh_filename,tagging_mesh_filename)
   int i,subvol,n_x_part,n_y_part,n_z_part,n_x_subvol,n_y_subvol,n_z_subvol;
 
   /* classify vertices */
-  fprintf(stderr,"Classifying vertices...\n");
+  fprintf(stderr,"Classifying vertices...");
+  fflush(stderr);
   n_x_part=volp->n_x_partitions;
   n_y_part=volp->n_y_partitions;
   n_z_part=volp->n_z_partitions;
@@ -1938,9 +1956,11 @@ int clip_mesh(volp,php,input_mesh_filename,tagging_mesh_filename)
     vlp=vlp->next;
   }
   fprintf(stderr,"Done\n");
+  fflush(stderr);
 
   /* classify polygons and vertices */
   fprintf(stderr,"Classifying polygons and vertices...");
+  fflush(stderr);
   plp=php->polygon_list;
   while (plp!=NULL) {
     pop=plp->polygon;
@@ -1972,6 +1992,7 @@ int clip_mesh(volp,php,input_mesh_filename,tagging_mesh_filename)
     plp=plp->next;
   }
   fprintf(stderr,"Done\n");
+  fflush(stderr);
 
   /* open output files */
 /* fully_outside file */
@@ -1984,11 +2005,15 @@ int clip_mesh(volp,php,input_mesh_filename,tagging_mesh_filename)
 */
 
 /* fully_inside file */
+/*
   if ((fully_inside_file=fopen(fully_inside_filename,"w"))==NULL) {
     fprintf(stderr,"mesh_tag_region: error opening file: %s\n",
             fully_inside_filename);
     return(1);
   } 
+*/
+
+  fully_inside_file = stdout;
 
 /* on_edge file */
 /*
@@ -2000,64 +2025,18 @@ int clip_mesh(volp,php,input_mesh_filename,tagging_mesh_filename)
 */
 
 
-#if 0
-  /* output vertices to appropriate files according to classification */
-  fprintf(stderr,"Writing vertices...");
-  /**/
-  fully_outside_vertex_count=0;
-  fully_inside_vertex_count=0;
-  on_edge_vertex_count=0;
-  vlp=php->unique_vertex;
-  while (vlp!=NULL) {
-    vert=vlp->vertex;
-    if (vlp->fully_outside_member) {
-      fully_outside_vertex_count++;
-      vlp->fully_outside_index=fully_outside_vertex_count;
-      fprintf(fully_outside_file,"Vertex %d %.15g %.15g %.15g\n",
-              fully_outside_vertex_count,vert->x,vert->y,vert->z);
-              // JPK 2008
-              // add command line flag to optionally
-              // print following original vertex indexing
-              // instead of renumbered indexing as above
-              // vlp->vertex_index,vert->x,vert->y,vert->z);
-    }
-    //    if (vlp->fully_inside_member || vlp->on_edge_member) {
-    if (vlp->fully_inside_member) {
-      fully_inside_vertex_count++;
-      vlp->fully_inside_index=fully_inside_vertex_count;
-      fprintf(fully_inside_file,"Vertex %d %.15g %.15g %.15g\n",
-              fully_inside_vertex_count,vert->x,vert->y,vert->z);
-              // JPK 2008
-              // add command line flag to optionally
-              // print following original vertex indexing
-              // instead of renumbered indexing as above
-              // vlp->vertex_index,vert->x,vert->y,vert->z);
-    }
-    /**/
-    if (vlp->on_edge_member) {
-      on_edge_vertex_count++;
-      vlp->on_edge_index=on_edge_vertex_count;
-      fprintf(on_edge_file,"Vertex %d %.15g %.15g %.15g\n",
-              on_edge_vertex_count,vert->x,vert->y,vert->z);
-              // JPK 2008
-              // add command line flag to optionally
-              // print following original vertex indexing
-              // instead of renumbered indexing as above
-              //vlp->vertex_index,vert->x,vert->y,vert->z);
-    }
-    /**/
-    vlp=vlp->next;
-  }
-  fprintf(stderr,"Done\n");
-#endif /* 0 */
-
 /* output tagged polygons to appropriate MDL files according to classification */
+  fprintf(stderr,"Writing tagged polygons...\n");
+  fflush(stderr);
+
   fprintf(fully_inside_file,"DEFINE_SURFACE_REGIONS {\n");
+  fflush(fully_inside_file);
   //fprintf(fully_inside_file,"  %s[%s] {\n",input_mesh_filename,tagging_mesh_filename);
   fprintf(fully_inside_file,"  %s {\n",get_region_name(region_name,tagging_mesh_filename));
+  fflush(fully_inside_file);
   fprintf(fully_inside_file,"    ELEMENT_LIST = [\n");
+  fflush(fully_inside_file);
 
-  fprintf(stderr,"Writing tagged polygons...");
   fully_outside_polygon_count=0;
   fully_inside_polygon_count=0;
   on_edge_polygon_count=0;
@@ -2070,20 +2049,17 @@ int clip_mesh(volp,php,input_mesh_filename,tagging_mesh_filename)
     if (pop->polygon_status==FULLY_OUTSIDE) {
       fully_outside_polygon_count++;
 #if 0
-      fprintf(fully_outside_file,"Face %d %d %d %d\n",
-              fully_outside_polygon_count,vl0->fully_outside_index,
-              vl1->fully_outside_index,vl2->fully_outside_index);
-              // JPK 2008
-              // add command line flag to optionally
-              // print following original vertex indexing
-              // instead of renumbered indexing as above
-              //fully_outside_polygon_count,vl0->vertex_index,
-              //vl1->vertex_index,vl2->vertex_index);
+      if (fully_outside_polygon_count==1) {
+        fprintf(fully_outside_file,"      %d",pop->polygon_index-1);
+      }
+      else {
+        fprintf(fully_outside_file,",\n      %d",pop->polygon_index-1);
+      }
+      fflush(fully_outside_file);
 #endif
     }
-    //    else if (pop->polygon_status==FULLY_INSIDE
-    //             || pop->polygon_status==ON_EDGE) {
-    else if (pop->polygon_status==FULLY_INSIDE || pop->polygon_status==ON_EDGE) {
+    else if (pop->polygon_status==FULLY_INSIDE
+             || pop->polygon_status==ON_EDGE) {
       fully_inside_polygon_count++;
       if (fully_inside_polygon_count==1) {
         fprintf(fully_inside_file,"      %d",pop->polygon_index-1);
@@ -2091,33 +2067,34 @@ int clip_mesh(volp,php,input_mesh_filename,tagging_mesh_filename)
       else {
         fprintf(fully_inside_file,",\n      %d",pop->polygon_index-1);
       }
+      fflush(fully_inside_file);
     }
     /**/
     else if (pop->polygon_status==ON_EDGE) {
       on_edge_polygon_count++;
 #if 0
-      fprintf(on_edge_file,"Face %d %d %d %d\n",
-              on_edge_polygon_count,vl0->on_edge_index,
-              vl1->on_edge_index,vl2->on_edge_index);
-              // JPK 2008
-              // add command line flag to optionally
-              // print following original vertex indexing
-              // instead of renumbered indexing as above
-              //on_edge_polygon_count,vl0->vertex_index,
-              //vl1->vertex_index,vl2->vertex_index);
+      if (on_edge_polygon_count==1) {
+        fprintf(on_edge_file,"      %d",pop->polygon_index-1);
+      }
+      else {
+        fprintf(on_edge_file,",\n      %d",pop->polygon_index-1);
+      }
+      fflush(on_edge_file);
 #endif
     }
-    /**/
     plp=plp->next;
   }
-  fprintf(stderr,"Done\n");
 
   fprintf(fully_inside_file,"\n    ]\n");
   fprintf(fully_inside_file,"  }\n");
   fprintf(fully_inside_file,"}\n");
+  fflush(fully_inside_file);
 
-  fclose(fully_inside_file);
+  fprintf(stderr,"Done writing\n");
+  fflush(stderr);
+
 /*
+  fclose(fully_inside_file);
   fclose(fully_outside_file);
   fclose(on_edge_file);
 */
