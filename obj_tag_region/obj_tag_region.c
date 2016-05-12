@@ -20,7 +20,7 @@ char *input_mesh_filename;
 char *tagging_mesh_filename;
 char fully_outside_filename[64];
 char fully_inside_filename[64];
-char region_name[64]; // JPK 2008
+char *region_name;
 char on_edge_filename[64];
 int line_num;
 int skip_freq;
@@ -49,16 +49,36 @@ int wall_map[27][3] = {
   TP, BCK, LFT,  TP, BCK, -1,  TP, BCK, RT	
 };	
 
-char * get_region_name (char * region_name,char * tagging_mesh_filename)
+
+char * get_region_name (char * region_name, char * tagging_mesh_filename)
 {
-  char *triplet = tagging_mesh_filename;
-  int i=0;
-  // stop when reach '.' 
-  while (strchr(".",*triplet)==NULL)
+  char *s1, *namestart, *nameend, *nextslash, *nextdot;
+
+  s1 = strdup(tagging_mesh_filename);
+
+  // stop when we find no more "/"
+  // start of name is just after last "/"
+  namestart = s1;
+  while ((nextslash=strpbrk(namestart,"/"))!=NULL)
   {
-    region_name[i++] = *triplet++;
+    namestart = nextslash+1;
   }
-  region_name[i]=0;
+
+  // stop when we find no more "."
+  // end of name is just before last "."
+  nameend = namestart;
+  while ((nextdot=strpbrk(nameend,"."))!=NULL)
+  {
+    nameend = nextdot+1;
+  }
+
+  // terminate name at position of last "."  if one exists
+  if (nameend != namestart)
+  {
+    nameend[-1] = 0;
+  }
+
+  region_name = strdup(namestart);
   return region_name;
 }
 
