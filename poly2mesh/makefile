@@ -5,4 +5,5 @@ poly2mesh: poly2mesh.cpp
 	$(COMPILE) poly2mesh.cpp
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f poly2mesh

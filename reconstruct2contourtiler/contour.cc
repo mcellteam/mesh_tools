@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <sstream> // stringstream
 #include <stdlib.h>
 
 #include "contour.h"
@@ -16,7 +17,7 @@ extern const double spline_ratio;
 Contour::Contour (Contour const & rhs)
 :s(rhs.s),cp(rhs.cp),section(rhs.section),
   radius_of_curvature_offset(rhs.radius_of_curvature_offset),
-  name(rhs.name),raw_points(rhs.raw_points),
+  name(rhs.name),header(rhs.header),raw_points(rhs.raw_points),
   spline_lengths(rhs.spline_lengths),
   radius_of_curvature(rhs.radius_of_curvature),
   path_parameter(rhs.path_parameter),
@@ -32,9 +33,9 @@ Contour & Contour::operator = (const Contour& rhs)
   exit(1);
 }
 
-Contour::Contour (char * const str, int sec)
+Contour::Contour (char * const str, const char * head, int sec)
 :s(),cp(),section(sec),radius_of_curvature_offset(0),
-  name(),raw_points(),spline_lengths(),radius_of_curvature(),
+  name(),header(head),raw_points(),spline_lengths(),radius_of_curvature(),
   path_parameter(),uniform_path_parameter(),final_radius_of_curvature()
 {
   char * ptr = str;
@@ -982,6 +983,18 @@ void Contour::printRawPoints (char const * const filename) const
     fputs(line,F);
   }
   fclose(F);
+}
+
+std::string Contour::getSerString() const {
+  std::stringstream ss;
+  ss << header << "\n";
+  ss << "points=\"";
+  for (c_p_iterator i=raw_points.begin();i!=raw_points.end();i++)
+  {
+    ss << i->getX() << " " << i->getY() << ",\n";
+  }
+  ss << "\"/>\n";
+  return ss.str();
 }
 
 /** Write radius of curvature to file.

@@ -4,4 +4,5 @@ mesh2contours: mesh2contours.cc subroutines.cc classes.cc
 	$(COMPILE) mesh2contours.cc
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f mesh2contours

@@ -7,4 +7,5 @@ meshrefine: classes.cc functions.cc meshrefine.cc
 	$(COMPILE) meshrefine.cc
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f meshrefine

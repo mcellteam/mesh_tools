@@ -4,8 +4,8 @@
 CXX = g++
 #FLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math
 FLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math -DNOASSERT=true
-LIBS = -L/home/jkinney/install/googleperf64/lib -lprofiler -ltcmalloc
-#LIBS =
+#LIBS = -L/home/jkinney/install/googleperf64/lib -lprofiler -ltcmalloc
+LIBS =
 
 SRCS = container.cc contour.cc controls.cc histogram.cc object.cc point.cc \
        reconstruct2contourtiler.cc control_points.cc parameter.cc sim_anneal.cc
@@ -22,6 +22,8 @@ reconstruct2contourtiler: $(OBJS)
 	$(CXX) $(FLAGS) -c $< -o $@
 
 clean:
-	rm *.o
+	rm -f *.o
+	rm -rf .deps
+	rm -f reconstruct2contourtiler
 
 include $(DEPSINCLUDE)

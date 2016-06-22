@@ -5,4 +5,5 @@ mesh2groupdx: mesh2groupdx.cc functions.cc
 	$(COMPILE) mesh2groupdx.cc
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f mesh2groupdx

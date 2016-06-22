@@ -135,6 +135,16 @@ void Object::writeOutputContours (const int & num_parts,
   }
 }
 
+std::string Object::getOutputContourSerStr(const int slice) {
+  for (c_l_iterator c = contours.begin(); c != contours.end(); c++) {
+    if (c->getSection() == slice) {
+      return c->getSerString();
+    }
+  }
+
+  return "";
+}
+
 /** Add new contour to object.
  * \param[in] mycontour New contour.
  */

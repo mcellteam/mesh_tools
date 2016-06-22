@@ -7,4 +7,5 @@ meshsimplify: classes.cc functions.cc meshsimplify.cc
 	$(COMPILE) meshsimplify.cc
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f meshsimplify

@@ -5,4 +5,5 @@ mesh_separate: mesh_separate.cc
 	$(COMPILE) mesh_separate.cc
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f mesh_separate

@@ -48,6 +48,7 @@ Controls::Controls (void)
   MIN_SAMPLE_INTERVAL                  (SECTION_THICKNESS/5.0),
   INPUT_DIR                            ("./"),
   OUTPUT_DIR                           ("./"),
+  OUTPUT_SER                           (0),
   PREFIX                               ("Volumejosef"),
   IGNORED_CONTOURS                     (),
   OUTPUT_SCRIPT                        ("mesh_and_convert.sh"),
@@ -74,10 +75,10 @@ std::string Controls::getUsageMessage (void)
         "       Section_thickness should be in same scale as x,y contour points.\n"+
         "       x,y and z coordinates of sampled splines will be multipled by scale in output.\n"+
         "\nEXAMPLES\n"+
-        "       reconstruct2contourtiler -i ./contours -f myContours -Y 10 -X 100 -t .05 -s 1000 -o ./contour_tiler_output -d 2\n"+
-        "              Read contours from directory './contours' and write contour_tiler output\n"+
-        "              files to directory 'contour_tiler_output'. The input contour files have the\n"+
-        "              name scheme 'myContours.#' where # is the section number which varies from\n"+
+        "       reconstruct2contourtiler -i ./examples1 -f Volumejosef -n 98 -x 102 -t .05 -s 1000 -o examples1/contour_tiler_output -d 2\n"+
+        "              Read contours from directory './examples1' and write contour_tiler output\n"+
+        "              files to directory 'examples1/contour_tiler_output'. The input contour files have the\n"+
+        "              name scheme 'Volumejosef.#' where # is the section number which varies from\n"+
         "              10 to 100. The distance between contours in the direction of sectioning\n"+
         "              is .050 microns. The contour_tiler output data will be in nanometers as\n"+
         "              dictated by the 1000 scaling. Capping directives will be included in the\n"+
@@ -166,6 +167,8 @@ std::string Controls::getUsageMessage (void)
         "       -o DIRECTORY, --output_data_dir=DIRECTORY\n"+           
         "              Directory where output data will be written.\n"+
         "              Default is current directory.\n\n"+
+        "       -q, --output_ser_files\n" +
+        "              Write SER files to output instead of raw points.\n\n"+
         "       -O STRING, --output_script=STRING\n"+     
         "              A bash script named STRING will be written \n"+
         "              to automate contour_tiling process.\n"+
@@ -219,6 +222,7 @@ void Controls::parseCommandLine (int argc,char **argv)
       {"linear_threshold"              , required_argument, 0, 'm'},
       {"input_data_dir"                , required_argument, 0, 'i'},
       {"output_data_dir"               , required_argument, 0, 'o'},
+      {"output_ser_files"              , no_argument, &OUTPUT_SER, 0},
       {"output_script"                 , required_argument, 0, 'O'},
       {"multi_part_suffix"             , required_argument, 0, 'M'},
       {"input_filename_prefix"         , required_argument, 0, 'f'},
@@ -234,7 +238,7 @@ void Controls::parseCommandLine (int argc,char **argv)
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
-    int c = getopt_long (argc, argv, "a:b:c:e:n:x:t:r:s:d:m:hi:o:f:T:I:O:S:X:Y:M:", long_options, &option_index);
+    int c = getopt_long (argc, argv, "a:b:c:e:n:x:t:r:s:d:m:hi:o:qf:T:I:O:S:X:Y:M:", long_options, &option_index);
 
     /* Detect the end of the options. */
     if (c == -1)
@@ -339,6 +343,10 @@ void Controls::parseCommandLine (int argc,char **argv)
         exit(1);
         break;
 
+      case 'q':
+        OUTPUT_SER = 1;
+        printf("Writing output to SER...\n");
+        break;
       default:
         std::cout << message << std::endl;
         abort ();

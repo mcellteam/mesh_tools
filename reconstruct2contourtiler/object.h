@@ -42,6 +42,7 @@ public:
   void addContour          (Contour mycontour);
   void computeHistogram    (Histogram & h,Histogram & si);
   void writeOutputContours (const int & num_parts,const std::vector<int> & ranges);
+  std::string getOutputContourSerStr (const int slice);
 private:
   bool isDegenerate        (void) const;
   void printConfigFile     (char  const * myname,

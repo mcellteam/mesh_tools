@@ -5,4 +5,5 @@ mesh_renumber: mesh_renumber.cc
 	$(COMPILE) mesh_renumber.cc
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f mesh_renumber

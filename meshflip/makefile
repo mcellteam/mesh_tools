@@ -5,4 +5,5 @@ meshflip: meshflip.cc
 	$(COMPILE) meshflip.cc
 
 clean:
-	-rm *.o
+	rm -f *.o
+	rm -f meshflip

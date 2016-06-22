@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <getopt.h>
+#include <stdio.h>
 #include <string.h>
 #include <string>
 #include <vector>
@@ -46,6 +47,7 @@ public:
   double getEpsilon                      () const throw() { return EPSILON; }
   double getMaxSampleInterval            () const throw() { return MAX_SAMPLE_INTERVAL; }
   double getMinSampleInterval            () const throw() { return MIN_SAMPLE_INTERVAL; }
+  int getOutputSer                       () const throw() { return OUTPUT_SER; }
   char const * getInputDir               () const throw() { return INPUT_DIR.c_str(); }
   char const * getOutputDir              () const throw() { return OUTPUT_DIR.c_str(); }
   char const * getPrefix                 () const throw() { return PREFIX.c_str(); }
@@ -209,6 +211,11 @@ private:
 
   // Directory to which output data will be written.
   std::string OUTPUT_DIR;
+
+  // Whether print to SER or raw points;
+  //  0 prints raw points
+  //  1 prints to SER files
+  int OUTPUT_SER;
 
   // The input contours will be read from
   // 'INPUT_DIR/PREFIX.MIN_SECTION' to

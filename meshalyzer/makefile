@@ -26,6 +26,8 @@ meshalyzer: $(OBJS)
 	$(CXX) $(FLAGS) -c $< -o $@
 
 clean:
-	rm *.o
+	rm -f *.o
+	rm -rf .deps
+	rm -f meshalyzer
 
 include $(DEPSINCLUDE)

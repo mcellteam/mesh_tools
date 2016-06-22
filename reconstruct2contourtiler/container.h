@@ -22,13 +22,14 @@ private:
   bool parseContour        (char const * line,
                             const int & section,char * const name);
   void setTransform        (char const * str,double * const transform);
-  void addContour2Object   (char * const name,const int & section);
+  void addContour2Object   (char * const name, const char * head, const int & section);
   void createCallingScript (char const * const outdir,char const * script);
 public:
   void processContour (Histogram & h,Histogram & si,Histogram & si_before);
   void clearOutputScripts  (void);
   void getContours         (void);
   void writeOutputContours (void);
+  void writeOutputContoursSer (void);
 private:
   /** Create a new object.
    * \param[in] object_name Name of new object.

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-prog='/home/jkinney/src/mesh_tools/reconstruct2contourtiler/reconstruct2contourtiler'
-$prog -i examples3 \
+#prog='/home/jkinney/src/mesh_tools/reconstruct2contourtiler/reconstruct2contourtiler'
+prog='./reconstruct2contourtiler'
+$prog -i examples2 \
 -o deleteme -I cube -I cyl -I grid -I domain1 \
 --min_section=99 --max_section=99 \
 --curvature_gain=1E2 --curvature_exponent=1 \

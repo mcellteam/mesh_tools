@@ -18,13 +18,15 @@ DEPSINCLUDE = $(addprefix .deps/,$(SRCS:%.cc=%.d))
 .deps/%.d: %.cc
 	mkdir -p .deps; $(SHELL) -vec '$(CXX) -MM $(FLAGS) $< | sed '\''s@\($*\)\.o[ :]*@\1.o $@ : @g'\'' > $@; [ -s $@ ] || rm -f $@'
 
-meshalyzer: $(OBJS)
-	$(CXX) $(FLAGS) $(OBJS) $(LIBS) -o meshalyzer
+meshstitch: $(OBJS)
+	$(CXX) $(FLAGS) $(OBJS) $(LIBS) -o meshstitch
 
 %.o: %.cc
 	$(CXX) $(FLAGS) -c $< -o $@
 
 clean:
-	rm *.o
+	rm -f *.o
+	rm -rf .deps
+	rm -f meshstitch
 
 include $(DEPSINCLUDE)

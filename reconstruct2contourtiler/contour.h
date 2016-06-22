@@ -36,6 +36,7 @@ private:
   int                                   section;
   double             radius_of_curvature_offset;
   std::string                              name;
+  std::string                            header;
   std::vector<Point>                 raw_points;
   std::vector<double>            spline_lengths;
   std::vector<double>       radius_of_curvature;
@@ -45,7 +46,7 @@ private:
   static const double integration_ratio = 1.0/3.0;
   static const double spline_ratio = 1.0/6.0;
 public:
-  Contour (char * const str, int sec);
+  Contour (char * const str, const char * head, int sec);
   Contour &  operator =  (Contour const &);
   Contour                (Contour const &);
   int processContour                (vec_d & my_path_intervals);
@@ -66,6 +67,7 @@ public:
   void printSplineSamplesHere       (char const * const filename,
                                      const int & num_splines,
                                      double path_parameter_value) const;
+  std::string getSerString          (void) const;
   void duplicateControlPoints       (list_i & control_points) const;
 private:
   void filterCurvature              (void);

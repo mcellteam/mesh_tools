@@ -1,5 +1,8 @@
 #include <cassert>
+#include <cstring>
+#include <fstream> // std::ofstream
 #include <iostream>
+#include <sstream> // std::stringstream
 #include <stdlib.h>
 
 #include "container.h"
@@ -58,6 +61,11 @@ void Container::createCallingScript (char const * const outdir,
 
 void Container::writeOutputContours (void)
 {
+  if (Controls::instance().getOutputSer() == 1) {
+    printf("Writing to SER output\n");
+    writeOutputContoursSer();
+    return;
+  }
   // for each object
   for (o_iterator i = o.begin();i!=o.end();i++)
   {
@@ -71,6 +79,34 @@ void Container::writeOutputContours (void)
       i->clearPtsFiles(num_parts,ranges);
       i->writeOutputContours(num_parts,ranges);
     }
+  }
+}
+
+/** Writes the container out to SER file format
+ *
+ */
+void Container::writeOutputContoursSer () {
+  
+  Controls &cs(Controls::instance());
+  for (int i = cs.getMinSection(); i <= cs.getMaxSection(); ++i) {
+    std::stringstream s;
+    s << cs.getOutputDir() << "/" << cs.getPrefix() << "." << i;
+    std::ofstream ofs(s.str().c_str(), std::ofstream::out);
+
+    ofs << "<?xml version=\"1.0\"?>\n"
+        << "<!DOCTYPE Section SYSTEM \"section.dtd\">\n"
+        << "\n"
+        << "<Section index=\"" << i << "\" thickness=\"" << cs.getSectionThickness()
+              << "\" alignLocked=\"true\">\n"
+        << "<Transform dim=\"0\"\n"
+        << " xcoef=\" 0 1 0 0 0 0\"\n"
+        << " ycoef=\" 0 0 1 0 0 0\">\n";
+    for (o_iterator obj = o.begin(); obj != o.end(); ++obj) {
+      ofs << obj->getOutputContourSerStr(i);
+    }
+    ofs << "</Transform>\n\n"
+        << "</Section>";
+    ofs.close();
   }
 }
 
@@ -100,6 +136,7 @@ int Container::getMatchingObject (char const * const object_name) const
  */
 
 void Container::addContour2Object (char * const object_name,
+                                   const char * contour_head,
                                    const int & section)
 {
   // has object been created with same name?
@@ -112,7 +149,7 @@ void Container::addContour2Object (char * const object_name,
   // add contour to pointer object
   assert(index>=0);
   assert(index<static_cast<int>(o.size()));
-  o[index].addContour(Contour(object_name,section));
+  o[index].addContour(Contour(object_name, contour_head, section));
   // update pointer object min and max
   if (section<o[index].getMinSection()) o[index].setMinSection(section);
   if (section>o[index].getMaxSection()) o[index].setMaxSection(section);
@@ -256,7 +293,7 @@ bool Container::parseContour (char const * line,
 {
   Controls & cs(Controls::instance());
   // find name
-  char *ptr = strstr(line,"name=");
+  const char *ptr = strstr(line,"name=");
   ptr += 6; // advance pointer to start of name
   int j=0;
   while (strchr("\"",*ptr)==NULL){contour_name[j++]=*ptr++;}
@@ -279,7 +316,7 @@ bool Container::parseContour (char const * line,
           << endl;
     return true;
   }
-  addContour2Object(contour_name,section);
+  addContour2Object(contour_name,line,section);
   return false;
 }
 
