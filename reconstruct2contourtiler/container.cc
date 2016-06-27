@@ -63,7 +63,6 @@ void Container::writeOutputContours (void)
 {
   Controls &cs(Controls::instance());
 
-//  if (Controls::instance().getOutputSer() == 1) {
   if (strcmp(cs.getOutputSerPrefix(),"")) {
     printf("Writing to SER output: %s\n",cs.getOutputSerPrefix());
     writeOutputContoursSer();
