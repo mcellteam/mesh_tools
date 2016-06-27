@@ -61,8 +61,11 @@ void Container::createCallingScript (char const * const outdir,
 
 void Container::writeOutputContours (void)
 {
-  if (Controls::instance().getOutputSer() == 1) {
-    printf("Writing to SER output\n");
+  Controls &cs(Controls::instance());
+
+//  if (Controls::instance().getOutputSer() == 1) {
+  if (strcmp(cs.getOutputSerPrefix(),"")) {
+    printf("Writing to SER output: %s\n",cs.getOutputSerPrefix());
     writeOutputContoursSer();
     return;
   }
@@ -89,9 +92,28 @@ void Container::writeOutputContours (void)
 void Container::writeOutputContoursSer () {
   
   Controls &cs(Controls::instance());
+
+  std::stringstream fn;
+  fn << cs.getOutputDir() << "/" << cs.getOutputSerPrefix() << ".ser";
+  std::ofstream ofs(fn.str().c_str(), std::ofstream::out);
+  ofs << "<?xml version=\"1.0\"?>\n"
+      << "<!DOCTYPE Series SYSTEM \"series.dtd\">\n"
+
+      << "<Series index=\"152\" viewport=\"11.741 7.1974 0.00210015\"\n"
+      << "  units=\"microns\"\n"
+      << "  defaultThickness=\"0.05\"\n"
+      << "  offset3D=\"0 0 0\"\n"
+      << "  type3Dobject=\"1\"\n"
+      << "  first3Dsection=\"" << cs.getMinSection() << "\"\n"
+      << "  last3Dsection=\"" << cs.getMaxSection() << "\"\n"
+      << "  >\n"
+      << "</Series>\n";
+  ofs.close();
+
+
   for (int i = cs.getMinSection(); i <= cs.getMaxSection(); ++i) {
     std::stringstream s;
-    s << cs.getOutputDir() << "/" << cs.getPrefix() << "." << i;
+    s << cs.getOutputDir() << "/" << cs.getOutputSerPrefix() << "." << i;
     std::ofstream ofs(s.str().c_str(), std::ofstream::out);
 
     ofs << "<?xml version=\"1.0\"?>\n"

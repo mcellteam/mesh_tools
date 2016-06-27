@@ -48,7 +48,7 @@ Controls::Controls (void)
   MIN_SAMPLE_INTERVAL                  (SECTION_THICKNESS/5.0),
   INPUT_DIR                            ("./"),
   OUTPUT_DIR                           ("./"),
-  OUTPUT_SER                           (0),
+  OUTPUT_SER_PREFIX                    (""),
   PREFIX                               ("Volumejosef"),
   EXCLUDED_CONTOURS                    (),
   INCLUDED_CONTOURS                    (),
@@ -168,8 +168,8 @@ std::string Controls::getUsageMessage (void)
         "       -o DIRECTORY, --output_data_dir=DIRECTORY\n"+           
         "              Directory where output data will be written.\n"+
         "              Default is current directory.\n\n"+
-        "       -q, --output_ser_files\n" +
-        "              Write SER files to output instead of raw points.\n\n"+
+        "       -w STRING, --output_ser_prefix=STRING\n" +
+        "              Write interpolated traces to SER files using specified prefix. Do not output raw points.\n\n"+
         "       -O STRING, --output_script=STRING\n"+     
         "              A bash script named STRING will be written \n"+
         "              to automate contour_tiling process.\n"+
@@ -227,7 +227,7 @@ void Controls::parseCommandLine (int argc,char **argv)
       {"linear_threshold"              , required_argument, 0, 'm'},
       {"input_data_dir"                , required_argument, 0, 'i'},
       {"output_data_dir"               , required_argument, 0, 'o'},
-      {"output_ser_files"              , no_argument, &OUTPUT_SER, 0},
+      {"output_ser_prefix"             , required_argument, 0, 'w'},
       {"output_script"                 , required_argument, 0, 'O'},
       {"multi_part_suffix"             , required_argument, 0, 'M'},
       {"input_filename_prefix"         , required_argument, 0, 'f'},
@@ -244,7 +244,7 @@ void Controls::parseCommandLine (int argc,char **argv)
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
-    int c = getopt_long (argc, argv, "a:b:c:e:n:x:t:r:s:d:m:hi:o:qf:T:I:O:S:X:Y:M:", long_options, &option_index);
+    int c = getopt_long (argc, argv, "a:b:c:e:n:x:t:r:s:d:m:hi:o:f:w:T:I:E:O:S:X:Y:M:", long_options, &option_index);
 
     /* Detect the end of the options. */
     if (c == -1)
@@ -353,10 +353,11 @@ void Controls::parseCommandLine (int argc,char **argv)
         exit(1);
         break;
 
-      case 'q':
-        OUTPUT_SER = 1;
+      case 'w':
+        OUTPUT_SER_PREFIX = optarg;
         printf("Writing output to SER...\n");
         break;
+
       default:
         std::cout << message << std::endl;
         abort ();

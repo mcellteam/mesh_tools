@@ -48,6 +48,7 @@ public:
   double getMaxSampleInterval            () const throw() { return MAX_SAMPLE_INTERVAL; }
   double getMinSampleInterval            () const throw() { return MIN_SAMPLE_INTERVAL; }
   int getOutputSer                       () const throw() { return OUTPUT_SER; }
+  char const * getOutputSerPrefix        () const throw() { return OUTPUT_SER_PREFIX.c_str(); }
   char const * getInputDir               () const throw() { return INPUT_DIR.c_str(); }
   char const * getOutputDir              () const throw() { return OUTPUT_DIR.c_str(); }
   char const * getPrefix                 () const throw() { return PREFIX.c_str(); }
@@ -216,6 +217,12 @@ private:
   //  0 prints raw points
   //  1 prints to SER files
   int OUTPUT_SER;
+
+  // File name of SER file to output into
+  // 'OUTPUT_DIR/OUTPUT_SER_PREFIX.ser'
+  // 'OUTPUT_DIR/OUTPUT_SER_PREFIX.MIN_SECTION' to
+  // 'OUTPUT_DIR/OUTPUT_SER_PREFIX.MAX_SECTION'
+  std::string OUTPUT_SER_PREFIX;
 
   // The input contours will be read from
   // 'INPUT_DIR/PREFIX.MIN_SECTION' to
