@@ -6,6 +6,7 @@ CXX = g++
 FLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math -DNOASSERT=true
 #LIBS = -L/home/jkinney/install/googleperf64/lib -lprofiler -ltcmalloc
 LIBS =
+INSTALL_DIR = $(HOME)/bin
 
 SRCS = container.cc contour.cc controls.cc histogram.cc object.cc point.cc \
        reconstruct2contourtiler.cc control_points.cc parameter.cc sim_anneal.cc
@@ -20,6 +21,17 @@ reconstruct2contourtiler: $(OBJS)
 
 %.o: %.cc
 	$(CXX) $(FLAGS) -c $< -o $@
+
+install:
+	@if [ "$(INSTALL_DIR)" ]; then \
+		if [ ! -s $(INSTALL_DIR) ]; then \
+			echo mkdir $(INSTALL_DIR); \
+			mkdir $(INSTALL_DIR); \
+		fi; \
+		echo cp reconstruct2contourtiler $(INSTALL_DIR); \
+		cp reconstruct2contourtiler $(INSTALL_DIR); \
+	fi
+
 
 clean:
 	rm -f *.o

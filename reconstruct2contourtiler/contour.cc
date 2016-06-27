@@ -985,6 +985,7 @@ void Contour::printRawPoints (char const * const filename) const
   fclose(F);
 }
 
+/*
 std::string Contour::getSerString() const {
   std::stringstream ss;
   ss << header << "\n";
@@ -992,6 +993,22 @@ std::string Contour::getSerString() const {
   for (c_p_iterator i=raw_points.begin();i!=raw_points.end();i++)
   {
     ss << i->getX() << " " << i->getY() << ",\n";
+  }
+  ss << "\"/>\n";
+  return ss.str();
+}
+*/
+
+std::string Contour::getSerString() const {
+  std::stringstream ss;
+  ss << header << "\n";
+  ss << "points=\"";
+  // for each spline sample in contour
+  c_p_iterator j=s.getFirstSplineSampleConst();
+  while (j!=s.getOnePastLastSplineSampleConst())
+  {
+    ss << j->getX() << " " << j->getY() << ",\n";
+    j++;
   }
   ss << "\"/>\n";
   return ss.str();

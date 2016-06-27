@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream> // stringstream
 #include <stdlib.h>
 
 #include "contour.h"
@@ -136,13 +137,14 @@ void Object::writeOutputContours (const int & num_parts,
 }
 
 std::string Object::getOutputContourSerStr(const int slice) {
+  std::stringstream ss;
   for (c_l_iterator c = contours.begin(); c != contours.end(); c++) {
     if (c->getSection() == slice) {
-      return c->getSerString();
+      ss << c->getSerString();
     }
   }
 
-  return "";
+  return ss.str();
 }
 
 /** Add new contour to object.

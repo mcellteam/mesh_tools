@@ -50,7 +50,8 @@ Controls::Controls (void)
   OUTPUT_DIR                           ("./"),
   OUTPUT_SER                           (0),
   PREFIX                               ("Volumejosef"),
-  IGNORED_CONTOURS                     (),
+  EXCLUDED_CONTOURS                    (),
+  INCLUDED_CONTOURS                    (),
   OUTPUT_SCRIPT                        ("mesh_and_convert.sh"),
   MULTI_PART_SUFFIX                    ("_part\%d_")
 {}
@@ -178,10 +179,14 @@ std::string Controls::getUsageMessage (void)
         "              'input_directory/STRING.min_section' to\n"+
         "              'input_directory/STRING.max_section'.\n"+
         "              Default is '" + PREFIX + "'.\n\n"+
-        "       -I STRING, --ignore_contour=STRING\n"+           
+        "       -E STRING, --exclude_contour=STRING\n"+           
         "              Contours with name STRING will not be processed\n"+
         "              and no output data will be written for these contours.\n"+
-        "              Default is no ignored contours.\n\n"+
+        "              Default is no excluded contours.\n\n"+
+        "       -I STRING, --include_contour=STRING\n"+           
+        "              Contours with name STRING will be included and processed\n"+
+        "              and output data will be written for only these contours.\n"+
+        "              Default is to include all contours.\n\n"+
         "       -M STRING, --multi_part_suffix=STRING\n"+     
         "              Objects with intermediate empty sections (thereby\n"+
         "              requiring multiple tiling steps) will have name\n"+
@@ -226,7 +231,8 @@ void Controls::parseCommandLine (int argc,char **argv)
       {"output_script"                 , required_argument, 0, 'O'},
       {"multi_part_suffix"             , required_argument, 0, 'M'},
       {"input_filename_prefix"         , required_argument, 0, 'f'},
-      {"ignore_contour"                , required_argument, 0, 'I'},
+      {"exclude_contour"               , required_argument, 0, 'E'},
+      {"include_contour"               , required_argument, 0, 'I'},
       {"curvature_gain"                , required_argument, 0, 'a'},
       {"curvature_exponent"            , required_argument, 0, 'b'},
       {"proximity_gain"                , required_argument, 0, 'c'},
@@ -321,8 +327,12 @@ void Controls::parseCommandLine (int argc,char **argv)
         MULTI_PART_SUFFIX = optarg;
         break;
 
+      case 'E':
+        EXCLUDED_CONTOURS.push_back(optarg);
+        break;
+
       case 'I':
-        IGNORED_CONTOURS.push_back(optarg);
+        INCLUDED_CONTOURS.push_back(optarg);
         break;
 
       case 'h':

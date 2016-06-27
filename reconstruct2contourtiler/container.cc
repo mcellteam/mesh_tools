@@ -66,6 +66,7 @@ void Container::writeOutputContours (void)
     writeOutputContoursSer();
     return;
   }
+
   // for each object
   for (o_iterator i = o.begin();i!=o.end();i++)
   {
@@ -284,7 +285,7 @@ bool Container::parseTransform (FILE * stream,double * const transform)
  * \param[in] line Line from input file.
  * \param[in] section Index of section in series.
  * \param[out] contour_name Name of contour.
- * \return True if contour is to be ignored; false otherwise.
+ * \return True if contour is to be excluded; false otherwise.
  */
 
 bool Container::parseContour (char const * line,
@@ -307,12 +308,12 @@ bool Container::parseContour (char const * line,
       *myptr='_';
     }
   }
-  // skip ignored_contours
-  if (cs.contourIsIgnored(contour_name)==true)
+  // skip excluded_contours
+  if (cs.contourIsExcluded(contour_name)==true)
   {
     cout << "Contour " << contour_name
           << " on section " << section
-          << " ignored (found on blacklist)."
+          << " excluded (found on blacklist)."
           << endl;
     return true;
   }

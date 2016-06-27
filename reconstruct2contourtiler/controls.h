@@ -90,7 +90,7 @@ private:
   int RETURN_INTERPOLATED_RAW_POINTS;
 
   // number of points per contour
-  // below which contours will be ignored and not processed
+  // below which contours will be excluded and not processed
   // Contours with fewer than MIN_PT_PER_CONTOUR_THRESHOLD
   // output sample points will be omitted from output data
   // files and statistics.
@@ -222,8 +222,10 @@ private:
   // 'INPUT_DIR/PREFIX.MAX_SECTION'
   std::string PREFIX;
 
-  // Collection of contour names that are to be ignored and not processed.
-  std::vector<std::string> IGNORED_CONTOURS;
+  // Collection of contour names that are to be excluded and not processed.
+  std::vector<std::string> EXCLUDED_CONTOURS;
+
+  std::vector<std::string> INCLUDED_CONTOURS;
 
   // Name of bash script written to output directory
   // which contains commands to tile output contours and convert
@@ -283,17 +285,27 @@ public:
     assert(EPSILON>0.0);
   }
 
-  /** Determine if contour is to be ignored.
+  /** Determine if contour is to be excluded.
    * \param[in] name Name of contour.
-   * \return True if contour is to be ignored; false otherwise.
+   * \return True if contour is to be excluded; false otherwise.
    */
 
-  bool contourIsIgnored (char const * const name) const
+  bool contourIsExcluded (char const * const name) const
   {
-    for (std::vector<std::string>::const_iterator i=IGNORED_CONTOURS.begin();i!=IGNORED_CONTOURS.end();i++)
+    for (std::vector<std::string>::const_iterator i=EXCLUDED_CONTOURS.begin();i!=EXCLUDED_CONTOURS.end();i++)
     {
       if (!strcmp((*i).c_str(),name)) return true;
     }
+    
+    if (INCLUDED_CONTOURS.size() > 0)
+    {
+      for (std::vector<std::string>::const_iterator i=INCLUDED_CONTOURS.begin();i!=INCLUDED_CONTOURS.end();i++)
+      {
+        if (!strcmp((*i).c_str(),name)) return false;
+      }
+      return true;
+    }
+    
     return false;
   }
 
