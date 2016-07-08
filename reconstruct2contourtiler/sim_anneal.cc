@@ -12,7 +12,8 @@ Sim_Anneal::Sim_Anneal (void)
   magic_number(1.0/Controls::instance().getBoltzman()/T),
   energy(),temperature()
 {
-    srand ( time(NULL) );
+//    srand ( time(NULL) );
+    srand ( 1 );
     inverse_rand_max = 1.0/static_cast<double>(RAND_MAX);
 }
 
