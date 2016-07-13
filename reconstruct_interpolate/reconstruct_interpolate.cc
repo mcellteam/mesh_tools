@@ -2,7 +2,7 @@
 #include <string>
 #include <cmath>
 
-#include "reconstruct2contourtiler.h"
+#include "reconstruct_interpolate.h"
 
 int main (int argc,char *argv[])
 {
@@ -27,7 +27,9 @@ int main (int argc,char *argv[])
   Histogram si; // linear distance between spline samples AFTER annealing
   Histogram si_before; // linear distance between spline samples BEFORE annealing
   c.processContour (h,si,si_before);
-  c.clearOutputScripts ();
+  if (!strcmp(cs.getOutputSerPrefix(),"")) {
+    c.clearOutputScripts ();
+  }
   printf ("Writing output contours.\n");
   c.writeOutputContours ();
   h.printStatistics ("deviation");

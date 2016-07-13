@@ -9,15 +9,15 @@ LIBS =
 INSTALL_DIR = $(HOME)/bin
 
 SRCS = container.cc contour.cc controls.cc histogram.cc object.cc point.cc \
-       reconstruct2contourtiler.cc control_points.cc parameter.cc sim_anneal.cc
+       reconstruct_interpolate.cc control_points.cc parameter.cc sim_anneal.cc
 OBJS = $(SRCS:%.cc=%.o)
 DEPSINCLUDE = $(addprefix .deps/,$(SRCS:%.cc=%.d))
 
 .deps/%.d: %.cc
 	mkdir -p .deps; $(SHELL) -vec '$(CXX) -MM $(FLAGS) $< | sed '\''s@\($*\)\.o[ :]*@\1.o $@ : @g'\'' > $@; [ -s $@ ] || rm -f $@'
 
-reconstruct2contourtiler: $(OBJS)
-	$(CXX) $(FLAGS) $(OBJS) $(LIBS) -o reconstruct2contourtiler
+reconstruct_interpolate: $(OBJS)
+	$(CXX) $(FLAGS) $(OBJS) $(LIBS) -o reconstruct_interpolate
 
 %.o: %.cc
 	$(CXX) $(FLAGS) -c $< -o $@
@@ -28,14 +28,14 @@ install:
 			echo mkdir $(INSTALL_DIR); \
 			mkdir $(INSTALL_DIR); \
 		fi; \
-		echo cp reconstruct2contourtiler $(INSTALL_DIR); \
-		cp reconstruct2contourtiler $(INSTALL_DIR); \
+		echo cp reconstruct_interpolate $(INSTALL_DIR); \
+		cp reconstruct_interpolate $(INSTALL_DIR); \
 	fi
 
 
 clean:
 	rm -f *.o
 	rm -rf .deps
-	rm -f reconstruct2contourtiler
+	rm -f reconstruct_interpolate
 
 include $(DEPSINCLUDE)

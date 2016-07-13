@@ -19,8 +19,8 @@ Controls & Controls::instance(void)
 Controls::Controls (void)
   :OBJECT_RESERVE_SIZE                 (10000),
   CAPPING_FLAG                         (1),
-  MIN_SECTION                          (60),
-  MAX_SECTION                          (160),
+  MIN_SECTION                          (0),
+  MAX_SECTION                          (0),
   PRINT_DETAILED_INFO                  (0),
   RETURN_RAW_CONTOUR_POINTS            (0),
   RETURN_INTERPOLATED_RAW_POINTS       (0),
@@ -49,7 +49,7 @@ Controls::Controls (void)
   INPUT_DIR                            ("./"),
   OUTPUT_DIR                           ("./"),
   OUTPUT_SER_PREFIX                    (""),
-  PREFIX                               ("Volumejosef"),
+  PREFIX                               (""),
   EXCLUDED_CONTOURS                    (),
   INCLUDED_CONTOURS                    (),
   OUTPUT_SCRIPT                        ("mesh_and_convert.sh"),
@@ -65,9 +65,9 @@ std::string Controls::getUsageMessage (void)
   std::string message = "\n";
   message=message+
         "NAME\n"+
-        "       reconstruct2contourtiler - generate contour_tiler input files from Reconstruct3D contours\n"+
+        "       reconstruct_interpolate - generate contour_tiler input files from Reconstruct3D contours\n"+
         "\nSYNOPSIS\n"+
-        "       reconstruct2contourtiler [options]\n"+
+        "       reconstruct_interpolate [options]\n"+
         "\nDESCRIPTION\n"+
         "       Converts Reconstruct3D XML contour format to contour_tiler input format.\n"+
         "       All files in input directory are assumed to be\n"+
@@ -76,7 +76,7 @@ std::string Controls::getUsageMessage (void)
         "       Section_thickness should be in same scale as x,y contour points.\n"+
         "       x,y and z coordinates of sampled splines will be multipled by scale in output.\n"+
         "\nEXAMPLES\n"+
-        "       reconstruct2contourtiler -i ./examples1 -f Volumejosef -n 98 -x 102 -t .05 -s 1000 -o examples1/contour_tiler_output -d 2\n"+
+        "       reconstruct_interpolate -i ./examples1 -f Volumejosef -n 98 -x 102 -t .05 -s 1000 -o examples1/contour_tiler_output -d 2\n"+
         "              Read contours from directory './examples1' and write contour_tiler output\n"+
         "              files to directory 'examples1/contour_tiler_output'. The input contour files have the\n"+
         "              name scheme 'Volumejosef.#' where # is the section number which varies from\n"+
@@ -194,7 +194,7 @@ std::string Controls::getUsageMessage (void)
         "              plus incremented index.\n"+
         "              Default script name is '" + MULTI_PART_SUFFIX + "'.\n\n"+
         "       -h, --help\n"+                     
-        "              Print reconstruct2contourtiler man page.\n"+
+        "              Print reconstruct_interpolate man page.\n"+
         "\nJustin Kinney				Sep 10 2009\n";
   return message;
 }

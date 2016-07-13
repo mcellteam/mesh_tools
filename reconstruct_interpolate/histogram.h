@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#include "reconstruct2contourtiler.h"
+#include "reconstruct_interpolate.h"
 
 typedef std::vector<double>                vec_d;
 typedef std::vector<double>::iterator d_iterator;
