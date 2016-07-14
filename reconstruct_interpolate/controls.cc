@@ -67,21 +67,23 @@ std::string Controls::getUsageMessage (void)
         "NAME\n"+
         "       reconstruct_interpolate - generate contour_tiler input files from Reconstruct3D contours\n"+
         "\nSYNOPSIS\n"+
-        "       reconstruct_interpolate [options]\n"+
+        "       reconstruct_interpolate [options] -f filename_prefix -n min_section -x max_section\n"+
         "\nDESCRIPTION\n"+
-        "       Converts Reconstruct3D XML contour format to contour_tiler input format.\n"+
+        "       Read and interpolate traced contours in Reconstruct3D XML contour format.\n"+
+        "       Resampled contours are written in either Reconstruct3D XML format\n"+
+        "       or ContourTiler raw points format (which is the default output format).\n"+
         "       All files in input directory are assumed to be\n"+
         "       of the form filename_prefix.section#.\n"+
         "       min_section to max_section is the section range to be converted.\n"+
         "       Section_thickness should be in same scale as x,y contour points.\n"+
         "       x,y and z coordinates of sampled splines will be multipled by scale in output.\n"+
-        "\nEXAMPLES\n"+
-        "       reconstruct_interpolate -i ./examples1 -f Volumejosef -n 98 -x 102 -t .05 -s 1000 -o examples1/contour_tiler_output -d 2\n"+
-        "              Read contours from directory './examples1' and write contour_tiler output\n"+
+        "\nEXAMPLE:\n"+
+        "       reconstruct_interpolate -i ./examples1 -f Volumejosef -n 98 -x 102 -t 0.05 -s 1000 -o examples1/contour_tiler_output -d 2\n"+
+        "              Read contours from directory './examples1' and write ContourTiler output\n"+
         "              files to directory 'examples1/contour_tiler_output'. The input contour files have the\n"+
         "              name scheme 'Volumejosef.#' where # is the section number which varies from\n"+
-        "              10 to 100. The distance between contours in the direction of sectioning\n"+
-        "              is .050 microns. The contour_tiler output data will be in nanometers as\n"+
+        "              98 to 102. The distance between contours in the direction of sectioning\n"+
+        "              is 0.05 microns. The ContourTiler output data will be in nanometers as\n"+
         "              dictated by the 1000 scaling. Capping directives will be included in the\n"+
         "              output data. The interpolated contours will not deviate from the input contours\n"+
         "              by more than 2 (nanometers since scaling is 1000).\n"+
@@ -169,7 +171,8 @@ std::string Controls::getUsageMessage (void)
         "              Directory where output data will be written.\n"+
         "              Default is current directory.\n\n"+
         "       -w STRING, --output_ser_prefix=STRING\n" +
-        "              Write interpolated traces to SER files using specified prefix. Do not output raw points.\n\n"+
+        "              Write interpolated traces to SER files using specified prefix.\n"+
+        "              If this option is used, output of raw points and scripts is disabled.\n\n"+
         "       -O STRING, --output_script=STRING\n"+     
         "              A bash script named STRING will be written \n"+
         "              to automate contour_tiling process.\n"+
@@ -178,7 +181,7 @@ std::string Controls::getUsageMessage (void)
         "              The input contours will be read from\n"+
         "              'input_directory/STRING.min_section' to\n"+
         "              'input_directory/STRING.max_section'.\n"+
-        "              Default is '" + PREFIX + "'.\n\n"+
+        "              No default is set.\n\n"+
         "       -E STRING, --exclude_contour=STRING\n"+           
         "              Contours with name STRING will not be processed\n"+
         "              and no output data will be written for these contours.\n"+
@@ -374,6 +377,12 @@ void Controls::parseCommandLine (int argc,char **argv)
     std::cout << message << std::endl;
     exit(1);
   }
+
+  if (!strcmp(getPrefix(),"")) {
+    std::cout << message << std::endl;
+    exit(1);
+  }
+
   // validate control values
   validate();
 }
