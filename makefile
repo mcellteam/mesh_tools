@@ -44,7 +44,7 @@ all:
 	cd obj_tag_region; make
 	cd poly2mesh; make
 	cd recon2obj; make
-	cd reconstruct2contourtiler; make
+	cd reconstruct_interpolate; make
 	cd remove_duplicate_vertices; make
 	cd simplify_surface; make
 	cd stl2mesh; make
@@ -99,7 +99,7 @@ clean:
 	cd obj_tag_region; make clean
 	cd poly2mesh; make clean
 	cd recon2obj; make clean
-	cd reconstruct2contourtiler; make clean
+	cd reconstruct_interpolate; make clean
 	cd remove_duplicate_vertices; make clean
 	cd simplify_surface; make clean
 	cd stl2mesh; make clean
