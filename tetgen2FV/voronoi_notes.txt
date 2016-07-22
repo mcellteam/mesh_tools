@@ -1,0 +1,79 @@
+/* These are pseudo-code notes on a set of routines to construct
+   the 3D Voronoi dual mesh of a given 3D Delaunay (tet) mesh */
+
+/* Our mentors: */
+/* http://hp.iitp.ru/eng/06/0605a.htm */
+/* http://www-groups.dcs.st-and.ac.uk/~history/Mathematicians/Delone.html */
+/* http://www.mathsoc.spb.ru/pantheon/delone/ */
+
+
+/* given 3D delaunay (tet) mesh construct 3D voronoi dual mesh */
+
+construct_voronoi(tet_mesh)
+{
+  foreach node in tet_mesh
+  {
+
+    /* given list of delaunay edges connecting to this delaunay node
+       construct voronoi cell around delaunay node */
+    foreach delaunay edge connecting to this node
+    {
+
+      /* given perimeter-ordered list of tets that share this delaunay edge
+         construct voronoi cell facet intersected by this delaunay edge */
+      traverse tets sharing delaunay_edge in perimeter order
+      {
+
+        /* given voronoi circumcenter of this tet
+           construct perimeter of voronoi facet
+           one circumcenter point at a time */
+        connect voronoi circumcenter of tet with next voronoi circumcenter
+      }
+
+      calculate area of voronoi facet (dA)
+      calculate length of delaunay edge normal to the voronoi facet (dS)
+    }
+ 
+    calculate volume of voronoi cell (dV)
+  }
+
+  done!
+
+}
+
+
+/* given a 3D delaunay (tet) mesh
+    construct the list of edges that share each delaunay node
+    and the list of tets that share each edge */
+
+construct_edge_list(tet_mesh)
+{
+
+  initialize edge hash table
+
+  foreach tet in tet_mesh
+  {
+
+    /* tet node indices are 0, 1, 2, 3 */
+    /* tet edges are the 6 sets of node-to-node connections:
+       0-1, 1-2, 2-0, 0-3, 1-3, 2-3 */
+    foreach node-to-node connection in tet
+    {
+
+      construct key for this edge
+      look-up edge in edge hash table
+
+      if this edge has not already been inserted into edge hash table
+      {
+        insert new edge into edge hash table
+        insert new edge into edge_list of the two nodes sharing this edge
+      }
+
+      insert tet into tet_list for this edge,
+        maintaining perimeter order of tets
+      
+    }
+  }
+
+  done!
+}

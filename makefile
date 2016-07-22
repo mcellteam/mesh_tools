@@ -50,6 +50,7 @@ all:
 	cd stl2mesh; make
 	cd stlb2stla; make
 	cd synu2mesh; make
+	cd tetgen2FV; make
 	cd vizvtk; make
 	cd vrml2mesh; make
 	cd vtk2mesh; make
@@ -105,6 +106,7 @@ clean:
 	cd stl2mesh; make clean
 	cd stlb2stla; make clean
 	cd synu2mesh; make clean
+	cd tetgen2FV; make clean
 	cd vizvtk; make clean
 	cd vrml2mesh; make clean
 	cd vtk2mesh; make clean

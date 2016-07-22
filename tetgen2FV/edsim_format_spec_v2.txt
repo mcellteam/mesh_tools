@@ -1,0 +1,35 @@
+
+Format of Electrodiffusion Simulator Input File
+
+glossary:
+
+  node_types:
+    parent  (has two interface children)
+    interior
+    world_boundary
+    interface (has one parent)
+
+
+File Format:
+
+Part 1, node list:
+
+n number of delaunay nodes including parents and children
+1 x y z dV node_type(parent, interior, world_boundary, interface) parent_index(i or self) child_index1(i or self) child_index2(i or self) material_type n_edges
+2 x y z dV ...
+...
+n x y z dV ...
+
+
+Part 2, edge list:
+
+1 neighbor_1 dA dS
+1 neighbor_2 dA dS
+...
+1 neighbor_n_edges_1 dA dS
+
+2 neighbor_1
+...
+n neighbor_n_edges_n
+
+
