@@ -47,7 +47,10 @@ Point::Point (char const * str, double * const t)
     printf("Error in reading y coordinate\n");
     return;
   }
-  x = t[0] + t[1]*xval + t[2]*yval + t[3]*xval*yval + t[4]*xval*xval + t[5]*yval*yval;
-  y = t[6] + t[7]*xval + t[8]*yval + t[9]*xval*yval + t[10]*xval*xval + t[11]*yval*yval;
+  x = -t[0] + t[1]*xval + t[2]*yval + t[3]*xval*yval + t[4]*xval*xval + t[5]*yval*yval;
+  y = -t[6] + t[7]*xval + t[8]*yval + t[9]*xval*yval + t[10]*xval*xval + t[11]*yval*yval;
+
+//  x = t[0] + t[1]*xval + t[2]*yval + t[3]*xval*yval + t[4]*xval*xval + t[5]*yval*yval;
+//  y = t[6] + t[7]*xval + t[8]*yval + t[9]*xval*yval + t[10]*xval*xval + t[11]*yval*yval;
 }
 
