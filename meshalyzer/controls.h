@@ -5,6 +5,7 @@
 #define CONTROLS_H 1
 
 #include <string>
+#include <getopt.h>
 
 class Controls
 {
