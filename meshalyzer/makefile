@@ -9,7 +9,7 @@
 CXX = g++
 FLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math -std=c++0x
 #LIBS = -L/home/jkinney/install/googleperf/lib -lprofiler -ltcmalloc
-LIBS =
+LIBS = 
 
 SRCS = boundary.cc box.cc container.cc controls.cc edge.cc face.cc \
        face_pair.cc meshalyzer.cc object.cc space.cc stats.cc vertex.cc

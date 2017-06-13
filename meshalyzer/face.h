@@ -19,7 +19,7 @@ private:
   Edge   * e[3];       // pointers to edges
   vec_b       b;       // pointers to boxes
 public:
-  Face (char*,Object*); 
+  Face (char* triplet,int f_index,Object* obj); 
   Face (Vertex*,Vertex*,Vertex*); 
   bool faceInTable_intf(void);
   bool match(int);

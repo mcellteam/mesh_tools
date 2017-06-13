@@ -27,7 +27,7 @@ bool Vertex::vertexIsNice (void)
   return o->vertexIsNice(this);	
 }
 
-Vertex::Vertex (char* triplet,Object *q)
+Vertex::Vertex (char* triplet,int v_index,Object *q)
   :index(0),cl(NULL),o(q),e(),f(),nf()
 {
 
@@ -37,24 +37,7 @@ Vertex::Vertex (char* triplet,Object *q)
 
   char *cp=triplet;
 
-  // get past 'Vertex'
-  while (strchr("Vertx",*triplet)!=NULL) {triplet++;}
-
-  // grab vertex index
-  while (strchr(" \t,",*triplet)!=NULL) { triplet++; }
-  i=0;
-  while (strchr("0123456789+-eE.",*triplet)!=NULL)
-  {
-    val[i++] = *triplet++;
-  }
-  val[i]=0;
-  index = atoi(val);
-  if (val==eptr)
-  {
-    index=0;
-    printf("Error in reading vertex index\n");
-    return;
-  }
+  index = v_index;
 
   // grab x coord
   while (strchr(" \t,",*triplet)!=NULL) { triplet++; }

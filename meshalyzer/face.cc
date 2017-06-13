@@ -27,7 +27,7 @@ Face::Face (Vertex *v1,Vertex *v2,Vertex *v3)
   v[2]=v3;
 }
 
-Face::Face (char *triplet,Object *obj)
+Face::Face (char *triplet,int f_index,Object *obj)
   :index(0),b()
 {
 
@@ -40,25 +40,7 @@ Face::Face (char *triplet,Object *obj)
   char *eptr;
   int i;
 
-  // get past 'Face'
-  while (strchr("Face",*triplet)!=NULL) {triplet++;}
-
-  // grab Face index
-  while (strchr(" \t,",*triplet)!=NULL) { triplet++; }
-  i=0;
-  while (strchr("0123456789+-eE.",*triplet)!=NULL)
-  {
-    val[i++] = *triplet++;
-  }
-  val[i]=0;
-  index = (int) strtod(val,&eptr);
-  if (val==eptr)
-  {
-    index=0;
-    v[0]=v[1]=v[2]=0;
-    printf("Error in reading face index\n");
-    return;
-  }
+  index = f_index;
 
   // grab first vertex index
   while (strchr(" \t,",*triplet)!=NULL) { triplet++; }

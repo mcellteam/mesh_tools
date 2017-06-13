@@ -504,7 +504,15 @@ Object* Container::processFile (std::string filename)
   // create new Object
   Object *obj = new Object(filename);
   // scan file
-  scanFile(obj,filename);
+  if (filename.rfind(".obj") != std::string::npos)
+  {
+    scanObjFile(obj,filename);
+  }
+  else
+  {
+    scanMeshFile(obj,filename);
+  }
+
   // check object contents
   if (obj->noVertices()==true || obj->noFaces()==true)
   {
@@ -579,9 +587,14 @@ void Container::update (Object *oo)
   num_dupl_f+=oo->getNumDuplFaceIndices();
 }
 
-void Container::scanFile (Object *obj,std::string filename) 
+void Container::scanMeshFile (Object *obj,std::string filename) 
 {
   char line[2048];
+  char val[80];
+  char *eptr;
+  int v_index, f_index;
+  int i;
+
   // open file
   FILE *F = fopen(filename.c_str(),"r");
   if (!F) 
@@ -605,9 +618,27 @@ void Container::scanFile (Object *obj,std::string filename)
     // skip leading whitespace
     while (strchr(" \t,",*str)!=NULL) { str++;}
     // if first character is V for Vertex, add new linked list class instance
-    if (strchr("V",*str)!=NULL)
+    if (str[0] == 'V')
     {
-      Vertex *v=new Vertex(str,obj);
+      // get past 'Vertex'
+      while (strchr("Vertx",*str)!=NULL) {str++;}
+
+      // grab vertex index
+      while (strchr(" \t,",*str)!=NULL) { str++; }
+      i=0;
+      while (strchr("0123456789+-eE.",*str)!=NULL)
+      {
+        val[i++] = *str++;
+      }
+      val[i]='\0';
+      v_index = strtol(val, &eptr, 10);
+      if (val==eptr)
+      {
+        printf("Error in reading vertex index\n");
+        exit(1);
+      }
+
+      Vertex *v=new Vertex(str,v_index,obj);
       // obj->v.push_back(v);
       obj->addVertex(v);
       //obj->vp.insert(std::make_pair(v->getIndex(),v));
@@ -616,11 +647,85 @@ void Container::scanFile (Object *obj,std::string filename)
       obj->addIndexBoolPair(v->getIndex(),false);
     }
     // if first character is F for Face, add new linked list class instance
-    else if (strchr("F",*str)!=NULL)
+    else if (str[0] == 'F')
     {
-      Face *f=new Face(str,obj);
+      // get past 'Face'
+      while (strchr("Face",*str)!=NULL) {str++;}
+
+      // grab Face index
+      while (strchr(" \t,",*str)!=NULL) { str++; }
+      i=0;
+      while (strchr("0123456789+-eE.",*str)!=NULL)
+      {
+        val[i++] = *str++;
+      }
+      val[i]='\0';
+      f_index = strtol(val, &eptr, 10);
+      if (val==eptr)
+      {
+        printf("Error in reading face index\n");
+        exit(1);
+      }
+
+      Face *f=new Face(str,f_index,obj);
       obj->addFace(f);
     }
+    // else ignore the whole line 
+  }
+  fclose(F);
+}
+
+void Container::scanObjFile (Object *obj,std::string filename) 
+{
+  char line[2048];
+  int v_index, f_index;
+
+  // open file
+  FILE *F = fopen(filename.c_str(),"r");
+  if (!F) 
+  {
+    cout <<"Couldn't open input file "
+          << filename << endl;
+    exit(1);
+  }
+  else 
+  {
+    cerr << "\n\n" << "/* ********************** "
+          << "OBJECT ********************** */\n";
+    //	print object name 
+    cerr << "name: " << obj->getName() << endl;
+    cerr.flush();
+    //		cout << "file found: " << filename << "\n"; cout.flush();
+  }
+  // for every line in file
+  v_index = 0;
+  f_index = 0;
+  for (char *str=fgets(line,2048,F) ; str!=NULL ; str=fgets(line,2048,F)) 
+  {
+    // skip leading whitespace
+    while (strchr(" \t,",*str)!=NULL) { str++;}
+    // if first character is v for Vertex, add new linked list class instance
+    if (str[0] == 'v')
+    {
+      v_index++;
+      str++;
+      Vertex *v=new Vertex(str,v_index,obj);
+      // obj->v.push_back(v);
+      obj->addVertex(v);
+      //obj->vp.insert(std::make_pair(v->getIndex(),v));
+      obj->addVertexIndexPair(v->getIndex(),v);
+      //obj->found.insert(std::make_pair(v->getIndex(),false));
+      obj->addIndexBoolPair(v->getIndex(),false);
+    }
+    // if first character is f for Face, add new linked list class instance
+    else if (str[0] == 'f')
+    {
+      f_index++;
+      str++;
+      Face *f=new Face(str,f_index,obj);
+      obj->addFace(f);
+    }
+    // else ignore the whole line 
   }
   fclose(F);
 }

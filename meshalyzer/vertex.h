@@ -22,7 +22,7 @@ private:
   Face *cl;		  // pointer to face on which closest mesh position lies
   Object *o;		  // pointer to parent object
 public:
-  Vertex(char* triplet,Object*);
+  Vertex(char* triplet, int v_index, Object*);
   Object * getObject (void)
   {
     return o;

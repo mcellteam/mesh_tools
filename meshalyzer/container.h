@@ -132,7 +132,8 @@ public:
   void clear(void);
   void printBatch(Controls&);
   void scanDir(const char*);
-  void scanFile(Object*,std::string);
+  void scanMeshFile(Object*,std::string);
+  void scanObjFile(Object*,std::string);
   void createEdges(void);
   void addVertexPointers(void);
   void findVertexAdjacencies(void);

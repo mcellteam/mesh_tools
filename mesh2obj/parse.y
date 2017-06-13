@@ -111,7 +111,7 @@ mesh_format:
 { 
   vlp=vertex_head;
   while (vlp!=NULL) {
-    printf("v %.9g %.9g %.9g\n",vlp->vertex->x,vlp->vertex->y,vlp->vertex->z);
+    printf("v %.15g %.15g %.15g\n",vlp->vertex->x,vlp->vertex->y,vlp->vertex->z);
     vlp=vlp->next;
   }
   plp=polygon_head;
