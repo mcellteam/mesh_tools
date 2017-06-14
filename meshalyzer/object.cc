@@ -1638,12 +1638,12 @@ void Object::printChars (Controls &cs)
   }
   else 
   {
-    cout << "    object genus: not computed, since ";
-    if (isClosed()==false){cout << "not closed,";}
-    if (isConsistent()==false){cout << "not consistent,";}
-    if (isManifold()==false){cout << "not manifold,";}
-    if (num_sep>1){cout << "#components=" << num_sep << ",";}
-    if (!orphan.empty()){cout << "orphan vertices were found";}
+    cout << "    object genus: not computed since";
+    if (isClosed()==false){cout << ", not closed";}
+    if (isConsistent()==false){cout << ", not consistent";}
+    if (isManifold()==false){cout << ", not manifold";}
+    if (num_sep>1){cout << ", #components=" << num_sep;}
+    if (!orphan.empty()){cout << ", orphan vertices were found";}
     cout << endl;
   }
   //////////////// bounding box
@@ -1879,10 +1879,10 @@ void Object::printChars (Controls &cs)
   }
   else 
   {
-    cout << "    edge angles: not computed, since ";
-    if (isConsistent()==false){cout << "not consistent,";}
-    if (isManifold()==false){cout << "not manifold";}
-    cout << endl;
+    cout << "    edge angles: not computed since";
+    if (isConsistent()==false){cout << ", not consistent,";}
+    if (isManifold()==false){cout << ", not manifold";}
+    cout << "\n\n";
   }
 
 }
@@ -2244,9 +2244,9 @@ void Object::printAttr (Controls &cs)
   if (isManifold()==false || isConsistent()==false || isClosed()==false)
   {
     cout << "    mesh has outward oriented face normals: uncomputable since";
-    if (isClosed()==false){cout << " not closed,";}
-    if (isConsistent()==false){cout << " not consistent,";}
-    if (isManifold()==false){cout << " not manifold";}
+    if (isClosed()==false){cout << ", not closed";}
+    if (isConsistent()==false){cout << ", not consistent";}
+    if (isManifold()==false){cout << ", not manifold";}
     cout << "\n\n";
   }
   else 
