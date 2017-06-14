@@ -162,8 +162,8 @@ int Object::setNumDigits (void)
 
 void Object::createEdges (void) 
 {
-  cerr << "Create edges for object [" << name << "]...............................";
-  cerr.flush();
+//  cerr << "Create edges for object [" << name << "]...............................";
+//  cerr.flush();
   // determine number of digits in largest vertex index
   int num_digits = setNumDigits();
   // create map for finding edges
@@ -176,7 +176,7 @@ void Object::createEdges (void)
     buildEdge(*i,(*i)->ptr_vertex(1),(*i)->ptr_vertex(2),hm,num_digits);
     buildEdge(*i,(*i)->ptr_vertex(2),(*i)->ptr_vertex(0),hm,num_digits);
   }
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
 }
 
 //void Object::verifyEdges (void)
@@ -420,8 +420,8 @@ void Object::newFindNeighborhoods (void)
 
 void Object::findVertexAdjacencies (void)
 {
-  cerr << "Finding vertex adjacencies for object [" << name << "].................";
-  cerr.flush();
+//  cerr << "Finding vertex adjacencies for object [" << name << "].................";
+//  cerr.flush();
   e_iterator i;
   f_iterator j;
   // for each edge, add edge* to both edge vertices
@@ -439,7 +439,7 @@ void Object::findVertexAdjacencies (void)
     ((*j)->ptr_vertex(1))->f.push_back(*j);
     ((*j)->ptr_vertex(2))->f.push_back(*j);
   }
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
 }
 
 void Object::boundObject (double r[6]) 
@@ -475,27 +475,27 @@ void Object::boundObject (double r[6])
 
 void Object::evalAttributes (Space &s)
 {
-  cerr << "Checking if object [" << name << "] is closed..........................";
-  cerr.flush();
+//  cerr << "Checking if object [" << name << "] is closed..........................";
+//  cerr.flush();
   //closed=isClosed();
-  cerr << "complete.\n";
-  cerr.flush();
-  cerr << "Checking if object [" << name << "] is manifold........................";
-  cerr.flush();
+//  cerr << "complete.\n";
+//  cerr.flush();
+//  cerr << "Checking if object [" << name << "] is manifold........................";
+//  cerr.flush();
   //manifold=isManifold();
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
   if (isManifold())
   {
-    cerr << "Checking if object [" << name << "] faces are consistently oriented....";
-    cerr.flush();
+//    cerr << "Checking if object [" << name << "] faces are consistently oriented....";
+//    cerr.flush();
     //consistent=isConsistent();
-    cerr << "complete.\n";cerr.flush();
+//    cerr << "complete.\n";cerr.flush();
     if (isConsistent() && isClosed())
     {
-      cerr << "Checking if object [" << name << "] faces are oriented outward.........";
-      cerr.flush();
+//      cerr << "Checking if object [" << name << "] faces are oriented outward.........";
+//      cerr.flush();
       outward=isOutward(s);
-      cerr << "complete.\n";cerr.flush();
+//      cerr << "complete.\n";cerr.flush();
     }
   }
 }
@@ -765,15 +765,15 @@ bool Object::isManifold (void)
 void Object::checkIntegrity (void)
 {
   // check vertex integrity
-  cerr << "\nChecking vertex integrity for object [" << name << "]..................";
-  cerr.flush();
+//  cerr << "\nChecking vertex integrity for object [" << name << "]..................";
+//  cerr.flush();
   orphanMissingContig();
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
   // check face integrity
-  cerr << "Checking face integrity for object [" << name << "]....................";
-  cerr.flush();
+//  cerr << "Checking face integrity for object [" << name << "]....................";
+//  cerr.flush();
   degenContig();
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
 }
 
 bool Object::goodIntegrity (void)
@@ -1465,69 +1465,69 @@ void Object::vertexDistin (void)
 void Object::evalCharacteristics (Container* c,Controls &cs,Space &s)
 {
   // vertices
-  cerr << "Bound object [" << name << "]..........................................";
-  cerr.flush();
+//  cerr << "Bound object [" << name << "]..........................................";
+//  cerr.flush();
   boundObject(bb);
-  cerr << "complete.\n";cerr.flush();
-  cerr << "Check if vertices are distinguishable for object [" << name << "]......";
-  cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
+//  cerr << "Check if vertices are distinguishable for object [" << name << "]......";
+//  cerr.flush();
   vertexDistin();
-  cerr << "complete.\n";cerr.flush();
-  cerr << "Analyze vertex adjacent faces for object [" << name << "]..............";
-  cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
+//  cerr << "Analyze vertex adjacent faces for object [" << name << "]..............";
+//  cerr.flush();
   vertexAdjacentFaces();
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
   // faces
-  cerr << "Identify separate components of object [" << name << "]................";
-  cerr.flush();
+//  cerr << "Identify separate components of object [" << name << "]................";
+//  cerr.flush();
   num_sep=countComponents();
   //	cs.num_sep+=num_sep;
-  cerr << "complete.\n";cerr.flush();
-  cerr << "Compute face area and aspect ratio for object [" << name << "].........";
-  cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
+//  cerr << "Compute face area and aspect ratio for object [" << name << "].........";
+//  cerr.flush();
   areaAspectRatio(cs);
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
   // if not batch mode
   if (cs.get_detect_interobject_intersections()==0)
   {
-    cerr << "Find intersecting faces for object [" << name << "]....................";
-    cerr.flush();
+//    cerr << "Find intersecting faces for object [" << name << "]....................";
+//    cerr.flush();
     findIntersectingFaces(c,s);
-    cerr << "complete.\n";cerr.flush();
+//    cerr << "complete.\n";cerr.flush();
   }
   // edges
-  cerr << "Identify boundaries for object [" << name << "]........................";
-  cerr.flush();
+//  cerr << "Identify boundaries for object [" << name << "]........................";
+//  cerr.flush();
   countBoundaries();
-  cerr << "complete.\n";cerr.flush();
-  cerr << "Analyze edge lengths for object [" << name << "].......................";
-  cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
+//  cerr << "Analyze edge lengths for object [" << name << "].......................";
+//  cerr.flush();
   processEdgeLengths(cs);
-  cerr << "complete.\n";cerr.flush();
+//  cerr << "complete.\n";cerr.flush();
 
   if (isManifold() && isConsistent())
   {
     // manifold and consistently oriented face normals
-    cerr << "Analyze edge angles for object [" << name << "]........................";
-    cerr.flush();
+//    cerr << "Analyze edge angles for object [" << name << "]........................";
+//    cerr.flush();
     computeEdgeAngles();
-    cerr << "complete.\n";cerr.flush();
+//    cerr << "complete.\n";cerr.flush();
     if (isClosed())
     {
       // closed, manifold, and consistently oriented face normals
-      cerr << "Compute volume of object [" << name << "]..............................";
-      cerr.flush();
+//      cerr << "Compute volume of object [" << name << "]..............................";
+//      cerr.flush();
       computeVolume();
-      cerr << "complete.\n";cerr.flush();
+//      cerr << "complete.\n";cerr.flush();
       // if number of components == 1
       // FUTURE IMPROVEMENT: only require orientable, not oriented
       // FUTURE IMPROVEMENT: separate components and compute genus of each component
       if (num_sep==1 && orphan.empty())
       {
-        cerr << "Compute genus of object [" << name << "]...............................";
-        cerr.flush();
+//        cerr << "Compute genus of object [" << name << "]...............................";
+//        cerr.flush();
         computeGenus();
-        cerr << "complete.\n";cerr.flush();
+//        cerr << "complete.\n";cerr.flush();
       }
     }
   }
@@ -2243,21 +2243,21 @@ void Object::printAttr (Controls &cs)
   // outward
   if (isManifold()==false || isConsistent()==false || isClosed()==false)
   {
-    cout << "    mesh has outward oriented face normals: uncomputable since ";
-    if (isClosed()==false){cout << "not closed,";}
-    if (isConsistent()==false){cout << "not consistent,";}
-    if (isManifold()==false){cout << "not manifold";}
-    cout << endl;
+    cout << "    mesh has outward oriented face normals: uncomputable since";
+    if (isClosed()==false){cout << " not closed,";}
+    if (isConsistent()==false){cout << " not consistent,";}
+    if (isManifold()==false){cout << " not manifold";}
+    cout << "\n\n";
   }
   else 
   {
     if (outward==true)
     {
-      cout << "    mesh has outward oriented face normals: yes\n";
+      cout << "    mesh has outward oriented face normals: yes\n\n";
     }
     else 
     {
-      cout << "    mesh has outward oriented face normals: no\n";
+      cout << "    mesh has outward oriented face normals: no\n\n";
     }
   }
 }

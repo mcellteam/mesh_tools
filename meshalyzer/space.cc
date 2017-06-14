@@ -185,11 +185,14 @@ void Space::initBoxes (double num_faces)
   // subdivide space
   double world_volume = (world[1]-world[0])*(world[3]-world[2])*(world[5]-world[4]);
   double box_volume = Controls::instance().get_faces_per_box() * world_volume / num_faces;
+/*
   	cout << "\nSpace::initBoxes: "
   	<< "FACES_PER_BOX = " << Controls::instance().get_faces_per_box()
   	<< ", world_volume = " << world_volume
   	<< ", num_faces = " << num_faces << "\n";
+*/
   space_length = pow ( fabs ( box_volume ), 1.0 / 3.0 );
+/*
   	cout << "Space::initBoxes: "
   	<< "space_length = " << space_length << "\n";
   	cout << "Space::initBoxes: "
@@ -200,15 +203,18 @@ void Space::initBoxes (double num_faces)
         << world[3] << ","
         << world[4] << ","
         << world[5] << "]\n";
+*/
         
   num_space[0] = (int) ceil( (world[1]-world[0])/space_length );
   num_space[1] = (int) ceil( (world[3]-world[2])/space_length );
   num_space[2] = (int) ceil( (world[5]-world[4])/space_length );
+/*
   	cout << "Space::initBoxes: "
         << "num_space ["
         << num_space[0] << ","
         << num_space[1] << ","
         << num_space[2] << "]\n\n";
+*/
         
   num_boxes = num_space[0]*num_space[1]*num_space[2];
   // allocate memory for boxes
