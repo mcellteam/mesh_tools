@@ -690,11 +690,11 @@ void Container::scanObjFile (Object *obj,std::string filename)
   }
   else 
   {
-    cerr << "\n\n" << "/* ********************** "
-          << "OBJECT ********************** */\n";
+//    cerr << "\n\n" << "/* ********************** "
+//          << "OBJECT ********************** */\n";
     //	print object name 
-    cerr << "name: " << obj->getName() << endl;
-    cerr.flush();
+//    cerr << "name: " << obj->getName() << endl;
+//    cerr.flush();
     //		cout << "file found: " << filename << "\n"; cout.flush();
   }
   // for every line in file
