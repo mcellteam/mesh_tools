@@ -36,6 +36,8 @@ struct vertex_list *vlp,*vertex_head,*vertex_tail;
 struct vector3 *vecp;
 int vertex_count;
 double x,y,z,section_thickness;
+double xcoef[6], ycoef[6];
+int transform_dim;
 int vert_1,vert_2,vert_3,vert_4;
 int i;
 int found_object;
@@ -63,6 +65,7 @@ struct object *obj;
 
 %token <tok> SECTION_BEGIN SECTION_END TAG_END
 %token <tok> TRANSFORM_BEGIN TRANSFORM_END IMAGE_BEGIN
+%token <tok> DIM XCOEF YCOEF
 %token <tok> CONTOUR_BEGIN CONTOUR_END
 %token <tok> ATTRIBUTE_NAME NAME POINTS EOF_TOK
 %token <tok> REAL INTEGER STR_VALUE
@@ -78,6 +81,21 @@ struct object *obj;
 recon_format:
 {
   section_thickness = 0.05;
+
+  transform_dim = 0;
+  xcoef[0] = 0;
+  xcoef[1] = 1;
+  xcoef[2] = 0;
+  xcoef[3] = 0;
+  xcoef[4] = 0;
+  xcoef[5] = 0;
+
+  ycoef[0] = 0;
+  ycoef[1] = 0;
+  ycoef[2] = 1;
+  ycoef[3] = 0;
+  ycoef[4] = 0;
+  ycoef[5] = 0;
 }
   section EOF_TOK
 {
@@ -151,10 +169,31 @@ transform_list: /* empty */
 	| transform_list transform
 ;
 
-transform: TRANSFORM_BEGIN attribute_list TAG_END
+transform: TRANSFORM_BEGIN transform_spec TAG_END
 	image
 	contour_list
   TRANSFORM_END
+;
+
+transform_spec: DIM int_arg '"'
+                XCOEF num_arg num_arg num_arg num_arg num_arg num_arg '"'
+                YCOEF num_arg num_arg num_arg num_arg num_arg num_arg '"'
+{
+  transform_dim = $<dbl>2;
+  xcoef[0] = $<dbl>5;
+  xcoef[1] = $<dbl>6;
+  xcoef[2] = $<dbl>7;
+  xcoef[3] = $<dbl>8;
+  xcoef[4] = $<dbl>9;
+  xcoef[5] = $<dbl>10;
+
+  ycoef[0] = $<dbl>13;
+  ycoef[1] = $<dbl>14;
+  ycoef[2] = $<dbl>15;
+  ycoef[3] = $<dbl>16;
+  ycoef[4] = $<dbl>17;
+  ycoef[5] = $<dbl>18;
+}
 ;
 
 image: /* empty */
@@ -241,9 +280,16 @@ vertex2: num_arg num_arg ','
       reconerror("Cannot store normal vector");
       return(1);
     }
-    vecp->x=$<dbl>1;
-    vecp->y=$<dbl>2;
+
+    x=$<dbl>1;
+    y=$<dbl>2;
+    x = -xcoef[0] + x*xcoef[1] + y*xcoef[2] + x*y*xcoef[3] + x*x*xcoef[4] * y*y*xcoef[5];
+    y = -ycoef[0] + x*ycoef[1] + y*ycoef[2] + x*y*ycoef[3] + x*x*ycoef[4] * y*y*ycoef[5];
+
+    vecp->x=x;
+    vecp->y=y;
     vecp->z=section_thickness*curr_slice_number;
+
     if ((vlp=(struct vertex_list *)malloc(sizeof(struct vertex_list)))==NULL) {
       reconerror("Cannot store vertex list");
       return(1);
