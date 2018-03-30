@@ -5,7 +5,7 @@ LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 
 SHELL = /bin/sh
-OBJS = argparse.bison.o reconparse.bison.o strfunc.o recon2obj.o 
+OBJS = argparse.bison.o reconparse.bison.o strfunc.o reconstruct_transform.o recon2obj.o 
 
 recon2obj: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o recon2obj
@@ -27,6 +27,9 @@ reconparse.o: reconparse.c recon2obj.h
 
 strfunc.o: strfunc.c strfunc.h
 	$(CC) $(FLAGS) $(DEFS) -c strfunc.c
+
+reconstruct_transform.o: reconstruct_transform.c reconstruct_transform.h
+	$(CC) $(FLAGS) $(DEFS) -c reconstruct_transform.c
 
 recon2obj.o: recon2obj.c recon2obj.h
 	$(CC) $(FLAGS) $(DEFS) -c recon2obj.c

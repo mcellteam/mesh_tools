@@ -3,6 +3,7 @@
 #include <string.h> 
 #include <math.h>
 #include "strfunc.h"
+#include "reconstruct_transform.h"
 #include "recon2obj.h"
 
 #ifdef DEBUG
@@ -283,8 +284,10 @@ vertex2: num_arg num_arg ','
 
     x=$<dbl>1;
     y=$<dbl>2;
-    x = -xcoef[0] + x*xcoef[1] + y*xcoef[2] + x*y*xcoef[3] + x*x*xcoef[4] * y*y*xcoef[5];
-    y = -ycoef[0] + x*ycoef[1] + y*ycoef[2] + x*y*ycoef[3] + x*x*ycoef[4] * y*y*ycoef[5];
+
+    XYinverse(transform_dim, xcoef, ycoef, &x, &y);
+//    x = -xcoef[0] + x*xcoef[1] + y*xcoef[2] + x*y*xcoef[3] + x*x*xcoef[4] * y*y*xcoef[5];
+//    y = -ycoef[0] + x*ycoef[1] + y*ycoef[2] + x*y*ycoef[3] + x*x*ycoef[4] * y*y*ycoef[5];
 
     vecp->x=x;
     vecp->y=y;
