@@ -13,8 +13,8 @@ private:
   double x,y;
 public:
   Point (void);
-  Point (char const * str,double * const transform);
-  Point (double xval,double yval);
+  Point (char const * str, int const dim, double * const transform);
+  Point (double xval, double yval);
   double getX (void) const { return x; }
   double getY (void) const { return y; }
 public:

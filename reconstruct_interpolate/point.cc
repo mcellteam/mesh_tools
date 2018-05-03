@@ -3,6 +3,7 @@
 #include <string>
 #include <string.h>
 
+#include "reconstruct_transform.h"
 #include "point.h"
 
 using std::cout;
@@ -18,7 +19,7 @@ Point::Point (double xval, double yval)
 {
 }
 
-Point::Point (char const * str, double * const t)
+Point::Point (char const * str, int const dim, double * const t)
   :x(0),y(0)
 {
   char val[80];
@@ -47,9 +48,21 @@ Point::Point (char const * str, double * const t)
     printf("Error in reading y coordinate\n");
     return;
   }
-  x = -t[0] + t[1]*xval + t[2]*yval + t[3]*xval*yval + t[4]*xval*xval + t[5]*yval*yval;
-  y = -t[6] + t[7]*xval + t[8]*yval + t[9]*xval*yval + t[10]*xval*xval + t[11]*yval*yval;
 
+// Apply the full inverse transform with method from Reconstruct source code
+  XYinverse(dim, &t[0], &t[6], &xval, &yval);
+  x = xval;
+  y = yval;
+
+// Tom Bartol's initial faulty fix 
+// But we have learned that that we need to apply the Inverse Transform
+// Only works for dim=0 or dim=1 transform, Duh!
+//  x = -t[0] + t[1]*xval + t[2]*yval + t[3]*xval*yval + t[4]*xval*xval + t[5]*yval*yval;
+//  y = -t[6] + t[7]*xval + t[8]*yval + t[9]*xval*yval + t[10]*xval*xval + t[11]*yval*yval;
+
+// Justin Kinney's original code for applying the Forward Transform
+// But we have learned that that we need to apply the Inverse Transform
+// Only works for identity transform, Duh!
 //  x = t[0] + t[1]*xval + t[2]*yval + t[3]*xval*yval + t[4]*xval*xval + t[5]*yval*yval;
 //  y = t[6] + t[7]*xval + t[8]*yval + t[9]*xval*yval + t[10]*xval*xval + t[11]*yval*yval;
 }

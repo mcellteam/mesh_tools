@@ -245,7 +245,7 @@ public:
       std::cout << "Contour '" << getName()
                 << "' on section " << getSection()
                 << " with " << getNumRawPoints()
-                << " raw points omited since insufficient number "
+                << " raw points omitted since insufficient number "
                 << "of points for either splining (4) or to exceed threshold ("
                 << Controls::instance().getPtPerContourThreshold()
                 << ")." << std::endl;

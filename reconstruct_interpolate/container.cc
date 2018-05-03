@@ -182,6 +182,27 @@ void Container::addContour2Object (char * const object_name,
  * \param[out] transform Array of Transform polynomial coefficients.
  */
 
+
+bool Container::setDim (char const * str,
+                        int * const dim)
+{
+  char val[80],*eptr;
+  int i;
+  // grab Dim value
+  while (strchr(" \t,",*str)!=NULL) { str++; }
+  i=0;
+  while (strchr("0123456789",*str)!=NULL){val[i++]=*str++;}
+  val[i]=0;
+  *dim=strtol(val,&eptr,10);
+  if (val==eptr)
+  {
+    printf("Error in reading Transform Dim value\n"); printf("str =%s\n",str);
+    return true;
+  }
+  return false;
+}
+
+
 void Container::setTransform (char const * str,
                               double * const transform)
 {
@@ -362,6 +383,7 @@ void Container::getContours (void)
     bool contour_flag = false;
     // initialize Transform
     double transform[12];
+    int dim;
     initTransform(transform);
     // for every line in file
     char line[2048];
@@ -370,8 +392,17 @@ void Container::getContours (void)
       if (strstr(str,"Transform dim")!=NULL)
       {
         // if Transform block
+        char *tstr = strstr(str,"Transform dim");
+        tstr += 15;  // skip over 'Transform dim"'
+        if (setDim(tstr,&dim))
+        {
+          // get value of transform dim
+          printf(" Reconstruct file may be corrupted: %s.\n",infile);
+          exit(1);
+        }
         if (parseTransform(stream,transform))
         {
+          // get values of transform coefficients
           printf(" Reconstruct file may be corrupted: %s.\n",infile);
           exit(1);
         }
@@ -391,7 +422,7 @@ void Container::getContours (void)
       {
         // save contour point
         c_l_iterator c_it = getLastContourFromObject(object_name); 
-        c_it->addRawPoint(Point(str,&transform[0]));
+        c_it->addRawPoint(Point(str, dim, &transform[0]));
       }
     }
     fclose(stream);

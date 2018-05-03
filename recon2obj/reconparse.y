@@ -291,7 +291,7 @@ vertex2: num_arg num_arg ','
 
     vecp->x=x;
     vecp->y=y;
-    vecp->z=section_thickness*curr_slice_number;
+    vecp->z=section_thickness*(curr_slice_number+0.5);
 
     if ((vlp=(struct vertex_list *)malloc(sizeof(struct vertex_list)))==NULL) {
       reconerror("Cannot store vertex list");

@@ -21,6 +21,7 @@ private:
   bool parseTransform      (FILE * stream,double * const transform);
   bool parseContour        (char const * line,
                             const int & section,char * const name);
+  bool setDim              (char const * str,int * const dim);
   void setTransform        (char const * str,double * const transform);
   void addContour2Object   (char * const name, const char * head, const int & section);
   void createCallingScript (char const * const outdir,char const * script);

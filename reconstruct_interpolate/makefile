@@ -2,25 +2,24 @@
 # Date: Feb 2009
 
 CXX = g++
-#FLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math
-FLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math -DNOASSERT=true
+CC = gcc
+#CFLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math
+CFLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math -DNOASSERT=true
 #LIBS = -L/home/jkinney/install/googleperf64/lib -lprofiler -ltcmalloc
 LIBS =
 INSTALL_DIR = $(HOME)/bin
 
-SRCS = container.cc contour.cc controls.cc histogram.cc object.cc point.cc \
-       reconstruct_interpolate.cc control_points.cc parameter.cc sim_anneal.cc
-OBJS = $(SRCS:%.cc=%.o)
-DEPSINCLUDE = $(addprefix .deps/,$(SRCS:%.cc=%.d))
-
-.deps/%.d: %.cc
-	mkdir -p .deps; $(SHELL) -vec '$(CXX) -MM $(FLAGS) $< | sed '\''s@\($*\)\.o[ :]*@\1.o $@ : @g'\'' > $@; [ -s $@ ] || rm -f $@'
+SRCS = container.cc container.h contour.cc contour.h controls.cc controls.h histogram.cc histogram.h object.cc object.h point.cc point.h reconstruct_transform.c reconstruct_transform.h reconstruct_interpolate.cc reconstruct_interpolate.h control_points.cc control_points.h parameter.cc parameter.h sim_anneal.cc sim_anneal.h
+OBJS = container.o contour.o controls.o histogram.o object.o point.o reconstruct_transform.o reconstruct_interpolate.o control_points.o parameter.o sim_anneal.o
 
 reconstruct_interpolate: $(OBJS)
-	$(CXX) $(FLAGS) $(OBJS) $(LIBS) -o reconstruct_interpolate
+	$(CXX) $(CFLAGS) $(OBJS) $(LIBS) -o reconstruct_interpolate
 
-%.o: %.cc
-	$(CXX) $(FLAGS) -c $< -o $@
+.cc.o: 
+	$(CXX) $(CFLAGS) -c $< -o $@
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
 
 install:
 	@if [ "$(INSTALL_DIR)" ]; then \
@@ -34,8 +33,6 @@ install:
 
 
 clean:
-	rm -f *.o
-	rm -rf .deps
+	rm -f $(OBJS)
 	rm -f reconstruct_interpolate
 
-include $(DEPSINCLUDE)
