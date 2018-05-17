@@ -15,6 +15,7 @@ extern FILE *reconin;
 extern struct object *objp;
 extern struct section *section_head, *section_tail;
 extern int start_slice_number, end_slice_number, curr_slice_number;
+extern int vesicles_opt;
 extern char *object_name;
 extern char *curr_file;
 extern struct object *world_obj;
@@ -36,7 +37,7 @@ struct double_list *dlp_head,*dlp;
 struct vertex_list *vlp,*vertex_head,*vertex_tail;
 struct vector3 *vecp;
 int vertex_count;
-double x,y,z,section_thickness;
+double x,y,z,x_sum,y_sum,section_thickness;
 double xcoef[6], ycoef[6];
 int transform_dim;
 int vert_1,vert_2,vert_3,vert_4;
@@ -97,6 +98,7 @@ recon_format:
   ycoef[3] = 0;
   ycoef[4] = 0;
   ycoef[5] = 0;
+
 }
   section EOF_TOK
 {
@@ -112,21 +114,41 @@ recon_format:
         for (cp=contour_head; cp!=NULL; cp=cp->next)
         {
           vertex_head = cp->vertex_list;
+          x_sum = 0;
+          y_sum = 0;
           for (vlp=vertex_head; vlp!=NULL; vlp=vlp->next)
           {
-            printf("v %.17g %.17g %.17g\n",
-                    vlp->vertex->x,vlp->vertex->y,vlp->vertex->z);
+            x = vlp->vertex->x;
+            y = vlp->vertex->y;
+            z = vlp->vertex->z;
+            if (vesicles_opt == 1)
+            {
+              x_sum += x;
+              y_sum += y;
+            }
+            else
+            {
+              printf("v %.17g %.17g %.17g\n",x,y,z);
+            }
           }
 
-          printf("l");
-          vlp=vertex_head;
           vertex_count = cp->vertex_count;
-          for (i=0; i<vertex_count; i++)
+          if (vesicles_opt == 1)
           {
-            printf(" %d",i-(vertex_count));
+            x = x_sum/vertex_count;
+            y = y_sum/vertex_count;
+            printf("v %.17g %.17g %.17g\n",x,y,z);
           }
-          printf(" %d", -(vertex_count));
-          printf("\n");
+          else
+          {
+            printf("l");
+            for (i=0; i<vertex_count; i++)
+            {
+              printf(" %d",i-(vertex_count));
+            }
+            printf(" %d", -(vertex_count));
+            printf("\n");
+          }
 
           fprintf(stderr,"\nContour: %s  vertices: %d\n",objp->name, vertex_count);
         }

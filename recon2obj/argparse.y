@@ -9,8 +9,9 @@
   #include "argparse.h"
 
   extern struct name_list *file_name_list;
-  extern char *object_name;
   extern int start_slice_number, end_slice_number;
+  extern int vesicles_opt;
+  extern char *object_name;
 
   char *arg_cval;
   int arg_ival;
@@ -37,7 +38,7 @@ int intg;
 %name-prefix="arg"
 %output="argparse.bison.c"
 
-%token <tok> REAL INTEGER HELP_OPT OBJ_OPT TEXT_ARG
+%token <tok> REAL INTEGER HELP_OPT OBJ_OPT VESICLES_OPT CONTOURS_OPT TEXT_ARG
 %token <tok> EOF_TOK
 %type <intg> int_arg
 /*
@@ -63,6 +64,8 @@ option: HELP_OPT
 {
   return(1);
 }
+	| cont_opt
+	| ves_opt
 	| object_name
 	| recon_infile_spec
 	| EOF_TOK
@@ -78,6 +81,16 @@ option: HELP_OPT
     return(1);
   }
   return(0);
+};
+
+cont_opt: CONTOURS_OPT
+{
+  vesicles_opt = 0;
+};
+
+ves_opt: VESICLES_OPT
+{
+  vesicles_opt = 1;
 };
 
 object_name: OBJ_OPT TEXT_ARG
@@ -157,6 +170,7 @@ int argparse_init(int argc, char *argv[])
   object_name = NULL;
   start_slice_number = 0;
   end_slice_number = 0;
+  vesicles_opt = 0;
 
   if ((arg_err_msg=(char *)malloc(1024*sizeof(char)))==NULL) {
     fprintf(err_file,"recon2obj: Out of memory storing arg_err_msg\n");

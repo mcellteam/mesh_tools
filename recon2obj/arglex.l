@@ -31,6 +31,8 @@ I ([0-9]+)
 [ \t]+                  ;
 "-help"			{return(HELP_OPT);}
 "-object"		{return(OBJ_OPT);}
+"-vesicles"		{return(VESICLES_OPT);}
+"-contours"		{return(CONTOURS_OPT);}
 {I}			{sscanf((const char *)argtext,"%d",&arg_ival); return(INTEGER);}
 [[:alnum:][:punct:]]+	 {arg_cval=my_strdup(argtext); 
 			  if(arg_cval == NULL){
