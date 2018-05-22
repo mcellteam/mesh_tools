@@ -10,6 +10,7 @@
 
   extern struct name_list *file_name_list;
   extern int start_slice_number, end_slice_number;
+  extern double section_thickness;
   extern int vesicles_opt;
   extern char *object_name;
 
@@ -39,11 +40,10 @@ int intg;
 %output="argparse.bison.c"
 
 %token <tok> REAL INTEGER HELP_OPT OBJ_OPT VESICLES_OPT CONTOURS_OPT TEXT_ARG
+%token <tok> THICKNESS_OPT
 %token <tok> EOF_TOK
 %type <intg> int_arg
-/*
 %type <dbl> real_arg num_arg 
-*/
 
 %right '='
 %left '+' '-'
@@ -66,6 +66,7 @@ option: HELP_OPT
 }
 	| cont_opt
 	| ves_opt
+	| thickness_opt
 	| object_name
 	| recon_infile_spec
 	| EOF_TOK
@@ -91,6 +92,11 @@ cont_opt: CONTOURS_OPT
 ves_opt: VESICLES_OPT
 {
   vesicles_opt = 1;
+};
+
+thickness_opt: THICKNESS_OPT real_arg
+{
+  section_thickness = $<dbl>2;
 };
 
 object_name: OBJ_OPT TEXT_ARG
@@ -132,14 +138,12 @@ int_arg: INTEGER {$$=arg_ival;}
 ;
 
 
-/*
 real_arg: REAL {$$=arg_rval;}
 ;
 
 num_arg: INTEGER {$$=(double)arg_ival;}
 	| REAL {$$=arg_rval;}
 ;
-*/
 
 
 %%
@@ -171,6 +175,7 @@ int argparse_init(int argc, char *argv[])
   start_slice_number = 0;
   end_slice_number = 0;
   vesicles_opt = 0;
+  section_thickness = 0.05;
 
   if ((arg_err_msg=(char *)malloc(1024*sizeof(char)))==NULL) {
     fprintf(err_file,"recon2obj: Out of memory storing arg_err_msg\n");

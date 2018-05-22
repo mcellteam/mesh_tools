@@ -8,6 +8,7 @@ extern FILE *reconin;
 struct name_list *file_name_list;
 struct object *objp;
 struct section *section_head, *section_tail;
+double section_thickness;
 int line_num=1;
 int start_slice_number, end_slice_number, curr_slice_number;
 int vesicles_opt;
@@ -37,6 +38,8 @@ main(argc,argv)
     fprintf(log_file,"       [-contours | -vesicles]   treat contours as plain contours\n");
     fprintf(log_file,"                                 (this is the default) or convert the contours\n");
     fprintf(log_file,"                                 to points representing vesicles\n");
+    fprintf(log_file,"       [-section_thickness float_val]  set section thickness to value\n");
+    fprintf(log_file,"                                       default is 0.05 microns\n");
     fprintf(log_file,"\nRead stack of RECONSTRUCT files and convert traces to OBJ format.\n\n ");
 
     exit(1);

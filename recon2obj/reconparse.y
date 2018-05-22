@@ -14,6 +14,7 @@ extern int line_num;
 extern FILE *reconin;
 extern struct object *objp;
 extern struct section *section_head, *section_tail;
+extern double section_thickness;
 extern int start_slice_number, end_slice_number, curr_slice_number;
 extern int vesicles_opt;
 extern char *object_name;
@@ -37,7 +38,7 @@ struct double_list *dlp_head,*dlp;
 struct vertex_list *vlp,*vertex_head,*vertex_tail;
 struct vector3 *vecp;
 int vertex_count;
-double x,y,z,x_sum,y_sum,section_thickness;
+double x,y,z,x_sum,y_sum;
 double xcoef[6], ycoef[6];
 int transform_dim;
 int vert_1,vert_2,vert_3,vert_4;
@@ -82,7 +83,6 @@ struct object *obj;
 
 recon_format:
 {
-  section_thickness = 0.05;
 
   transform_dim = 0;
   xcoef[0] = 0;

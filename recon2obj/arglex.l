@@ -33,7 +33,9 @@ I ([0-9]+)
 "-object"		{return(OBJ_OPT);}
 "-vesicles"		{return(VESICLES_OPT);}
 "-contours"		{return(CONTOURS_OPT);}
+"-section_thickness"		{return(THICKNESS_OPT);}
 {I}			{sscanf((const char *)argtext,"%d",&arg_ival); return(INTEGER);}
+{R}			{sscanf((const char *)argtext,"%lf",&arg_rval); return(REAL);}
 [[:alnum:][:punct:]]+	 {arg_cval=my_strdup(argtext); 
 			  if(arg_cval == NULL){
                             fprintf(stderr,"MCell: Out of memory while parsing command line arguments.\n");
