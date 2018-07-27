@@ -33,6 +33,7 @@ I ([-]*[0-9]+)
 [\"]"/>"                {return(CONTOUR_END);}
 "name"                  {return(NAME);}
 "points="[\"]           {return(POINTS);}
+"handles="[\"]          {return(HANDLES);}
 "dim="[\"]              {return(DIM);}
 "xcoef="[\"]            {return(XCOEF);}
 "ycoef="[\"]            {return(YCOEF);}

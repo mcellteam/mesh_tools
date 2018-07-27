@@ -70,7 +70,7 @@ struct object *obj;
 %token <tok> TRANSFORM_BEGIN TRANSFORM_END IMAGE_BEGIN
 %token <tok> DIM XCOEF YCOEF
 %token <tok> CONTOUR_BEGIN CONTOUR_END
-%token <tok> ATTRIBUTE_NAME NAME POINTS EOF_TOK
+%token <tok> ATTRIBUTE_NAME NAME POINTS HANDLES EOF_TOK
 %token <tok> REAL INTEGER STR_VALUE
 %type <dbl> int_arg real_arg num_arg 
 
@@ -227,7 +227,7 @@ contour_list: contour
 	| contour_list contour
 ;
 
-contour: CONTOUR_BEGIN name_spec attribute_list points_spec CONTOUR_END
+contour: CONTOUR_BEGIN name_spec attribute_list handles_spec points_spec CONTOUR_END
 ;
 
 name_spec: NAME '=' STR_VALUE
@@ -279,6 +279,18 @@ name_spec: NAME '=' STR_VALUE
     vertex_count = 0;
   }
 }
+;
+
+handles_spec:
+   /* empty */
+   |  HANDLES discard_list '"'
+;
+
+discard_list: discard_item4
+	| discard_list discard_item4
+;
+
+discard_item4: num_arg num_arg num_arg num_arg ','
 ;
 
 points_spec: POINTS vertex2_list
