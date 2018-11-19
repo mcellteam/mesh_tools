@@ -94,7 +94,7 @@ ves_opt: VESICLES_OPT
   vesicles_opt = 1;
 };
 
-thickness_opt: THICKNESS_OPT real_arg
+thickness_opt: THICKNESS_OPT num_arg
 {
   section_thickness = $<dbl>2;
 };
