@@ -69,7 +69,7 @@ struct object *obj;
 %token <tok> SECTION_BEGIN SECTION_END TAG_END
 %token <tok> TRANSFORM_BEGIN TRANSFORM_END IMAGE_BEGIN
 %token <tok> DIM XCOEF YCOEF
-%token <tok> CONTOUR_BEGIN CONTOUR_END
+%token <tok> CONTOUR_BEGIN
 %token <tok> ATTRIBUTE_NAME NAME POINTS HANDLES EOF_TOK
 %token <tok> REAL INTEGER STR_VALUE
 %type <dbl> int_arg real_arg num_arg 
@@ -150,7 +150,7 @@ recon_format:
             printf("\n");
           }
 
-          fprintf(stderr,"\nContour: %s  vertices: %d\n",objp->name, vertex_count);
+//          fprintf(stderr,"\nContour: %s  vertices: %d\n",objp->name, vertex_count);
         }
       }
     }
@@ -227,7 +227,7 @@ contour_list: contour
 	| contour_list contour
 ;
 
-contour: CONTOUR_BEGIN name_spec attribute_list handles_spec points_spec CONTOUR_END
+contour: CONTOUR_BEGIN name_spec attribute_list handles_spec points_spec TAG_END
 ;
 
 name_spec: NAME '=' STR_VALUE
@@ -240,7 +240,7 @@ name_spec: NAME '=' STR_VALUE
   }
   if (strcmp(tempstr,object_name)==0)
   {
-    fprintf(stderr,"Found object %s in file %s\n",object_name,curr_file);
+//    fprintf(stderr,"Found object %s in file %s\n",object_name,curr_file);
     found_object = 1;
     if (objp==NULL)
     {
@@ -293,7 +293,9 @@ discard_list: discard_item4
 discard_item4: num_arg num_arg num_arg num_arg ','
 ;
 
-points_spec: POINTS vertex2_list
+points_spec:
+  /* empty */
+  | POINTS vertex2_list '"'
 {
   if (found_object)
   {

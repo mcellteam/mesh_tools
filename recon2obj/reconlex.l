@@ -30,7 +30,6 @@ I ([-]*[0-9]+)
 ^"<?"[^\n]*$            ;
 ^"<!"[^\n]*$            ;
 "<Contour"              {return(CONTOUR_BEGIN);}
-[\"]"/>"                {return(CONTOUR_END);}
 "name"                  {return(NAME);}
 "points="[\"]           {return(POINTS);}
 "handles="[\"]          {return(HANDLES);}
