@@ -223,7 +223,8 @@ image: /* empty */
 	| IMAGE_BEGIN attribute_list TAG_END
 ;
 
-contour_list: contour
+contour_list: /* empty */
+  | contour
 	| contour_list contour
 ;
 

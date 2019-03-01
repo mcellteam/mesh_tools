@@ -100,7 +100,8 @@ void Container::writeOutputContoursSer () {
 
       << "<Series index=\"152\" viewport=\"11.741 7.1974 0.00210015\"\n"
       << "  units=\"microns\"\n"
-      << "  defaultThickness=\"0.05\"\n"
+//      << "  defaultThickness=\"0.05\"\n"
+      << "  defaultThickness=\"" << cs.getSectionThickness() << "\"\n"
       << "  offset3D=\"0 0 0\"\n"
       << "  type3Dobject=\"1\"\n"
       << "  first3Dsection=\"" << cs.getMinSection() << "\"\n"
