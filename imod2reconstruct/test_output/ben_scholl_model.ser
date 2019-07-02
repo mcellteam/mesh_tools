@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE Series SYSTEM "series.dtd">
+<Series index="152" viewport="11.741 7.1974 0.00210015"
+  units="microns"
+  defaultThickness="0.06"
+  offset3D="0 0 0"
+  type3Dobject="1"
+  first3Dsection="0"
+  last3Dsection="2147483647"
+  >
+</Series>
