@@ -315,7 +315,7 @@ view_directive:
   | VIEWROT num_arg num_arg num_arg NL
   | VIEWLIGHT num_arg num_arg NL
   | DEPTHCUE num_arg num_arg NL
-  | VIEWLABEL VAR NL
+  | VIEWLABEL VIEW num_arg NL
   | global_clip_stmt
 ; 
 
@@ -372,69 +372,75 @@ obj_clip_stmt: OBJCLIPS int_arg int_arg num_arg int_arg NL list_clip_planes
 
 
 contour_directive:
- CONTOUR int_arg int_arg int_arg NL
-   {
-//     printf("CONTOUR %g %g %g\n", $<dbl>2, $<dbl>3, $<dbl>4);
-     if ((contp=(struct contour *)malloc(sizeof(struct contour)))==NULL) {
-       yyerror("Cannot store contour");
-       return(1);
-     }
-     contp->name = obj_name;
-     contp->vertex_count = 0;
-     contp->vertex_list = NULL;
-     contp->next = NULL;
-     contour_z = 0;
-     vertex_count=0;
-     vertex_head=NULL;
-     vertex_tail=NULL;
-   }
-   vertex_list
-   {
-     contp->vertex_count = vertex_count;
-     contp->vertex_list = vertex_head;
-     if (contour_z < min_section) { min_section = contour_z; }
-     if (contour_z > max_section) { max_section = contour_z; }
-     if (section_array[contour_z].contour_head == NULL) {
-       section_array[contour_z].contour_head = contp;
-     }
-     if (section_array[contour_z].contour_tail == NULL) {
-       section_array[contour_z].contour_tail = contp;
-     }
-     else {
-       section_array[contour_z].contour_tail->next = contp;
-     }
-     section_array[contour_z].contour_tail = contp;
-   }
- | CONTOUR int_arg int_arg int_arg int_arg NL
-   {
-//     printf("CONTOUR %g %g %g %g\n", $<dbl>2, $<dbl>3, $<dbl>4, $<dbl>5);
-     if ((contp=(struct contour *)malloc(sizeof(struct contour)))==NULL) {
-       yyerror("Cannot store contour");
-       return(1);
-     }
-     vertex_count=0;
-     vertex_head=NULL;
-     vertex_tail=NULL;
-   }
-   vertex_list
-   {
-     contp->vertex_count = vertex_count;
-     contp->vertex_list = vertex_head;
-     if (section_array[contour_z].contour_head == NULL) {
-       section_array[contour_z].contour_head = contp;
-     }
-     if (section_array[contour_z].contour_tail == NULL) {
-       section_array[contour_z].contour_tail = contp;
-     }
-     else {
-       section_array[contour_z].contour_tail->next = contp;
-     }
-     section_array[contour_z].contour_tail = contp;
-   }
+  CONTOUR int_arg int_arg int_arg NL
+    {
+  //     printf("CONTOUR %g %g %g\n", $<dbl>2, $<dbl>3, $<dbl>4);
+      if ((contp=(struct contour *)malloc(sizeof(struct contour)))==NULL) {
+        yyerror("Cannot store contour");
+        return(1);
+      }
+      contp->name = obj_name;
+      contp->vertex_count = 0;
+      contp->vertex_list = NULL;
+      contp->next = NULL;
+      contour_z = 0;
+      vertex_count=0;
+      vertex_head=NULL;
+      vertex_tail=NULL;
+    }
+    vertex_list
+    {
+      contp->vertex_count = vertex_count;
+      contp->vertex_list = vertex_head;
+      if (contour_z < min_section) { min_section = contour_z; }
+      if (contour_z > max_section) { max_section = contour_z; }
+      if (section_array[contour_z].contour_head == NULL) {
+        section_array[contour_z].contour_head = contp;
+      }
+      if (section_array[contour_z].contour_tail == NULL) {
+        section_array[contour_z].contour_tail = contp;
+      }
+      else {
+        section_array[contour_z].contour_tail->next = contp;
+      }
+      section_array[contour_z].contour_tail = contp;
+    }
+  | CONTOUR int_arg int_arg int_arg int_arg NL
+    {
+  //     printf("CONTOUR %g %g %g %g\n", $<dbl>2, $<dbl>3, $<dbl>4, $<dbl>5);
+      if ((contp=(struct contour *)malloc(sizeof(struct contour)))==NULL) {
+        yyerror("Cannot store contour");
+        return(1);
+      }
+      contp->name = obj_name;
+      contp->vertex_count = 0;
+      contp->vertex_list = NULL;
+      contp->next = NULL;
+      contour_z = 0;
+      vertex_count=0;
+      vertex_head=NULL;
+      vertex_tail=NULL;
+    }
+    vertex_list
+    {
+      contp->vertex_count = vertex_count;
+      contp->vertex_list = vertex_head;
+      if (section_array[contour_z].contour_head == NULL) {
+        section_array[contour_z].contour_head = contp;
+      }
+      if (section_array[contour_z].contour_tail == NULL) {
+        section_array[contour_z].contour_tail = contp;
+      }
+      else {
+        section_array[contour_z].contour_tail->next = contp;
+      }
+      section_array[contour_z].contour_tail = contp;
+    }
 ;
 
 
-vertex_list: vertex
+vertex_list: /* empty */
+        | vertex
 	| vertex_list vertex
 ;
 
