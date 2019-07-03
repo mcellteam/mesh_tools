@@ -20,8 +20,17 @@ int main(argc,argv)
 
         if (argc<3) {
       	  fprintf(stderr,"\nUsage: %s [-h] imod_file_name reconstruct_series_prefix_name  \n\n",argv[0]);
-          fprintf(stderr,"  Read ascii IMOD input file and convert to RECONSTRUCT series format.\n");
-          fprintf(stderr,"  Output is written to Reconstruct Series named using prefix.\n\n");
+          fprintf(stderr,"  Read an ascii format IMOD file and convert to RECONSTRUCT series format.\n");
+          fprintf(stderr,"  Output is written to a sequence of files containing the Reconstruct Series\n");
+          fprintf(stderr,"  and Traces where the files are named using the prefix.\n\n");
+          fprintf(stderr,"  Example:\n");
+          fprintf(stderr,"    %s my_imod_model.amod my_series_dir/my_series\n\n",argv[0]);
+          fprintf(stderr,"    will generate files in my_series_dir named:\n");
+          fprintf(stderr,"    my_series.ser\n");
+          fprintf(stderr,"    my_series.1\n");
+          fprintf(stderr,"    my_series.2\n");
+          fprintf(stderr,"    my_series.3\n");
+          fprintf(stderr,"    ...\n\n");
           fflush(stdout);
           exit(1);
         }
