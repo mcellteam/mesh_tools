@@ -388,6 +388,22 @@ contour_directive:
       vertex_head=NULL;
       vertex_tail=NULL;
     }
+  | CONTOUR int_arg int_arg int_arg NL
+    {
+  //     printf("CONTOUR %g %g %g\n", $<dbl>2, $<dbl>3, $<dbl>4);
+      if ((contp=(struct contour *)malloc(sizeof(struct contour)))==NULL) {
+        yyerror("Cannot store contour");
+        return(1);
+      }
+      contp->name = obj_name;
+      contp->vertex_count = 0;
+      contp->vertex_list = NULL;
+      contp->next = NULL;
+      contour_z = 0;
+      vertex_count=0;
+      vertex_head=NULL;
+      vertex_tail=NULL;
+    }
     vertex_list
     {
       contp->vertex_count = vertex_count;
@@ -439,8 +455,7 @@ contour_directive:
 ;
 
 
-vertex_list: /* empty */
-        | vertex
+vertex_list: vertex
 	| vertex_list vertex
 ;
 
