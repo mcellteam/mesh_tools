@@ -388,6 +388,7 @@ contour_directive:
       vertex_head=NULL;
       vertex_tail=NULL;
     }
+    contour_options
   | CONTOUR int_arg int_arg int_arg NL
     {
   //     printf("CONTOUR %g %g %g\n", $<dbl>2, $<dbl>3, $<dbl>4);
@@ -421,6 +422,7 @@ contour_directive:
       }
       section_array[contour_z].contour_tail = contp;
     }
+    contour_options
   | CONTOUR int_arg int_arg int_arg int_arg NL
     {
   //     printf("CONTOUR %g %g %g %g\n", $<dbl>2, $<dbl>3, $<dbl>4, $<dbl>5);
@@ -452,6 +454,11 @@ contour_directive:
       }
       section_array[contour_z].contour_tail = contp;
     }
+    contour_options
+;
+
+
+contour_options: /* empty */ | CONTFLAGS num_arg | CONTTIME num_arg
 ;
 
 
