@@ -3,7 +3,7 @@
 #include <string.h> 
 #include <math.h>
 #include "strfunc.h"
-#include "netgen2mesh.h"
+#include "netgen2obj.h"
 
 #ifdef DEBUG
 #define no_printf printf
@@ -115,7 +115,7 @@ netgen_format:
 
   vlp=vertex_head;
   while (vlp!=NULL) {
-    printf("Vertex %d  %.15g %.15g %.15g\n",vlp->vertex_index,
+    printf("v %.15g %.15g %.15g\n",
       vlp->vertex->x,vlp->vertex->y,vlp->vertex->z);
     vlp=vlp->next;
   }
@@ -123,7 +123,7 @@ netgen_format:
   polygon_count=0;
   while (plp!=NULL) {
     polygon_count++;
-    printf("Face %d  %d %d %d\n",polygon_count,
+    printf("f %d %d %d\n",
       plp->polygon->vertex_index[0],plp->polygon->vertex_index[1],
       plp->polygon->vertex_index[2]);
     plp=plp->next;
@@ -299,7 +299,7 @@ netgenwrap()
 
 netgenerror(char *s)
 {
-	fprintf(stderr,"netgen2mesh: error on line: %d of file: %s  %s\n",
+	fprintf(stderr,"netgen2obj: error on line: %d of file: %s  %s\n",
 	        line_num,curr_file,s);
 	fflush(stderr);
 	return(1);

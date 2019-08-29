@@ -1002,15 +1002,23 @@ std::string Contour::getSerString() const {
 std::string Contour::getSerString() const {
   std::stringstream ss;
   ss << header << "\n";
-  ss << "points=\"";
-  // for each spline sample in contour
-  c_p_iterator j=s.getFirstSplineSampleConst();
-  while (j!=s.getOnePastLastSplineSampleConst())
+  int n_pts = s.getNumSamplePoints();
+  if (n_pts > 0)
   {
-    ss << j->getX() << " " << j->getY() << ",\n";
-    j++;
+    ss << "points=\"";
+    // for each spline sample in contour
+    c_p_iterator j=s.getFirstSplineSampleConst();
+    while (j!=s.getOnePastLastSplineSampleConst())
+    {
+      ss << j->getX() << " " << j->getY() << ",\n";
+      j++;
+    }
+    ss << "\"/>\n";
   }
-  ss << "\"/>\n";
+  else
+  {
+    ss << "/>\n";
+  }
   return ss.str();
 }
 
