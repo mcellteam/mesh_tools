@@ -30,6 +30,9 @@ I ([-]*[0-9]+)
 ^"#"[^\n]*$		;
 "dimension"		{return(DIMENSION);}
 "edgesegmentsgi2"	{return(EDGE_SEGMENTS);}
+"endmesh"	        {return(ENDMESH);}
+"face_colours"	        {return(FACE_COLOURS);}
+"geomtype"	        {return(GEOMTYPE);}
 "mesh3d"		{return(MESH3D);}
 "points"		{return(POINTS);}
 "surfaceelementsgi"	{return(SURFACE_ELEMENTS);}

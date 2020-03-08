@@ -10,10 +10,10 @@ OBJS = netgenparse.bison.o strfunc.o netgen2obj.o
 netgen2obj: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o netgen2obj
 
-netgenlex.c: netgenlex.l
-	flex -Cfra -Pnetgen -onetgenlex.c netgenlex.l
+netgenlex.flex.c: netgenlex.l
+	flex -Cfra -P netgen netgenlex.l
 
-netgenparse.bison.c: netgenlex.c netgenparse.y netgen2obj.h
+netgenparse.bison.c: netgenlex.flex.c netgenparse.y netgen2obj.h
 	bison netgenparse.y
 
 netgenparse.bison.o: netgenparse.bison.c netgen2obj.h
@@ -26,7 +26,7 @@ netgen2obj.o: netgen2obj.c netgen2obj.h
 	$(CC) $(FLAGS) $(DEFS) -c netgen2obj.c
 
 clean:
-	rm -f $(OBJS) netgenlex.c netgenparse.bison.c netgen2obj
+	rm -f $(OBJS) netgenlex.flex.c netgenparse.bison.c netgen2obj
 
 install:
 	@if [ "$(INSTALL_DIR)" ]; then \
@@ -39,7 +39,7 @@ install:
 	fi
 
 tar:
-	tar -cvf netgen2obj.tar lex.l parse.y netgen2obj.c netgen2obj.h makefile
+	tar -cvf netgen2obj.tar netgenlex.l netgenparse.y netgen2obj.c netgen2obj.h strfunc.c strfunc.h makefile
 
 gzip:
-	tar -cvf - lex.l parse.y netgen2obj.c netgen2obj.h makefile | gzip -9c netgen2obj.tar.gz
+	tar -cvf - netgenlex.l netgenparse.y netgen2obj.c netgen2obj.h strfunc.c strfunc.h makefile | gzip -9c netgen2obj.tar.gz

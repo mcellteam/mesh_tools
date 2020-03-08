@@ -68,7 +68,8 @@ struct object *obj;
 %output="netgenparse.bison.c"
 
 
-%token <tok> DIMENSION EDGE_SEGMENTS MESH3D POINTS SURFACE_ELEMENTS
+%token <tok> DIMENSION EDGE_SEGMENTS ENDMESH FACE_COLOURS GEOMTYPE
+%token <tok> MESH3D POINTS SURFACE_ELEMENTS
 %token <tok> VOLUME_ELEMENTS NEWLINE REAL INTEGER 
 %type <dbl> int_arg real_arg num_arg 
 
@@ -101,6 +102,8 @@ netgen_format:
         volume_elements_block
         edge_segments_block
         points_block
+        face_colours_block
+        ENDMESH newline_list
 { 
   if ((vertex_array=(struct vertex_list **)malloc
        (vertex_count*sizeof(struct vertex_list *)))==NULL) {
@@ -139,6 +142,8 @@ newline_list: NEWLINE
 
 netgen_header: MESH3D newline_list
 	DIMENSION newline_list
+	int_arg newline_list
+        GEOMTYPE newline_list
 	int_arg newline_list
 ;
 
@@ -275,6 +280,18 @@ point: num_arg num_arg num_arg newline_list
     vertex_head=vlp;
   }
 };
+
+face_colours_block: FACE_COLOURS newline_list
+  int_arg newline_list
+  face_colours_list
+;
+
+face_colours_list: face_colour_spec
+  | face_colours_list face_colour_spec
+;
+
+face_colour_spec: int_arg num_arg num_arg num_arg newline_list
+;
 
 int_arg: INTEGER {$$=(double)ival;}
 ;
