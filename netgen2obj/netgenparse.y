@@ -68,9 +68,10 @@ struct object *obj;
 %output="netgenparse.bison.c"
 
 
+%token <tok> CSGSURFACES CYLINDER
 %token <tok> DIMENSION EDGE_SEGMENTS ENDMESH FACE_COLOURS GEOMTYPE
-%token <tok> MESH3D POINTS SURFACE_ELEMENTS
-%token <tok> VOLUME_ELEMENTS NEWLINE REAL INTEGER 
+%token <tok> MESH3D PLANE POINTS SURFACE_ELEMENTSGI SURFACE_ELEMENTS
+%token <tok> UNDEF VOLUME_ELEMENTS NEWLINE REAL INTEGER 
 %type <dbl> int_arg real_arg num_arg 
 
 %right '='
@@ -104,6 +105,7 @@ netgen_format:
         points_block
         face_colours_block
         ENDMESH newline_list
+        csg_block
 { 
   if ((vertex_array=(struct vertex_list **)malloc
        (vertex_count*sizeof(struct vertex_list *)))==NULL) {
@@ -156,7 +158,46 @@ surface_element_list: surface_element
 	| surface_element_list surface_element
 ;
 
-surface_element:	int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg newline_list
+surface_element:	int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg newline_list
+{
+  vert_1=$<dbl>6;
+  vert_2=$<dbl>7;
+  vert_3=$<dbl>8;
+  polygon_count++;
+  if ((pop=(struct polygon *)malloc(sizeof(struct polygon)))==NULL) {
+    netgenerror("Cannot store polygon");
+    return(1);
+  }
+  if ((plp=(struct polygon_list *)malloc(sizeof(struct polygon_list)))==NULL) {
+    netgenerror("Cannot store polygon list");
+    return(1);
+  }
+  pop->n_verts=3;
+  pop->vertex_index[0]=vert_1;
+  pop->vertex_index[1]=vert_2;
+  pop->vertex_index[2]=vert_3;
+  plp->polygon=pop;
+  if (polygon_tail==NULL) {
+    polygon_tail=plp;
+  }
+  polygon_tail->next=plp;
+  plp->next=NULL;
+  polygon_tail=plp;
+  if (polygon_head==NULL) {
+    polygon_head=plp;
+  }
+};
+
+surface_elementsgi_block:  SURFACE_ELEMENTSGI newline_list
+	int_arg newline_list
+	surface_elementgi_list
+;
+
+surface_elementgi_list: surface_elementgi
+	| surface_elementgi_list surface_elementgi
+;
+
+surface_elementgi:	int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg newline_list
 {
   vert_1=$<dbl>6;
   vert_2=$<dbl>7;
@@ -291,6 +332,30 @@ face_colours_list: face_colour_spec
 ;
 
 face_colour_spec: int_arg num_arg num_arg num_arg newline_list
+;
+
+csg_block: /* empty */
+  |
+    CSGSURFACES int_arg newline_list
+    UNDEF int_arg newline_list
+    csg_primitives_list
+;
+
+csg_primitives_list:
+  csg_primitive
+  |
+  csg_primitives_list csg_primitive
+;
+
+
+csg_primitive: cylinder_primitive
+  | plane_primitive
+;
+
+cylinder_primitive: CYLINDER int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg num_arg newline_list
+;
+
+plane_primitive: PLANE int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg newline_list
 ;
 
 int_arg: INTEGER {$$=(double)ival;}

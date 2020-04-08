@@ -28,14 +28,19 @@ I ([-]*[0-9]+)
 
 [ \t]+			;
 ^"#"[^\n]*$		;
+"csgsurfaces"		{return(CSGSURFACES);}
+"cylinder"		{return(CYLINDER);}
 "dimension"		{return(DIMENSION);}
 "edgesegmentsgi2"	{return(EDGE_SEGMENTS);}
 "endmesh"	        {return(ENDMESH);}
 "face_colours"	        {return(FACE_COLOURS);}
 "geomtype"	        {return(GEOMTYPE);}
 "mesh3d"		{return(MESH3D);}
+"plane"			{return(PLANE);}
 "points"		{return(POINTS);}
-"surfaceelementsgi"	{return(SURFACE_ELEMENTS);}
+"surfaceelementsgi"	{return(SURFACE_ELEMENTSGI);}
+"surfaceelements"	{return(SURFACE_ELEMENTS);}
+"undef"			{return(UNDEF);}
 "volumeelements"	{return(VOLUME_ELEMENTS);}
 {R}			{sscanf((const char *)netgentext,"%lf",&rval); return(REAL);}
 {I}			{sscanf((const char *)netgentext,"%d",&ival); return(INTEGER);}
