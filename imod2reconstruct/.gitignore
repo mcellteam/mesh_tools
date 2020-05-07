@@ -1,0 +1,5 @@
+/imod2reconstruct
+/imod2reconstruct.o
+/parse.bison.c
+/parse.bison.o
+/lex.flex.c
