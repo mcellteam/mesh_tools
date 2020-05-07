@@ -41,6 +41,7 @@ double section_thickness;
 int vert_1,vert_2,vert_3;
 int i;
 
+int name_counter = 0;
 
 char *my_strdup(s)
   char *s;
@@ -69,6 +70,7 @@ struct object *obj;
   #include "lex.flex.c"
 %}
 
+%error-verbose
 
 %token <tok> IMOD
 %token <tok> MAX
@@ -347,6 +349,13 @@ object_directive:
       obj_name = cval;
       printf("  Object name: %s\n", cval);
     }
+  | NAME NL
+    {
+      obj_name = (char*)malloc(32);
+      sprintf(obj_name, "unnamed_obj_%d", name_counter);
+      name_counter++;
+      printf("  Object name: %s\n", obj_name);
+    }
   | LINEWIDTH int_arg NL
   | SURFSIZE int_arg NL
   | POINTSIZE int_arg NL
@@ -517,7 +526,9 @@ mesh_vertex_normal_list:
 ;
 
 
-mesh_vertex_normal: num_arg num_arg num_arg num_arg num_arg num_arg NL
+mesh_vertex_normal: 
+  num_arg num_arg num_arg num_arg num_arg num_arg NL
+  | num_arg num_arg num_arg NL num_arg num_arg num_arg NL
 ;
 
 
