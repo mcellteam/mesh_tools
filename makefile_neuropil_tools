@@ -2,14 +2,14 @@
 .PHONY: all clean install
 
 all:
-	cd contour_tiler/contour_tiler; make
+	#cd contour_tiler/contour_tiler; make
 	cd obj_tag_region; make
 	cd recon2obj; make
 	cd reconstruct_interpolate; make
 	cd imod2reconstruct; make
 
 clean:
-	cd contour_tiler/contour_tiler; make clean
+	#cd contour_tiler/contour_tiler; make clean
 	cd obj_tag_region; make clean
 	cd recon2obj; make clean
 	cd reconstruct_interpolate; make clean
@@ -18,7 +18,7 @@ clean:
 install: all
 	@[ "${INSTALL_DIR}" ] && echo "Installing" || ( echo "INSTALL_DIR is not set"; exit 1 )
 	mkdir -p ${INSTALL_DIR}
-	cp contour_tiler/contour_tiler/contour_tiler${EXE} ${INSTALL_DIR}/ContourTilerBin${EXE}
+	#cp contour_tiler/contour_tiler/contour_tiler${EXE} ${INSTALL_DIR}/ContourTilerBin${EXE}
 	cp insert_mdl_region/insert_mdl_region.py ${INSTALL_DIR}/insert_mdl_region.py
 	cp obj_tag_region/obj_tag_region${EXE} ${INSTALL_DIR}/obj_tag_region${EXE}
 	cp rawc2obj/rawc2obj.py ${INSTALL_DIR}/rawc2obj.py
