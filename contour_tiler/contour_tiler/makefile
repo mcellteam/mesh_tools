@@ -1,7 +1,7 @@
 CC = gcc
 CXX = g++
 DEFS =
-FLAGS = -O3
+FLAGS = -O3 -fpermissive
 # FLAGS = -g
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin

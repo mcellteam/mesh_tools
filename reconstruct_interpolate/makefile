@@ -4,7 +4,7 @@
 CXX = g++
 CC = gcc
 #CFLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math
-CFLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math -DNOASSERT=true
+CFLAGS = -Wall -Wshadow -Wextra -Weffc++ -O3 -g -ffast-math -DNOASSERT=true -fpermissive
 #LIBS = -L/home/jkinney/install/googleperf64/lib -lprofiler -ltcmalloc
 LIBS =
 INSTALL_DIR = $(HOME)/bin
