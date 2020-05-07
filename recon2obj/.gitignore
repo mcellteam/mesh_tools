@@ -1,0 +1,10 @@
+/arglex.flex.c
+/argparse.bison.c
+/argparse.bison.o
+/recon2obj
+/recon2obj.o
+/reconlex.flex.c
+/reconparse.bison.c
+/reconparse.bison.o
+/reconstruct_transform.o
+/strfunc.o

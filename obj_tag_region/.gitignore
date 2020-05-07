@@ -1,0 +1,6 @@
+/lex.flex.c
+/obj_tag_region
+/obj_tag_region.o
+/parse.bison.c
+/parse.bison.o
+/vector.o
