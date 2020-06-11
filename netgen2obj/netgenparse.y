@@ -339,7 +339,11 @@ csg_block: /* empty */
     CSGSURFACES int_arg newline_list
     UNDEF int_arg newline_list
     csg_primitives_list
+  |
+    CSGSURFACES int_arg newline_list
+    csg_primitives_list
 ;
+
 
 csg_primitives_list:
   csg_primitive
