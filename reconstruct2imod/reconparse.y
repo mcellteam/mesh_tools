@@ -84,7 +84,7 @@ struct object *obj;
 
 recon_format:
 {
-
+  line_num = 1;
   transform_dim = 0;
   xcoef[0] = 0;
   xcoef[1] = 1;
@@ -332,6 +332,7 @@ discard_item4: num_arg num_arg num_arg num_arg ','
 
 points_spec:
   /* empty */
+  | POINTS '"'
   | POINTS vertex2_list '"'
 {
   if (found_object)

@@ -9,7 +9,7 @@ struct name_list *file_name_list;
 struct object *objp;
 struct section *section_head, *section_tail;
 double pixel_size;
-int line_num=1;
+int line_num;
 int xmax, ymax, zmax, start_slice_number, end_slice_number, curr_slice_number;
 int contour_count;
 struct vector3 translate;
