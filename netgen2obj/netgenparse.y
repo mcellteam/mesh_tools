@@ -104,7 +104,7 @@ netgen_format:
         edge_segments_block
         points_block
         face_colours_block
-        ENDMESH newline_list
+        endmesh
         csg_block
 { 
   if ((vertex_array=(struct vertex_list **)malloc
@@ -145,13 +145,20 @@ newline_list: NEWLINE
 netgen_header: MESH3D newline_list
 	DIMENSION newline_list
 	int_arg newline_list
-        GEOMTYPE newline_list
-	int_arg newline_list
+        geomtype
 ;
 
-surface_elements_block:  SURFACE_ELEMENTS newline_list
-	int_arg newline_list
-	surface_element_list
+geomtype: /* empty */
+        | GEOMTYPE newline_list
+	  int_arg newline_list
+;
+
+surface_elements_block: SURFACE_ELEMENTS newline_list
+	    int_arg newline_list
+	    surface_element_list
+        | SURFACE_ELEMENTSGI newline_list
+	    int_arg newline_list
+	    surface_elementsgi_list
 ;
 
 surface_element_list: surface_element
@@ -188,13 +195,9 @@ surface_element:	int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg
   }
 };
 
-surface_elementsgi_block:  SURFACE_ELEMENTSGI newline_list
-	int_arg newline_list
-	surface_elementgi_list
-;
 
-surface_elementgi_list: surface_elementgi
-	| surface_elementgi_list surface_elementgi
+surface_elementsgi_list: surface_elementgi
+	| surface_elementsgi_list surface_elementgi
 ;
 
 surface_elementgi:	int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg newline_list
@@ -322,9 +325,10 @@ point: num_arg num_arg num_arg newline_list
   }
 };
 
-face_colours_block: FACE_COLOURS newline_list
-  int_arg newline_list
-  face_colours_list
+face_colours_block: /* empty */
+        | FACE_COLOURS newline_list
+          int_arg newline_list
+          face_colours_list
 ;
 
 face_colours_list: face_colour_spec
@@ -332,6 +336,10 @@ face_colours_list: face_colour_spec
 ;
 
 face_colour_spec: int_arg num_arg num_arg num_arg newline_list
+;
+
+endmesh: /* empty */
+        | ENDMESH newline_list
 ;
 
 csg_block: /* empty */
