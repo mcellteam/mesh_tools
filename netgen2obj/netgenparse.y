@@ -68,7 +68,7 @@ struct object *obj;
 %output="netgenparse.bison.c"
 
 
-%token <tok> CSGSURFACES CYLINDER
+%token <tok> CSGSURFACES CYLINDER ELLIPSOID
 %token <tok> DIMENSION EDGE_SEGMENTS ENDMESH FACE_COLOURS GEOMTYPE
 %token <tok> MESH3D PLANE POINTS SURFACE_ELEMENTSGI SURFACE_ELEMENTS
 %token <tok> UNDEF VOLUME_ELEMENTS NEWLINE REAL INTEGER 
@@ -361,10 +361,14 @@ csg_primitives_list:
 
 
 csg_primitive: cylinder_primitive
+  | ellipsoid_primitive
   | plane_primitive
 ;
 
 cylinder_primitive: CYLINDER int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg num_arg newline_list
+;
+
+ellipsoid_primitive: ELLIPSOID int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg newline_list
 ;
 
 plane_primitive: PLANE int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg newline_list
