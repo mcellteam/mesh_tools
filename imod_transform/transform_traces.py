@@ -17,7 +17,7 @@ http://www.gnu.org/licenses/gpl-2.0.html
 
 # https://towardsdatascience.com/image-geometric-transformation-in-numpy-and-opencv-936f5cd1d315
 # https://docs.opencv.org/2.4/modules/imgproc/doc/geometric_transformations.html?highlight=warpaffine#void%20warpAffine(InputArray%20src,%20OutputArray%20dst,%20InputArray%20M,%20Size%20dsize,%20int%20flags,%20int%20borderMode,%20const%20Scalar&%20borderValue)
-
+# 2:25 of https://robotacademy.net.au/lesson/describing-rotation-and-translation-in-2d/#:~:text=The%20homogeneous%20transformation%20matrix%20T,in%20this%20single%203x3%20matrix.
 
 import sys
 import os
@@ -147,20 +147,23 @@ def transform_contour_line(line, rev_transforms, swift_transforms):
     data = line.split()
     assert len(data) == 3
     id = int(data[2])
-    coords = np.array([[float(data[0])], [float(data[1])]])
+    point = np.array([[float(data[0])], [float(data[1])], [1.0]])
+
+    if id not in rev_transforms:
+        print("Error: reverse transform for slide id " + str(id) + " was not found.")
+        sys.exit(1)
+    if id not in swift_transforms:
+        print("Error: SWIFT-IR transform for slide id " + str(id) + " was not found.")
+        sys.exit(1)
     
-    # apply transforms 
-    # TODO: some error checks
-    print(coords)
-    print(coords.shape)
-    print(rev_transforms[id])
-    print(rev_transforms[id].shape)
-    after_rev = ndimage.affine_transform(coords, rev_transforms[id])
-    print(after_rev)
-    after_swift = ndimage.affine_transform(after_rev, swift_transforms[id])
-    print(after_swift)
+    # apply both transformations
+    mrev = np.vstack((rev_transforms[id], [0.0, 0.0, 1.0]))
+    mswift = np.vstack((swift_transforms[id], [0.0, 0.0, 1.0]))
     
-    return str(after_swift[0][0]) + ' ' + str(after_swift[1][0]) + ' ' + str(id) + '\n'
+    point_rev = mrev.dot(point)
+    point_swift = mswift.dot(point_rev)
+    
+    return str(point_swift[0][0]) + ' ' + str(point_swift[1][0]) + ' ' + str(id) + '\n'
     
 
 def process_amod_file(infile, outfile, rev_transforms, swift_transforms):
