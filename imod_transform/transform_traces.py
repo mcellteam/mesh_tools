@@ -33,6 +33,7 @@ class Options:
         self.rev_transform_file = ''
         self.input_amod_file = ''
         self.output_amod_file = ''
+        self.y_offset = 0
 
     def __repr__(self):
         attrs = vars(self)
@@ -52,6 +53,9 @@ class Options:
         parser.add_argument(
             '-a', '--amod', type=str, 
             help='amod file containing definition of traces done on original images')
+        parser.add_argument(
+            '-y', '--y-offset', type=int, 
+            help='add y offset to the resulting trace, default is 0')
         parser.add_argument(
             '-o', '--output', type=str, 
             help='name of output .amod file')
@@ -86,6 +90,9 @@ class Options:
         else:
             self.output_amod_file = self.input_amod_file + '.out'
 
+        if args.y_offset:
+            self.y_offset = args.y_offset 
+    
         return True
 
         
@@ -127,7 +134,7 @@ def load_swift_transforms(swift_transforms_file):
         for align in alignment_stack:
 
             atm = np.array(get_dict_value(
-                align, ['align_to_ref_method', 'method_results', 'affine_matrix'], swift_transforms_file))
+                align, ['align_to_ref_method', 'method_results', 'cumulative_afm'], swift_transforms_file))
             assert atm.shape == (2, 3)
             
             fname = get_dict_value(align, ['images', 'base', 'filename'], swift_transforms_file)
@@ -143,35 +150,58 @@ def load_swift_transforms(swift_transforms_file):
 
 
 
-def transform_contour_line(line, rev_transforms, swift_transforms):
+def transform_contour_line(line, rev_transforms, swift_transforms, height, y_offset):
     data = line.split()
     assert len(data) == 3
     id = int(data[2])
     point = np.array([[float(data[0])], [float(data[1])], [1.0]])
 
     if id not in rev_transforms:
-        print("Error: reverse transform for slide id " + str(id) + " was not found.")
+        print("Error: reverse transform for layer id " + str(id) + " was not found.")
         sys.exit(1)
     if id not in swift_transforms:
-        print("Error: SWIFT-IR transform for slide id " + str(id) + " was not found.")
+        print("Error: SWIFT-IR transform for layer id " + str(id) + " was not found.")
         sys.exit(1)
+
+    # transformation was applied on image with reflected y coordinate 
+    point[1][0] = height - point[1][0] 
     
     # apply both transformations
     mrev = np.vstack((rev_transforms[id], [0.0, 0.0, 1.0]))
     mswift = np.vstack((swift_transforms[id], [0.0, 0.0, 1.0]))
     
-    point_rev = mrev.dot(point)
-    point_swift = mswift.dot(point_rev)
+    mrev_inv = np.linalg.inv(mrev)
+    mswift_inv = np.linalg.inv(mswift)
+
+    # apply inverse transformation that was applied on 
+    # original image to create sources for SWIFT-IR alignment      
+    point_rev = mrev_inv.dot(point)
+    
+    # and apply inverse transformation of cummulative 
+    # transformation from SWIFT-IR 
+    point_swift = mswift_inv.dot(point_rev)
+
+    # reflect back along Y axis
+    point_swift[1][0] = height - point_swift[1][0]
+        
+    # and move by y offset
+    point_swift[1][0] += y_offset
     
     return str(point_swift[0][0]) + ' ' + str(point_swift[1][0]) + ' ' + str(id) + '\n'
     
 
-def process_amod_file(infile, outfile, rev_transforms, swift_transforms):
+def process_amod_file(infile, outfile, rev_transforms, swift_transforms, y_offset):
     with open(infile, 'r') as fin:
         with open(outfile, 'w') as fout:
             remaining_countours = 0
+            height = -1
             for line in fin:
                 if remaining_countours == 0:
+                    if 'max' in line:
+                        items = line.split()
+                        assert len(items) == 4
+                        height = int(items[2])                   
+                        
                     if 'contour' in line:
                         items = line.split()
                         assert len(items) == 4
@@ -181,7 +211,12 @@ def process_amod_file(infile, outfile, rev_transforms, swift_transforms):
                     fout.write(line)
                 else:
                     # transform line
-                    res_line = transform_contour_line(line, rev_transforms, swift_transforms)
+                    res_line = transform_contour_line(
+                        line, 
+                        rev_transforms, swift_transforms,
+                        height,
+                        y_offset
+                    )
                     fout.write(res_line)
                     remaining_countours -= 1
                  
@@ -211,7 +246,7 @@ def main():
               
     process_amod_file(
         opts.input_amod_file, opts.output_amod_file,
-        rev_transforms, swift_transforms)
+        rev_transforms, swift_transforms, opts.y_offset)
     
             
 if __name__ == '__main__':
