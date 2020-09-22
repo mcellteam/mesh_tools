@@ -33,7 +33,7 @@ class Options:
         self.rev_transform_file = ''
         self.input_amod_file = ''
         self.output_amod_file = ''
-        self.y_offset = 0
+        self.y_crop = 0
 
     def __repr__(self):
         attrs = vars(self)
@@ -54,8 +54,8 @@ class Options:
             '-a', '--amod', type=str, 
             help='amod file containing definition of traces done on original images')
         parser.add_argument(
-            '-y', '--y-offset', type=int, 
-            help='add y offset to the resulting trace, default is 0')
+            '-y', '--y-crop', type=int, 
+            help='how many pixels were cropped from the bottom of the image before alignment with SWIFT-IR, default is 0')
         parser.add_argument(
             '-o', '--output', type=str, 
             help='name of output .amod file')
@@ -90,8 +90,8 @@ class Options:
         else:
             self.output_amod_file = self.input_amod_file + '.out'
 
-        if args.y_offset:
-            self.y_offset = args.y_offset 
+        if args.y_crop:
+            self.y_crop = args.y_crop 
     
         return True
 
@@ -150,7 +150,7 @@ def load_swift_transforms(swift_transforms_file):
 
 
 
-def transform_contour_line(line, rev_transforms, swift_transforms, height, y_offset):
+def transform_contour_line(line, rev_transforms, swift_transforms, height, y_crop):
     data = line.split()
     assert len(data) == 3
     id = int(data[2])
@@ -176,21 +176,22 @@ def transform_contour_line(line, rev_transforms, swift_transforms, height, y_off
     # apply inverse transformation that was applied on 
     # original image to create sources for SWIFT-IR alignment      
     point_rev = mrev_inv.dot(point)
+
+    # and move by y offset - how much were the images cropped
+    point_crop = point_rev 
+    point_crop[1][0] = point_crop[1][0] + y_crop
     
     # and apply inverse transformation of cummulative 
     # transformation from SWIFT-IR 
-    point_swift = mswift_inv.dot(point_rev)
+    point_swift = mswift_inv.dot(point_crop)
 
     # reflect back along Y axis
     point_swift[1][0] = height - point_swift[1][0]
-        
-    # and move by y offset
-    point_swift[1][0] += y_offset
     
     return str(point_swift[0][0]) + ' ' + str(point_swift[1][0]) + ' ' + str(id) + '\n'
     
 
-def process_amod_file(infile, outfile, rev_transforms, swift_transforms, y_offset):
+def process_amod_file(infile, outfile, rev_transforms, swift_transforms, y_crop):
     with open(infile, 'r') as fin:
         with open(outfile, 'w') as fout:
             remaining_countours = 0
@@ -215,7 +216,7 @@ def process_amod_file(infile, outfile, rev_transforms, swift_transforms, y_offse
                         line, 
                         rev_transforms, swift_transforms,
                         height,
-                        y_offset
+                        y_crop
                     )
                     fout.write(res_line)
                     remaining_countours -= 1
@@ -246,7 +247,7 @@ def main():
               
     process_amod_file(
         opts.input_amod_file, opts.output_amod_file,
-        rev_transforms, swift_transforms, opts.y_offset)
+        rev_transforms, swift_transforms, opts.y_crop)
     
             
 if __name__ == '__main__':
