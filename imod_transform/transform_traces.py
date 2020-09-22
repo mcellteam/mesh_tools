@@ -19,6 +19,15 @@ http://www.gnu.org/licenses/gpl-2.0.html
 # https://docs.opencv.org/2.4/modules/imgproc/doc/geometric_transformations.html?highlight=warpaffine#void%20warpAffine(InputArray%20src,%20OutputArray%20dst,%20InputArray%20M,%20Size%20dsize,%20int%20flags,%20int%20borderMode,%20const%20Scalar&%20borderValue)
 # 2:25 of https://robotacademy.net.au/lesson/describing-rotation-and-translation-in-2d/#:~:text=The%20homogeneous%20transformation%20matrix%20T,in%20this%20single%203x3%20matrix.
 
+"""
+display traces:
+
+convert -compress none *.jpg picts.tif
+
+tif2mrc -p 16.0 *.tif proj.mrc
+alterheader proj.mrc -org "3872 3408 1824"
+"""
+
 import sys
 import os
 import argparse
@@ -34,6 +43,8 @@ class Options:
         self.input_amod_file = ''
         self.output_amod_file = ''
         self.y_crop = 0
+        self.x_margin = 0
+        self.y_margin = 0
 
     def __repr__(self):
         attrs = vars(self)
@@ -56,6 +67,12 @@ class Options:
         parser.add_argument(
             '-y', '--y-crop', type=int, 
             help='how many pixels were cropped from the bottom of the image before alignment with SWIFT-IR, default is 0')
+        parser.add_argument(
+            '-mx', '--x-margin', type=int, 
+            help='x-margin used when generating new images with SWIFT-IR')
+        parser.add_argument(
+            '-my', '--y-margin', type=int, 
+            help='y-margin used when generating new images with SWIFT-IR')
         parser.add_argument(
             '-o', '--output', type=str, 
             help='name of output .amod file')
@@ -93,6 +110,12 @@ class Options:
         if args.y_crop:
             self.y_crop = args.y_crop 
     
+        if args.x_margin:
+            self.x_margin = args.x_margin 
+
+        if args.y_margin:
+            self.y_margin = args.y_margin 
+
         return True
 
         
@@ -150,7 +173,7 @@ def load_swift_transforms(swift_transforms_file):
 
 
 
-def transform_contour_line(line, rev_transforms, swift_transforms, height, y_crop):
+def transform_contour_line(line, rev_transforms, swift_transforms, height, opts):
     data = line.split()
     assert len(data) == 3
     id = int(data[2])
@@ -179,21 +202,26 @@ def transform_contour_line(line, rev_transforms, swift_transforms, height, y_cro
 
     # and move by y offset - how much were the images cropped
     point_crop = point_rev 
-    point_crop[1][0] = point_crop[1][0] + y_crop
+    point_crop[1][0] += opts.y_crop
     
     # and apply inverse transformation of cummulative 
     # transformation from SWIFT-IR 
     point_swift = mswift_inv.dot(point_crop)
 
+    point_margin = point_swift
+    point_margin[0][0] += opts.x_margin
+    point_margin[1][0] -= opts.y_margin
+
     # reflect back along Y axis
-    point_swift[1][0] = height - point_swift[1][0]
+    point_margin[1][0] = height - point_margin[1][0]
     
-    return str(point_swift[0][0]) + ' ' + str(point_swift[1][0]) + ' ' + str(id) + '\n'
+    return str(point_margin[0][0]) + ' ' + str(point_margin[1][0]) + ' ' + str(id) + '\n'
     
 
-def process_amod_file(infile, outfile, rev_transforms, swift_transforms, y_crop):
-    with open(infile, 'r') as fin:
-        with open(outfile, 'w') as fout:
+def process_amod_file(opts, rev_transforms, swift_transforms):
+    
+    with open(opts.input_amod_file, 'r') as fin:
+        with open(opts.output_amod_file, 'w') as fout:
             remaining_countours = 0
             height = -1
             for line in fin:
@@ -216,7 +244,7 @@ def process_amod_file(infile, outfile, rev_transforms, swift_transforms, y_crop)
                         line, 
                         rev_transforms, swift_transforms,
                         height,
-                        y_crop
+                        opts
                     )
                     fout.write(res_line)
                     remaining_countours -= 1
@@ -246,8 +274,7 @@ def main():
         print("SWIFT-IR transform ids:" + str(swift_transforms.keys()))
               
     process_amod_file(
-        opts.input_amod_file, opts.output_amod_file,
-        rev_transforms, swift_transforms, opts.y_crop)
+        opts, rev_transforms, swift_transforms)
     
             
 if __name__ == '__main__':
