@@ -63,16 +63,16 @@ class Options:
             )
         parser.add_argument(
             '-a', '--amod', type=str, 
-            help='amod file containing definition of traces done on original images')
+            help='amod file containing definition of traces done on top of the original images')
         parser.add_argument(
             '-y', '--y-crop', type=int, 
-            help='how many pixels were cropped from the bottom of the image before alignment with SWIFT-IR, default is 0')
+            help='how many pixels were cropped from the bottom of the image before alignment with SWIFT-IR was done, default is 0')
         parser.add_argument(
             '-mx', '--x-margin', type=int, 
-            help='x-margin used when generating new images with SWIFT-IR')
+            help='x-margin used when generating new images with SWIFT-IR, default is 0')
         parser.add_argument(
             '-my', '--y-margin', type=int, 
-            help='y-margin used when generating new images with SWIFT-IR')
+            help='y-margin used when generating new images with SWIFT-IR, default is 0')
         parser.add_argument(
             '-o', '--output', type=str, 
             help='name of output .amod file')
