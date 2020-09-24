@@ -249,6 +249,19 @@ def process_amod_file(opts, rev_transforms, swift_transforms):
                     fout.write(res_line)
                     remaining_countours -= 1
                  
+
+def check_amod_file(input_amod_file):
+    with open(input_amod_file, 'rb') as fin:
+        magic = b'IMODV1.2'
+        d = fin.read(len(magic))
+        if d == magic:
+            fname = os.path.splitext(input_amod_file)[0]
+            print("Error: input file '" + input_amod_file + 
+                  "' seems to be binary .mod file because it starts with magic header " + str(magic)[1:] + ". "
+                  "It can be converted with 'imodinfo -a " + input_amod_file + " > " + fname + ".ascii.amod'.")
+            return False
+    return True
+
             
 def main():
     opts = Options()
@@ -272,7 +285,11 @@ def main():
         print("Warning: Reverse and SWIFT-IR transforms contain different image ids!")
         print("Reverse transform ids:" + str(rev_transforms.keys()))
         print("SWIFT-IR transform ids:" + str(swift_transforms.keys()))
-              
+    
+    ok = check_amod_file(opts.input_amod_file)
+    if not ok:
+        sys.exit(1)
+            
     process_amod_file(
         opts, rev_transforms, swift_transforms)
     
