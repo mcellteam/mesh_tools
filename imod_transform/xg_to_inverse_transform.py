@@ -20,12 +20,10 @@ http://www.gnu.org/licenses/gpl-2.0.html
 # 2:25 of https://robotacademy.net.au/lesson/describing-rotation-and-translation-in-2d/#:~:text=The%20homogeneous%20transformation%20matrix%20T,in%20this%20single%203x3%20matrix.
 
 """
-display traces:
+example:
+python xg_to_inverse_transform.py -x test/interf.xg -s test/infer.sections
 
-convert -compress none *.jpg picts.tif
-
-tif2mrc -p 16.0 *.tif proj.mrc
-alterheader proj.mrc -org "3872 3408 1824"
+creates file test/interf.xg.json
 """
 
 import sys

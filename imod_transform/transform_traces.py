@@ -28,6 +28,11 @@ tif2mrc -p 16.0 *.tif proj.mrc
 alterheader proj.mrc -org "3872 3408 1824"
 """
 
+""" 
+example:
+python transform_traces.py -s test/G3-SA_original_alignem_project_v3_ident_phys_sec_3.json -r test/ref_interf.xg.json -a test/mito10_backchecked.amod -o test/mito10_backchecked_transformed.amod
+"""
+
 import sys
 import os
 import argparse
@@ -218,7 +223,8 @@ def transform_contour_line(line, rev_transforms, swift_transforms, height, opts)
     return str(point_margin[0][0]) + ' ' + str(point_margin[1][0]) + ' ' + str(id) + '\n'
     
 
-def process_amod_file(opts, rev_transforms, swift_transforms):
+# signature for custom_processing_function - (line, opts), returns resultign line
+def process_amod_file(opts, rev_transforms, swift_transforms, custom_processing_function=None):
     
     with open(opts.input_amod_file, 'r') as fin:
         with open(opts.output_amod_file, 'w') as fout:
@@ -239,13 +245,19 @@ def process_amod_file(opts, rev_transforms, swift_transforms):
                     # copy line verbatim
                     fout.write(line)
                 else:
-                    # transform line
-                    res_line = transform_contour_line(
-                        line, 
-                        rev_transforms, swift_transforms,
-                        height,
-                        opts
-                    )
+                    if not custom_processing_function:
+                        # transform line
+                        res_line = transform_contour_line(
+                            line, 
+                            rev_transforms, swift_transforms,
+                            height,
+                            opts
+                        )
+                    else:
+                        res_line = custom_processing_function(
+                            line, 
+                            opts
+                        )
                     fout.write(res_line)
                     remaining_countours -= 1
                  
