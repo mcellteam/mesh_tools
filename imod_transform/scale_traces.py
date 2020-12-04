@@ -107,6 +107,8 @@ def main():
             
     transform_traces.process_amod_file(opts, None, None, scale_contour_line)
     
+    print("Created file " + opts.output_amod_file + ".")
+    
 if __name__ == '__main__':
     main()            
         

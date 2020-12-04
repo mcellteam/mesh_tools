@@ -85,7 +85,7 @@ class Options:
             return False  
 
         if args.output:
-            self.output_json_file = args.output
+            self.output_json_file = args.output.strip()
         else:
             self.output_json_file = self.xg_file + '.json'
 
@@ -136,8 +136,6 @@ def generate_transforms_file(opts, transform_matrices, sections):
             item['affine_matrix'] = t
             transforms.append(item)
     
-    print(transforms)
-    
     with open(opts.output_json_file, 'w') as f:
         json.dump(transforms, f, cls=NumpyArrayEncoder, indent=4, separators=(',', ': '))
             
@@ -152,14 +150,12 @@ def main():
         print("Error while loading " + opts.xg_file)
         sys.exit(1)
     print("Loaded xg file transforms, got " + str(len(transform_matrices)) + " entries.")
-    print(transform_matrices)
     
     sections = load_sections_file(opts.sections_file)
     if not sections:
         print("Error while loading " + opts.sections_file)
         sys.exit(1)
     print("Loaded sections file, got " + str(len(sections)) + " entries.")
-    print(sections)
     
     if len(transform_matrices) != len(sections):
         print("Error: xf and sections file contain different counts of sections.")
@@ -167,7 +163,8 @@ def main():
     
     generate_transforms_file(
         opts, transform_matrices, sections)
-        
+    
+    print("Created file " + opts.output_json_file + ".")
             
 if __name__ == '__main__':
     main()         
