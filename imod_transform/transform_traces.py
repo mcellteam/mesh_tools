@@ -43,13 +43,15 @@ from scipy import linalg
 
 class Options:
     def __init__(self):
-        self.swift_ir_file = ''
-        self.rev_transform_file = ''
+        self.swift_ir_file = None
+        self.rev_transform_file = None
+        self.not_invert_rev_transform = False
         self.input_amod_file = ''
         self.output_amod_file = ''
         self.y_crop = 0
         self.x_margin = 0
         self.y_margin = 0
+        self.margin_as_first = False
 
     def __repr__(self):
         attrs = vars(self)
@@ -67,11 +69,18 @@ class Options:
                  ', it must be supplied as a reverse transformation, i.e. how to get from SWIFT-IR images to original images'
             )
         parser.add_argument(
+            '-n', '--not-invert-rev-transform', action='store_true',
+            help='do not invert the reverse transformation suppoled through the -r/--rev-transform argument, default is false'
+            )
+        parser.add_argument(
             '-a', '--amod', type=str, 
             help='amod file containing definition of traces done on top of the original images')
         parser.add_argument(
             '-y', '--y-crop', type=int, 
             help='how many pixels were cropped from the bottom of the image before alignment with SWIFT-IR was done, default is 0')
+        parser.add_argument(
+            '-m1', '--margin-as-first', action='store_true', 
+            help='x and y margin is applied first then the transformations are done, default is false')
         parser.add_argument(
             '-mx', '--x-margin', type=int, 
             help='x-margin used when generating new images with SWIFT-IR, default is 0')
@@ -91,15 +100,12 @@ class Options:
         if args.swift_ir:
             self.swift_ir_file = args.swift_ir
         else:
-            print("Input swift-ir file must be set")
-            return False
+            print("Input swift-ir file was not set, this transformation will be ignored.")
         
-        # optional?
         if args.rev_transform:
             self.rev_transform_file = args.rev_transform
         else:
-            print("Input reverse transforms file must be set")
-            return False  
+            print("Input reverse transforms file was not set, this transformation will be ignored.")
             
         if args.amod:
             self.input_amod_file = args.amod
@@ -120,6 +126,12 @@ class Options:
 
         if args.y_margin:
             self.y_margin = args.y_margin 
+            
+        if args.margin_as_first:
+            self.margin_as_first = True
+
+        if args.not_invert_rev_transform:
+            self.not_invert_rev_transform = True 
 
         return True
 
@@ -136,7 +148,10 @@ def get_dict_value(d, keys, fname):
                   
         
 def load_rev_transforms(rev_transform_file):
-    # returns dictionary containing id -> 2x3 numpy array
+    # returns dictionary containing id -> 2x3 numpy array or None
+    if not rev_transform_file:
+        return None
+    
     res = {}
     with open(rev_transform_file, 'r') as fin:
         json_transforms = json.load(fin)
@@ -151,7 +166,10 @@ def load_rev_transforms(rev_transform_file):
 
 
 def load_swift_transforms(swift_transforms_file):
-    # returns dictionary containing id -> 2x3 numpy array
+    # returns dictionary containing id -> 2x3 numpy array or None
+    if not swift_transforms_file:
+        return None
+    
     res = {}
     with open(swift_transforms_file, 'r') as fin:
         json_swift = json.load(fin)
@@ -184,26 +202,43 @@ def transform_contour_line(line, rev_transforms, swift_transforms, height, opts)
     id = int(data[2])
     point = np.array([[float(data[0])], [float(data[1])], [1.0]])
 
-    if id not in rev_transforms:
+    if rev_transforms and id not in rev_transforms:
         print("Error: reverse transform for layer id " + str(id) + " was not found.")
         sys.exit(1)
-    if id not in swift_transforms:
+    if swift_transforms and id not in swift_transforms:
         print("Error: SWIFT-IR transform for layer id " + str(id) + " was not found.")
         sys.exit(1)
 
     # transformation was applied on image with reflected y coordinate 
     point[1][0] = height - point[1][0] 
     
-    # apply both transformations
-    mrev = np.vstack((rev_transforms[id], [0.0, 0.0, 1.0]))
-    mswift = np.vstack((swift_transforms[id], [0.0, 0.0, 1.0]))
+    point_margin1 = point
+    if opts.margin_as_first:
+        point_margin1[0][0] += opts.x_margin
+        point_margin1[1][0] -= opts.y_margin
     
-    mrev_inv = np.linalg.inv(mrev)
+    # read selected transformations
+    if rev_transforms:
+        mrev = np.vstack((rev_transforms[id], [0.0, 0.0, 1.0]))
+    else:
+        mrev = np.identity(3)
+        
+    if swift_transforms:
+        mswift = np.vstack((swift_transforms[id], [0.0, 0.0, 1.0]))
+    else:
+        mswift = np.identity(3)
+    
+    
+    if opts.not_invert_rev_transform:
+        mrev_inv = mrev
+    else:
+        mrev_inv = np.linalg.inv(mrev)
+    
     mswift_inv = np.linalg.inv(mswift)
 
     # apply inverse transformation that was applied on 
     # original image to create sources for SWIFT-IR alignment      
-    point_rev = mrev_inv.dot(point)
+    point_rev = mrev_inv.dot(point_margin1)
 
     # and move by y offset - how much were the images cropped
     point_crop = point_rev 
@@ -212,15 +247,16 @@ def transform_contour_line(line, rev_transforms, swift_transforms, height, opts)
     # and apply inverse transformation of cummulative 
     # transformation from SWIFT-IR 
     point_swift = mswift_inv.dot(point_crop)
-
-    point_margin = point_swift
-    point_margin[0][0] += opts.x_margin
-    point_margin[1][0] -= opts.y_margin
+    
+    point_margin2 = point_swift
+    if not opts.margin_as_first:
+        point_margin2[0][0] += opts.x_margin
+        point_margin2[1][0] -= opts.y_margin
 
     # reflect back along Y axis
-    point_margin[1][0] = height - point_margin[1][0]
+    point_margin2[1][0] = height - point_margin2[1][0]
     
-    return str(point_margin[0][0]) + ' ' + str(point_margin[1][0]) + ' ' + str(id) + '\n'
+    return str(point_margin2[0][0]) + ' ' + str(point_margin2[1][0]) + ' ' + str(id) + '\n'
     
 
 # signature for custom_processing_function - (line, opts), returns resultign line
@@ -282,18 +318,14 @@ def main():
         sys.exit(1)
         
     rev_transforms = load_rev_transforms(opts.rev_transform_file)
-    if not rev_transforms:
-        print("Error while loading " + opts.rev_transform_file)
-        sys.exit(1)
-    print("Loaded reverse transforms, got " + str(len(rev_transforms)) + " entries.")
+    if rev_transforms:
+        print("Loaded reverse transforms, got " + str(len(rev_transforms)) + " entries.")
     
     swift_transforms = load_swift_transforms(opts.swift_ir_file)
-    if not swift_transforms:
-        print("Error while loading " + opts.swift_ir_file)
-        sys.exit(1)
-    print("Loaded SWIFT-IR transforms, got " + str(len(swift_transforms)) + " entries.")
+    if swift_transforms:
+        print("Loaded SWIFT-IR transforms, got " + str(len(swift_transforms)) + " entries.")
     
-    if rev_transforms.keys() != swift_transforms.keys():
+    if rev_transforms and swift_transforms and rev_transforms.keys() != swift_transforms.keys():
         print("Warning: Reverse and SWIFT-IR transforms contain different image ids!")
         print("Reverse transform ids:" + str(rev_transforms.keys()))
         print("SWIFT-IR transform ids:" + str(swift_transforms.keys()))
