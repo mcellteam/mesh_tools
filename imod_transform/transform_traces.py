@@ -259,13 +259,14 @@ def transform_contour_line(line, rev_transforms, swift_transforms, height, opts)
     return str(point_margin2[0][0]) + ' ' + str(point_margin2[1][0]) + ' ' + str(id) + '\n'
     
 
-# signature for custom_processing_function - (line, opts), returns resultign line
+# signature for custom_processing_function - (index, line, opts), returns resultign line
 def process_amod_file(opts, rev_transforms, swift_transforms, custom_processing_function=None):
     
     with open(opts.input_amod_file, 'r') as fin:
         with open(opts.output_amod_file, 'w') as fout:
             remaining_countours = 0
             height = -1
+            current_index = -1
             for line in fin:
                 if remaining_countours == 0:
                     if 'max' in line:
@@ -273,10 +274,15 @@ def process_amod_file(opts, rev_transforms, swift_transforms, custom_processing_
                         assert len(items) == 4
                         height = int(items[2])                   
                         
-                    if 'contour' in line:
+                    elif 'contour' in line:
                         items = line.split()
                         assert len(items) == 4
                         remaining_countours = int(items[3])
+                        
+                    elif 'object' in line:
+                        items = line.split()
+                        assert len(items) == 4
+                        current_index = int(items[1])
                     
                     # copy line verbatim
                     fout.write(line)
@@ -291,6 +297,7 @@ def process_amod_file(opts, rev_transforms, swift_transforms, custom_processing_
                         )
                     else:
                         res_line = custom_processing_function(
+                            current_index,
                             line, 
                             opts
                         )

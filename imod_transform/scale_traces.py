@@ -34,7 +34,9 @@ import transform_traces
 
 class Options:
     def __init__(self):
-        self.scale_factor = ''
+        self.scale_factor = None
+        self.scale_file = None
+        self.scale_factors_dict = None # set when scale_file is loaded 
         self.input_amod_file = ''
         self.output_amod_file = ''
 
@@ -48,6 +50,9 @@ class Options:
         parser.add_argument(
             '-s', '--scale', type=str, 
             help='scale factor')
+        parser.add_argument(
+            '-f', '--scale-file', type=str, 
+            help='scale file in the format where first column is object id and the second column is scaling for this object')
         parser.add_argument(
             '-a', '--amod', type=str, 
             help='amod file containing definition of traces done on top of the original images')
@@ -63,8 +68,16 @@ class Options:
         
         if args.scale:
             self.scale_factor = float(args.scale)
-        else:
-            print("Input scale factor file must be set")
+
+        if args.scale_file:
+            self.scale_file = args.scale_file
+            
+        if self.scale_file and self.scale_factor: 
+            print("Only one of scale factor and scale file must be set")
+            return False
+            
+        if not self.scale_file and not self.scale_factor: 
+            print("Input scale factor or scale file must be set")
             return False
         
         if args.amod:
@@ -81,25 +94,50 @@ class Options:
         return True
 
 
-def scale_contour_line(line, opts):
+def scale_contour_line(index, line, opts):
     # parse countour line into a 2D point with W coordinate
     data = line.split()
     assert len(data) == 3
     id = int(data[2])
     x = float(data[0])
     y = float(data[1])
+    
+    if opts.scale_factor:
+        scale = opts.scale_factor
+    else:
+        assert opts.scale_factors_dict
+        if index not in opts.scale_factors_dict:
+            print("Error: amod file uses object with index " + str(index) + 
+                  " but scale for this object was not supplied.")
+            sys.exit(1)
+        scale = opts.scale_factors_dict[index]
  
     # simply multiply the coordinates
-    x = x * opts.scale_factor
-    y = y * opts.scale_factor
+    x = x * scale
+    y = y * scale
 
     return str(x) + ' ' + str(y) + ' ' + str(id) + '\n'        
+
+
+def load_scale_file(opts):
+    res = {}
+    with open(opts.scale_file, 'r') as f:
+        for line in f:
+            index_scale = line.split()
+            res[int(index_scale[0])] = float(index_scale[1])
+    return res
+
 
 def main():
     opts = Options()
     ok = opts.process_opts()
     if not ok:
         sys.exit(1)
+    
+    if opts.scale_file: 
+        opts.scale_factors_dict = load_scale_file(opts)
+        print("Loaded scales:")
+        print(opts.scale_factors_dict)
     
     ok = transform_traces.check_amod_file(opts.input_amod_file)
     if not ok:
