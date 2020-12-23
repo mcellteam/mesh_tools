@@ -123,7 +123,12 @@ def load_scale_file(opts):
     res = {}
     with open(opts.scale_file, 'r') as f:
         for line in f:
+            if not line.strip():
+                continue
             index_scale = line.split()
+            if len(index_scale) != 2:
+                print("Error in " + opts.scale_file + " - could not process line '" + line + "'.")
+                sys.exit(1)
             res[int(index_scale[0])] = float(index_scale[1])
     return res
 
