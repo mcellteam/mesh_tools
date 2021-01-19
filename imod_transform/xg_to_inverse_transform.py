@@ -126,15 +126,36 @@ def load_sections_file(file_name):
 def generate_transforms_file(opts, transform_matrices, sections):
     # prepare json dict
     transforms = []
+    last_id = 0
+    last_transform = None
     for k in range(len(sections)):
         s = sections[k]
         t = transform_matrices[k]
+        
+        # do we need to interpolate missing images?
+        if s[0] != last_id:
+            assert last_transform is not None
+            num_missing = s[0] - last_id - 1
+            print("Interpolating transforms for missing " + str(num_missing) + " images.")
+
+            t0 = np.array(last_transform)
+            diff = np.array(t) - t0
+            
+            for i in range(1, num_missing + 1):
+                item = {}
+                item['id'] = last_id + i
+                # lineraly interpolate missing transform
+                item['affine_matrix'] = (t0 + (diff / (num_missing + 1)) * i).tolist()
+                transforms.append(item)
         
         for id in range(s[0], s[1] + 1):
             item = {}
             item['id'] = id
             item['affine_matrix'] = t
             transforms.append(item)
+
+        last_id = s[1]
+        last_transform = t
     
     with open(opts.output_json_file, 'w') as f:
         json.dump(transforms, f, cls=NumpyArrayEncoder, indent=4, separators=(',', ': '))
