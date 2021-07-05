@@ -4,7 +4,7 @@ import sys
 if __name__ == '__main__':
 
   if (len(sys.argv)<2):
-    print '\nUsage: %s rawc_filename\n'%(sys.argv[0])
+    print('\nUsage: %s rawc_filename\n'%(sys.argv[0]))
     exit()
 
   ifn = sys.argv[1]
