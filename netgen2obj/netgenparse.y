@@ -68,7 +68,7 @@ struct object *obj;
 %output="netgenparse.bison.c"
 
 
-%token <tok> CSGSURFACES CYLINDER
+%token <tok> CSGSURFACES CYLINDER ELLIPSOID
 %token <tok> DIMENSION EDGE_SEGMENTS ENDMESH FACE_COLOURS GEOMTYPE
 %token <tok> MESH3D PLANE POINTS SURFACE_ELEMENTSGI SURFACE_ELEMENTS
 %token <tok> UNDEF VOLUME_ELEMENTS NEWLINE REAL INTEGER 
@@ -104,7 +104,7 @@ netgen_format:
         edge_segments_block
         points_block
         face_colours_block
-        ENDMESH newline_list
+        endmesh
         csg_block
 { 
   if ((vertex_array=(struct vertex_list **)malloc
@@ -145,13 +145,20 @@ newline_list: NEWLINE
 netgen_header: MESH3D newline_list
 	DIMENSION newline_list
 	int_arg newline_list
-        GEOMTYPE newline_list
-	int_arg newline_list
+        geomtype
 ;
 
-surface_elements_block:  SURFACE_ELEMENTS newline_list
-	int_arg newline_list
-	surface_element_list
+geomtype: /* empty */
+        | GEOMTYPE newline_list
+	  int_arg newline_list
+;
+
+surface_elements_block: SURFACE_ELEMENTS newline_list
+	    int_arg newline_list
+	    surface_element_list
+        | SURFACE_ELEMENTSGI newline_list
+	    int_arg newline_list
+	    surface_elementsgi_list
 ;
 
 surface_element_list: surface_element
@@ -188,13 +195,9 @@ surface_element:	int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg
   }
 };
 
-surface_elementsgi_block:  SURFACE_ELEMENTSGI newline_list
-	int_arg newline_list
-	surface_elementgi_list
-;
 
-surface_elementgi_list: surface_elementgi
-	| surface_elementgi_list surface_elementgi
+surface_elementsgi_list: surface_elementgi
+	| surface_elementsgi_list surface_elementgi
 ;
 
 surface_elementgi:	int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg int_arg newline_list
@@ -322,9 +325,10 @@ point: num_arg num_arg num_arg newline_list
   }
 };
 
-face_colours_block: FACE_COLOURS newline_list
-  int_arg newline_list
-  face_colours_list
+face_colours_block: /* empty */
+        | FACE_COLOURS newline_list
+          int_arg newline_list
+          face_colours_list
 ;
 
 face_colours_list: face_colour_spec
@@ -334,12 +338,20 @@ face_colours_list: face_colour_spec
 face_colour_spec: int_arg num_arg num_arg num_arg newline_list
 ;
 
+endmesh: /* empty */
+        | ENDMESH newline_list
+;
+
 csg_block: /* empty */
   |
     CSGSURFACES int_arg newline_list
     UNDEF int_arg newline_list
     csg_primitives_list
+  |
+    CSGSURFACES int_arg newline_list
+    csg_primitives_list
 ;
+
 
 csg_primitives_list:
   csg_primitive
@@ -349,10 +361,14 @@ csg_primitives_list:
 
 
 csg_primitive: cylinder_primitive
+  | ellipsoid_primitive
   | plane_primitive
 ;
 
 cylinder_primitive: CYLINDER int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg num_arg newline_list
+;
+
+ellipsoid_primitive: ELLIPSOID int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg num_arg newline_list
 ;
 
 plane_primitive: PLANE int_arg newline_list num_arg num_arg num_arg num_arg num_arg num_arg newline_list

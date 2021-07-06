@@ -1,0 +1,26 @@
+Running
+ 
+$ python transform_traces.py --help
+
+shows help.
+
+One of the arguments is a reverse transform file, 
+this was obtained for the G3-SA dataset by running
+other/model_points.G3-SA.v2.py.
+It is stored as test/rev_transforms.json.  
+
+Example of a run for the G3-SA dataset with the latest SWIFT-IR output and margin: 
+
+$ python transform_traces.py -a mito10_backchecked.amod \
+    -s G3-SA_modeled_cropped_1464_piecewise_alignem_project.json \
+    -r rev_transforms.json \
+    -y 29 -mx 285 -my 285 -o res_y29_m285.amod
+
+
+
+Unrelated notes on how to display jpeg images along with traces in IMOD:
+
+$ convert -compress none *.jpg picts.tif
+$ tif2mrc -p 16.0 *.tif proj.mrc
+$ alterheader proj.mrc -org "3872 3408 1824"
+ 

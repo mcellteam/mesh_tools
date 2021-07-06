@@ -30,6 +30,7 @@ I ([-]*[0-9]+)
 ^"#"[^\n]*$		;
 "csgsurfaces"		{return(CSGSURFACES);}
 "cylinder"		{return(CYLINDER);}
+"ellipsoid"		{return(ELLIPSOID);}
 "dimension"		{return(DIMENSION);}
 "edgesegmentsgi2"	{return(EDGE_SEGMENTS);}
 "endmesh"	        {return(ENDMESH);}
