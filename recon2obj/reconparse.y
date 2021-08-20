@@ -32,7 +32,7 @@ char *a_str,*rem_str;
 char c,fmt_str[128],time_str[128];
 char err_msg[128];
 struct object_list *olp;
-struct section *sp,*section_head;
+struct section *sp;
 struct contour *cp, *contour_head;
 struct double_list *dlp_head,*dlp;
 struct vertex_list *vlp,*vertex_head,*vertex_tail;

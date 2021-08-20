@@ -43,7 +43,6 @@ int skip_count;
 int polygon_count,polygon_index;
 double x,y,z,dot;
 int vert_0,vert_1,vert_2;
-int i;
 
 
 char *my_strdup(s)
