@@ -84,7 +84,7 @@ char * get_region_name (char * region_name, char * tagging_mesh_filename)
 
 
 /* Begin main */
-main(argc,argv)
+int main(argc,argv)
   int argc; 
   char *argv[];  
 {
@@ -280,7 +280,6 @@ void sort_dbl_array(array,n)
       }
     }
   }
-  return;
 }
 
 
@@ -898,9 +897,9 @@ void repartition_volume(volp)
   struct wall *wp;
   int i,j,k,l,m,n,nx,ny,nz,nxy,nx_parts,ny_parts,nz_parts,n_subvol,adjacent;
 
-  sort_dbl_array(volp->x_partitions);
-  sort_dbl_array(volp->y_partitions);
-  sort_dbl_array(volp->z_partitions);
+  sort_dbl_array(volp->x_partitions,volp->n_x_partitions);
+  sort_dbl_array(volp->y_partitions,volp->n_y_partitions);
+  sort_dbl_array(volp->z_partitions,volp->n_z_partitions);
 
   nx_parts=volp->n_x_partitions;
   ny_parts=volp->n_y_partitions;

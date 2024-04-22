@@ -182,9 +182,13 @@ struct volume {
 };
 
 
-void output_object();
-void output_nurbs();
-void output_polyhedron();
+int partition_volume(struct volume*);
+int decompose_volume(struct volume*, struct wall*);
+int init_geom(struct polyhedron*);
+int clip_mesh(struct volume*, struct polyhedron*, char*, char*);
+void sort_dbl_array(double*, int);
+
+int yyparse (void);
 
 #ifndef DEBUG
 void no_printf();

@@ -1,6 +1,7 @@
 %{
 #include <stdio.h> 
 #include <string.h> 
+#include <stdlib.h> 
 #include <math.h>
 #include "obj_tag_region.h"
 #include "vector.h"
@@ -44,6 +45,7 @@ int polygon_count,polygon_index;
 double x,y,z,dot;
 int vert_0,vert_1,vert_2;
 
+int yyerror(char *s);
 
 char *my_strdup(s)
   char *s;
@@ -71,7 +73,7 @@ struct object *obj;
   #include "lex.flex.c"
 %}
 
-%output="parse.bison.c"
+%output "parse.bison.c"
 
 %token <tok> REAL INTEGER VERTEX FACE SMOOTH_GROUP OFF
 %type <dbl> int_arg real_arg num_arg 
@@ -275,7 +277,7 @@ num_arg: INTEGER {$$=(double)ival;}
 %%
 
 
-yyerror(s)
+int yyerror(s)
 char *s;
 {
 	fprintf(stderr,"mesh_tag_region: error on line: %d of file: %s  %s\n",
