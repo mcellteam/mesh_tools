@@ -137,6 +137,8 @@ void output_object();
 void output_nurbs();
 void output_polyhedron();
 
+int reconparse(void);
+
 #ifndef DEBUG
 void no_printf();
 #endif

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "strfunc.h"
+#include "argparse.h"
 #include "recon2obj.h"
 
 extern FILE *reconin;
@@ -18,7 +19,7 @@ char *object_name;
 char *curr_file;
 
 /* Begin main */
-main(argc,argv)
+int main(argc,argv)
   int argc; 
   char *argv[];  
 {

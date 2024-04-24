@@ -36,8 +36,8 @@ int intg;
 %}
 
 
-%name-prefix="arg"
-%output="argparse.bison.c"
+%define api.prefix {arg}
+%output "argparse.bison.c"
 
 %token <tok> REAL INTEGER HELP_OPT OBJ_OPT VESICLES_OPT CONTOURS_OPT TEXT_ARG
 %token <tok> THICKNESS_OPT

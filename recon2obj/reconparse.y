@@ -10,6 +10,8 @@
 #define no_printf printf
 #endif
 
+int reconerror(char *s);
+
 extern int line_num;
 extern FILE *reconin;
 extern struct object *objp;
@@ -62,8 +64,8 @@ struct object *obj;
 %}
 
 
-%name-prefix="recon"
-%output="reconparse.bison.c"
+%define api.prefix {recon}
+%output "reconparse.bison.c"
 
 
 %token <tok> SECTION_BEGIN SECTION_END TAG_END
@@ -367,13 +369,13 @@ num_arg: int_arg {$$=$<dbl>1;}
 
 #undef reconwrap
 
-reconwrap()
+int reconwrap()
 {
         return(1);
 } 
 
 
-reconerror(char *s)
+int reconerror(char *s)
 {
 	fprintf(stderr,"recon2obj: error on line: %d of file: %s  %s\n",
 	        line_num,curr_file,s);
