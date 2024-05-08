@@ -26,16 +26,16 @@ I ([-]*[0-9]+)
 
 %%
 
-[ \t]+			;
+[ \t]+                  ;
 ^"<?"[^\n]*$            ;
 ^"<!"[^\n]*$            ;
 "<Contour"              {return(CONTOUR_BEGIN);}
 "name"                  {return(NAME);}
-"points="[\"]           {return(POINTS);}
-"handles="[\"]          {return(HANDLES);}
-"dim="[\"]              {return(DIM);}
-"xcoef="[\"]            {return(XCOEF);}
-"ycoef="[\"]            {return(YCOEF);}
+"points="\"             {return(POINTS);}
+"handles="\"            {return(HANDLES);}
+"dim="\"                {return(DIM);}
+"xcoef="\"              {return(XCOEF);}
+"ycoef="\"              {return(YCOEF);}
 "<Section"              {return(SECTION_BEGIN);}
 "</Section>"            {return(SECTION_END);}
 "<Image"                {return(IMAGE_BEGIN);}
@@ -54,7 +54,7 @@ I ([-]*[0-9]+)
                                return(STR_VALUE);
                              }
 [A-Za-z][A-Za-z0-9\_\.]* {return(ATTRIBUTE_NAME);}
-[\,\=\"]                   {return(recontext[0]);}
+[\,\=\"]                {return(recontext[0]);}
 .			;
-\n			{line_num++;}
+[\n]			{line_num++;}
 <<EOF>>                 {return(EOF_TOK);}

@@ -197,27 +197,37 @@ transform_list: /* empty */
 transform: TRANSFORM_BEGIN transform_spec TAG_END
 	image
 	contour_list
-  TRANSFORM_END
+	TRANSFORM_END
 ;
 
-transform_spec: DIM int_arg '"'
-                XCOEF num_arg num_arg num_arg num_arg num_arg num_arg '"'
-                YCOEF num_arg num_arg num_arg num_arg num_arg num_arg '"'
+transform_spec: dim_spec xcoef_spec ycoef_spec
+;
+
+dim_spec: DIM int_arg '"' 
 {
   transform_dim = $<dbl>2;
-  xcoef[0] = $<dbl>5;
-  xcoef[1] = $<dbl>6;
-  xcoef[2] = $<dbl>7;
-  xcoef[3] = $<dbl>8;
-  xcoef[4] = $<dbl>9;
-  xcoef[5] = $<dbl>10;
+}
+;
 
-  ycoef[0] = $<dbl>13;
-  ycoef[1] = $<dbl>14;
-  ycoef[2] = $<dbl>15;
-  ycoef[3] = $<dbl>16;
-  ycoef[4] = $<dbl>17;
-  ycoef[5] = $<dbl>18;
+xcoef_spec: XCOEF num_arg num_arg num_arg num_arg num_arg num_arg '"' 
+{
+  xcoef[0] = $<dbl>2;
+  xcoef[1] = $<dbl>3;
+  xcoef[2] = $<dbl>4;
+  xcoef[3] = $<dbl>5;
+  xcoef[4] = $<dbl>6;
+  xcoef[5] = $<dbl>7;
+}
+;
+
+ycoef_spec: YCOEF num_arg num_arg num_arg num_arg num_arg num_arg '"' 
+{
+  ycoef[0] = $<dbl>2;
+  ycoef[1] = $<dbl>3;
+  ycoef[2] = $<dbl>4;
+  ycoef[3] = $<dbl>5;
+  ycoef[4] = $<dbl>6;
+  ycoef[5] = $<dbl>7;
 }
 ;
 
@@ -226,7 +236,6 @@ image: /* empty */
 ;
 
 contour_list: /* empty */
-  | contour
 	| contour_list contour
 ;
 

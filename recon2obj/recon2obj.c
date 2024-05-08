@@ -10,7 +10,7 @@ struct name_list *file_name_list;
 struct object *objp;
 struct section *section_head, *section_tail;
 double section_thickness;
-int line_num=1;
+int line_num;
 int start_slice_number, end_slice_number, curr_slice_number;
 int vesicles_opt;
 struct vector3 translate;
@@ -55,6 +55,7 @@ int main(argc,argv)
     sprintf(intstr,"%d",curr_slice_number);
     curr_file = my_strcat(base_file_name, my_strcat(".",intstr));
 
+    line_num=1;
     if ((reconin=fopen(curr_file,"r"))==NULL) {
       fprintf(log_file,"recon2obj: error opening RECONSTRUCT file: %s\n",curr_file);
       exit(1);

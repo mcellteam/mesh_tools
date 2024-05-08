@@ -11,13 +11,13 @@ recon2obj: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o recon2obj
 
 arglex.flex.c: arglex.l
-	flex -Cfra arglex.l
+	flex -Crema arglex.l
 
 argparse.bison.c: arglex.flex.c argparse.y recon2obj.h
 	bison argparse.y
 
 reconlex.flex.c: reconlex.l
-	flex -Cfra reconlex.l
+	flex -Crema reconlex.l
 
 reconparse.bison.c: reconlex.flex.c reconparse.y recon2obj.h
 	bison reconparse.y
