@@ -3,10 +3,10 @@
 
 all:
 	#cd contour_tiler/contour_tiler; make
-	cd obj_tag_region; make
-	cd recon2obj; make
-	cd reconstruct_interpolate; make
-	cd imod2reconstruct; make
+	cd obj_tag_region; make clean ; make
+	cd recon2obj; make clean ; make
+	cd reconstruct_interpolate; make clean ; make
+	cd imod2reconstruct; make clean ; make
 
 clean:
 	#cd contour_tiler/contour_tiler; make clean
