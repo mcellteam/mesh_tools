@@ -94,6 +94,8 @@ void output_object();
 void output_nurbs();
 void output_polyhedron();
 
+int objparse(void);
+
 #ifndef DEBUG
 void no_printf();
 #endif

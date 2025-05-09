@@ -5,25 +5,25 @@ LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 
 SHELL = /bin/sh
-OBJS = parse.bison.o obj2mesh.o 
+OBJS = objparse.bison.o obj2mesh.o 
 
 obj2mesh: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o obj2mesh
 
-lex.flex.c: lex.l
-	flex -Cfra lex.l
+objlex.flex.c: objlex.l
+	flex -Cfra objlex.l
 
-parse.bison.c: lex.flex.c parse.y obj2mesh.h
-	bison parse.y
+objparse.bison.c: objlex.flex.c objparse.y obj2mesh.h
+	bison objparse.y
 
-parse.bison.o: parse.bison.c obj2mesh.h
-	$(CC) $(FLAGS) $(DEFS) -c parse.bison.c
+objparse.bison.o: objparse.bison.c obj2mesh.h
+	$(CC) $(FLAGS) $(DEFS) -c objparse.bison.c
 
 obj2mesh.o: obj2mesh.c obj2mesh.h
 	$(CC) $(FLAGS) $(DEFS) -c obj2mesh.c
 
 clean:
-	rm -f $(OBJS) lex.flex.c parse.bison.c obj2mesh
+	rm -f $(OBJS) objlex.flex.c objparse.bison.c obj2mesh
 
 install:
 	@if [ "$(INSTALL_DIR)" ]; then \
@@ -36,7 +36,7 @@ install:
 	fi
 
 tar:
-	tar -cvf obj2mesh.tar lex.l parse.y obj2mesh.c obj2mesh.h makefile
+	tar -cvf obj2mesh.tar objlex.l objparse.y obj2mesh.c obj2mesh.h makefile
 
 gzip:
-	tar -cvf - lex.l parse.y obj2mesh.c obj2mesh.h makefile | gzip -9c obj2mesh.tar.gz
+	tar -cvf - objlex.l objparse.y obj2mesh.c obj2mesh.h makefile | gzip -9c obj2mesh.tar.gz

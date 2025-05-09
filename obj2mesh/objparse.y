@@ -1,5 +1,6 @@
 %{
 #include <stdio.h> 
+#include <stdlib.h> 
 #include <string.h> 
 #include <math.h>
 #include "obj2mesh.h"
@@ -12,6 +13,8 @@ extern FILE *yyin;
 extern char *infile;
 extern int skip_freq;
 extern struct object *world_obj;
+
+void objerror(char *s);
 
 int ival;
 double rval;
@@ -41,8 +44,7 @@ double x,y,z;
 int vert_1,vert_2,vert_3;
 int i;
 
-char *my_strdup(s)
-  char *s;
+char *my_strdup(char *s)
 {
   char *temp;
 
@@ -65,13 +67,14 @@ struct object *obj;
 
 
 %{
-  #include "lex.flex.c"
+  #include "objlex.flex.c"
 %}
 
-%output="parse.bison.c"
+%define api.prefix {obj}
+%output "objparse.bison.c"
 
 %token <tok> REAL INTEGER VERTEX FACE SMOOTH_GROUP OFF
-%type <dbl> int_arg real_arg num_arg 
+%type <dbl> int_arg num_arg 
 
 %right '='
 %left '+' '-'
@@ -97,7 +100,7 @@ mesh_format:
 { 
   if ((vertex_array=(struct vertex_list **)malloc
        (max_vertex*sizeof(struct vertex_list *)))==NULL) {
-    yyerror("Cannot store vertex array");
+    objerror("Cannot store vertex array");
     return(1);
   }
   vlp=vertex_head;
@@ -133,14 +136,14 @@ vertex_list: vertex
 vertex: VERTEX num_arg num_arg num_arg
 {
   if ((vecp=(struct vector3 *)malloc(sizeof(struct vector3)))==NULL) {
-    yyerror("Cannot store normal vector");
+    objerror("Cannot store normal vector");
     return(1);
   }
   vecp->x=$<dbl>2;
   vecp->y=$<dbl>3;
   vecp->z=$<dbl>4;
   if ((vlp=(struct vertex_list *)malloc(sizeof(struct vertex_list)))==NULL) {
-    yyerror("Cannot store vertex list");
+    objerror("Cannot store vertex list");
     return(1);
   }
   vertex_count++;
@@ -179,11 +182,11 @@ face: FACE int_arg int_arg int_arg
   vert_3=$<dbl>4;
   polygon_count++;
   if ((pop=(struct polygon *)malloc(sizeof(struct polygon)))==NULL) {
-    yyerror("Cannot store polygon");
+    objerror("Cannot store polygon");
     return(1);
   }
   if ((plp=(struct polygon_list *)malloc(sizeof(struct polygon_list)))==NULL) {
-    yyerror("Cannot store polygon list");
+    objerror("Cannot store polygon list");
     return(1);
   }
   pop->n_verts=3;
@@ -205,21 +208,16 @@ face: FACE int_arg int_arg int_arg
 int_arg: INTEGER {$$=(double)ival;}
 ;
 
-real_arg: REAL {$$=rval;}
-;
-
 num_arg: INTEGER {$$=(double)ival;}
 	| REAL {$$=rval;}
 ;
 
 %%
 
-yyerror(s)
-char *s;
+void objerror(char *s)
 {
-	fprintf(stderr,"mesh2off: error on line: %d of file: %s  %s\n",
+	fprintf(stderr,"obj2mesh: error on line: %d of file: %s  %s\n",
 	        line_num,infile,s);
 	fflush(stderr);
-	return(1);
 }
 

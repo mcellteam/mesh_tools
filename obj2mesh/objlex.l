@@ -5,11 +5,12 @@ extern char *cval;
 extern int ival;
 extern double rval;
 extern char err_msg[128];
-char *my_strdup();
+char *my_strdup(char *s);
 
 %}
 
-%option outfile="lex.flex.c"
+%option prefix="obj"
+%option outfile="objlex.flex.c"
 %option noyywrap
 
 %p 10000
