@@ -3,15 +3,13 @@
 #include <string.h>
 #include "mesh2obj.h"
 
-extern FILE *yyin;
+extern FILE *meshin;
 char *infile;
 int line_num;
 int skip_freq;
 
 /* Begin main */
-main(argc,argv)
-  int argc; 
-  char *argv[];  
+int main(int argc, char **argv)
 {
 
 	if (argc<2) {
@@ -21,16 +19,16 @@ main(argc,argv)
 
 	infile=argv[1];
 
-	if ((yyin=fopen(infile,"r"))==NULL) {
+	if ((meshin=fopen(infile,"r"))==NULL) {
 	  fprintf(stderr,"mesh2off: error opening file: %s\n",infile);
 	  exit(1);
 	} 
 	fflush(stdout);
-	if (yyparse()) {
+	if (meshparse()) {
 	  fprintf(stderr,"mesh2off: error parsing file: %s\n",infile);
 	  exit(1);
 	} 
-	fclose(yyin);
+	fclose(meshin);
 
 	exit(0);
 }
