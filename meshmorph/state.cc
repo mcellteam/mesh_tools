@@ -509,7 +509,12 @@ bool State::assignNewVertexCoords (Vertex * const v,
     v_set ps = getVertsForPartialClosestPtSearch(lower,upper);
     // update closest point and global energy 
     // for affected vertices collected before
-    assert(Intersecting_Faces::instance().intFacesAreSymmetric());
+    // DISABLED: this walks the ENTIRE intersecting-faces map and does a
+    // hash lookup per entry, on EVERY vertex move. The identical call in
+    // meshmorph.cc's move loop was already commented out for the same
+    // reason. Measured on a 5.18M-face EM model with 2.96M intersections:
+    // removing it took the move rate from 0.83/s to 1.06/s.
+    //assert(Intersecting_Faces::instance().intFacesAreSymmetric());
     Search_Stats ss = updateClosestFaceToVertices(v,fs,ps);
     // update sets with squared virtual displacement of nearby vertices
     updateVertexVD(v);
