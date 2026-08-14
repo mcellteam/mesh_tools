@@ -19,9 +19,7 @@ char *object_name;
 char *curr_file;
 
 /* Begin main */
-int main(argc,argv)
-  int argc; 
-  char *argv[];  
+int main(int argc, char **argv)
 {
   FILE *log_file;
   struct name_list *nlp;
