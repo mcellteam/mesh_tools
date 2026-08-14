@@ -1,0 +1,85 @@
+From 39f3eae1624702a98e5aeed7889dd1467d86f7e1 Mon Sep 17 00:00:00 2001
+From: microns-mcell <bartol@salk.edu>
+Date: Fri, 14 Aug 2026 13:39:51 -0700
+Subject: [PATCH 3/3] perf: constant-time emptiness tests on the vertex-move
+ path
+
+getCountOfIntFaces() traverses the entire intersecting-faces map with a
+hash lookup per entry and returns count/2. Two call sites used it purely
+to compare against zero, both on the per-move path:
+
+  state.cc      if (getCountOfIntFaces(false) > 0)   -- every move
+  meshmorph.cc  if (getCountOfIntFaces(false) == 0)  -- every successful
+                move, live only under --no_int_prevention
+
+So --no_int_prevention paid two full O(intersections) traversals per
+vertex move. Replaced with hasNoIntersections(), which is intf.empty().
+
+Behavioural note: for the meshmorph.cc self-tightening check, empty() is
+STRICTER than the old test -- it requires all intersections to be gone,
+including self-intersections, whereas getCountOfIntFaces(false) counted
+only cross-object ones. It can therefore only delay re-enabling strict
+face-intersection prevention, never enable it early.
+
+Measured on a 5.18M-face EM model with 2.96M intersections:
+  as shipped                 1443 moves / 1741s =   0.83 moves/s
+  + assert disabled          1872 moves / 1764s =   1.06 moves/s
+  + this change             10083 moves /   35s = 286.45 moves/s   (270x)
+
+Startup state bit-identical across all three runs: 1502800 nonnice
+vertices, 2961004 intersections, min edge angle 0.4722981867 deg.
+---
+ meshmorph/intersecting_faces.h | 4 ++++
+ meshmorph/meshmorph.cc         | 8 +++++++-
+ meshmorph/state.cc             | 4 +++-
+ 3 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/meshmorph/intersecting_faces.h b/meshmorph/intersecting_faces.h
+index a6c1b73..0566b35 100644
+--- a/meshmorph/intersecting_faces.h
++++ b/meshmorph/intersecting_faces.h
+@@ -33,6 +33,10 @@ public:
+                                           Face const * const,
+                                           int * const) const;
+   int       getCountOfIntFaces           (bool);
++  // Constant-time emptiness test. getCountOfIntFaces walks the WHOLE
++  // map with a hash lookup per entry, so using it as a >0 / ==0 test on
++  // the per-move path costs O(intersections) per vertex move.
++  bool      hasNoIntersections           (void) const { return intf.empty(); }
+   bool      checkFaceEdgeInt             (Face const * const,
+                                           Face const * const) const;
+   bool      checkEdgeEdgeIntersection    (Face const * const,
+diff --git a/meshmorph/meshmorph.cc b/meshmorph/meshmorph.cc
+index 8e8e5ff..9f85db5 100644
+--- a/meshmorph/meshmorph.cc
++++ b/meshmorph/meshmorph.cc
+@@ -322,7 +322,13 @@ int main (int argc,char **argv)
+             // automatically strict face intersection prevention
+             if (cs.get_strict_face_intersection_prevention()==false)
+             {
+-              if (Intersecting_Faces::instance().getCountOfIntFaces(false)==0)
++              // was: getCountOfIntFaces(false)==0, an O(intersections) walk
++              // after every successful move, live only under
++              // --no_int_prevention. empty() is stricter: it waits for ALL
++              // intersections including self ones, rather than only the
++              // cross-object ones that count() reports. Conservative on
++              // purpose -- it can only delay re-enabling strict prevention.
++              if (Intersecting_Faces::instance().hasNoIntersections())
+               {
+                 cs.set_strict_face_intersection_prevention();
+               }
+diff --git a/meshmorph/state.cc b/meshmorph/state.cc
+index b4cea92..3b1c7ad 100644
+--- a/meshmorph/state.cc
++++ b/meshmorph/state.cc
+@@ -495,7 +495,9 @@ bool State::assignNewVertexCoords (Vertex * const v,
+   if (face_intersection==false && extreme_angle==false && outside_octree==false)
+   {
+     // process intersecting faces, if any
+-    if (i_f.getCountOfIntFaces(false)>0)
++    // was: getCountOfIntFaces(false)>0 -- an O(intersections) walk used as
++    // an emptiness test, on every vertex move.
++    if (i_f.hasNoIntersections()==false)
+     {
+       // store vertices for which niceness may have changed
+       // i.e. vertices of faces that were intersected

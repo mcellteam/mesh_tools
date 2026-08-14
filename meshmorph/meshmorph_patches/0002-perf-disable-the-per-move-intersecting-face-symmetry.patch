@@ -1,0 +1,40 @@
+From 18d914e3cc5b858306fc6635178e87f24939a50d Mon Sep 17 00:00:00 2001
+From: microns-mcell <bartol@salk.edu>
+Date: Fri, 14 Aug 2026 13:39:30 -0700
+Subject: [PATCH 2/3] perf: disable the per-move intersecting-face symmetry
+ assert
+
+State::assignNewVertexCoords runs once per vertex move and asserted
+Intersecting_Faces::intFacesAreSymmetric(), which traverses the whole
+intersecting-faces map with a hash lookup per entry -- O(intersections)
+per move. The same call inside meshmorph.cc's move loop was already
+commented out, so this was the surviving copy.
+
+The makefile does not define NDEBUG, so the assert is live in the -O3
+build. It is invisible on models with few intersections and dominant on
+models with many.
+
+Measured: 1443 moves in 1741s -> 1872 moves in 1764s (0.83 -> 1.06 moves/s).
+Startup state bit-identical (1502800 nonnice, 2961004 intersections).
+---
+ meshmorph/state.cc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/meshmorph/state.cc b/meshmorph/state.cc
+index d1869a8..b4cea92 100644
+--- a/meshmorph/state.cc
++++ b/meshmorph/state.cc
+@@ -509,7 +509,12 @@ bool State::assignNewVertexCoords (Vertex * const v,
+     v_set ps = getVertsForPartialClosestPtSearch(lower,upper);
+     // update closest point and global energy 
+     // for affected vertices collected before
+-    assert(Intersecting_Faces::instance().intFacesAreSymmetric());
++    // DISABLED: this walks the ENTIRE intersecting-faces map and does a
++    // hash lookup per entry, on EVERY vertex move. The identical call in
++    // meshmorph.cc's move loop was already commented out for the same
++    // reason. Measured on a 5.18M-face EM model with 2.96M intersections:
++    // removing it took the move rate from 0.83/s to 1.06/s.
++    //assert(Intersecting_Faces::instance().intFacesAreSymmetric());
+     Search_Stats ss = updateClosestFaceToVertices(v,fs,ps);
+     // update sets with squared virtual displacement of nearby vertices
+     updateVertexVD(v);

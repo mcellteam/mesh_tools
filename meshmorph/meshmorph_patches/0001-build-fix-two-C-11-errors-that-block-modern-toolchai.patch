@@ -1,0 +1,110 @@
+From 728617301bf77612919262a7509f2506112ff7a2 Mon Sep 17 00:00:00 2001
+From: microns-mcell <bartol@salk.edu>
+Date: Fri, 14 Aug 2026 13:39:01 -0700
+Subject: [PATCH 1/3] build: fix two C++11 errors that block modern toolchains
+
+meshmorph/container.cc:984 and meshmorph/gain_schedule.cc:108 stream an
+ofstream into cout; both meant to print the filename. Pre-C++11 this
+compiled via basic_ios' implicit void* conversion, which C++11's explicit
+operator bool removed.
+
+meshalyzer/meshalyzer.h passes explicit std::allocator<V> as the allocator
+template argument to std::map/multimap/unordered_map, but an associative
+container's allocator value_type must be pair<const K,V>. libc++ static-asserts
+on this. The defaults were always the correct types, so the arguments are
+simply dropped.
+
+Verified on macOS, Apple clang, C++11 libc++: both binaries build and run.
+---
+ meshalyzer/meshalyzer.h    | 50 +++++++++++++++++++-------------------
+ meshmorph/container.cc     |  2 +-
+ meshmorph/gain_schedule.cc |  2 +-
+ 3 files changed, 27 insertions(+), 27 deletions(-)
+
+diff --git a/meshalyzer/meshalyzer.h b/meshalyzer/meshalyzer.h
+index 5af0805..eb088db 100644
+--- a/meshalyzer/meshalyzer.h
++++ b/meshalyzer/meshalyzer.h
+@@ -147,31 +147,31 @@ typedef std::vector<double>				vec_d;
+ typedef std::vector<double>::iterator	d_iterator;
+ typedef std::vector<double>::const_iterator	c_d_iterator;
+ 
+-typedef std::map<std::string,Edge*,lts,std::allocator<Edge*> >					map_se;
+-
+-typedef std::multimap<int,bool,lti,std::allocator<bool> >						mmap_ib;
+-typedef std::multimap<int,bool,lti,std::allocator<bool> >::iterator				ib_iterator;
+-typedef std::multimap<double,Vertex*,gtd,std::allocator<Vertex*> >				mmap_dv;
+-typedef std::multimap<double,Vertex*,gtd,std::allocator<Vertex*> >::iterator	dv_iterator;
+-typedef std::multimap<int,Face*,lti,std::allocator<Face*> >						mmap_if;
+-typedef std::multimap<int,Face*,lti,std::allocator<Face*> >::iterator			if_iterator;
+-typedef std::multimap<int,Vertex*,gti,std::allocator<Vertex*> >					mmap_iv;
+-typedef std::multimap<int,Vertex*,gti,std::allocator<Vertex*> >::iterator		iv_iterator;
+-
+-typedef std::unordered_map<Vertex*,int,v_hash,eqv,std::allocator<int> >								hmap_vi;
+-typedef std::unordered_map<Face*,double*,f_hash,eqf,std::allocator<double*> >							hmap_fdp;
+-typedef std::unordered_map<Face*,double,f_hash,eqf,std::allocator<double*> >							hmap_fd;
+-typedef std::unordered_map<Face*,double,f_hash,eqf,std::allocator<double*> >::iterator					fd_iterator;
+-typedef std::unordered_map<Face*,int,f_hash,eqf,std::allocator<int> >									hmap_fi;
+-typedef std::unordered_map<Face*,int,f_hash,eqf,std::allocator<int> >::iterator						fi_iterator;
+-typedef std::unordered_map<Vertex*,double,v_hash,eqv,std::allocator<double> >							hmap_vd;
+-typedef std::unordered_map<Vertex*,double,v_hash,eqv,std::allocator<double> >::iterator				vd_iterator;
+-typedef std::unordered_map<Edge*,double,e_hash,eqe,std::allocator<double> >							hmap_ed;
+-typedef std::unordered_map<Edge*,double,e_hash,eqe,std::allocator<double> >::iterator					ed_iterator;
+-typedef std::unordered_map<Face*,vec_f*,f_hash,eqf,std::allocator<std::vector<Face*>* > >				hmap_ff;
+-typedef std::unordered_map<Face*,vec_f*,f_hash,eqf,std::allocator<std::vector<Face*>* > >::iterator	ff_iterator;
+-typedef std::unordered_map<Edge*,int,e_hash,eqe,std::allocator<int> >									hmap_e;
+-typedef std::unordered_map<int,Vertex*,i_hash,eqi,std::allocator<Vertex*> >							hmap_iv;
++typedef std::map<std::string,Edge*,lts >					map_se;
++
++typedef std::multimap<int,bool,lti >						mmap_ib;
++typedef std::multimap<int,bool,lti >::iterator				ib_iterator;
++typedef std::multimap<double,Vertex*,gtd >				mmap_dv;
++typedef std::multimap<double,Vertex*,gtd >::iterator	dv_iterator;
++typedef std::multimap<int,Face*,lti >						mmap_if;
++typedef std::multimap<int,Face*,lti >::iterator			if_iterator;
++typedef std::multimap<int,Vertex*,gti >					mmap_iv;
++typedef std::multimap<int,Vertex*,gti >::iterator		iv_iterator;
++
++typedef std::unordered_map<Vertex*,int,v_hash,eqv >								hmap_vi;
++typedef std::unordered_map<Face*,double*,f_hash,eqf >							hmap_fdp;
++typedef std::unordered_map<Face*,double,f_hash,eqf >							hmap_fd;
++typedef std::unordered_map<Face*,double,f_hash,eqf >::iterator					fd_iterator;
++typedef std::unordered_map<Face*,int,f_hash,eqf >									hmap_fi;
++typedef std::unordered_map<Face*,int,f_hash,eqf >::iterator						fi_iterator;
++typedef std::unordered_map<Vertex*,double,v_hash,eqv >							hmap_vd;
++typedef std::unordered_map<Vertex*,double,v_hash,eqv >::iterator				vd_iterator;
++typedef std::unordered_map<Edge*,double,e_hash,eqe >							hmap_ed;
++typedef std::unordered_map<Edge*,double,e_hash,eqe >::iterator					ed_iterator;
++typedef std::unordered_map<Face*,vec_f*,f_hash,eqf >				hmap_ff;
++typedef std::unordered_map<Face*,vec_f*,f_hash,eqf >::iterator	ff_iterator;
++typedef std::unordered_map<Edge*,int,e_hash,eqe >									hmap_e;
++typedef std::unordered_map<int,Vertex*,i_hash,eqi >							hmap_iv;
+ 
+ typedef std::set<int,lti>									set_i;
+ typedef std::set<Vertex*,ltv>								set_v;
+diff --git a/meshmorph/container.cc b/meshmorph/container.cc
+index 684433a..3ab9a35 100644
+--- a/meshmorph/container.cc
++++ b/meshmorph/container.cc
+@@ -981,7 +981,7 @@ void Container::writeMeshData (int const & group) const
+     {
+       cout << "\nContainer::writeMeshData: "
+             << "Error. Unable to open file = "
+-            << newfile << endl;
++            << file << endl;
+       assert(newfile.is_open()==true);
+       exit(1);
+     }
+diff --git a/meshmorph/gain_schedule.cc b/meshmorph/gain_schedule.cc
+index 5557bdd..f1d5b41 100644
+--- a/meshmorph/gain_schedule.cc
++++ b/meshmorph/gain_schedule.cc
+@@ -105,7 +105,7 @@ void Gain_Schedule::parseGainFile (const char *filename)
+     {
+       cout << "\nGain_Schedule::parseGainFile: "
+             << "Error. Unable to open file = "
+-            << newfile << endl;
++            << filename << endl;
+       assert(newfile.is_open()==true);
+       exit(1);
+     }
