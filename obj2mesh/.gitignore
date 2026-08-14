@@ -1,0 +1,5 @@
+/objlex.flex.c
+/objparse.bison.c
+/objparse.bison.o
+/obj2mesh
+/obj2mesh.o

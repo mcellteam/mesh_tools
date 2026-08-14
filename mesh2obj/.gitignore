@@ -1,0 +1,5 @@
+/meshlex.flex.c
+/meshparse.bison.c
+/meshparse.bison.o
+/mesh2obj
+/mesh2obj.o
