@@ -25,14 +25,21 @@ int main(int argc, char **argv)
         sscanf(argv[2],"%lf",&scale.y);
         sscanf(argv[3],"%lf",&scale.z);
 	infile_1=argv[4];
-
-	if ((meshin=fopen(infile_1,"r"))==NULL) {
-	  fprintf(stderr,"meshscale: error opening file: %s\n",infile_1);
-	  exit(1);
+        if (strcmp(infile_1,"-") == 0)
+        {
+          meshin = stdin;
+        }
+	else {
+           if ((meshin=fopen(infile_1,"r"))==NULL)
+           {
+	    fprintf(stderr,"meshscale: error opening file: %s\n",infile_1);
+	    exit(1);
+           }
 	} 
         curr_file=infile_1;
 	fflush(stdout);
-	if (meshparse()) {
+	if (meshparse())
+        {
 	  fprintf(stderr,"meshscale: error parsing mesh file %s\n",curr_file);
 	  exit(1);
 	} 
