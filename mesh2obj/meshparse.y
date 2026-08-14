@@ -1,22 +1,20 @@
 %{
 #include <stdio.h> 
+#include <stdlib.h> 
 #include <string.h> 
 #include <math.h>
-#include "meshscale.h"
-
-#include "lex.c"
+#include "mesh2obj.h"
 
 #ifdef DEBUG
 #define no_printf printf
 #endif
 
 extern FILE *yyin;
-extern char *infile_1;
-extern char *infile_2;
-extern char *curr_file;
+extern char *infile;
 extern int skip_freq;
 extern struct object *world_obj;
-extern struct vector3 scale;
+
+void mesherror(char *s);
 
 int ival;
 double rval;
@@ -35,7 +33,7 @@ struct nurbs *nrbp;
 struct double_list *dlp_head,*dlp;
 struct ctlpt_list *clp_head,*clp;
 struct ctlpt *cpp;
-struct vertex_list *vlp,*vertex_head,*vertex_tail;
+struct vertex_list *vlp,*vertex_head,*vertex_tail,**vertex_array;
 struct vector3 *vecp;
 int vertex_index;
 int vertex_count;
@@ -46,8 +44,7 @@ double x,y,z;
 int vert_1,vert_2,vert_3;
 int i;
 
-char *my_strdup(s)
-  char *s;
+char *my_strdup(char *s)
 {
   char *temp;
 
@@ -68,8 +65,17 @@ struct vector3 *vec;
 struct object *obj;
 } 
 
+
+%{
+  #include "meshlex.flex.c"
+%}
+
+%define api.prefix {mesh}
+%output "meshparse.bison.c"
+
+
 %token <tok> REAL INTEGER VERTEX FACE
-%type <dbl> int_arg real_arg num_arg 
+%type <dbl> int_arg num_arg 
 
 %right '='
 %left '+' '-'
@@ -83,6 +89,7 @@ mesh_format:
   skip_count=0;
   vertex_count=0;
   max_vertex=0;
+  polygon_count=0;
   vlp=NULL;
   vertex_head=NULL;
   vertex_tail=NULL;
@@ -91,20 +98,29 @@ mesh_format:
   polygon_tail=NULL;
 }
 	vertex_list
+{ 
+  if ((vertex_array=(struct vertex_list **)malloc
+       (max_vertex*sizeof(struct vertex_list *)))==NULL) {
+    mesherror("Cannot store vertex array");
+    return(1);
+  }
+  vlp=vertex_head;
+  while (vlp!=NULL) {
+    vertex_array[vlp->vertex_index-1]=vlp;
+    vlp=vlp->next;
+  }
+}
 	face_list
 { 
   vlp=vertex_head;
   while (vlp!=NULL) {
-    printf("Vertex %d %.9g %.9g %.9g\n",
-      vlp->vertex_index,vlp->vertex->x,vlp->vertex->y,vlp->vertex->z);
+    printf("v %.15g %.15g %.15g\n",vlp->vertex->x,vlp->vertex->y,vlp->vertex->z);
     vlp=vlp->next;
   }
   plp=polygon_head;
-  polygon_count=0;
   while (plp!=NULL) {
-    polygon_count++;
-    printf("Face %d %d %d %d\n",polygon_count,plp->polygon->vertex_index[0],
-      plp->polygon->vertex_index[1],plp->polygon->vertex_index[2]);
+    printf("f %d %d %d\n",1+plp->polygon->vertex_index[0],
+      1+plp->polygon->vertex_index[1],1+plp->polygon->vertex_index[2]);
     plp=plp->next;
   }
   fprintf(stderr,"\npolygon mesh:  %d vertices & %d polygons\n",
@@ -118,18 +134,18 @@ vertex_list: vertex
 vertex: VERTEX int_arg num_arg num_arg num_arg
 {
   if ((vecp=(struct vector3 *)malloc(sizeof(struct vector3)))==NULL) {
-    yyerror("Cannot store normal vector");
+    mesherror("Cannot store normal vector");
     return(1);
   }
   vertex_index=$<dbl>2;
   if (vertex_index>max_vertex) {
     max_vertex=vertex_index;
   }
-  vecp->x=$<dbl>3*scale.x;
-  vecp->y=$<dbl>4*scale.y;
-  vecp->z=$<dbl>5*scale.z;
+  vecp->x=$<dbl>3;
+  vecp->y=$<dbl>4;
+  vecp->z=$<dbl>5;
   if ((vlp=(struct vertex_list *)malloc(sizeof(struct vertex_list)))==NULL) {
-    yyerror("Cannot store vertex list");
+    mesherror("Cannot store vertex list");
     return(1);
   }
   vlp->vertex_count=vertex_count++;
@@ -156,18 +172,19 @@ face: FACE int_arg int_arg int_arg int_arg
   vert_1=$<dbl>3;
   vert_2=$<dbl>4;
   vert_3=$<dbl>5;
+  polygon_count++;
   if ((pop=(struct polygon *)malloc(sizeof(struct polygon)))==NULL) {
-    yyerror("Cannot store polygon");
+    mesherror("Cannot store polygon");
     return(1);
   }
   if ((plp=(struct polygon_list *)malloc(sizeof(struct polygon_list)))==NULL) {
-    yyerror("Cannot store polygon list");
+    mesherror("Cannot store polygon list");
     return(1);
   }
   pop->n_verts=3;
-  pop->vertex_index[0]=vert_1;
-  pop->vertex_index[1]=vert_2;
-  pop->vertex_index[2]=vert_3;
+  pop->vertex_index[0]=vertex_array[vert_1-1]->vertex_count;
+  pop->vertex_index[1]=vertex_array[vert_2-1]->vertex_count;
+  pop->vertex_index[2]=vertex_array[vert_3-1]->vertex_count;
   plp->polygon=pop;
   if (polygon_tail==NULL) {
     polygon_tail=plp;
@@ -183,21 +200,16 @@ face: FACE int_arg int_arg int_arg int_arg
 int_arg: INTEGER {$$=(double)ival;}
 ;
 
-real_arg: REAL {$$=rval;}
-;
-
 num_arg: INTEGER {$$=(double)ival;}
 	| REAL {$$=rval;}
 ;
 
 %%
 
-yyerror(s)
-char *s;
+void mesherror(char *s)
 {
-	fprintf(stderr,"meshscale: error on line: %d of file: %s  %s\n",
-	        line_num,curr_file,s);
+	fprintf(stderr,"mesh2obj: error on line: %d of file: %s  %s\n",
+	        line_num,infile,s);
 	fflush(stderr);
-	return(1);
 }
 

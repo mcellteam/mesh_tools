@@ -1,30 +1,29 @@
 CC = gcc
 DEFS =
-FLAGS = -O3 -march=pentiumpro
+FLAGS = -O3
 LIBS = -lm
 INSTALL_DIR = $(HOME)/bin
 
 SHELL = /bin/sh
-OBJS = parse.o meshscale.o 
+OBJS = meshparse.bison.o meshscale.o 
 
 meshscale: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o meshscale
 
-lex.c: lex.l
-	flex lex.l
-	mv lex.yy.c lex.c
+meshlex.flex.c: meshlex.l
+	flex -Cfra meshlex.l
 
-parse.c: lex.c parse.y meshscale.h
-	bison -o parse.c parse.y
+meshparse.bison.c: meshlex.flex.c meshparse.y meshscale.h
+	bison meshparse.y
 
-parse.o: parse.c meshscale.h
-	$(CC) $(FLAGS) $(DEFS) -c parse.c
+meshparse.bison.o: meshparse.bison.c meshscale.h
+	$(CC) $(FLAGS) $(DEFS) -c meshparse.bison.c
 
 meshscale.o: meshscale.c meshscale.h
 	$(CC) $(FLAGS) $(DEFS) -c meshscale.c
 
 clean:
-	rm -f $(OBJS) lex.c parse.c meshscale
+	rm -f $(OBJS) meshlex.flex.c meshparse.bison.c meshscale
 
 install:
 	@if [ "$(INSTALL_DIR)" ]; then \
@@ -37,7 +36,7 @@ install:
 	fi
 
 tar:
-	tar -cvf meshscale.tar lex.l parse.y meshscale.c meshscale.h makefile
+	tar -cvf meshscale.tar meshlex.flex.l meshparse.y meshscale.c meshscale.h makefile
 
 gzip:
-	tar -cvf - lex.l parse.y meshscale.c meshscale.h makefile | gzip -9c meshscale.tar.gz
+	tar -cvf - meshlex.flex.l meshparse.y meshscale.c meshscale.h makefile | gzip -9c meshscale.tar.gz

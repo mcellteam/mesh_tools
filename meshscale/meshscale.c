@@ -3,7 +3,7 @@
 #include <string.h>
 #include "meshscale.h"
 
-extern FILE *yyin;
+extern FILE *meshin;
 char *infile_1;
 char *infile_2;
 char *curr_file;
@@ -13,9 +13,7 @@ int skip_freq;
 struct vector3 scale;
 
 /* Begin main */
-main(argc,argv)
-  int argc; 
-  char *argv[];  
+int main(int argc, char **argv)
 {
 
 	if (argc<5) {
@@ -28,17 +26,17 @@ main(argc,argv)
         sscanf(argv[3],"%lf",&scale.z);
 	infile_1=argv[4];
 
-	if ((yyin=fopen(infile_1,"r"))==NULL) {
+	if ((meshin=fopen(infile_1,"r"))==NULL) {
 	  fprintf(stderr,"meshscale: error opening file: %s\n",infile_1);
 	  exit(1);
 	} 
         curr_file=infile_1;
 	fflush(stdout);
-	if (yyparse()) {
+	if (meshparse()) {
 	  fprintf(stderr,"meshscale: error parsing mesh file %s\n",curr_file);
 	  exit(1);
 	} 
-	fclose(yyin);
+	fclose(meshin);
 
 	exit(0);
 }
