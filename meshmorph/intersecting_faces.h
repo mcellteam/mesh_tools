@@ -33,6 +33,10 @@ public:
                                           Face const * const,
                                           int * const) const;
   int       getCountOfIntFaces           (bool);
+  // Constant-time emptiness test. getCountOfIntFaces walks the WHOLE
+  // map with a hash lookup per entry, so using it as a >0 / ==0 test on
+  // the per-move path costs O(intersections) per vertex move.
+  bool      hasNoIntersections           (void) const { return intf.empty(); }
   bool      checkFaceEdgeInt             (Face const * const,
                                           Face const * const) const;
   bool      checkEdgeEdgeIntersection    (Face const * const,

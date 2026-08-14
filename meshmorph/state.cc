@@ -495,7 +495,9 @@ bool State::assignNewVertexCoords (Vertex * const v,
   if (face_intersection==false && extreme_angle==false && outside_octree==false)
   {
     // process intersecting faces, if any
-    if (i_f.getCountOfIntFaces(false)>0)
+    // was: getCountOfIntFaces(false)>0 -- an O(intersections) walk used as
+    // an emptiness test, on every vertex move.
+    if (i_f.hasNoIntersections()==false)
     {
       // store vertices for which niceness may have changed
       // i.e. vertices of faces that were intersected

@@ -322,7 +322,13 @@ int main (int argc,char **argv)
             // automatically strict face intersection prevention
             if (cs.get_strict_face_intersection_prevention()==false)
             {
-              if (Intersecting_Faces::instance().getCountOfIntFaces(false)==0)
+              // was: getCountOfIntFaces(false)==0, an O(intersections) walk
+              // after every successful move, live only under
+              // --no_int_prevention. empty() is stricter: it waits for ALL
+              // intersections including self ones, rather than only the
+              // cross-object ones that count() reports. Conservative on
+              // purpose -- it can only delay re-enabling strict prevention.
+              if (Intersecting_Faces::instance().hasNoIntersections())
               {
                 cs.set_strict_face_intersection_prevention();
               }
