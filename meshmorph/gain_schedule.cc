@@ -105,7 +105,7 @@ void Gain_Schedule::parseGainFile (const char *filename)
     {
       cout << "\nGain_Schedule::parseGainFile: "
             << "Error. Unable to open file = "
-            << newfile << endl;
+            << filename << endl;
       assert(newfile.is_open()==true);
       exit(1);
     }

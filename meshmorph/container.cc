@@ -981,7 +981,7 @@ void Container::writeMeshData (int const & group) const
     {
       cout << "\nContainer::writeMeshData: "
             << "Error. Unable to open file = "
-            << newfile << endl;
+            << file << endl;
       assert(newfile.is_open()==true);
       exit(1);
     }
