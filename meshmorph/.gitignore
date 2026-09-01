@@ -1,0 +1,35 @@
+# Build output. Entries are explicit and root-anchored, matching the
+# per-tool .gitignore convention already used in mesh2obj/, obj2mesh/,
+# meshscale/, recon2obj/ and others in this repo.
+/.deps/
+/meshmorph
+/Array.o
+/Octree.o
+/OctreeAuxiliary.o
+/OctreeImplementation.o
+/Vector3r.o
+/Wm4Quaternion.o
+/bestfit.o
+/container.o
+/controls.o
+/edge.o
+/energy.o
+/face.o
+/gain_schedule.o
+/grid.o
+/intersecting_faces.o
+/log.o
+/meshmorph.o
+/nice.o
+/object.o
+/octree_agent_face.o
+/octree_visitor_check_face.o
+/octree_visitor_face.o
+/octree_visitor_measure.o
+/octree_visitor_update.o
+/opttritri.o
+/refractory.o
+/state.o
+/vertex.o
+/vertex_schedule.o
+/virtual_disp.o

@@ -1,0 +1,17 @@
+# Build output. Entries are explicit and root-anchored, matching the
+# per-tool .gitignore convention already used in mesh2obj/, obj2mesh/,
+# meshscale/, recon2obj/ and others in this repo.
+/.deps/
+/meshalyzer
+/boundary.o
+/box.o
+/container.o
+/controls.o
+/edge.o
+/face.o
+/face_pair.o
+/meshalyzer.o
+/object.o
+/space.o
+/stats.o
+/vertex.o
