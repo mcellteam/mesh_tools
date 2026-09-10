@@ -358,7 +358,7 @@ void Virtual_Disp::validateVirtDispMap2 (void)
   for (tv_it i=vd2_to_v.begin();i!=vd2_to_v.end();++i)
   {
     // check if displacement is Nan
-    assert(isnan((*i).first)==false);
+    assert(std::isnan((*i).first)==false);
     // check if vertex is NULL
     assert((*i).second!=NULL);
     // check if squared virtual displacement is large
